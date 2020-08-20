@@ -11,4 +11,4 @@ container.register<FetchAPI>("FetchAPI", {
   useValue: fetch,
 });
 
-export { container };
+export const Container = container;

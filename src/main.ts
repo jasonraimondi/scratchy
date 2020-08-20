@@ -1,8 +1,17 @@
 import "reflect-metadata";
 
-import { container } from "./container";
-import { GetUserHandler } from "./handlers/get_user";
+import { createPool, sql } from "slonik";
 
-const client = container.resolve<GetUserHandler>(GetUserHandler);
+const pool = createPool("postgres://scratchy:secret@localhost:30532/scratchy");
 
-client.bar().then(console.log);
+const main = () => {
+  return pool.connect(async (connection) => {
+    await connection.query(sql`DROP TABLE IF EXISTS users`);
+    await connection.query(sql`CREATE TABLE users (id INT, name TEXT, email TEXT)`);
+    await connection.query(sql`INSERT INTO users (id, name, email) values (1, 'jason', 'jason@raimondi.us')`)
+    const res = await connection.query(sql`SELECT * FROM users`)
+    return res.rows;
+  });
+};
+
+main().then(console.log);

@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  pg:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_DB: scratchy
+      POSTGRES_USER: scratchy
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 30532:5432
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
+
+volumes:
+  pgdata1:
