@@ -1,4 +1,7 @@
-### Node ###
+dist
+generated
+tmp
+
 # Logs
 logs
 *.log
