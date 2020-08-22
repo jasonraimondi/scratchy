@@ -1,11 +1,9 @@
 import { Controller, Post, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
+
 import { RefreshTokenDTO } from "~/modules/auth/dto/refresh_token.dto";
 import { AuthService } from "~/modules/auth/auth.service";
-
-export const STATUS_CODES = {
-  Unauthorized: 401,
-};
+import { STATUS_CODES } from "~/config/status_codes";
 
 @Controller("/auth")
 export class AuthController {

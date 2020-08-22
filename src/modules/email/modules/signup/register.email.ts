@@ -20,7 +20,7 @@ export class RegisterEmail implements IEmailService {
     const data: ISendMailOptions = {
       to: user.email,
       subject: "Register User Email",
-      template: "index",
+      template: "signup/register",
       context: {
         url: API_ROUTES.verify_email.create({
           email: user.email,
@@ -28,8 +28,6 @@ export class RegisterEmail implements IEmailService {
         }),
       },
     };
-    this.logger.debug("sending register email to user");
-    this.logger.debug(user);
     await this.emailService.send(data);
   }
 }

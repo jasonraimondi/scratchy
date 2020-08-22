@@ -4,7 +4,7 @@ import { Inject } from "@nestjs/common";
 import { isAuth } from "~/lib/middleware/is_auth";
 import { User } from "~/entity/user/user_entity";
 import { MyContext } from "~/lib/types/my_context";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/config/inversify";
 import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 @Resolver()

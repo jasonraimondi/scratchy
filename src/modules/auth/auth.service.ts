@@ -3,8 +3,8 @@ import { sign, verify } from "jsonwebtoken";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { ENV } from "~/lib/constants/config";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { ENV } from "~/config/environment";
+import { REPOSITORY } from "~/config/inversify";
 import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 export class AuthService {

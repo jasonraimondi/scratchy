@@ -5,7 +5,7 @@ import "dotenv/config";
 
 import { NestFactory } from "@nestjs/core";
 
-import { ENV } from "~/lib/constants/config";
+import { ENV } from "~/config/environment";
 import { AppModule } from "~/app.module";
 
 (async () => {

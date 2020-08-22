@@ -3,7 +3,7 @@ import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity
 import { Role } from "../../../entity/role/role_entity";
 import { MyContext } from "../../../lib/types/my_context";
 import { Permission } from "../../../entity/role/permission_entity";
-import { REPOSITORY } from "../../../lib/constants/inversify";
+import { REPOSITORY } from "../../../config/inversify";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
 
 describe("auth_resolver", () => {

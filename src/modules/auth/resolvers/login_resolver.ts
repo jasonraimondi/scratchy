@@ -3,7 +3,7 @@ import { Inject } from "@nestjs/common";
 
 import { MyContext } from "~/lib/types/my_context";
 import { LoginResponse } from "~/modules/user/dtos/login_response";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/config/inversify";
 import { LoginInput } from "~/modules/user/dtos/login_input";
 import { AuthService } from "~/modules/auth/auth.service";
 import { IUserRepository } from "~/modules/repository/user/user.repository";

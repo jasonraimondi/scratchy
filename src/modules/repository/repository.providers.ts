@@ -1,5 +1,5 @@
 import { createConnection, Connection } from "typeorm";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/config/inversify";
 import { EmailConfirmationRepository } from "~/modules/repository/user/email_confirmation.repository";
 import { UserRepository } from "~/modules/repository/user/user.repository";
 import { ForgotPasswordRepository } from "~/modules/repository/user/forgot_password.repository";

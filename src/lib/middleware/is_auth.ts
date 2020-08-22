@@ -2,7 +2,7 @@ import { MiddlewareFn } from "type-graphql";
 import { verify } from "jsonwebtoken";
 
 import { MyContext } from "~/lib/types/my_context";
-import { ENV } from "~/lib/constants/config";
+import { ENV } from "~/config/environment";
 
 export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const authorization = context.req.get("authorization");

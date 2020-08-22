@@ -1,15 +1,14 @@
 import { Module } from "@nestjs/common";
 import { BullModule } from "@nestjs/bull";
 import { MailerModule } from "@nestjs-modules/mailer";
-import { join } from "path";
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 
-import { QUEUE } from "~/lib/constants/inversify";
-import { ENV } from "~/lib/constants/config";
+import { QUEUE } from "~/config/inversify";
+import { ENV } from "~/config/environment";
 import { emailProviders } from "~/modules/email/email.providers";
 import { SendEmailProcessor } from "~/modules/email/processors/send_email.processor";
 import { EmailService } from "~/modules/email/services/email.service";
 import { RepositoryModule } from "~/modules/repository/repository.module";
+import { EmailTemplateService } from "~/modules/email/services/email_template.service";
 
 @Module({
   imports: [
@@ -18,13 +17,6 @@ import { RepositoryModule } from "~/modules/repository/repository.module";
       transport: ENV.mailerURL,
       defaults: {
         from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
-      },
-      template: {
-        dir: join(__dirname, "/templates"),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
       },
     }),
     BullModule.registerQueue({
@@ -35,8 +27,7 @@ import { RepositoryModule } from "~/modules/repository/repository.module";
       },
     }),
   ],
-  providers: [EmailService, SendEmailProcessor, ...emailProviders],
+  providers: [EmailService, EmailTemplateService, SendEmailProcessor, ...emailProviders],
   exports: [...emailProviders],
 })
-export class EmailModule {
-}
+export class EmailModule {}

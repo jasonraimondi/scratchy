@@ -3,9 +3,10 @@ import { Inject, Logger } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { Job } from "bull";
 
-import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/lib/constants/inversify";
+import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/inversify";
 import { IUserRepository } from "~/modules/repository/user/user.repository";
 import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
+import { EmailTemplateService } from "~/modules/email/services/email_template.service";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {
@@ -14,12 +15,25 @@ export class SendEmailProcessor {
   constructor(
     @Inject(REPOSITORY.UserRepository) private readonly userRepository: IUserRepository,
     private readonly mailerService: MailerService,
+    private readonly emailTemplateService: EmailTemplateService,
   ) {}
 
   @Process(QUEUE_JOBS.email.send)
   async handleSend(job: Job<ISendMailOptions>) {
-    this.logger.debug(job.data);
-    const res = await this.mailerService.sendMail(job.data);
-    this.logger.debug(res);
+    const { template, context, ...config } = job.data;
+    if (!template) throw new Error(`Template not found ${template}`);
+    const html = await this.emailTemplateService.html(template, context);
+    const text = await this.emailTemplateService.txt(template, context);
+    try {
+      const result = await this.mailerService.sendMail({
+        ...config,
+        html,
+        text,
+      });
+      this.logger.debug(result);
+    } catch (error) {
+      this.logger.error(error);
+    }
+    await job.finished();
   }
 }

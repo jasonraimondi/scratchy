@@ -2,7 +2,7 @@ import { Arg, Query, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/config/inversify";
 import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 @Resolver()

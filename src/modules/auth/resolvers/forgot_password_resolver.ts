@@ -2,12 +2,12 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { REPOSITORY } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/config/inversify";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/modules/user/dtos/forgot_password_input";
 import { IUserRepository } from "~/modules/repository/user/user.repository";
 import { IForgotPasswordRepository } from "~/modules/repository/user/forgot_password.repository";
-import { ForgotPasswordEmail } from "~/modules/email/emails/forgot_password.email";
+import { ForgotPasswordEmail } from "~/modules/email/modules/auth/forgot_password.email";
 
 @Resolver()
 export class ForgotPasswordResolver {

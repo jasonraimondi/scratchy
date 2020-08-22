@@ -5,7 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { Container } from "~/lib/inversify_container";
-import { ENV } from "~/lib/constants/config";
+import { ENV } from "~/config/environment";
 
 const expressMiddlewares = (app: Application) => {
   app.use(
