@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 
-import { UserRepository } from "./services/user_repository";
-import { fetch, FetchAPI } from "./services/http_client";
+import { UserRepository } from "~/lib/repository/user/user_repository";
+import { fetch, FetchAPI } from "~/lib/services/http_client.service";
 
 container.register("IUserRepository", {
   useClass: UserRepository,

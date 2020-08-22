@@ -7,9 +7,7 @@ import { User } from "~/entities/user";
 @injectable()
 @Resolver()
 export class UserResolver {
-  constructor(
-    @inject("IUserRepository") private userRepository: IUserRepository,
-  ) {}
+  constructor(@inject("IUserRepository") private userRepository: IUserRepository) {}
 
   @Query(() => User)
   async user(@Arg("id") id: string) {

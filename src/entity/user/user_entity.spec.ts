@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from "./user_entity";
 
 describe("user entity", () => {
   test("isActive computed correctly", async () => {
@@ -29,9 +29,9 @@ describe("user entity", () => {
     });
     const user4 = await User.create({ email: "charlie@kelly.us" });
 
-    expect(user1.name).toBe("Charlie Kelly");
-    expect(user2.name).toBe("Charlie");
-    expect(user3.name).toBe("Kelly");
-    expect(user4.name).toBeUndefined();
+    expect(user1.name(user1)).toBe("Charlie Kelly");
+    expect(user2.name(user2)).toBe("Charlie");
+    expect(user3.name(user3)).toBe("Kelly");
+    expect(user4.name(user4)).toBeNull();
   });
 });

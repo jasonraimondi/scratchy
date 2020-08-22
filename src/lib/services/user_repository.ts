@@ -1,6 +1,5 @@
 import { inject, injectable } from "tsyringe";
-
-import { FetchAPI } from "~/services/http_client";
+import { FetchAPI } from "~/lib/services/http_client.service";
 
 export interface IExternalIntegration {
   getShows(): Promise<string>;
