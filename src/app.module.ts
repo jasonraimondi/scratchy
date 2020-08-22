@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
-import { MailerModule } from "@nestjs-modules/mailer";
 import { TypeGraphQLModule } from "typegraphql-nestjs";
 
 import { AppController } from "~/app.controller";
@@ -8,6 +6,7 @@ import { AuthModule } from "~/modules/auth/auth.module";
 import { UserModule } from "~/modules/user/user.module";
 import { AppResolver } from "~/modules/app/app_resolver";
 import { SignupModule } from "~/modules/signup/signup.module";
+import { ENV } from "~/config/environment";
 
 @Module({
   controllers: [AppController],
@@ -15,7 +14,7 @@ import { SignupModule } from "~/modules/signup/signup.module";
     TypeGraphQLModule.forRoot({
       debug: true,
       playground: true,
-      emitSchemaFile: true,
+      emitSchemaFile: ENV.enableOutputSchema,
       validate: true,
       dateScalarMode: "timestamp",
       context: ({ req }) => ({ currentUser: req.user }),
