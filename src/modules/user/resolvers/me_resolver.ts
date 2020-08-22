@@ -1,17 +1,16 @@
 import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
-import { inject, injectable } from "inversify";
+import { Inject } from "@nestjs/common";
 
 import { isAuth } from "~/lib/middleware/is_auth";
 import { User } from "~/entity/user/user_entity";
 import { MyContext } from "~/lib/types/my_context";
 import { REPOSITORY } from "~/lib/constants/inversify";
-import { IUserRepository } from "~/lib/repository/user/user_repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
-@injectable()
 @Resolver()
 export class MeResolver {
   constructor(
-    @inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
   ) {}
 
   @Query(() => User)

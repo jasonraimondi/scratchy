@@ -1,17 +1,16 @@
-import { inject, injectable } from "inversify";
+import { Inject } from "@nestjs/common";
 import { Arg, Mutation, Resolver } from "type-graphql";
 
-import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation_repository";
 import { REPOSITORY } from "~/lib/constants/inversify";
-import { IUserRepository } from "~/lib/repository/user/user_repository";
-import { VerifyEmailInput } from "~/modules/user/auth/verify_email_input";
+import { VerifyEmailInput } from "~/modules/user/inputs/verify_email_input";
+import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
-@injectable()
 @Resolver()
 export class EmailConfirmationResolver {
   constructor(
-    @inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @inject(REPOSITORY.EmailConfirmationRepository)
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    @Inject(REPOSITORY.EmailConfirmationRepository)
     private userConfirmationRepository: IEmailConfirmationRepository,
   ) {}
 
@@ -20,9 +19,7 @@ export class EmailConfirmationResolver {
     @Arg("data") { id, email }: VerifyEmailInput,
   ): Promise<boolean> {
     email = email.toLowerCase();
-    const userConfirmation = await this.userConfirmationRepository.findById(
-      id,
-    );
+    const userConfirmation = await this.userConfirmationRepository.findById(id);
     if (userConfirmation.user.email !== email) {
       throw new Error(
         `invalid user and confirmation (${userConfirmation.user.email}) (${email})`,

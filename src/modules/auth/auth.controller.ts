@@ -24,15 +24,14 @@ export class AuthController {
       return;
     }
 
-    // try {
-    //   const { accessToken, user } = await this.authService.updateAccessToken(
-    //     refreshToken.token,
-    //   );
-    //   this.authService.sendRefreshToken(res, rememberMe, user);
-    //   res.json({ success: true, accessToken });
-    //   return;
-    // } catch (_) {
-    // }
+    try {
+      const { accessToken, user } = await this.authService.updateAccessToken(
+        refreshToken.token,
+      );
+      this.authService.sendRefreshToken(res, rememberMe, user);
+      res.json({ success: true, accessToken });
+      return;
+    } catch (_) {}
 
     res.status(STATUS_CODES.Unauthorized);
     res.json(this.FAILED_TO_REFRESH);

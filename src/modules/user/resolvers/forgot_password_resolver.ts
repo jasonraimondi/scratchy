@@ -10,7 +10,7 @@ import { IUserRepository } from "~/lib/repository/user/user_repository";
 import {
   SendForgotPasswordInput,
   UpdatePasswordInput,
-} from "~/modules/user/auth/forgot_password_input";
+} from "~/modules/user/inputs/forgot_password_input";
 
 @injectable()
 @Resolver()

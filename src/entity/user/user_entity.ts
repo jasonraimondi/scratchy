@@ -15,7 +15,7 @@ export interface ICreateUser {
 }
 
 @ObjectType()
-@Entity()
+@Entity("user")
 export class User extends BaseUuidEntity {
   static async create({
     id,

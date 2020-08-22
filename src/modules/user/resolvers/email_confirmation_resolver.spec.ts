@@ -7,7 +7,7 @@ import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
 import { TestingContainer } from "../../../test/test_container";
 import { EmailConfirmationResolver } from "./email_confirmation_resolver";
 import { IEmailConfirmationRepository } from "../../lib/repository/user/email_confirmation_repository";
-import { VerifyEmailInput } from "./auth/verify_email_input";
+import { VerifyEmailInput } from "./inputs/verify_email_input";
 import { IUserRepository } from "../../lib/repository/user/user_repository";
 
 describe("email confirmation resolver", () => {

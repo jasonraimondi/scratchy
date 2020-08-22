@@ -10,7 +10,7 @@ import { TestingContainer } from "../../../test/test_container";
 import {
   SendForgotPasswordInput,
   UpdatePasswordInput,
-} from "./auth/forgot_password_input";
+} from "./inputs/forgot_password_input";
 import { ForgotPasswordResolver } from "./forgot_password_resolver";
 
 describe("forgot password resolver", () => {

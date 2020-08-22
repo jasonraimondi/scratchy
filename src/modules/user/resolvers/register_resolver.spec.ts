@@ -7,7 +7,7 @@ import { ForgotPassword } from "../../entity/user/forgot_password_entity";
 import { Permission } from "../../entity/role/permission_entity";
 import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
 import { RegisterResolver } from "./register_resolver";
-import { RegisterInput } from "./auth/register_input";
+import { RegisterInput } from "./inputs/register_input";
 import { REPOSITORY } from "../../lib/constants/inversify";
 import { EmailConfirmationRepository } from "../../lib/repository/user/email_confirmation_repository";
 import { IUserRepository } from "../../lib/repository/user/user_repository";

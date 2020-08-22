@@ -1,8 +1,9 @@
 import { Connection } from "typeorm";
-import { UserRepository } from "~/lib/repository/user/user_repository";
-import { EmailConfirmationRepository } from "~/lib/repository/user/email_confirmation_repository";
-import { ForgotPasswordRepository } from "~/lib/repository/user/forgot_password_repository";
+
 import { REPOSITORY } from "~/lib/constants/inversify";
+import { EmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
+import { UserRepository } from "~/lib/repository/user/user.repository";
+import { ForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
 
 export const userRepositories = [
   {

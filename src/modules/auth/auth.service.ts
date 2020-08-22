@@ -2,7 +2,7 @@ import { CookieOptions, Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import { Inject } from "@nestjs/common";
 
-import { IUserRepository } from "~/lib/repository/user/user_repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { User } from "~/entity/user/user_entity";
 import { ENV } from "~/lib/constants/config";
 import { REPOSITORY } from "~/lib/constants/inversify";

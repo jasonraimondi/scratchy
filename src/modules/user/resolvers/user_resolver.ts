@@ -1,15 +1,14 @@
 import { Arg, Query, Resolver } from "type-graphql";
-import { inject, injectable } from "inversify";
+import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { IUserRepository } from "~/lib/repository/user/user_repository";
 import { REPOSITORY } from "~/lib/constants/inversify";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
-@injectable()
 @Resolver()
 export class UserResolver {
   constructor(
-    @inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
   ) {}
 
   @Query(() => User)

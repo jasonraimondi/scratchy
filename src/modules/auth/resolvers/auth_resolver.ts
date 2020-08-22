@@ -1,19 +1,18 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import { inject, injectable } from "inversify";
+import { Inject } from "@nestjs/common";
 
 import { MyContext } from "~/lib/types/my_context";
-import { LoginResponse } from "~/modules/user/auth/login_response";
-import { AuthService } from "~/lib/services/auth/auth_service";
-import { IUserRepository } from "~/lib/repository/user/user_repository";
-import { REPOSITORY, SERVICE } from "~/lib/constants/inversify";
-import { LoginInput } from "~/modules/user/auth/login_input";
+import { LoginResponse } from "~/modules/user/inputs/login_response";
+import { REPOSITORY } from "~/lib/constants/inversify";
+import { LoginInput } from "~/modules/user/inputs/login_input";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { AuthService } from "~/modules/auth/auth.service";
 
-@injectable()
 @Resolver()
 export class AuthResolver {
   constructor(
-    @inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @inject(SERVICE.AuthService) private authService: AuthService,
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    private authService: AuthService,
   ) {}
 
   @Mutation(() => LoginResponse)

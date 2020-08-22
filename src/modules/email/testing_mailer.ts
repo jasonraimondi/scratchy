@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 
-import { IMailer, Options } from "~/lib/services/email/mailer";
+import { IMailer, Options } from "~/modules/email/mailer";
 
 @injectable()
 export class TestingMailer implements IMailer {
