@@ -12,7 +12,7 @@ import { ENV } from "~/config/environment";
   controllers: [AppController],
   imports: [
     TypeGraphQLModule.forRoot({
-      debug: true,
+      debug: ENV.enableDebugging,
       playground: true,
       emitSchemaFile: ENV.enableOutputSchema,
       validate: true,
