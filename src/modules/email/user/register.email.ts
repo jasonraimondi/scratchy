@@ -1,13 +1,12 @@
-import { inject, injectable } from "inversify";
+import { Injectable } from "@nestjs/common";
+import { MailerService } from "@nestjs-modules/mailer";
 
-import { IMailer } from "~/lib/services/email/mailer";
-import { SERVICE } from "~/lib/constants/inversify";
 import { EmailConfirmation } from "~/entity/user/email_confirmation_entity";
 import { API_ROUTES } from "~/lib/services/route_service";
 
-@injectable()
+@Injectable()
 export class RegisterEmail {
-  constructor(@inject(SERVICE.Mailer) private readonly emailService: IMailer) {}
+  constructor(private readonly mailerService: MailerService) {}
 
   async send(userConfirmation: EmailConfirmation): Promise<any> {
     const user = userConfirmation.user;
@@ -20,7 +19,7 @@ export class RegisterEmail {
   <a href="${url}">${url}</a>
 </div>`;
 
-    await this.emailService.send({
+    await this.mailerService.sendMail({
       to: user.email,
       from: "noreply@example.com",
       subject: "Register User Email",

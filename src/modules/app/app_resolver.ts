@@ -1,12 +1,12 @@
 import { Query, Resolver } from "type-graphql";
 
 import { AppInfoResponse } from "~/modules/app/info/app_info_response";
+import { author, license, name, version } from "~package.json";
 
 @Resolver()
 export class AppResolver {
   @Query(() => AppInfoResponse!)
-  async info(): Promise<AppInfoResponse> {
-    const { author, license, name, version } = await import("~package.json");
+  info(): AppInfoResponse {
     return { author, license, name, version };
   }
 }

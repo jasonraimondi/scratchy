@@ -1,13 +1,12 @@
-import { inject, injectable } from "inversify";
+import { MailerService } from "@nestjs-modules/mailer";
+import { Injectable } from "@nestjs/common";
 
-import { IMailer } from "~/lib/services/email/mailer";
-import { SERVICE } from "~/lib/constants/inversify";
 import { ForgotPassword } from "~/entity/user/forgot_password_entity";
 import { API_ROUTES } from "~/lib/services/route_service";
 
-@injectable()
+@Injectable()
 export class ForgotPasswordEmail {
-  constructor(@inject(SERVICE.Mailer) private readonly mailer: IMailer) {}
+  constructor(private readonly mailerService: MailerService) {}
 
   async send(forgotPassword: ForgotPassword): Promise<any> {
     const { id, user } = forgotPassword;
@@ -19,7 +18,7 @@ export class ForgotPasswordEmail {
   <a href="${url}">${url}</a>
 </div>`;
 
-    await this.mailer.send({
+    await this.mailerService.sendMail({
       to: user.email,
       from: "noreply@example.com",
       subject: "Forgot your password?",

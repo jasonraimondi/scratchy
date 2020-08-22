@@ -2,8 +2,8 @@ import { CookieOptions, Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import { Inject } from "@nestjs/common";
 
-import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { User } from "~/entity/user/user_entity";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { ENV } from "~/lib/constants/config";
 import { REPOSITORY } from "~/lib/constants/inversify";
 
@@ -19,7 +19,6 @@ export class AuthService {
   async updateAccessToken(refreshToken: string) {
     let payload: any;
     try {
-      // @todo fix ENV
       payload = verify(refreshToken, ENV.refreshTokenSecret);
     } catch (_) {
       throw new Error("invalid refresh token");
@@ -52,8 +51,7 @@ export class AuthService {
   createRefreshToken(user: User, rememberMe = false): string {
     const payload = {
       userId: user.id,
-      // tokenVersion: user.tokenVersion,
-      tokenVersion: 1, // @TODO fix
+      tokenVersion: user.tokenVersion,
     };
     return sign(payload, ENV.refreshTokenSecret, {
       expiresIn: rememberMe
