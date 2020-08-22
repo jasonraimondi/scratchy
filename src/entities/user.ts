@@ -3,67 +3,86 @@ import { compare, hash } from "bcryptjs";
 import { v4 } from "uuid";
 import { IsEmail, validateOrReject } from "class-validator";
 
+import { Users, UsersFields } from "../../db";
 
 export interface ICreateUser {
   email: string;
+  firstName?: string | null;
+  lastName?: string | null;
   uuid?: string;
-  firstName?: string;
-  lastName?: string;
+  createdIpAddress?: string;
+}
+
+export interface ICreateUserExtended extends ICreateUser {
   password?: string;
 }
 
 @ObjectType()
-export class User {
-  static async create({ uuid, email, firstName, lastName, password }: ICreateUser): Promise<User> {
-    const user = new User(email, uuid ?? v4());
-    user.firstName = firstName;
-    user.lastName = lastName;
-    await user.setPassword(password);
+export class User implements Users {
+  static async create({
+    password,
+    ...create
+  }: ICreateUserExtended): Promise<User> {
+    const user = new User(create);
+    if (password) await user.setPassword(password);
     await validateOrReject(user);
     return user;
   }
 
-  private constructor(email: string, id: string) {
-    this.id = id;
+  private constructor({
+    uuid = v4(),
+    email,
+    firstName = null,
+    lastName = null,
+    createdIpAddress = "0.0.0.0",
+  }: ICreateUser) {
+    this.id = uuid;
     this.email = email.toLowerCase();
     this.isEmailConfirmed = false;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.createdIp = createdIpAddress;
     this.createdAt = new Date();
+    this.password = null;
+    this.lastLoginAt = null;
+    this.lastLoginIp = null;
+    this.updatedAt = null;
   }
 
   @Field(() => ID)
-  id: string;
+  readonly id: UsersFields.id;
 
   @IsEmail()
   @Field()
-  email: string;
+  email: UsersFields.email;
 
-  password?: string;
+  password: UsersFields.password;
 
-  @Field({ nullable: true })
-  firstName?: string;
+  @Field(() => String, { nullable: true })
+  firstName: UsersFields.firstName;
 
-  @Field({ nullable: true })
-  lastName?: string;
+  @Field(() => String, { nullable: true })
+  lastName: UsersFields.lastName;
 
   @Field()
-  isEmailConfirmed: boolean;
+  isEmailConfirmed: UsersFields.isEmailConfirmed;
 
-  @Field(() => Date, { nullable: true })
-  lastLoginAt?: Date;
+  lastLoginIp: UsersFields.lastLoginIp;
 
+  lastLoginAt: UsersFields.lastLoginAt;
+
+  readonly createdIp: UsersFields.createdIp;
 
   @Field(() => Date)
-  createdAt: Date;
+  readonly createdAt: UsersFields.createdAt;
 
+  updatedAt: UsersFields.updatedAt;
 
-  @Field(() => Date, { nullable: true })
-  updatedAt?: Date;
-
-  get name(): string {
+  get fullName(): string | undefined {
     const name = [];
     if (this.firstName) name.push(this.firstName);
     if (this.lastName) name.push(this.lastName);
-    return name.join(" ");
+    return name.join(" ") || undefined;
   }
 
   @Field()
@@ -71,14 +90,25 @@ export class User {
     return user.isEmailConfirmed && !!user.password;
   }
 
-  async setPassword(password?: string): Promise<void> {
-    this.password = undefined;
-    if (password) this.password = await hash(password, 12);
+  async setPassword(password: string): Promise<void> {
+    this.password = await hash(password, 12);
+  }
+
+  async checkPassword(password: string): Promise<void> {
+    if (!this.password) {
+      throw new Error("user must create password");
+    }
+
+    const isValid = await compare(password, this.password);
+
+    if (!isValid) {
+      throw new Error("invalid password");
+    }
   }
 
   async verify(password: string): Promise<void> {
-    if (!this.password) throw new Error("user must create password");
-    if (!this.isActive(this)) throw new Error("user is not active");
-    if (!(await compare(password, this.password))) throw new Error("invalid password");
+    if (!this.isActive(this)) {
+      throw new Error("user is not active");
+    }
   }
 }

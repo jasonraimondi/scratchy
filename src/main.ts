@@ -1,37 +1,36 @@
 import "reflect-metadata";
+import "source-map-support/register";
+import "tsconfig-paths/register";
+import "dotenv/config";
 
-import * as knex from "knex";
+import { pool } from "~/database";
+import { UserRepository } from "~/lib/repository/user_repository";
+import { User } from "~/entities/user";
 
-const Users = () => knex('users')
+const main = () => {
+  return pool.connect(async (connection) => {
+    const user = await User.create({
+      email: `jason+${Math.floor(Math.random() * 60 + 1)}@raimondi.us`,
+    });
+    console.log(Object.keys(user));
+    const userRepository = new UserRepository(connection);
+    await userRepository.create(user);
 
-console.log(Users().select("id").toSQL())
+    // const expires_at = new Date();
+    // expires_at.setDate(expires_at.getDate() + 10);
 
-// import { v4 } from "uuid";
-//
-// import { createPool, sql } from "slonik";
-//
+    // await connection.query(
+    //   sql`INSERT INTO users (id, "firstName", email) values (${user_id}, 'jason', ${"jason@raimondi.us"})`,
+    // );
+    // await connection.query(
+    //   sql`INSERT INTO email_confirmation_tokens (token, "userId", "expiresAt") values (${v4()}, ${user_id}, ${dateParam(
+    //     expires_at,
+    //   )})`,
+    // );
 
-// const pool = createPool("postgres://scratchy:secret@localhost:30532/scratchy");
-//
-// const uuid = v4();
+    // console.log((await connection.query(sql`SELECT * FROM users`)).rows);
+    return;
+  });
+};
 
-// const main = () => {
-//   return pool.connect(async (connection) => {
-//
-//     await connection.query(sql`DROP TABLE IF EXISTS users`);
-//     await connection.query(sql`
-//         CREATE TABLE users
-//         (
-//             id    UUID NOT NULL,
-//             name  TEXT NOT NULL,
-//             email TEXT NOT NULL
-//         )`);
-//     await connection.query(sql`INSERT INTO users (id, name, email) values (${uuid}, 'jason', 'jason@raimondi.us')`);
-//
-//     const res = await connection.query(sql`SELECT *
-//                                            FROM users`);
-//     return res.rows;
-//   });
-// };
-//
-// main().then(console.log);
+main().then(console.log);
