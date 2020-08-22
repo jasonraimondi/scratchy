@@ -2,7 +2,9 @@ import { MailerService } from "@nestjs-modules/mailer";
 
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { API_ROUTES } from "~/lib/services/route_service";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class ForgotPasswordEmail {
   constructor(private readonly mailerService: MailerService) {}
 

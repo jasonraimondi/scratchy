@@ -10,6 +10,8 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { RegisterEmail } from "~/modules/user/emails/register.email";
+import { InjectQueue } from "@nestjs/bull";
+import { Queue } from "bull";
 
 @Resolver()
 export class RegisterResolver {
@@ -18,6 +20,7 @@ export class RegisterResolver {
     @Inject(REPOSITORY.EmailConfirmationRepository)
     private emailConfirmationRepository: IEmailConfirmationRepository,
     private registerEmail: RegisterEmail,
+    @InjectQueue("audio") private readonly audioQueue: Queue,
   ) {}
 
   @Mutation(() => Boolean!)
@@ -39,6 +42,8 @@ export class RegisterResolver {
     @Arg("data") registerInput: RegisterInput,
   ): Promise<RegisterResponse> {
     registerInput.email = registerInput.email.toLowerCase();
+
+    await this.audioQueue.add('transcode', registerInput);
     const { email, id, password } = registerInput;
     await this.guardAgainstDuplicateUser(email, id);
     const user = await User.create(registerInput);

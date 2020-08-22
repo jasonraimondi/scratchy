@@ -12,6 +12,11 @@ services:
     volumes:
       - pgdata1:/var/lib/postgresql/data
 
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
   mailhog:
     image: mailhog/mailhog
     ports:

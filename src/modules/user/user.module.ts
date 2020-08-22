@@ -8,9 +8,20 @@ import { EmailConfirmationResolver } from "~/modules/user/resolvers/email_confir
 import { RegisterResolver } from "~/modules/user/resolvers/register_resolver";
 import { RegisterEmail } from "~/modules/user/emails/register.email";
 import { ForgotPasswordEmail } from "~/modules/user/emails/forgot_password.email";
+import { BullModule } from "@nestjs/bull";
+import { AudioConsumer } from "~/jobs/audio.consumer";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    DatabaseModule,
+    BullModule.registerQueue({
+      name: "audio",
+      redis: {
+        host: "localhost",
+        port: 6379,
+      },
+    }),
+  ],
   providers: [
     RegisterEmail,
     ForgotPasswordEmail,
@@ -19,6 +30,7 @@ import { ForgotPasswordEmail } from "~/modules/user/emails/forgot_password.email
     ForgotPasswordResolver,
     MeResolver,
     UserResolver,
+    AudioConsumer,
   ],
 })
 export class UserModule {}

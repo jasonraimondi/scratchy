@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { TypeGraphQLModule } from "typegraphql-nestjs";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 import { MailerModule } from "@nestjs-modules/mailer";
+import { TypeGraphQLModule } from "typegraphql-nestjs";
 
 import { AppController } from "~/app.controller";
 import { AuthModule } from "~/modules/auth/auth.module";
@@ -15,10 +15,10 @@ import { ENV } from "~/lib/constants/config";
     MailerModule.forRoot({
       transport: ENV.mailerURL,
       defaults: {
-        from:'"graphql-scratchy" <jason+scratchy@raimondi.us>',
+        from: "\"graphql-scratchy\" <jason+scratchy@raimondi.us>",
       },
       template: {
-        dir: __dirname + '/templates',
+        dir: __dirname + "/templates",
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
@@ -38,4 +38,5 @@ import { ENV } from "~/lib/constants/config";
   ],
   providers: [AppResolver],
 })
-export class AppModule {}
+export class AppModule {
+}
