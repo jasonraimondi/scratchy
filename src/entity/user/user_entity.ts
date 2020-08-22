@@ -1,14 +1,14 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Field, ID, ObjectType, Root } from "type-graphql";
 import { compare, hash } from "bcryptjs";
-import { v4 } from "uuid";
 
-import { Role } from "~/entity/role/role_entity";
-import { Permission } from "~/entity/role/permission_entity";
+import { Role } from "../role/role_entity";
+import { Permission } from "../role/permission_entity";
+import { BaseUuidEntity } from "../uuid_entity";
 
 export interface ICreateUser {
   email: string;
-  uuid?: string;
+  id?: string;
   firstName?: string;
   lastName?: string;
   password?: string;
@@ -16,9 +16,15 @@ export interface ICreateUser {
 
 @ObjectType()
 @Entity()
-export class User {
-  static async create({ uuid, email, firstName, lastName, password }: ICreateUser): Promise<User> {
-    const user = new User(uuid);
+export class User extends BaseUuidEntity {
+  static async create({
+    id,
+    email,
+    firstName,
+    lastName,
+    password,
+  }: ICreateUser) {
+    const user = new User(id);
     user.email = email.toLowerCase();
     user.firstName = firstName;
     user.lastName = lastName;
@@ -26,15 +32,15 @@ export class User {
     return user;
   }
 
-  private constructor(uuid?: string) {
-    this.uuid = uuid ?? v4();
+  private constructor(id?: string) {
+    super(id);
     this.tokenVersion = 0;
     this.isEmailConfirmed = false;
   }
 
   @Field(() => ID)
   @PrimaryColumn("uuid")
-  uuid: string;
+  id: string;
 
   @Field()
   @Column("text", { unique: true })
@@ -91,6 +97,7 @@ export class User {
   async verify(password: string) {
     if (!this.password) throw new Error("user must create password");
     if (!this.isActive(this)) throw new Error("user is not active");
-    if (!(await compare(password, this.password))) throw new Error("invalid password");
+    if (!(await compare(password, this.password)))
+      throw new Error("invalid password");
   }
 }

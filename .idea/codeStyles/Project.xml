@@ -1,5 +1,21 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <DB2CodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </DB2CodeStyleSettings>
+    <DerbyCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </DerbyCodeStyleSettings>
+    <H2CodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </H2CodeStyleSettings>
+    <HSQLCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </HSQLCodeStyleSettings>
     <JSCodeStyleSettings version="0">
       <option name="FORCE_SEMICOLON_STYLE" value="true" />
       <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
@@ -8,13 +24,33 @@
       <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
       <option name="SPACES_WITHIN_IMPORTS" value="true" />
     </JSCodeStyleSettings>
+    <MSSQLCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </MSSQLCodeStyleSettings>
+    <MySQLCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </MySQLCodeStyleSettings>
+    <OracleCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </OracleCodeStyleSettings>
     <PostgresCodeStyleSettings version="2">
       <option name="USE_GENERIC_STYLE" value="true" />
     </PostgresCodeStyleSettings>
+    <SQLiteCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </SQLiteCodeStyleSettings>
     <SqlCodeStyleSettings version="2">
       <option name="KEYWORD_CASE" value="0" />
       <option name="TYPE_CASE" value="0" />
     </SqlCodeStyleSettings>
+    <SybaseCodeStyleSettings version="2">
+      <option name="KEYWORD_CASE" value="0" />
+      <option name="TYPE_CASE" value="0" />
+    </SybaseCodeStyleSettings>
     <TypeScriptCodeStyleSettings version="0">
       <option name="FORCE_SEMICOLON_STYLE" value="true" />
       <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
