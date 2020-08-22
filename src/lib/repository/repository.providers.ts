@@ -1,8 +1,8 @@
 import { createConnection, Connection } from "typeorm";
 import { REPOSITORY } from "~/config/inversify";
-import { EmailConfirmationRepository } from "~/modules/repository/user/email_confirmation.repository";
-import { UserRepository } from "~/modules/repository/user/user.repository";
-import { ForgotPasswordRepository } from "~/modules/repository/user/forgot_password.repository";
+import { EmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
+import { UserRepository } from "~/lib/repository/user/user.repository";
+import { ForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
 
 export const databaseProviders = [
   {

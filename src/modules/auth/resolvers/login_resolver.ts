@@ -6,7 +6,7 @@ import { LoginResponse } from "~/modules/user/dtos/login_response";
 import { REPOSITORY } from "~/config/inversify";
 import { LoginInput } from "~/modules/user/dtos/login_input";
 import { AuthService } from "~/modules/auth/auth.service";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
 @Resolver()
 export class LoginResolver {

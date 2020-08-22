@@ -4,7 +4,7 @@ import { Inject } from "@nestjs/common";
 import { MyContext } from "~/lib/types/my_context";
 import { REPOSITORY } from "~/config/inversify";
 import { AuthService } from "~/modules/auth/auth.service";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
 @Resolver()
 export class LogoutResolver {

@@ -3,7 +3,7 @@ import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
 import { REPOSITORY } from "~/config/inversify";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
 
 @Resolver()
 export class UserResolver {

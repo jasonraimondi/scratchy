@@ -5,9 +5,9 @@ import { User } from "~/entity/user/user_entity";
 import { REPOSITORY } from "~/config/inversify";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/modules/user/dtos/forgot_password_input";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
-import { IForgotPasswordRepository } from "~/modules/repository/user/forgot_password.repository";
-import { ForgotPasswordEmail } from "~/modules/email/modules/auth/forgot_password.email";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
+import { ForgotPasswordEmail } from "~/lib/email/modules/auth/forgot_password.email";
 
 @Resolver()
 export class ForgotPasswordResolver {

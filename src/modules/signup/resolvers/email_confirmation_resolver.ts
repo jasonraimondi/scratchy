@@ -1,8 +1,8 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject, Logger } from "@nestjs/common";
 import { REPOSITORY } from "~/config/inversify";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
-import { IEmailConfirmationRepository } from "~/modules/repository/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
 import { VerifyEmailInput } from "~/modules/user/dtos/verify_email_input";
 
 @Resolver()

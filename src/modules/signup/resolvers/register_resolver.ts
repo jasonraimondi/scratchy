@@ -1,9 +1,9 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 import { REPOSITORY } from "~/config/inversify";
-import { IUserRepository } from "~/modules/repository/user/user.repository";
-import { IEmailConfirmationRepository } from "~/modules/repository/user/email_confirmation.repository";
-import { RegisterEmail } from "~/modules/email/modules/signup/register.email";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
+import { RegisterEmail } from "~/lib/email/modules/signup/register.email";
 import { RegisterResponse } from "~/modules/user/dtos/register_response";
 import { RegisterInput } from "~/modules/user/dtos/register_input";
 import { User } from "~/entity/user/user_entity";

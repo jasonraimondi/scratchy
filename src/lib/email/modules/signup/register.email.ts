@@ -3,7 +3,7 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
 import { API_ROUTES } from "~/lib/services/route";
-import { EmailService } from "~/modules/email/services/email.service";
+import { EmailService } from "~/lib/email/services/email.service";
 
 interface IEmailService {
   send<T>(context: any): Promise<void>;

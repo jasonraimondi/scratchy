@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { IBaseRepository } from "~/modules/repository/base.repository";
+import { IBaseRepository } from "~/lib/repository/base.repository";
 
 export interface IForgotPasswordRepository extends IBaseRepository<ForgotPasswordToken> {
   findForUser(userId: string): Promise<ForgotPasswordToken>;
