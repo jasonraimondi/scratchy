@@ -1,7 +1,7 @@
 import { Role } from "../../entity/role/role_entity";
 import { User } from "../../entity/user/user_entity";
 import { Permission } from "../../entity/role/permission_entity";
-import { IUserRepository } from "../../lib/repository/user/user_repository";
+import { IUserRepository } from "../../lib/repositories/user/user_repository";
 import { REPOSITORY } from "../../lib/constants/inversify";
 import { ForgotPassword } from "../../entity/user/forgot_password_entity";
 import { UserResolver } from "./user_resolver";

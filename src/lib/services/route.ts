@@ -17,6 +17,6 @@ const route = (path: string) => {
 };
 
 export const API_ROUTES = {
-  verify_email: route("/verify_email?e=:email&u=:id"),
-  forgot_password: route("/reset_password?e=:email&u=:id"),
+  verify_email: route("/verify_email?e=:emails&u=:id"),
+  forgot_password: route("/reset_password?e=:emails&u=:id"),
 };

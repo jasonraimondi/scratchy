@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 
 import { User } from "~/entity/user/user_entity";
-import { IBaseRepository } from "~/lib/repository/base.repository";
+import { IBaseRepository } from "~/lib/repositories/base.repository";
 
 export interface IUserRepository extends IBaseRepository<User> {
   findByEmail(email: string): Promise<User>;

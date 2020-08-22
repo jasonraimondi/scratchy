@@ -9,5 +9,5 @@ export const ENV = {
   corsURLS: (process.env.CORS_URLS ?? "").split(","),
   mailerURL: process.env.MAILER_URL ?? "smtp://localhost:1025",
   baseURL: process.env.BASE_URL ?? "http://localhost:8080",
-  emailTemplatesDir: join(__dirname, "../lib/email/templates"),
+  emailTemplatesDir: join(__dirname, "../lib/emails/templates"),
 };

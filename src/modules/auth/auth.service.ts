@@ -5,7 +5,7 @@ import { Inject } from "@nestjs/common";
 import { User } from "~/entity/user/user_entity";
 import { ENV } from "~/config/environment";
 import { REPOSITORY } from "~/config/inversify";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 export class AuthService {
   private readonly accessTokenTimeout = "15m";

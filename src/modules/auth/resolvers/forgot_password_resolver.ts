@@ -5,9 +5,9 @@ import { User } from "~/entity/user/user_entity";
 import { REPOSITORY } from "~/config/inversify";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/modules/user/dtos/forgot_password_input";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
-import { IForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
-import { ForgotPasswordEmail } from "~/lib/email/modules/auth/forgot_password.email";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
+import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 
 @Resolver()
 export class ForgotPasswordResolver {
@@ -21,7 +21,7 @@ export class ForgotPasswordResolver {
   async validateForgotPasswordToken(@Arg("token") token: string, @Arg("email") email: string) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
     if (forgotPassword.user.email !== email.toLowerCase()) {
-      throw new Error("invalid email or token");
+      throw new Error("invalid emails or token");
     }
     return true;
   }

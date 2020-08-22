@@ -7,7 +7,7 @@ import { TestingContainer } from "../../../test/test_container";
 import { MyContext } from "../../lib/types/my_context";
 import { MeResolver } from "./me_resolver";
 import { REPOSITORY } from "../../lib/constants/inversify";
-import { IUserRepository } from "../../lib/repository/user/user_repository";
+import { IUserRepository } from "../../lib/repositories/user/user_repository";
 import { mockRequest, mockResponse } from "../../../test/mock_application";
 
 describe("me resolver", () => {

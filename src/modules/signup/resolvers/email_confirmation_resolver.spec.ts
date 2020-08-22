@@ -5,12 +5,12 @@ import { Permission } from "../../entity/role/permission_entity";
 import { REPOSITORY } from "../../lib/constants/inversify";
 import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
 import { TestingContainer } from "../../../test/test_container";
-import { IEmailConfirmationRepository } from "../../lib/repository/user/email_confirmation_repository";
+import { IEmailConfirmationRepository } from "../../lib/repositories/user/email_confirmation_repository";
 import { VerifyEmailInput } from "./dtos/verify_email_input";
-import { IUserRepository } from "../../lib/repository/user/user_repository";
+import { IUserRepository } from "../../lib/repositories/user/user_repository";
 import { EmailConfirmationResolver } from "../../signup/resolvers/email_confirmation_resolver";
 
-describe("email confirmation resolver", () => {
+describe("emails confirmation resolver", () => {
   const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
 
   let container: TestingContainer;
@@ -25,7 +25,7 @@ describe("email confirmation resolver", () => {
     resolver = container.get(EmailConfirmationResolver);
   });
 
-  describe("verify user email confirmation", () => {
+  describe("verify user emails confirmation", () => {
     test("resolve user by id", async () => {
       // arrange
       const user = await User.create({ email: "jason@raimondi.us" });

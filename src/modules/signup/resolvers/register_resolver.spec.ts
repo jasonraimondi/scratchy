@@ -8,8 +8,8 @@ import { Permission } from "../../entity/role/permission_entity";
 import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
 import { RegisterInput } from "./dtos/register_input";
 import { REPOSITORY } from "../../lib/constants/inversify";
-import { EmailConfirmationRepository } from "../../lib/repository/user/email_confirmation_repository";
-import { IUserRepository } from "../../lib/repository/user/user_repository";
+import { EmailConfirmationRepository } from "../../lib/repositories/user/email_confirmation_repository";
+import { IUserRepository } from "../../lib/repositories/user/user_repository";
 import { RegisterResolver } from "../../signup/resolvers/register_resolver";
 
 describe("register_resolver", () => {
@@ -63,7 +63,7 @@ describe("register_resolver", () => {
       await expect(result).rejects.toThrowError("duplicate id for user");
     });
 
-    test("duplicate user email is denied", async () => {
+    test("duplicate user emails is denied", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
@@ -74,10 +74,10 @@ describe("register_resolver", () => {
       const result = resolver.register(input);
 
       // assert
-      await expect(result).rejects.toThrowError("duplicate email for user");
+      await expect(result).rejects.toThrowError("duplicate emails for user");
     });
 
-    test("user is registered with email confirmation", async () => {
+    test("user is registered with emails confirmation", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
@@ -101,7 +101,7 @@ describe("register_resolver", () => {
   });
 
   describe("resentConfirmEmail", () => {
-    test("resend email function works", async () => {
+    test("resend emails function works", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
@@ -115,7 +115,7 @@ describe("register_resolver", () => {
       expect(result).toBe(true);
     });
 
-    test("resend email throws for invalid user", async () => {
+    test("resend emails throws for invalid user", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
 

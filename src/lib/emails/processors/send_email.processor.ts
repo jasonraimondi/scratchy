@@ -4,9 +4,9 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Job } from "bull";
 
 import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/inversify";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
-import { EmailTemplateService } from "~/lib/email/services/email_template.service";
+import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {

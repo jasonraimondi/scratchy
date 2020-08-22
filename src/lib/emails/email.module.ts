@@ -4,11 +4,11 @@ import { MailerModule } from "@nestjs-modules/mailer";
 
 import { QUEUE } from "~/config/inversify";
 import { ENV } from "~/config/environment";
-import { emailProviders } from "~/lib/email/email.providers";
-import { SendEmailProcessor } from "~/lib/email/processors/send_email.processor";
-import { EmailService } from "~/lib/email/services/email.service";
-import { RepositoryModule } from "~/lib/repository/repository.module";
-import { EmailTemplateService } from "~/lib/email/services/email_template.service";
+import { emailProviders } from "~/lib/emails/email.providers";
+import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
+import { EmailService } from "~/lib/emails/services/email.service";
+import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 
 @Module({
   imports: [

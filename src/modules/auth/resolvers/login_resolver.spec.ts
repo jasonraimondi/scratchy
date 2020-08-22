@@ -55,7 +55,7 @@ describe("login_resolver", () => {
   test("non existant user throws", async () => {
     // arrange
     const input = new LoginInput();
-    input.email = "email@notfound.com";
+    input.email = "emails@notfound.com";
     input.password = "thisuserdoesntexist";
 
     // act
