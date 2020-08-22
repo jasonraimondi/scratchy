@@ -7,15 +7,13 @@ CREATE TABLE "users"
     "firstName"        VARCHAR(255) NULL,
     "lastName"         VARCHAR(255) NULL,
     "isEmailConfirmed" BOOLEAN      NOT NULL DEFAULT '0',
+    "tokenVersion"     INTEGER      NOT NULL DEFAULT 1,
     "lastLoginIP"      INET         NULL,
     "lastLoginAt"      TIMESTAMPTZ  NULL,
     "createdIP"        INET         NULL,
     "createdAt"        TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt"        TIMESTAMPTZ  NULL
+    "updatedAt"        TIMESTAMPTZ  NULL,
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "users_email_unique" UNIQUE ("email")
 );
 
-ALTER TABLE "users"
-    ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
-
-ALTER TABLE "users"
-    ADD CONSTRAINT "users_email_unique" UNIQUE ("email");

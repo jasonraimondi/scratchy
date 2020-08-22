@@ -1,25 +1,24 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
-import { inject, injectable } from "inversify";
+import { Inject } from "@nestjs/common";
 
-import { ForgotPasswordEmail } from "~/lib/services/email/user/forgot_password_email";
-import { IForgotPasswordRepository } from "~/lib/repository/user/forgot_password_repository";
 import { User } from "~/entity/user/user_entity";
+
 import { REPOSITORY, SERVICE } from "~/lib/constants/inversify";
-import { ForgotPassword } from "~/entity/user/forgot_password_entity";
-import { IUserRepository } from "~/lib/repository/user/user_repository";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import {
   SendForgotPasswordInput,
   UpdatePasswordInput,
-} from "~/modules/user/inputs/forgot_password_input";
+} from "~/modules/user/dtos/forgot_password_input";
+import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { ForgotPasswordEmail } from "~/modules/user/emails/forgot_password.email";
+import { IForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
 
-@injectable()
 @Resolver()
 export class ForgotPasswordResolver {
   constructor(
-    @inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @inject(REPOSITORY.ForgotPasswordRepository)
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    @Inject(REPOSITORY.ForgotPasswordRepository)
     private forgotPasswordRepository: IForgotPasswordRepository,
-    @inject(SERVICE.ForgotPasswordEmail)
     private forgotPasswordEmail: ForgotPasswordEmail,
   ) {}
 
@@ -75,7 +74,7 @@ export class ForgotPasswordResolver {
     try {
       return await this.forgotPasswordRepository.findForUser(user.id);
     } catch (e) {}
-    const forgotPassword = new ForgotPassword();
+    const forgotPassword = new ForgotPasswordToken();
     forgotPassword.user = user;
     await this.forgotPasswordRepository.save(forgotPassword);
     return forgotPassword;

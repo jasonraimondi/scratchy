@@ -2,9 +2,10 @@ import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { Field, ID, ObjectType, Root } from "type-graphql";
 import { compare, hash } from "bcryptjs";
 
-import { Role } from "../role/role_entity";
-import { Permission } from "../role/permission_entity";
-import { BaseUuidEntity } from "../uuid_entity";
+import { Role } from "~/entity/role/role_entity";
+import { Permission } from "~/entity/role/permission_entity";
+import { BaseUuidEntity } from "~/entity/uuid_entity";
+import { CreateDateColumn, UpdateDateColumn } from "typeorm/index";
 
 export interface ICreateUser {
   email: string;
@@ -15,7 +16,7 @@ export interface ICreateUser {
 }
 
 @ObjectType()
-@Entity("user")
+@Entity("users")
 export class User extends BaseUuidEntity {
   static async create({
     id,
@@ -65,15 +66,27 @@ export class User extends BaseUuidEntity {
   @Column({ nullable: true })
   lastLoginAt?: Date;
 
+  @Column("inet", { nullable: true })
+  lastLoginIP: string;
+
+  @Column("inet", { nullable: true })
+  createdIP: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt?: Date;
+
   @Column("int")
   tokenVersion: number;
 
   @ManyToMany(() => Role)
-  @JoinTable({ name: "user_role" })
+  @JoinTable({ name: "user_roles" })
   roles: Role[];
 
   @ManyToMany(() => Permission)
-  @JoinTable({ name: "user_permission" })
+  @JoinTable({ name: "user_permissions" })
   permissions: Permission[];
 
   @Field()

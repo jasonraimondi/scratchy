@@ -1,14 +1,12 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { Injectable } from "@nestjs/common";
 
-import { ForgotPassword } from "~/entity/user/forgot_password_entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { API_ROUTES } from "~/lib/services/route_service";
 
-@Injectable()
 export class ForgotPasswordEmail {
   constructor(private readonly mailerService: MailerService) {}
 
-  async send(forgotPassword: ForgotPassword): Promise<any> {
+  async send(forgotPassword: ForgotPasswordToken): Promise<any> {
     const { id, user } = forgotPassword;
     const url = API_ROUTES.forgot_password.create({ email: user.email, id });
     const text = url;

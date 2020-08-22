@@ -2,7 +2,7 @@ import { Inject } from "@nestjs/common";
 import { Arg, Mutation, Resolver } from "type-graphql";
 
 import { REPOSITORY } from "~/lib/constants/inversify";
-import { VerifyEmailInput } from "~/modules/user/inputs/verify_email_input";
+import { VerifyEmailInput } from "~/modules/user/dtos/verify_email_input";
 import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repository/user/user.repository";
 

@@ -2,17 +2,17 @@ import jwtDecode from "jwt-decode";
 
 import { User } from "../../../entity/user/user_entity";
 import { IUserRepository } from "../../../lib/repository/user/user.repository";
-import { ForgotPassword } from "../../../entity/user/forgot_password_entity";
-import { LoginInput } from "../../user/inputs/login_input";
+import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
+import { LoginInput } from "../../user/dtos/login_input";
 import { Role } from "../../../entity/role/role_entity";
 import { MyContext } from "../../../lib/types/my_context";
 import { Permission } from "../../../entity/role/permission_entity";
 import { AuthResolver } from "./auth_resolver";
 import { REPOSITORY } from "../../../lib/constants/inversify";
-import { EmailConfirmation } from "../../../entity/user/email_confirmation_entity";
+import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
 
 describe("auth_resolver", () => {
-  const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
+  const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingContainer;
   let userRepository: IUserRepository;

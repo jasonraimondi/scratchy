@@ -1,13 +1,9 @@
 --create_email_confirmation_tokens_table (up)
 CREATE TABLE "email_confirmation_tokens"
 (
-    "token"     UUID        NOT NULL,
+    "id"        UUID        NOT NULL,
     "userId"    UUID        NOT NULL,
-    "expiresAt" TIMESTAMPTZ NOT NULL
+    "expiresAt" TIMESTAMPTZ NOT NULL,
+    CONSTRAINT "email_confirmation_tokens_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "email_confirmation_tokens_userid_foreign" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
-
-ALTER TABLE "email_confirmation_tokens"
-    ADD CONSTRAINT "email_confirmation_tokens_pkey" PRIMARY KEY ("token");
-
-ALTER TABLE "email_confirmation_tokens"
-    ADD CONSTRAINT "email_confirmation_tokens_userid_foreign" FOREIGN KEY ("userId") REFERENCES "users" ("id");

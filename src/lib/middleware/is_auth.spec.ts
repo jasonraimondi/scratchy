@@ -1,15 +1,15 @@
 import { User } from "../../entity/user/user_entity";
 import { Role } from "../../entity/role/role_entity";
 import { Permission } from "../../entity/role/permission_entity";
-import { ForgotPassword } from "../../entity/user/forgot_password_entity";
-import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
+import { ForgotPasswordToken } from "../../entity/user/forgot_password_entity";
+import { EmailConfirmationToken } from "../../entity/user/email_confirmation_entity";
 import { TestingContainer } from "../../../test/test_container";
 import { MyContext } from "../types/my_context";
 import { isAuth } from "./is_auth";
 import { mockRequest, mockResponse } from "../../../test/mock_application";
 
 describe("is_auth", () => {
-  const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
+  const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingContainer;
   let context: MyContext;
