@@ -7,24 +7,11 @@ import { AppController } from "~/app.controller";
 import { AuthModule } from "~/modules/auth/auth.module";
 import { UserModule } from "~/modules/user/user.module";
 import { AppResolver } from "~/modules/app/app_resolver";
-import { ENV } from "~/lib/constants/config";
+import { SignupModule } from "~/modules/signup/signup.module";
 
 @Module({
   controllers: [AppController],
   imports: [
-    MailerModule.forRoot({
-      transport: ENV.mailerURL,
-      defaults: {
-        from: "\"graphql-scratchy\" <jason+scratchy@raimondi.us>",
-      },
-      template: {
-        dir: __dirname + "/templates",
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
-    }),
     TypeGraphQLModule.forRoot({
       debug: true,
       playground: true,
@@ -34,9 +21,9 @@ import { ENV } from "~/lib/constants/config";
       context: ({ req }) => ({ currentUser: req.user }),
     }),
     AuthModule,
+    SignupModule,
     UserModule,
   ],
   providers: [AppResolver],
 })
-export class AppModule {
-}
+export class AppModule {}

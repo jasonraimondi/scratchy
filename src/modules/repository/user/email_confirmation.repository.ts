@@ -1,10 +1,9 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { IBaseRepository } from "~/lib/repository/base_repository";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { IBaseRepository } from "~/modules/repository/base.repository";
 
-export interface IEmailConfirmationRepository
-  extends IBaseRepository<EmailConfirmationToken> {
+export interface IEmailConfirmationRepository extends IBaseRepository<EmailConfirmationToken> {
   findByEmail(email: string): Promise<EmailConfirmationToken>;
 }
 

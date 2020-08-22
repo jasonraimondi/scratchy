@@ -2,31 +2,23 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-
-import { REPOSITORY, SERVICE } from "~/lib/constants/inversify";
+import { REPOSITORY } from "~/lib/constants/inversify";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import {
-  SendForgotPasswordInput,
-  UpdatePasswordInput,
-} from "~/modules/user/dtos/forgot_password_input";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
-import { ForgotPasswordEmail } from "~/modules/user/emails/forgot_password.email";
-import { IForgotPasswordRepository } from "~/lib/repository/user/forgot_password.repository";
+import { SendForgotPasswordInput, UpdatePasswordInput } from "~/modules/user/dtos/forgot_password_input";
+import { IUserRepository } from "~/modules/repository/user/user.repository";
+import { IForgotPasswordRepository } from "~/modules/repository/user/forgot_password.repository";
+import { ForgotPasswordEmail } from "~/modules/email/emails/forgot_password.email";
 
 @Resolver()
 export class ForgotPasswordResolver {
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @Inject(REPOSITORY.ForgotPasswordRepository)
-    private forgotPasswordRepository: IForgotPasswordRepository,
+    @Inject(REPOSITORY.ForgotPasswordRepository) private forgotPasswordRepository: IForgotPasswordRepository,
     private forgotPasswordEmail: ForgotPasswordEmail,
   ) {}
 
   @Mutation(() => Boolean!)
-  async validateForgotPasswordToken(
-    @Arg("token") token: string,
-    @Arg("email") email: string,
-  ) {
+  async validateForgotPasswordToken(@Arg("token") token: string, @Arg("email") email: string) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
     if (forgotPassword.user.email !== email.toLowerCase()) {
       throw new Error("invalid email or token");
@@ -35,9 +27,7 @@ export class ForgotPasswordResolver {
   }
 
   @Mutation(() => Boolean)
-  async sendForgotPasswordEmail(
-    @Arg("data") { email }: SendForgotPasswordInput,
-  ) {
+  async sendForgotPasswordEmail(@Arg("data") { email }: SendForgotPasswordInput) {
     const user = await this.userRepository.findByEmail(email);
     const forgotPassword = await this.getForgotPasswordForUser(user);
     try {
@@ -51,9 +41,7 @@ export class ForgotPasswordResolver {
   }
 
   @Mutation(() => Boolean)
-  async updatePasswordFromToken(
-    @Arg("data") { token, email, password }: UpdatePasswordInput,
-  ) {
+  async updatePasswordFromToken(@Arg("data") { token, email, password }: UpdatePasswordInput) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
     const { user } = forgotPassword;
     if (email !== user.email) {

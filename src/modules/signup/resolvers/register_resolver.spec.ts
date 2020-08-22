@@ -6,11 +6,11 @@ import { Role } from "../../entity/role/role_entity";
 import { ForgotPassword } from "../../entity/user/forgot_password_entity";
 import { Permission } from "../../entity/role/permission_entity";
 import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
-import { RegisterResolver } from "./register_resolver";
 import { RegisterInput } from "./dtos/register_input";
 import { REPOSITORY } from "../../lib/constants/inversify";
 import { EmailConfirmationRepository } from "../../lib/repository/user/email_confirmation_repository";
 import { IUserRepository } from "../../lib/repository/user/user_repository";
+import { RegisterResolver } from "../../signup/resolvers/register_resolver";
 
 describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
@@ -87,12 +87,10 @@ describe("register_resolver", () => {
       const result = await resolver.register(input);
 
       // assert
-      const emailConfirmationRepository = container.get<
-        EmailConfirmationRepository
-      >(REPOSITORY.EmailConfirmationRepository);
-      const emailConfirmation = await emailConfirmationRepository.findByEmail(
-        "jason@raimondi.us",
+      const emailConfirmationRepository = container.get<EmailConfirmationRepository>(
+        REPOSITORY.EmailConfirmationRepository,
       );
+      const emailConfirmation = await emailConfirmationRepository.findByEmail("jason@raimondi.us");
       expect(result.emailConfirmation).toBeTruthy();
       expect(result.emailConfirmation!.id).toBe(emailConfirmation.id);
       expect(result.user).toBeTruthy();
@@ -125,9 +123,7 @@ describe("register_resolver", () => {
       const result = resolver.resentConfirmEmail("jason@raimondi.us");
 
       // assert
-      await expect(result).rejects.toThrow(
-        new RegExp('Could not find any entity of type "EmailConfirmation"'),
-      );
+      await expect(result).rejects.toThrow(new RegExp('Could not find any entity of type "EmailConfirmation"'));
     });
   });
 });

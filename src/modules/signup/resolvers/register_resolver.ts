@@ -1,33 +1,25 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
-import { hash } from "bcryptjs";
 import { Inject } from "@nestjs/common";
-
+import { REPOSITORY } from "~/lib/constants/inversify";
+import { IUserRepository } from "~/modules/repository/user/user.repository";
+import { IEmailConfirmationRepository } from "~/modules/repository/user/email_confirmation.repository";
+import { RegisterEmail } from "~/modules/email/emails/register.email";
 import { RegisterResponse } from "~/modules/user/dtos/register_response";
-import { User } from "~/entity/user/user_entity";
 import { RegisterInput } from "~/modules/user/dtos/register_input";
-import { REPOSITORY, SERVICE } from "~/lib/constants/inversify";
+import { User } from "~/entity/user/user_entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
-import { IEmailConfirmationRepository } from "~/lib/repository/user/email_confirmation.repository";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
-import { RegisterEmail } from "~/modules/user/emails/register.email";
-import { InjectQueue } from "@nestjs/bull";
-import { Queue } from "bull";
 
 @Resolver()
 export class RegisterResolver {
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @Inject(REPOSITORY.EmailConfirmationRepository)
-    private emailConfirmationRepository: IEmailConfirmationRepository,
+    @Inject(REPOSITORY.EmailConfirmationRepository) private emailConfirmationRepository: IEmailConfirmationRepository,
     private registerEmail: RegisterEmail,
-    @InjectQueue("audio") private readonly audioQueue: Queue,
   ) {}
 
   @Mutation(() => Boolean!)
   async resentConfirmEmail(@Arg("email") email: string): Promise<boolean> {
-    const emailConfirmation = await this.emailConfirmationRepository.findByEmail(
-      email,
-    );
+    const emailConfirmation = await this.emailConfirmationRepository.findByEmail(email);
     try {
       await this.registerEmail.send(emailConfirmation);
       return true;
@@ -38,16 +30,13 @@ export class RegisterResolver {
   }
 
   @Mutation(() => RegisterResponse!)
-  async register(
-    @Arg("data") registerInput: RegisterInput,
-  ): Promise<RegisterResponse> {
+  async register(@Arg("data") registerInput: RegisterInput): Promise<RegisterResponse> {
     registerInput.email = registerInput.email.toLowerCase();
 
-    await this.audioQueue.add('transcode', registerInput);
     const { email, id, password } = registerInput;
     await this.guardAgainstDuplicateUser(email, id);
     const user = await User.create(registerInput);
-    if (password) await user.setPassword(password)
+    if (password) await user.setPassword(password);
     try {
       await this.userRepository.save(user);
       const emailConfirmation = new EmailConfirmationToken(user);

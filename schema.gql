@@ -33,9 +33,6 @@ type Mutation {
   register(data: RegisterInput!): RegisterResponse!
   resentConfirmEmail(email: String!): Boolean!
   revokeRefreshToken(userId: String!): Boolean!
-  sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
-  updatePasswordFromToken(data: UpdatePasswordInput!): Boolean!
-  validateForgotPasswordToken(email: String!, token: String!): Boolean!
   verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
 }
 
@@ -59,20 +56,10 @@ type RegisterResponse {
   user: User
 }
 
-input SendForgotPasswordInput {
-  email: String!
-}
-
 """
 The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
 scalar Timestamp
-
-input UpdatePasswordInput {
-  email: String!
-  password: String!
-  token: String!
-}
 
 type User {
   email: String!

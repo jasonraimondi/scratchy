@@ -3,18 +3,16 @@ import { sign, verify } from "jsonwebtoken";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { ENV } from "~/lib/constants/config";
 import { REPOSITORY } from "~/lib/constants/inversify";
+import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 export class AuthService {
   private readonly accessTokenTimeout = "15m";
   private readonly refreshTokenTimeout = "2h";
   private readonly refreshTokenTimeoutRemember = "7d";
 
-  constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-  ) {}
+  constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
 
   async updateAccessToken(refreshToken: string) {
     let payload: any;
@@ -54,9 +52,7 @@ export class AuthService {
       tokenVersion: user.tokenVersion,
     };
     return sign(payload, ENV.refreshTokenSecret, {
-      expiresIn: rememberMe
-        ? this.refreshTokenTimeoutRemember
-        : this.refreshTokenTimeout,
+      expiresIn: rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout,
     });
   }
 
@@ -70,10 +66,7 @@ export class AuthService {
     const options: CookieOptions = {
       httpOnly: true,
       domain: ENV.cookieDomain,
-      expires:
-        token === ""
-          ? new Date()
-          : new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      expires: token === "" ? new Date() : new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
     };
 
     res.cookie("rememberMe", rememberMe, options);

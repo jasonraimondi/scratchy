@@ -18,13 +18,7 @@ export interface ICreateUser {
 @ObjectType()
 @Entity("users")
 export class User extends BaseUuidEntity {
-  static async create({
-    id,
-    email,
-    firstName,
-    lastName,
-    password,
-  }: ICreateUser) {
+  static async create({ id, email, firstName, lastName, password }: ICreateUser) {
     const user = new User(id);
     user.email = email.toLowerCase();
     user.firstName = firstName;
@@ -110,7 +104,6 @@ export class User extends BaseUuidEntity {
   async verify(password: string) {
     if (!this.password) throw new Error("user must create password");
     if (!this.isActive(this)) throw new Error("user is not active");
-    if (!(await compare(password, this.password)))
-      throw new Error("invalid password");
+    if (!(await compare(password, this.password))) throw new Error("invalid password");
   }
 }

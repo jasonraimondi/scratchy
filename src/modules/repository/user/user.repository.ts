@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { IBaseRepository } from "~/lib/repository/base_repository";
 import { User } from "~/entity/user/user_entity";
+import { IBaseRepository } from "~/modules/repository/base.repository";
 
 export interface IUserRepository extends IBaseRepository<User> {
   findByEmail(email: string): Promise<User>;
@@ -12,8 +12,7 @@ export interface IUserRepository extends IBaseRepository<User> {
 }
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User>
-  implements IUserRepository {
+export class UserRepository extends Repository<User> implements IUserRepository {
   findById(id: string) {
     return this.findOneOrFail(id);
   }

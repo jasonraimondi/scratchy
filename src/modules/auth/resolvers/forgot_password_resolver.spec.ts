@@ -7,10 +7,7 @@ import { REPOSITORY } from "../../lib/constants/inversify";
 import { IForgotPasswordRepository } from "../../lib/repository/user/forgot_password_repository";
 import { IUserRepository } from "../../lib/repository/user/user_repository";
 import { TestingContainer } from "../../../test/test_container";
-import {
-  SendForgotPasswordInput,
-  UpdatePasswordInput,
-} from "./dtos/forgot_password_input";
+import { SendForgotPasswordInput, UpdatePasswordInput } from "./dtos/forgot_password_input";
 import { ForgotPasswordResolver } from "./forgot_password_resolver";
 
 describe("forgot password resolver", () => {
@@ -24,9 +21,7 @@ describe("forgot password resolver", () => {
   beforeEach(async () => {
     container = await TestingContainer.create(entities);
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    forgotPasswordRepository = container.get<IForgotPasswordRepository>(
-      REPOSITORY.ForgotPasswordRepository,
-    );
+    forgotPasswordRepository = container.get<IForgotPasswordRepository>(REPOSITORY.ForgotPasswordRepository);
     resolver = container.get(ForgotPasswordResolver);
   });
 
@@ -43,12 +38,8 @@ describe("forgot password resolver", () => {
       await resolver.sendForgotPasswordEmail(input);
 
       // assert
-      const updatedForgotPassword = await forgotPasswordRepository.findForUser(
-        user.id,
-      );
-      expect(updatedForgotPassword.expiresAt.getTime()).toBeGreaterThan(
-        Date.now(),
-      );
+      const updatedForgotPassword = await forgotPasswordRepository.findForUser(user.id);
+      expect(updatedForgotPassword.expiresAt.getTime()).toBeGreaterThan(Date.now());
     });
   });
 
@@ -70,12 +61,8 @@ describe("forgot password resolver", () => {
 
       // assert
       const updatedUser = await userRepository.findById(user.id);
-      await expect(
-        updatedUser.verify("my-new-password"),
-      ).resolves.toBeUndefined();
-      await expect(
-        forgotPasswordRepository.findForUser(forgotPassword.id),
-      ).rejects.toThrowError(
+      await expect(updatedUser.verify("my-new-password")).resolves.toBeUndefined();
+      await expect(forgotPasswordRepository.findForUser(forgotPassword.id)).rejects.toThrowError(
         'Could not find any entity of type "ForgotPassword"',
       );
     });

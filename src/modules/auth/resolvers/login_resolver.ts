@@ -5,11 +5,11 @@ import { MyContext } from "~/lib/types/my_context";
 import { LoginResponse } from "~/modules/user/dtos/login_response";
 import { REPOSITORY } from "~/lib/constants/inversify";
 import { LoginInput } from "~/modules/user/dtos/login_input";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
 import { AuthService } from "~/modules/auth/auth.service";
+import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 @Resolver()
-export class AuthResolver {
+export class LoginResolver {
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     private authService: AuthService,
@@ -32,22 +32,5 @@ export class AuthResolver {
       accessToken: this.authService.createAccessToken(user),
       user,
     };
-  }
-
-  @Mutation(() => Boolean)
-  async logout(@Ctx() { res }: MyContext) {
-    this.authService.sendRefreshToken(res, false, undefined);
-    return true;
-  }
-
-  @Mutation(() => Boolean)
-  async revokeRefreshToken(@Arg("userId", () => String) userId: string) {
-    try {
-      await this.userRepository.findById(userId);
-      await this.userRepository.incrementToken(userId);
-      return true;
-    } catch {
-      return false;
-    }
   }
 }

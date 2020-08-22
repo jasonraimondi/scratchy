@@ -3,7 +3,6 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { User } from "~/entity/user/user_entity";
 import { BaseUuidEntity } from "~/entity/uuid_entity";
 
-
 @ObjectType()
 @Entity("forgot_password_tokens")
 export class ForgotPasswordToken extends BaseUuidEntity {

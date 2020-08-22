@@ -3,13 +3,11 @@ import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
 import { REPOSITORY } from "~/lib/constants/inversify";
-import { IUserRepository } from "~/lib/repository/user/user.repository";
+import { IUserRepository } from "~/modules/repository/user/user.repository";
 
 @Resolver()
 export class UserResolver {
-  constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-  ) {}
+  constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
 
   @Query(() => User)
   async user(@Arg("id") id: string) {

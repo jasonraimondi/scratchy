@@ -4,9 +4,14 @@ export const REPOSITORY = {
   ForgotPasswordRepository: Symbol("ForgotPasswordRepository"),
 };
 
-export const SERVICE = {
-  Mailer: Symbol("Mailer"),
-  ForgotPasswordEmail: Symbol("ForgotPasswordEmail"),
-  RegisterEmail: Symbol("RegisterEmail"),
-  AuthService: Symbol("AuthService"),
+export const QUEUE = {
+  email: "email",
 };
+
+export const QUEUE_JOBS = {
+  email: {
+    send: "send",
+  },
+};
+
+// why you asking what is an example of a high pressure situation you handled

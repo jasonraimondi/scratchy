@@ -25,9 +25,7 @@ export class AuthController {
     }
 
     try {
-      const { accessToken, user } = await this.authService.updateAccessToken(
-        refreshToken.token,
-      );
+      const { accessToken, user } = await this.authService.updateAccessToken(refreshToken.token);
       this.authService.sendRefreshToken(res, rememberMe, user);
       res.json({ success: true, accessToken });
       return;

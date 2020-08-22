@@ -30,9 +30,7 @@ describe("is_auth", () => {
     const next: any = () => {};
 
     // assert
-    await expect(isAuth(params, next)).rejects.toThrowError(
-      "not authenticated",
-    );
+    await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
   });
 
   test("guards against missing token", async () => {
@@ -42,9 +40,7 @@ describe("is_auth", () => {
     const next: any = () => {};
 
     // assert
-    await expect(isAuth(params, next)).rejects.toThrowError(
-      "not authenticated",
-    );
+    await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
   });
 
   test("guards against invalid token", async () => {
@@ -60,8 +56,6 @@ describe("is_auth", () => {
     const next: any = () => {};
 
     // assert
-    await expect(isAuth(params, next)).rejects.toThrowError(
-      "not authenticated",
-    );
+    await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
   });
 });

@@ -28,9 +28,7 @@ describe("me resolver", () => {
   });
 
   test("successfully returns user response", async () => {
-    const userRepository = container.get<IUserRepository>(
-      REPOSITORY.UserRepository,
-    );
+    const userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
     const user = await User.create({ email: "jason@raimondi.us" });
     await userRepository.save(user);
 
@@ -66,8 +64,6 @@ describe("me resolver", () => {
     const result = resolver.me(context);
 
     // assert
-    await expect(result).rejects.toThrowError(
-      /Cannot read property 'userId' of undefined/,
-    );
+    await expect(result).rejects.toThrowError(/Cannot read property 'userId' of undefined/);
   });
 });
