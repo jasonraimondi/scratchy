@@ -25,12 +25,7 @@ export class SendEmailProcessor {
     const html = await this.emailTemplateService.html(template, context);
     const text = await this.emailTemplateService.txt(template, context);
     try {
-      const result = await this.mailerService.sendMail({
-        ...config,
-        html,
-        text,
-      });
-      this.logger.debug(result);
+      await this.mailerService.sendMail({ ...config, html, text, });
     } catch (error) {
       this.logger.error(error);
     }
