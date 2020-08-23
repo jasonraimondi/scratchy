@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeGraphQLModule } from "typegraphql-nestjs";
 
-import { AppController } from "~/app.controller";
 import { AuthModule } from "~/modules/auth/auth.module";
 import { UserModule } from "~/modules/user/user.module";
 import { AppResolver } from "~/modules/app/app_resolver";
@@ -9,7 +8,6 @@ import { SignupModule } from "~/modules/signup/signup.module";
 import { ENV } from "~/config/environment";
 
 @Module({
-  controllers: [AppController],
   imports: [
     TypeGraphQLModule.forRoot({
       debug: ENV.enableDebugging,

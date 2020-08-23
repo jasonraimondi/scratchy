@@ -2,7 +2,7 @@ import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { MyContext } from "~/lib/types/my_context";
-import { REPOSITORY } from "~/config/inversify";
+import { REPOSITORY } from "~/config/keys";
 import { AuthService } from "~/modules/auth/auth.service";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 

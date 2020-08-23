@@ -9,6 +9,7 @@ import { CreateDateColumn, UpdateDateColumn } from "typeorm/index";
 
 export interface ICreateUser {
   email: string;
+  createdIP?: string;
   id?: string;
   firstName?: string;
   lastName?: string;
@@ -18,11 +19,12 @@ export interface ICreateUser {
 @ObjectType()
 @Entity("users")
 export class User extends BaseUuidEntity {
-  static async create({ id, email, firstName, lastName, password }: ICreateUser) {
+  static async create({ id, email, firstName, lastName, password, createdIP = "0.0.0.0" }: ICreateUser) {
     const user = new User(id);
     user.email = email.toLowerCase();
     user.firstName = firstName;
     user.lastName = lastName;
+    user.createdIP = createdIP;
     await user.setPassword(password);
     return user;
   }

@@ -6,7 +6,7 @@ import { IBaseRepository } from "~/lib/repositories/base.repository";
 export interface IUserRepository extends IBaseRepository<User> {
   findByEmail(email: string): Promise<User>;
 
-  incrementLastLoginAt(user: User): Promise<void>;
+  incrementLastLogin(user: User, ipAddr: string): Promise<void>;
 
   incrementToken(id: string): Promise<void>;
 }
@@ -22,8 +22,9 @@ export class UserRepository extends Repository<User> implements IUserRepository 
     return this.findOneOrFail({ where: { email } });
   }
 
-  async incrementLastLoginAt(user: User) {
+  async incrementLastLogin(user: User, ipAddr: string) {
     user.lastLoginAt = new Date();
+    user.lastLoginIP = ipAddr;
     await this.save(user);
   }
 

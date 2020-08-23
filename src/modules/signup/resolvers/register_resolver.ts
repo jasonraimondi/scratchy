@@ -1,6 +1,6 @@
-import { Arg, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
-import { REPOSITORY } from "~/config/inversify";
+import { REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
@@ -8,6 +8,7 @@ import { RegisterResponse } from "~/modules/user/dtos/register_response";
 import { RegisterInput } from "~/modules/user/dtos/register_input";
 import { User } from "~/entity/user/user_entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { MyContext } from "~/lib/types/my_context";
 
 @Resolver()
 export class RegisterResolver {
@@ -30,12 +31,15 @@ export class RegisterResolver {
   }
 
   @Mutation(() => RegisterResponse!)
-  async register(@Arg("data") registerInput: RegisterInput): Promise<RegisterResponse> {
+  async register(@Arg("data") registerInput: RegisterInput, @Ctx() { req }: MyContext): Promise<RegisterResponse> {
     registerInput.email = registerInput.email.toLowerCase();
-
+    const createdIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const { email, id, password } = registerInput;
     await this.guardAgainstDuplicateUser(email, id);
-    const user = await User.create(registerInput);
+    const user = await User.create({
+      ...registerInput,
+      createdIP: createdIp,
+    });
     if (password) await user.setPassword(password);
     try {
       await this.userRepository.save(user);

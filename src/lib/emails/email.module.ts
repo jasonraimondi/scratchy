@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { BullModule } from "@nestjs/bull";
 import { MailerModule } from "@nestjs-modules/mailer";
 
-import { QUEUE } from "~/config/inversify";
+import { QUEUE } from "~/config/keys";
 import { ENV } from "~/config/environment";
 import { emailProviders } from "~/lib/emails/email.providers";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";

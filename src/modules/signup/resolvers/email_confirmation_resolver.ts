@@ -1,6 +1,7 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject, Logger } from "@nestjs/common";
-import { REPOSITORY } from "~/config/inversify";
+
+import { REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { VerifyEmailInput } from "~/modules/user/dtos/verify_email_input";

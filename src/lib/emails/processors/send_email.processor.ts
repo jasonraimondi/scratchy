@@ -3,7 +3,7 @@ import { Inject, Logger } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { Job } from "bull";
 
-import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/inversify";
+import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
@@ -35,5 +35,6 @@ export class SendEmailProcessor {
       this.logger.error(error);
     }
     await job.finished();
+    return;
   }
 }
