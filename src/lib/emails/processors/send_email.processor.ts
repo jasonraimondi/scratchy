@@ -34,7 +34,6 @@ export class SendEmailProcessor {
     } catch (error) {
       this.logger.error(error);
     }
-    await job.finished();
     return;
   }
 }

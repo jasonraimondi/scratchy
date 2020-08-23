@@ -26,7 +26,7 @@ export class LoginResolver {
 
     this.authService.sendRefreshToken(res, rememberMe, user);
 
-    const ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const ipAddr = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
     await this.userRepository.incrementLastLogin(user, ipAddr);
 
