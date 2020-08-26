@@ -16,6 +16,8 @@ export interface ICreateUser {
   password?: string;
 }
 
+const inet = process.env.NODE_ENV === "test" ? "text" : "inet";
+
 @ObjectType()
 @Entity("users")
 export class User extends BaseUuidEntity {
@@ -62,10 +64,10 @@ export class User extends BaseUuidEntity {
   @Column({ nullable: true })
   lastLoginAt?: Date;
 
-  @Column("inet", { nullable: true })
+  @Column(inet, { nullable: true })
   lastLoginIP: string;
 
-  @Column("inet", { nullable: true })
+  @Column(inet, { nullable: true })
   createdIP: string;
 
   @CreateDateColumn()

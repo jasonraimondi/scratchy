@@ -5,8 +5,8 @@ import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadat
 
 import { databaseProviders } from "../src/lib/repositories/repository.providers";
 
-export async function createTestModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
-  const db = [
+export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
+  const repositoryProviders = [
     {
       provide: "DATABASE_CONNECTION",
       useFactory: async () =>
@@ -22,12 +22,11 @@ export async function createTestModule(metadata: ModuleMetadata, entities: any[]
     ...databaseProviders,
   ];
 
-  const guess = {
+  return Test.createTestingModule({
     ...metadata,
-    providers: [...(metadata.providers ?? []), ...db],
-  };
-
-  console.log({ length: guess.providers.length });
-
-  return await Test.createTestingModule(guess).compile();
+    providers: [
+      ...(metadata.providers ?? []),
+      ...repositoryProviders
+    ],
+  }).compile();
 }

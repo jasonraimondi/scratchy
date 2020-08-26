@@ -1,24 +1,31 @@
-import { User } from "../../entity/user/user_entity";
-import { Role } from "../../entity/role/role_entity";
-import { Permission } from "../../entity/role/permission_entity";
-import { ForgotPassword } from "../../entity/user/forgot_password_entity";
-import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
-import { TestingContainer } from "../../../test/test_container";
-import { MyContext } from "../../lib/types/my_context";
+import { TestingModule } from "@nestjs/testing";
+import { User } from "../../../entity/user/user_entity";
 import { MeResolver } from "./me_resolver";
-import { REPOSITORY } from "../../lib/constants/inversify";
-import { IUserRepository } from "../../lib/repositories/user/user_repository";
-import { mockRequest, mockResponse } from "../../../test/mock_application";
+import { IUserRepository } from "../../../lib/repositories/user/user.repository";
+import { createTestingModule } from "../../../../test/test_container";
+import { Role } from "../../../entity/role/role_entity";
+import { MyContext } from "../../../lib/types/my_context";
+import { Permission } from "../../../entity/role/permission_entity";
+import { REPOSITORY } from "../../../lib/config/keys";
+import { UserResolver } from "./user_resolver";
+import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
+import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
+import { mockRequest, mockResponse } from "../../../../test/mock_application";
 
 describe("me resolver", () => {
-  const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
+  const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingContainer;
+  let container: TestingModule;
   let context: MyContext;
   let resolver: MeResolver;
 
   beforeEach(async () => {
-    container = await TestingContainer.create(entities);
+    container = await createTestingModule(
+      {
+        providers: [MeResolver],
+      },
+      entities,
+    );
     context = {
       req: mockRequest(),
       res: mockResponse(),

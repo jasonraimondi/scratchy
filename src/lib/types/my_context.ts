@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { TestingModule } from "@nestjs/testing";
 
 export interface MyContext {
   req: Request | any;
@@ -8,4 +9,5 @@ export interface MyContext {
     email: string;
     isEmailConfirmed: boolean;
   };
+  container: TestingModule
 }

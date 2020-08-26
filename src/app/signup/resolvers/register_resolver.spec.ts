@@ -1,25 +1,35 @@
 import { validate } from "class-validator";
+import { TestingModule } from "@nestjs/testing";
 
-import { TestingContainer } from "../../../test/test_container";
-import { User } from "../../entity/user/user_entity";
-import { Role } from "../../entity/role/role_entity";
-import { ForgotPassword } from "../../entity/user/forgot_password_entity";
-import { Permission } from "../../entity/role/permission_entity";
-import { EmailConfirmation } from "../../entity/user/email_confirmation_entity";
-import { RegisterInput } from "./dtos/register_input";
-import { REPOSITORY } from "../../lib/constants/inversify";
-import { EmailConfirmationRepository } from "../../lib/repositories/user/email_confirmation_repository";
-import { IUserRepository } from "../../lib/repositories/user/user_repository";
-import { RegisterResolver } from "../../signup/resolvers/register_resolver";
+import { RegisterResolver } from "./register_resolver";
+import { Role } from "../../../entity/role/role_entity";
+import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
+import { EmailConfirmationRepository } from "../../../lib/repositories/user/email_confirmation.repository";
+import { User } from "../../../entity/user/user_entity";
+import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
+import { Permission } from "../../../entity/role/permission_entity";
+import { IUserRepository } from "../../../lib/repositories/user/user.repository";
+import { RegisterInput } from "../../user/dtos/register_input";
+import { REPOSITORY } from "../../../lib/config/keys";
+import { createTestingModule } from "../../../../test/test_container";
+import { mockContext } from "../../../../test/mock_application";
+
 
 describe("register_resolver", () => {
-  const entities = [User, Role, Permission, ForgotPassword, EmailConfirmation];
+  const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingContainer;
+  let container: TestingModule;
   let userRepository: IUserRepository;
+  let context: any;
 
   beforeEach(async () => {
-    container = await TestingContainer.create(entities);
+    container = await createTestingModule(
+      {
+        providers: [RegisterResolver],
+      },
+      entities,
+    );
+    context = mockContext({ container });
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
   });
 
@@ -57,7 +67,7 @@ describe("register_resolver", () => {
       await userRepository.save(await User.create(input));
 
       // act
-      const result = resolver.register(input);
+      const result = resolver.register(input, context);
 
       // assert
       await expect(result).rejects.toThrowError("duplicate id for user");
@@ -71,7 +81,7 @@ describe("register_resolver", () => {
       await userRepository.save(await User.create(input));
 
       // act
-      const result = resolver.register(input);
+      const result = resolver.register(input, context);
 
       // assert
       await expect(result).rejects.toThrowError("duplicate emails for user");
@@ -84,7 +94,7 @@ describe("register_resolver", () => {
       input.email = "jason@raimondi.us";
 
       // act
-      const result = await resolver.register(input);
+      const result = await resolver.register(input, context);
 
       // assert
       const emailConfirmationRepository = container.get<EmailConfirmationRepository>(

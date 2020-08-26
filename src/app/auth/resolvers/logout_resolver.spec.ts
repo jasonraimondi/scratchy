@@ -1,28 +1,39 @@
-import { User } from "../../../entity/user/user_entity";
-import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
+import { TestingModule } from "@nestjs/testing";
+
 import { Role } from "../../../entity/role/role_entity";
+import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
 import { MyContext } from "../../../lib/types/my_context";
-import { Permission } from "../../../entity/role/permission_entity";
-import { REPOSITORY } from "../../../lib/config/keys";
+import { mockRequest, mockResponse } from "../../../../test/mock_application";
+import { User } from "../../../entity/user/user_entity";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
+import { Permission } from "../../../entity/role/permission_entity";
+import { IUserRepository } from "../../../lib/repositories/user/user.repository";
+import { REPOSITORY } from "../../../lib/config/keys";
+import { LogoutResolver } from "./logout_resolver";
+import { createTestingModule } from "../../../../test/test_container";
 
 describe("auth_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingContainer;
+  let container: TestingModule;
   let userRepository: IUserRepository;
   let context: MyContext;
-  let resolver: AuthResolver;
+  let resolver: LogoutResolver;
 
   beforeEach(async () => {
-    container = await TestingContainer.create(entities);
+    container = await createTestingModule(
+      {
+        providers: [LogoutResolver],
+      },
+      entities,
+    );
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
     context = {
       res: mockRequest(),
       req: mockResponse(),
       container,
     };
-    resolver = container.get(AuthResolver);
+    resolver = container.get(LogoutResolver);
   });
 
   describe("revokeRefreshToken", () => {
