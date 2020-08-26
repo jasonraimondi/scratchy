@@ -12,16 +12,13 @@ describe("Auth Controller", () => {
   let controller: AuthController;
 
   beforeEach(async () => {
-
-    const module: TestingModule = await createTestModule({
-      controllers: [AuthController],
-      providers: [AuthService],
-    }, [
-      EmailConfirmationToken,
-      User,
-      Role,
-      Permission,
-    ])
+    const module: TestingModule = await createTestModule(
+      {
+        controllers: [AuthController],
+        providers: [AuthService],
+      },
+      [EmailConfirmationToken, User, Role, Permission],
+    );
 
     controller = module.get<AuthController>(AuthController);
   });

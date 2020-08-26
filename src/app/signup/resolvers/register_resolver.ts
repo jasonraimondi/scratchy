@@ -16,8 +16,7 @@ export class RegisterResolver {
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     @Inject(REPOSITORY.EmailConfirmationRepository) private emailConfirmationRepository: IEmailConfirmationRepository,
     private registerEmail: RegisterEmail,
-  ) {
-  }
+  ) {}
 
   @Mutation(() => Boolean!)
   async resentConfirmEmail(@Arg("email") email: string): Promise<boolean> {

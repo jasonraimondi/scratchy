@@ -13,5 +13,4 @@ import { databaseProviders } from "~/lib/repositories/repository.providers";
   ],
   exports: [...databaseProviders],
 })
-export class RepositoryModule {
-}
+export class RepositoryModule {}
