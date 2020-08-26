@@ -11,6 +11,7 @@ import { IForgotPasswordRepository } from "../../../lib/repositories/user/forgot
 import { createTestingModule } from "../../../../test/test_container";
 import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
+import { EmailModule } from "../../../lib/emails/email.module";
 
 describe("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -23,6 +24,7 @@ describe("forgot password resolver", () => {
   beforeEach(async () => {
     container = await createTestingModule(
       {
+        imports: [EmailModule],
         providers: [ForgotPasswordResolver],
       },
       entities,

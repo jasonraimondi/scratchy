@@ -4,6 +4,7 @@ import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 
 import { databaseProviders } from "../src/lib/repositories/repository.providers";
+import { EmailModule } from "../src/lib/emails/email.module";
 
 export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
   const repositoryProviders = [

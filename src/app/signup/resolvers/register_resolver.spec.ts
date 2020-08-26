@@ -13,6 +13,7 @@ import { RegisterInput } from "../../user/dtos/register_input";
 import { REPOSITORY } from "../../../lib/config/keys";
 import { createTestingModule } from "../../../../test/test_container";
 import { mockContext } from "../../../../test/mock_application";
+import { RegisterEmail } from "../../../lib/emails/modules/signup/register.email";
 
 
 describe("register_resolver", () => {
@@ -25,7 +26,7 @@ describe("register_resolver", () => {
   beforeEach(async () => {
     container = await createTestingModule(
       {
-        providers: [RegisterResolver],
+        providers: [RegisterResolver, RegisterEmail],
       },
       entities,
     );
@@ -101,8 +102,6 @@ describe("register_resolver", () => {
         REPOSITORY.EmailConfirmationRepository,
       );
       const emailConfirmation = await emailConfirmationRepository.findByEmail("jason@raimondi.us");
-      expect(result.emailConfirmation).toBeTruthy();
-      expect(result.emailConfirmation!.id).toBe(emailConfirmation.id);
       expect(result.user).toBeTruthy();
       expect(result.user!.id).toBe(emailConfirmation.user.id);
       expect(result.user!.email).toBe("jason@raimondi.us");
@@ -116,7 +115,7 @@ describe("register_resolver", () => {
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = "jason@raimondi.us";
-      await resolver.register(input);
+      await resolver.register(input, context);
 
       // act
       const result = await resolver.resentConfirmEmail("jason@raimondi.us");

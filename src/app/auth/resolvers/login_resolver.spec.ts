@@ -5,7 +5,7 @@ import { TestingModule } from "@nestjs/testing";
 import { Role } from "../../../entity/role/role_entity";
 import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
 import { MyContext } from "../../../lib/types/my_context";
-import { mockRequest, mockResponse } from "../../../../test/mock_application";
+import { mockContext, mockRequest, mockResponse } from "../../../../test/mock_application";
 import { User } from "../../../entity/user/user_entity";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
 import { Permission } from "../../../entity/role/permission_entity";
@@ -13,6 +13,7 @@ import { IUserRepository } from "../../../lib/repositories/user/user.repository"
 import { REPOSITORY } from "../../../lib/config/keys";
 import { LoginInput } from "../../user/dtos/login_input";
 import { LoginResolver } from "./login_resolver";
+import { AuthService } from "../auth.service";
 
 describe("login_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -25,16 +26,12 @@ describe("login_resolver", () => {
   beforeEach(async () => {
     container = await createTestingModule(
       {
-        providers: [UserResolver],
+        providers: [LoginResolver, AuthService],
       },
       entities,
     );
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    context = {
-      res: mockRequest(),
-      req: mockResponse(),
-      container,
-    };
+    context = mockContext({ container });
     resolver = container.get(LoginResolver);
   });
 

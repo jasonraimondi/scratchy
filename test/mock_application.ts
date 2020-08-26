@@ -19,6 +19,9 @@ export const mockRequest = (authHeader?: string, sessionData?: any) => ({
     if (name === "authorization") return authHeader;
     return null;
   },
+  connection: {
+    remoteAddress: "::testing"
+  },
   cookie: jest.fn().mockReturnValue({
     authorization: "bearer iamacookie",
   }),
