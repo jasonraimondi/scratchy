@@ -10,7 +10,6 @@ import { createTestingModule } from "../../../../test/test_container";
 import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
 
-
 describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 

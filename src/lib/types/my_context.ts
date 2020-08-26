@@ -9,5 +9,5 @@ export interface MyContext {
     email: string;
     isEmailConfirmed: boolean;
   };
-  container: TestingModule
+  container: TestingModule;
 }

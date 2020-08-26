@@ -25,9 +25,6 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
 
   return Test.createTestingModule({
     ...metadata,
-    providers: [
-      ...(metadata.providers ?? []),
-      ...repositoryProviders
-    ],
+    providers: [...(metadata.providers ?? []), ...repositoryProviders],
   }).compile();
 }

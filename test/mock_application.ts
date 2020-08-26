@@ -1,8 +1,8 @@
 import { TestingModule } from "@nestjs/testing";
 
 interface IMockContent {
-  container: TestingModule,
-  res?: any
+  container: TestingModule;
+  res?: any;
   req?: any;
 }
 
@@ -12,7 +12,7 @@ export const mockContext = ({ container, res = mockRequest(), req = mockRequest(
     req,
     container,
   };
-}
+};
 
 export const mockRequest = (authHeader?: string, sessionData?: any) => ({
   get(name: string) {
@@ -20,7 +20,7 @@ export const mockRequest = (authHeader?: string, sessionData?: any) => ({
     return null;
   },
   connection: {
-    remoteAddress: "::testing"
+    remoteAddress: "::testing",
   },
   cookie: jest.fn().mockReturnValue({
     authorization: "bearer iamacookie",

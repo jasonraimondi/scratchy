@@ -11,11 +11,6 @@ import { EmailModule } from "~/lib/emails/email.module";
 @Module({
   controllers: [AuthController],
   imports: [EmailModule, RepositoryModule],
-  providers: [
-    AuthService,
-    ForgotPasswordResolver,
-    LogoutResolver,
-    LoginResolver,
-  ],
+  providers: [AuthService, ForgotPasswordResolver, LogoutResolver, LoginResolver],
 })
 export class AuthModule {}

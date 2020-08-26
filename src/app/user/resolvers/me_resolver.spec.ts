@@ -7,7 +7,6 @@ import { Role } from "../../../entity/role/role_entity";
 import { MyContext } from "../../../lib/types/my_context";
 import { Permission } from "../../../entity/role/permission_entity";
 import { REPOSITORY } from "../../../lib/config/keys";
-import { UserResolver } from "./user_resolver";
 import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
 import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
 import { mockRequest, mockResponse } from "../../../../test/mock_application";

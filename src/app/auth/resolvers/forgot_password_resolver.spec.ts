@@ -72,7 +72,7 @@ describe("forgot password resolver", () => {
       const updatedUser = await userRepository.findById(user.id);
       await expect(updatedUser.verify("my-new-password")).resolves.toBeUndefined();
       await expect(forgotPasswordRepository.findForUser(forgotPassword.id)).rejects.toThrowError(
-        "Could not find any entity of type \"ForgotPasswordToken\"",
+        'Could not find any entity of type "ForgotPasswordToken"',
       );
     });
   });

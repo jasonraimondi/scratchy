@@ -15,7 +15,6 @@ import { createTestingModule } from "../../../../test/test_container";
 import { mockContext } from "../../../../test/mock_application";
 import { RegisterEmail } from "../../../lib/emails/modules/signup/register.email";
 
-
 describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
