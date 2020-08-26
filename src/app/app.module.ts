@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { TypeGraphQLModule } from "typegraphql-nestjs";
 
-import { AuthModule } from "~/modules/auth/auth.module";
-import { UserModule } from "~/modules/user/user.module";
-import { AppResolver } from "~/modules/app/app_resolver";
-import { SignupModule } from "~/modules/signup/signup.module";
-import { ENV } from "~/config/environment";
+import { AuthModule } from "~/app/auth/auth.module";
+import { UserModule } from "~/app/user/user.module";
+import { AppResolver } from "~/app/info/info.resolver";
+import { SignupModule } from "~/app/signup/signup.module";
+import { ENV } from "~/lib/config/environment";
 
 @Module({
   imports: [

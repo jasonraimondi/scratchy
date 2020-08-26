@@ -1,4 +1,4 @@
-import { ENV } from "~/config/environment";
+import { ENV } from "~/lib/config/environment";
 
 const route = (path: string) => {
   path = `${ENV.baseURL}${path}`;

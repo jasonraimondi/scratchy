@@ -2,9 +2,9 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
-import { REPOSITORY } from "~/config/keys";
+import { REPOSITORY } from "~/lib/config/keys";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { SendForgotPasswordInput, UpdatePasswordInput } from "~/modules/user/dtos/forgot_password_input";
+import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password_input";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";

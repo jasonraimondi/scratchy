@@ -1,11 +1,11 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
-import { REPOSITORY } from "~/config/keys";
+import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
-import { RegisterResponse } from "~/modules/user/dtos/register_response";
-import { RegisterInput } from "~/modules/user/dtos/register_input";
+import { RegisterResponse } from "~/app/user/dtos/register_response";
+import { RegisterInput } from "~/app/user/dtos/register_input";
 import { User } from "~/entity/user/user_entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
 import { MyContext } from "~/lib/types/my_context";
@@ -16,7 +16,8 @@ export class RegisterResolver {
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     @Inject(REPOSITORY.EmailConfirmationRepository) private emailConfirmationRepository: IEmailConfirmationRepository,
     private registerEmail: RegisterEmail,
-  ) {}
+  ) {
+  }
 
   @Mutation(() => Boolean!)
   async resentConfirmEmail(@Arg("email") email: string): Promise<boolean> {
@@ -41,16 +42,11 @@ export class RegisterResolver {
       createdIP: createdIp,
     });
     if (password) await user.setPassword(password);
-    try {
-      await this.userRepository.save(user);
-      const emailConfirmation = new EmailConfirmationToken(user);
-      await this.emailConfirmationRepository.save(emailConfirmation);
-      await this.registerEmail.send(emailConfirmation);
-      return { user, emailConfirmation };
-    } catch (e) {
-      console.error(e);
-    }
-    return {};
+    await this.userRepository.save(user);
+    const emailConfirmation = new EmailConfirmationToken(user);
+    await this.emailConfirmationRepository.save(emailConfirmation);
+    await this.registerEmail.send(emailConfirmation);
+    return { user };
   }
 
   private async guardAgainstDuplicateUser(email: string, id?: string) {

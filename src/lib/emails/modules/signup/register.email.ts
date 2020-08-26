@@ -22,6 +22,7 @@ export class RegisterEmail implements IEmailService {
       subject: "Register User Email",
       template: "signup/register",
       context: {
+        user,
         url: API_ROUTES.verify_email.create({
           email: user.email,
           id: userConfirmation.id,
