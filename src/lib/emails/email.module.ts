@@ -7,7 +7,7 @@ import { ENV } from "~/lib/config/environment";
 import { emailProviders } from "~/lib/emails/email.providers";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { RepositoryModule } from "../../../test/test_repository.module";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 
 @Module({

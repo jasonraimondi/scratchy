@@ -82,6 +82,7 @@
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "schemats": "^3.0.3",
+    "sqlite3": "^5.0.0",
     "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.58",

@@ -3,7 +3,7 @@ import { BullModule } from "@nestjs/bull";
 
 import { UserResolver } from "~/app/user/resolvers/user_resolver";
 import { MeResolver } from "~/app/user/resolvers/me_resolver";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { RepositoryModule } from "../../../test/test_repository.module";
 import { QUEUE } from "~/lib/config/keys";
 import { EmailModule } from "~/lib/emails/email.module";
 
