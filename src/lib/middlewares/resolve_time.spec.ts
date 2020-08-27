@@ -17,7 +17,7 @@ describe("resolve_time", () => {
       },
     };
     const timeout = 5;
-    const next = async () => await sleep(timeout);
+    const next = async () => await sleep(timeout * 2);
 
     // act
     const { resolveTime, message } = await ResolveTime(action, next);
