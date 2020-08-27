@@ -2,7 +2,7 @@
 
 ![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)
 
-Install
+## Install
 
 ```bash
 # install dependencies
@@ -17,3 +17,26 @@ npm run migrate:up
 # start the server
 npm run start:dev
 ```
+
+## About:
+
+* NestJS application
+* Authentication via JWT
+* TypeORM using Repository Pattern
+* Bull for handling queue / jobs
+* Email sending using nodemailer, over SMTP
+* Email templates using MJML
+
+### Modules:
+
+* Auth
+  - Login
+  - Logout
+  - Forgot Password
+Signup
+  - Register
+  - Verify Email Address
+User
+  - Me
+  - Get User
+  - List Users
