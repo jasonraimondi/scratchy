@@ -17,9 +17,9 @@
     "migrate:down": "db-migrate down -m db/migrations",
     "migrate:down:all": "db-migrate down -m db/migrations 0",
     "migrate:create": "db-migrate create --sql-file -m db/migrations",
-    "test": "jest --detectOpenHandles",
-    "test:watch": "jest --watch --detectOpenHandles",
-    "test:cov": "jest --coverage --detectOpenHandles",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "keywords": [],
