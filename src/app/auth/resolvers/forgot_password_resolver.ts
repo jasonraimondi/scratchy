@@ -1,5 +1,5 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
-import { Inject } from "@nestjs/common";
+import { Inject, Logger } from "@nestjs/common";
 
 import { User } from "~/entity/user/user_entity";
 import { REPOSITORY } from "~/lib/config/keys";
@@ -11,6 +11,8 @@ import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.e
 
 @Resolver()
 export class ForgotPasswordResolver {
+  private readonly logger = new Logger(ForgotPasswordResolver.name);
+
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     @Inject(REPOSITORY.ForgotPasswordRepository) private forgotPasswordRepository: IForgotPasswordRepository,
@@ -35,7 +37,7 @@ export class ForgotPasswordResolver {
       await this.forgotPasswordEmail.send(forgotPassword);
       return true;
     } catch (e) {
-      console.error(e);
+      this.logger.error(e);
     }
     return false;
   }
