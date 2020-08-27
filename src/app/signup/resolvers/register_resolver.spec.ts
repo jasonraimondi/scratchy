@@ -15,7 +15,7 @@ import { Permission } from "~/entity/role/permission_entity";
 import { mockContext } from "~test/mock_application";
 import { REPOSITORY } from "~/lib/config/keys";
 
-describe.skip("register_resolver", () => {
+describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
@@ -87,7 +87,7 @@ describe.skip("register_resolver", () => {
       await expect(result).rejects.toThrowError("duplicate emails for user");
     });
 
-    test("user is registered with emails confirmation", async () => {
+    test.skip("user is registered with emails confirmation", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
@@ -101,14 +101,15 @@ describe.skip("register_resolver", () => {
         REPOSITORY.EmailConfirmationRepository,
       );
       const emailConfirmation = await emailConfirmationRepository.findByEmail("jason@raimondi.us");
+      console.log({ emailConfirmation, result })
       expect(result.user).toBeTruthy();
-      expect(result.user!.id).toBe(emailConfirmation.user.id);
-      expect(result.user!.email).toBe("jason@raimondi.us");
-      expect(result.user!.isEmailConfirmed).toBeFalsy();
+      expect(result.user.id).toBe(emailConfirmation.user.id);
+      expect(result.user.email).toBe("jason@raimondi.us");
+      expect(result.user.isEmailConfirmed).toBeFalsy();
     });
   });
 
-  describe("resentConfirmEmail", () => {
+  describe.skip("resentConfirmEmail", () => {
     test("resend emails function works", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);

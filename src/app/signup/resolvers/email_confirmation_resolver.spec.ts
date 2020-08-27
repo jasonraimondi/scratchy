@@ -12,7 +12,7 @@ import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
 import { createTestingModule } from "~test/test_container";
 
-describe.skip("emails confirmation resolver", () => {
+describe("emails confirmation resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
@@ -32,7 +32,7 @@ describe.skip("emails confirmation resolver", () => {
     resolver = container.get(EmailConfirmationResolver);
   });
 
-  describe("verify user emails confirmation", () => {
+  describe.skip("verify user emails confirmation", () => {
     test("resolve user by id", async () => {
       // arrange
       const user = await User.create({ email: "jason@raimondi.us" });

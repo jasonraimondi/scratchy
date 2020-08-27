@@ -33,7 +33,7 @@ export class RegisterResolver {
   @Mutation(() => RegisterResponse!)
   async register(@Arg("data") registerInput: RegisterInput, @Ctx() { req }: MyContext): Promise<RegisterResponse> {
     registerInput.email = registerInput.email.toLowerCase();
-    const createdIp = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    const createdIp = req.headers?.["x-forwarded-for"] || req.connection.remoteAddress;
     const { email, id, password } = registerInput;
     await this.guardAgainstDuplicateUser(email, id);
     const user = await User.create({

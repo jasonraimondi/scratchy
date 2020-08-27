@@ -6,14 +6,14 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password_resolver";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password_input";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { EmailModule } from "~/lib/emails/email.module";
 import { createTestingModule } from "~test/test_container";
 import { Role } from "~/entity/role/role_entity";
 import { Permission } from "~/entity/role/permission_entity";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
+import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 
-describe.skip("forgot password resolver", () => {
+describe("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
@@ -24,8 +24,7 @@ describe.skip("forgot password resolver", () => {
   beforeEach(async () => {
     container = await createTestingModule(
       {
-        imports: [EmailModule],
-        providers: [ForgotPasswordResolver],
+        providers: [ForgotPasswordResolver, ForgotPasswordEmail],
       },
       entities,
     );
