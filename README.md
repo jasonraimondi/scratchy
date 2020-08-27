@@ -18,7 +18,7 @@ npm run migrate:up
 npm run start:dev
 ```
 
-## About:
+## Tooling:
 
 * NestJS application
 * Authentication via JWT
@@ -27,7 +27,7 @@ npm run start:dev
 * Email sending using nodemailer, over SMTP
 * Email templates using MJML
 
-### Modules:
+## Modules:
 
 * Auth
   - Login

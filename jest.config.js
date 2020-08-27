@@ -7,6 +7,7 @@ module.exports = {
     "json",
     "ts",
   ],
+  modulePathIgnorePatterns: ['<rootDir>/dist'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/",
   }),
