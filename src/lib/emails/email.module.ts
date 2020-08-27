@@ -21,10 +21,7 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
     }),
     BullModule.registerQueue({
       name: QUEUE.email,
-      redis: {
-        host: "localhost",
-        port: 6379,
-      },
+      redis: ENV.queueURL,
     }),
   ],
   providers: [EmailService, EmailTemplateService, SendEmailProcessor, ...emailProviders],
