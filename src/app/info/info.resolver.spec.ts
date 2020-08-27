@@ -1,4 +1,5 @@
-import { AppResolver } from "./info.resolver";
+import { AppResolver } from "~/app/info/info.resolver";
+
 import pkg from "../../../package.json";
 
 describe("app_resolver", () => {

@@ -12,7 +12,8 @@
     "paths": {
       "~package.json": ["package.json"],
       "~/*": ["src/*"],
-      "~db/*": ["db/*"]
+      "~db/*": ["db/*"],
+      "~test/*": ["test/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -28,6 +29,6 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true
   },
-  "include": ["src/**/*", "db/**/*"],
-  "exclude": ["node_modules", "src/**/*.spec.*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

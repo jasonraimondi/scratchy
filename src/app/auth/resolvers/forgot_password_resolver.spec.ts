@@ -1,19 +1,19 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "../../../entity/role/role_entity";
-import { User } from "../../../entity/user/user_entity";
-import { ForgotPasswordResolver } from "./forgot_password_resolver";
-import { SendForgotPasswordInput, UpdatePasswordInput } from "../../user/dtos/forgot_password_input";
-import { Permission } from "../../../entity/role/permission_entity";
-import { IUserRepository } from "../../../lib/repositories/user/user.repository";
-import { REPOSITORY } from "../../../lib/config/keys";
-import { IForgotPasswordRepository } from "../../../lib/repositories/user/forgot_password.repository";
-import { createTestingModule } from "../../../../test/test_container";
-import { ForgotPasswordToken } from "../../../entity/user/forgot_password_entity";
-import { EmailConfirmationToken } from "../../../entity/user/email_confirmation_entity";
-import { EmailModule } from "../../../lib/emails/email.module";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
+import { User } from "~/entity/user/user_entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password_resolver";
+import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password_input";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { EmailModule } from "~/lib/emails/email.module";
+import { createTestingModule } from "~test/test_container";
+import { Role } from "~/entity/role/role_entity";
+import { Permission } from "~/entity/role/permission_entity";
+import { REPOSITORY } from "~/lib/config/keys";
+import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 
-describe("forgot password resolver", () => {
+describe.skip("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
@@ -37,7 +37,7 @@ describe("forgot password resolver", () => {
   describe("sendForgotPasswordEmail", () => {
     test("success", async () => {
       // arrange
-      const user = await User.create({ email: "jason@raimondi.us" });
+      const user = await User.create({ email: "jason1@raimondi.us" });
       user.isEmailConfirmed = true;
       await userRepository.save(user);
 
