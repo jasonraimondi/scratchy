@@ -1,5 +1,7 @@
 # Scratchy
 
+![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)
+
 Install
 
 ```bash
