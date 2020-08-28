@@ -15,7 +15,7 @@ import { ENV } from "~/lib/config/environment";
       emitSchemaFile: ENV.enableOutputSchema,
       validate: true,
       dateScalarMode: "timestamp",
-      context: ({ req }) => ({ currentUser: req.user }),
+      context: ({ res, req }) => ({ currentUser: req.user, res, req }),
     }),
     AuthModule,
     SignupModule,
