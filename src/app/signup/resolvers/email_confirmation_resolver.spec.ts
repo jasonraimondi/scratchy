@@ -32,7 +32,7 @@ describe("emails confirmation resolver", () => {
     resolver = container.get(EmailConfirmationResolver);
   });
 
-  describe.skip("verify user emails confirmation", () => {
+  describe("verify user emails confirmation", () => {
     test("resolve user by id", async () => {
       // arrange
       const user = await User.create({ email: "jason@raimondi.us" });
@@ -48,7 +48,7 @@ describe("emails confirmation resolver", () => {
       const result = emailConfirmationRepository.findByEmail(user.email);
 
       // assert
-      await expect(result).rejects.toThrowError('Could not find any entity of type "EmailConfirmation"');
+      await expect(result).rejects.toThrowError('Could not find any entity of type "EmailConfirmationToken"');
     });
   });
 });

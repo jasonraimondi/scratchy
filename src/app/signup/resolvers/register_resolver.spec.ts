@@ -87,7 +87,7 @@ describe("register_resolver", () => {
       await expect(result).rejects.toThrowError("duplicate emails for user");
     });
 
-    test.skip("user is registered with emails confirmation", async () => {
+    test("user is registered with emails confirmation", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
@@ -101,7 +101,6 @@ describe("register_resolver", () => {
         REPOSITORY.EmailConfirmationRepository,
       );
       const emailConfirmation = await emailConfirmationRepository.findByEmail("jason@raimondi.us");
-      console.log({ emailConfirmation, result })
       expect(result.user).toBeTruthy();
       expect(result.user.id).toBe(emailConfirmation.user.id);
       expect(result.user.email).toBe("jason@raimondi.us");
@@ -109,7 +108,7 @@ describe("register_resolver", () => {
     });
   });
 
-  describe.skip("resentConfirmEmail", () => {
+  describe("resentConfirmEmail", () => {
     test("resend emails function works", async () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
@@ -132,7 +131,7 @@ describe("register_resolver", () => {
       const result = resolver.resentConfirmEmail("jason@raimondi.us");
 
       // assert
-      await expect(result).rejects.toThrow(new RegExp('Could not find any entity of type "EmailConfirmation"'));
+      await expect(result).rejects.toThrow(new RegExp('Could not find any entity of type "EmailConfirmationToken"'));
     });
   });
 });

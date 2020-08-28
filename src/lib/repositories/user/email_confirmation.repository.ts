@@ -10,28 +10,21 @@ export interface IEmailConfirmationRepository extends IBaseRepository<EmailConfi
 @EntityRepository(EmailConfirmationToken)
 export class EmailConfirmationRepository extends Repository<EmailConfirmationToken>
   implements IEmailConfirmationRepository {
-  findByEmail(email: string): Promise<EmailConfirmationToken> {
-    return this.findOneOrFail({
-      join: {
-        alias: "user_confirmation",
-        leftJoinAndSelect: {
-          user: "user_confirmation.user",
-        },
-      },
-      where: {
-        "user.email = :email": {
-          email,
-        },
-      },
-    });
+  async findByEmail(email: string): Promise<EmailConfirmationToken> {
+    const emailConfirmationToken = await this.createQueryBuilder("email_confirmation_tokens")
+      .leftJoinAndSelect("email_confirmation_tokens.user", "users")
+      .where("users.email = :email", { email })
+      .getOne();
+    if (!emailConfirmationToken) throw new Error(`Could not find any entity of type "${EmailConfirmationToken.name}"`)
+    return emailConfirmationToken;
   }
 
   findById(id: string): Promise<EmailConfirmationToken> {
     return this.findOneOrFail(id, {
       join: {
-        alias: "user_confirmation",
+        alias: "email_confirmation_tokens",
         leftJoinAndSelect: {
-          user: "user_confirmation.user",
+          user: "email_confirmation_tokens.user",
         },
       },
     });
