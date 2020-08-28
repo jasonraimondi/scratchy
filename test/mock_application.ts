@@ -14,11 +14,11 @@ export const mockContext = ({ container, res = mockRequest(), req = mockRequest(
   };
 };
 
-export const mockRequest = (authHeader?: string, sessionData?: any) => ({
-  get(name: string) {
+export const mockRequest = (authHeader?: string, sessionData = {}): any => ({
+  get: jest.fn((name: string) => {
     if (name === "authorization") return authHeader;
     return null;
-  },
+  }),
   connection: {
     remoteAddress: "::testing",
   },

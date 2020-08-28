@@ -1,5 +1,6 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
+
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
