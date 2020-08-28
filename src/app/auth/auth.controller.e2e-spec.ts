@@ -1,3 +1,4 @@
+import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
@@ -9,7 +10,6 @@ import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission_entity";
 import { AuthController } from "~/app/auth/auth.controller";
 import { createTestingModule } from "~test/test_container";
-import { INestApplication } from "@nestjs/common";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
 

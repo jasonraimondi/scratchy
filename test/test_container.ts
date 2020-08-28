@@ -8,6 +8,7 @@ import { BullModule } from "@nestjs/bull";
 import { databaseProviders } from "~/lib/repositories/repository.providers";
 import { QUEUE } from "~/lib/config/keys";
 import { EmailService } from "~/lib/emails/services/email.service";
+import { ENV } from "~/lib/config/environment";
 
 const mockTransport = {
   name: 'mock-transport',
@@ -41,6 +42,7 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
   const emailImports = [
     BullModule.registerQueue({
       name: QUEUE.email,
+      redis: ENV.queueURL
     }),
     MailerModule.forRoot({
       transport: mockTransport,
