@@ -25,8 +25,7 @@ describe("is_auth", () => {
     // arrange
     // act
     const params: any = { context };
-    const next: any = () => {
-    };
+    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
@@ -36,8 +35,7 @@ describe("is_auth", () => {
     // arrange
     // act
     const params: any = { context };
-    const next: any = () => {
-    };
+    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
@@ -53,8 +51,7 @@ describe("is_auth", () => {
 
     // act
     const params: any = { context };
-    const next: any = () => {
-    };
+    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");

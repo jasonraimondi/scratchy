@@ -15,7 +15,7 @@ export class EmailConfirmationRepository extends Repository<EmailConfirmationTok
       .leftJoinAndSelect("email_confirmation_tokens.user", "users")
       .where("users.email = :email", { email })
       .getOne();
-    if (!emailConfirmationToken) throw new Error(`Could not find any entity of type "${EmailConfirmationToken.name}"`)
+    if (!emailConfirmationToken) throw new Error(`Could not find any entity of type "${EmailConfirmationToken.name}"`);
     return emailConfirmationToken;
   }
 

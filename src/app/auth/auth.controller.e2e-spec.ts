@@ -35,9 +35,7 @@ describe("Auth Controller", () => {
 
   describe("/POST auth/refresh_token", () => {
     it("throws 401 if no refresh token cookie", () => {
-      return request(app.getHttpServer())
-        .post('/auth/refresh_token')
-        .expect(401)
-    })
+      return request(app.getHttpServer()).post("/auth/refresh_token").expect(401);
+    });
   });
 });

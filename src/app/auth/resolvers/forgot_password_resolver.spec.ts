@@ -13,7 +13,7 @@ import { REPOSITORY } from "~/lib/config/keys";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 
-describe("forgot password resolver", () => {
+describe.skip("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;

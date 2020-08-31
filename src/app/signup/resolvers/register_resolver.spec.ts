@@ -15,7 +15,7 @@ import { Permission } from "~/entity/role/permission_entity";
 import { mockContext } from "~test/mock_application";
 import { REPOSITORY } from "~/lib/config/keys";
 
-describe("register_resolver", () => {
+describe.skip("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;

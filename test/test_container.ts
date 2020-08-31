@@ -11,17 +11,19 @@ import { EmailService } from "~/lib/emails/services/email.service";
 import { ENV } from "~/lib/config/environment";
 
 const mockTransport = {
-  name: 'mock-transport',
-  version: '1.0.0',
+  name: "mock-transport",
+  version: "1.0.0",
   send: (mail: any, callback: any) => {
     console.log(mail);
     const input = mail.message.createReadStream();
     input.pipe(process.stdout);
-    input.on('end', function () {
+    input.on("end", function () {
       callback(null, true);
     });
-  }
+  },
 };
+
+import produce from "immer";
 
 export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
   const repositoryProviders = [
@@ -39,22 +41,27 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
     },
     ...databaseProviders,
   ];
-  const emailImports = [
-    BullModule.registerQueue({
-      name: QUEUE.email,
-      redis: ENV.queueURL
-    }),
-    MailerModule.forRoot({
-      transport: mockTransport,
-      defaults: {
-        from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
-      },
-    }),
+
+  const emailImports: any = [
+    // BullModule.registerQueue({
+    //   name: QUEUE.email,
+    //   redis: ENV.queueURL
+    // }),
+    // MailerModule.forRoot({
+    //   transport: mockTransport,
+    //   defaults: {
+    //     from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
+    //   },
+    // }),
   ];
 
-  return Test.createTestingModule({
-    ...metadata,
-    imports: [...(metadata.imports ?? []), ...emailImports],
-    providers: [...(metadata.providers ?? []), EmailService, ...repositoryProviders],
-  }).compile();
+  const tester = produce(metadata, (draft: ModuleMetadata) => {
+    draft.imports = draft.imports ?? [];
+    draft.providers = draft.providers ?? [];
+
+    draft.imports.push(...emailImports);
+    // draft.providers.push(EmailService);
+    draft.providers.push(...repositoryProviders);
+  });
+  return Test.createTestingModule(tester).compile();
 }
