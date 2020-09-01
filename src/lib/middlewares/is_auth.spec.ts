@@ -15,6 +15,7 @@ describe("is_auth", () => {
 
   let container: TestingModule;
   let context: MyContext;
+  const next = jest.fn();
 
   beforeEach(async () => {
     container = await createTestingModule({}, entities);
@@ -25,7 +26,6 @@ describe("is_auth", () => {
     // arrange
     // act
     const params: any = { context };
-    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
@@ -35,7 +35,6 @@ describe("is_auth", () => {
     // arrange
     // act
     const params: any = { context };
-    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");
@@ -51,7 +50,6 @@ describe("is_auth", () => {
 
     // act
     const params: any = { context };
-    const next: any = () => {};
 
     // assert
     await expect(isAuth(params, next)).rejects.toThrowError("not authenticated");

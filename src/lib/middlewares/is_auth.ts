@@ -11,11 +11,11 @@ export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   }
   try {
     const token = authorization.split(" ")[1];
-    const verif: any = verify(token, ENV.accessTokenSecret);
+    const decodedToken: any = verify(token, ENV.accessTokenSecret);
     context.auth = {
-      userId: verif.userId,
-      email: verif.email,
-      isEmailConfirmed: verif.isEmailConfirmed,
+      userId: decodedToken.userId,
+      email: decodedToken.email,
+      isEmailConfirmed: decodedToken.isEmailConfirmed,
     };
   } catch (err) {
     throw new Error("not authenticated");

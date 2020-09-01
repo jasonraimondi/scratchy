@@ -23,7 +23,7 @@ describe("send_email processor", () => {
       subject: "Forgot your password?",
       template: "test/hello-world",
       context: {
-        name: "World"
+        name: "World",
       },
     },
   };
@@ -36,7 +36,7 @@ describe("send_email processor", () => {
   it("sends email for valid job data", async () => {
     const result = resolver.handleSend(job);
     await expect(result).resolves.toBeUndefined();
-    expect(emails.length).toBe(1)
+    expect(emails.length).toBe(1);
     expect(emails[0].to).toBe(job.data.to);
     expect(emails[0].subject).toBe(job.data.subject);
     expect(emails[0].html).toBe("<p>Hello World</p>");
@@ -44,9 +44,9 @@ describe("send_email processor", () => {
   });
 
   it("throws error when template not found", async () => {
-    job.data.template = "foo/bar"
+    job.data.template = "foo/bar";
     const result = resolver.handleSend(job);
-    await expect(result).rejects.toThrowError(new RegExp('no such file or directory'));
-    expect(emails.length).toBe(0)
+    await expect(result).rejects.toThrowError(new RegExp("no such file or directory"));
+    expect(emails.length).toBe(0);
   });
 });

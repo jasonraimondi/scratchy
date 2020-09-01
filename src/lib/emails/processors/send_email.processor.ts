@@ -1,4 +1,4 @@
-import { Processor, Process } from "@nestjs/bull";
+import { Process, Processor } from "@nestjs/bull";
 import { Inject, Logger } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";

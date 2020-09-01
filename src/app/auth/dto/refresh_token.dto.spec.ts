@@ -5,8 +5,8 @@ describe("refresh_token", () => {
     it("for expired tokens", () => {
       const refreshToken = new RefreshTokenDTO();
       expect(refreshToken.isExpired).toBeTruthy();
-    })
+    });
 
     // @todo add test for passing token
-  })
+  });
 });

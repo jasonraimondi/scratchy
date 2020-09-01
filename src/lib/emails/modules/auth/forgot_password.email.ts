@@ -1,4 +1,4 @@
-import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
+import { ISendMailOptions } from "@nestjs-modules/mailer";
 
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
 import { API_ROUTES } from "~/lib/services/route";
