@@ -12,7 +12,7 @@ import { ENV } from "~/lib/config/environment";
     TypeGraphQLModule.forRoot({
       debug: ENV.enableDebugging,
       playground: true,
-      emitSchemaFile: ENV.enableOutputSchema,
+      emitSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
       validate: true,
       dateScalarMode: "timestamp",
       context: ({ res, req }) => ({ currentUser: req.user, res, req }),
