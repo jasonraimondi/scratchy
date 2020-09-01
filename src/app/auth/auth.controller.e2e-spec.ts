@@ -9,15 +9,16 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission_entity";
 import { AuthController } from "~/app/auth/auth.controller";
-import { createTestingModule } from "~test/test_container";
+import { createTestingModule } from "~/app/app_testing.module";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
 
 describe("Auth Controller", () => {
   let app: INestApplication;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await createTestingModule(
+    module = await createTestingModule(
       {
         controllers: [AuthController],
         providers: [AuthService],
@@ -37,5 +38,7 @@ describe("Auth Controller", () => {
     it("throws 401 if no refresh token cookie", () => {
       return request(app.getHttpServer()).post("/auth/refresh_token").expect(401);
     });
+
+    // @todo add test for valid post
   });
 });

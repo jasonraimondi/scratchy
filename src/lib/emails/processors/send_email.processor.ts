@@ -22,13 +22,9 @@ export class SendEmailProcessor {
   async handleSend(job: Job<ISendMailOptions>) {
     const { template, context, ...config } = job.data;
     if (!template) throw new Error(`Template not found ${template}`);
-    try {
-      const html = await this.emailTemplateService.html(template, context);
-      const text = await this.emailTemplateService.txt(template, context);
-      await this.mailerService.sendMail({ ...config, html, text });
-    } catch (error) {
-      this.logger.error(error);
-    }
+    const html = await this.emailTemplateService.html(template, context);
+    const text = await this.emailTemplateService.txt(template, context);
+    await this.mailerService.sendMail({ ...config, html, text });
     return;
   }
 }

@@ -8,7 +8,7 @@ import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission_entity";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
-import { createTestingModule } from "~test/test_container";
+import { createTestingModule } from "~/app/app_testing.module";
 import { LogoutResolver } from "~/app/auth/resolvers/logout_resolver";
 
 describe("auth_resolver", () => {

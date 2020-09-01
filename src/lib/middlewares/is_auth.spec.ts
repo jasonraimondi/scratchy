@@ -1,7 +1,7 @@
 import { TestingModule } from "@nestjs/testing";
 
 import { Role } from "~/entity/role/role_entity";
-import { createTestingModule } from "~test/test_container";
+import { createTestingModule } from "~/app/app_testing.module";
 import { User } from "~/entity/user/user_entity";
 import { Permission } from "~/entity/role/permission_entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";

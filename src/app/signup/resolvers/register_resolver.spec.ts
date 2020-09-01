@@ -8,14 +8,15 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { RegisterInput } from "~/app/user/dtos/register_input";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
-import { createTestingModule } from "~test/test_container";
+import { createTestingModule } from "~/app/app_testing.module";
 import { RegisterResolver } from "~/app/signup/resolvers/register_resolver";
 import { Role } from "~/entity/role/role_entity";
 import { Permission } from "~/entity/role/permission_entity";
 import { mockContext } from "~test/mock_application";
 import { REPOSITORY } from "~/lib/config/keys";
+import { emails } from "~test/mock_email_service";
 
-describe.skip("register_resolver", () => {
+describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
@@ -121,6 +122,9 @@ describe.skip("register_resolver", () => {
 
       // assert
       expect(result).toBe(true);
+      expect(emails.length).toBe(2);
+      expect(emails[0].template).toBe("signup/register");
+      expect(emails[1].template).toBe("signup/register");
     });
 
     test("resend emails throws for invalid user", async () => {
@@ -132,6 +136,7 @@ describe.skip("register_resolver", () => {
 
       // assert
       await expect(result).rejects.toThrow(new RegExp('Could not find any entity of type "EmailConfirmationToken"'));
+      expect(emails.length).toBe(0);
     });
   });
 });

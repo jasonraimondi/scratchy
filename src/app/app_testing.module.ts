@@ -1,29 +1,20 @@
+import produce from "immer";
 import { createConnection } from "typeorm";
 import { v4 } from "uuid";
 import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
-import { MailerModule } from "@nestjs-modules/mailer";
-import { BullModule } from "@nestjs/bull";
+
+import { emails, emailServiceMock } from "~test/mock_email_service";
 
 import { databaseProviders } from "~/lib/repositories/repository.providers";
-import { QUEUE } from "~/lib/config/keys";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { ENV } from "~/lib/config/environment";
+import { MailerService } from "@nestjs-modules/mailer";
 
-const mockTransport = {
-  name: "mock-transport",
-  version: "1.0.0",
-  send: (mail: any, callback: any) => {
-    console.log(mail);
-    const input = mail.message.createReadStream();
-    input.pipe(process.stdout);
-    input.on("end", function () {
-      callback(null, true);
-    });
-  },
+const mailerServiceMock = {
+  sendMail: jest.fn().mockImplementation((res) => {
+    emails.push(res);
+  }),
 };
-
-import produce from "immer";
 
 export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
   const repositoryProviders = [
@@ -42,26 +33,18 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
     ...databaseProviders,
   ];
 
-  const emailImports: any = [
-    // BullModule.registerQueue({
-    //   name: QUEUE.email,
-    //   redis: ENV.queueURL
-    // }),
-    // MailerModule.forRoot({
-    //   transport: mockTransport,
-    //   defaults: {
-    //     from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
-    //   },
-    // }),
-  ];
-
   const tester = produce(metadata, (draft: ModuleMetadata) => {
-    draft.imports = draft.imports ?? [];
     draft.providers = draft.providers ?? [];
-
-    draft.imports.push(...emailImports);
-    // draft.providers.push(EmailService);
+    draft.providers.push({
+      provide: EmailService,
+      useValue: emailServiceMock,
+    });
+    draft.providers.push({
+      provide: MailerService,
+      useValue: mailerServiceMock,
+    });
     draft.providers.push(...repositoryProviders);
   });
+
   return Test.createTestingModule(tester).compile();
 }

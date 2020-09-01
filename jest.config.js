@@ -16,8 +16,8 @@ module.exports = {
   transform: {
     "^.+\\.(t|j)s$": "ts-jest",
   },
-  coverageDirectory: "<rootDir>/coverage",
-  collectCoverage: true,
+  // coverageDirectory: "<rootDir>/coverage",
+  // collectCoverage: true,
   // coverageReporters: ["lcov"],
   testEnvironment: "node",
   setupFiles: [

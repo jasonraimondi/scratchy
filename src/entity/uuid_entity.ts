@@ -4,7 +4,6 @@ export abstract class BaseUuidEntity {
   id: string;
 
   protected constructor(id?: string) {
-    if (!id) id = v4();
-    this.id = id;
+    this.id = id ?? v4();
   }
 }

@@ -5,7 +5,7 @@ import { TestingModule } from "@nestjs/testing";
 import { User } from "~/entity/user/user_entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { createTestingModule } from "~test/test_container";
+import { createTestingModule } from "~/app/app_testing.module";
 import { LoginInput } from "~/app/user/dtos/login_input";
 import { Role } from "~/entity/role/role_entity";
 import { MyContext } from "~/lib/types/my_context";

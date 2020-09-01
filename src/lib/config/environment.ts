@@ -10,5 +10,5 @@ export const ENV = {
   mailerURL: process.env.MAILER_URL ?? "smtp://localhost:1025",
   queueURL: process.env.QUEUE_URL ?? "redis://localhost:6379",
   baseURL: process.env.BASE_URL ?? "http://localhost:8080",
-  emailTemplatesDir: join(__dirname, "../emails/templates"),
+  emailTemplatesDir: join(__dirname, "../../templates/emails"),
 };

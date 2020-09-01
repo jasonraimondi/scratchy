@@ -8,7 +8,7 @@ import { ENV } from "~/lib/config/environment";
 @Injectable()
 export class EmailTemplateService {
   private readonly logger = new Logger(EmailTemplateService.name);
-  private readonly templatesDir = ENV.emailTemplatesDir;
+  private templatesDir = ENV.emailTemplatesDir;
 
   async txt(path: string, context = {}): Promise<string> {
     const handlebarsTemplate = compile(await this.getFileFromPath(`${path}.txt`));
@@ -17,9 +17,12 @@ export class EmailTemplateService {
 
   async html(path: string, context = {}): Promise<string> {
     const handlebarsTemplate = compile(await this.getFileFromPath(`${path}.html`));
-    const rawMJML = handlebarsTemplate(this.mergeContext(context));
-    const { html } = mjml2html(rawMJML);
-    return html;
+    let result = handlebarsTemplate(this.mergeContext(context));
+    if (result.includes("<mjml>")) {
+      const { html } = mjml2html(result);
+      result = html;
+    }
+    return result;
   }
 
   private mergeContext(context: any): any {
@@ -30,9 +33,9 @@ export class EmailTemplateService {
     };
   }
 
-  private getFileFromPath(path: string) {
+  private async getFileFromPath(path: string) {
     path = `${this.getTemplatesDir(path)}.hbs`;
-    return promises.readFile(path, "utf8"); // need to be in an async function
+    return promises.readFile(path, "utf8");
   }
 
   private getTemplatesDir(template: string) {
