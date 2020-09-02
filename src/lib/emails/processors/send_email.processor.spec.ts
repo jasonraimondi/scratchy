@@ -18,6 +18,7 @@ describe("send_email processor", () => {
   let resolver: SendEmailProcessor;
 
   const job: Job<ISendMailOptions> | any = {
+    progress: jest.fn(),
     data: {
       to: "jason1@raimondi.us",
       subject: "Forgot your password?",
