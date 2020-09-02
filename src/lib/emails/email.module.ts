@@ -9,6 +9,7 @@ import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor
 import { EmailService } from "~/lib/emails/services/email.service";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { QueueUIProvider } from "~/app/queue_ui.provider";
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
       redis: ENV.queueURL,
     }),
   ],
-  providers: [EmailService, EmailTemplateService, SendEmailProcessor, ...emailProviders],
+  providers: [EmailService, EmailTemplateService, SendEmailProcessor, QueueUIProvider, ...emailProviders],
   exports: [...emailProviders],
 })
-export class EmailModule {}
+export class EmailModule {
+}

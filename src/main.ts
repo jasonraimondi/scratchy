@@ -4,6 +4,7 @@ import "tsconfig-paths/register";
 import "dotenv/config";
 
 import { NestFactory } from "@nestjs/core";
+import { UI as bullUI } from "bull-board";
 
 import { ENV } from "~/lib/config/environment";
 import { AppModule } from "~/app/app.module";
@@ -11,6 +12,7 @@ import { AppModule } from "~/app/app.module";
 (async () => {
   if (ENV.enableDebugging) console.log("DEBUGGING ENABLED");
   const app = await NestFactory.create(AppModule);
+  app.use("/admin/queues", bullUI)
   await app.listen(3000);
   console.log(`Listening on ${await app.getUrl()}`);
 })();
