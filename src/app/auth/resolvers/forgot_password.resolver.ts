@@ -1,10 +1,10 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject, Logger } from "@nestjs/common";
 
-import { User } from "~/entity/user/user_entity";
+import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password_input";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";

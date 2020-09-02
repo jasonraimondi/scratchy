@@ -2,7 +2,7 @@ import { AppResolver } from "~/app/info/info.resolver";
 
 import pkg from "../../../package.json";
 
-describe("app_resolver", () => {
+describe("app.resolver", () => {
   test("info info from package.json is resolved correctly", async () => {
     const appResolver = new AppResolver();
 

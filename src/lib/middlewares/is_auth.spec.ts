@@ -1,14 +1,14 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "~/entity/role/role_entity";
+import { Role } from "~/entity/role/role.entity";
 import { createTestingModule } from "~test/app_testing.module";
-import { User } from "~/entity/user/user_entity";
-import { Permission } from "~/entity/role/permission_entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
+import { User } from "~/entity/user/user.entity";
+import { Permission } from "~/entity/role/permission.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { MyContext } from "~/lib/types/my_context";
 import { mockContext, mockRequest, mockResponse } from "~test/mock_application";
 import { isAuth } from "~/lib/middlewares/is_auth";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 
 describe("is_auth", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

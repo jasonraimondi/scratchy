@@ -1,22 +1,22 @@
 import { validate } from "class-validator";
 import { TestingModule } from "@nestjs/testing";
 
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { EmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { User } from "~/entity/user/user_entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { User } from "~/entity/user/user.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { RegisterInput } from "~/app/user/dtos/register_input";
+import { RegisterInput } from "~/app/user/dtos/register.input";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { createTestingModule } from "~test/app_testing.module";
-import { RegisterResolver } from "~/app/signup/resolvers/register_resolver";
-import { Role } from "~/entity/role/role_entity";
-import { Permission } from "~/entity/role/permission_entity";
+import { RegisterResolver } from "~/app/signup/resolvers/register.resolver";
+import { Role } from "~/entity/role/role.entity";
+import { Permission } from "~/entity/role/permission.entity";
 import { mockContext } from "~test/mock_application";
 import { REPOSITORY } from "~/lib/config/keys";
 import { emails } from "~test/mock_email_service";
 
-describe("register_resolver", () => {
+describe("register.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;

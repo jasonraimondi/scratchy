@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { ISendMailOptions } from "@nestjs-modules/mailer";
 
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { API_ROUTES } from "~/lib/services/route";
 import { EmailService } from "~/lib/emails/services/email.service";
 

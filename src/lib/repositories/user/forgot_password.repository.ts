@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
 
 export interface IForgotPasswordRepository extends IBaseRepository<ForgotPasswordToken> {

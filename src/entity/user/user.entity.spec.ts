@@ -1,4 +1,4 @@
-import { User } from "~/entity/user/user_entity";
+import { User } from "~/entity/user/user.entity";
 
 describe("user entity", () => {
   test("isActive computed correctly", async () => {

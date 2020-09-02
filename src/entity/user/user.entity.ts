@@ -2,9 +2,9 @@ import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { ClassType, Field, ID, ObjectType, Root } from "type-graphql";
 import { compare, hash } from "bcryptjs";
 
-import { Role } from "~/entity/role/role_entity";
-import { Permission } from "~/entity/role/permission_entity";
-import { BaseUuidEntity } from "~/entity/uuid_entity";
+import { Role } from "~/entity/role/role.entity";
+import { Permission } from "~/entity/role/permission.entity";
+import { BaseUuidEntity } from "~/entity/uuid.entity";
 import { CreateDateColumn, UpdateDateColumn } from "typeorm/index";
 
 export interface ICreateUser {

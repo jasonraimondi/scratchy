@@ -2,7 +2,7 @@ import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { isAuth } from "~/lib/middlewares/is_auth";
-import { User } from "~/entity/user/user_entity";
+import { User } from "~/entity/user/user.entity";
 import { MyContext } from "~/lib/types/my_context";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";

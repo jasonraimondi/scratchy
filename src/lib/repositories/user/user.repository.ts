@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { User } from "~/entity/user/user_entity";
+import { User } from "~/entity/user/user.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
 import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
 

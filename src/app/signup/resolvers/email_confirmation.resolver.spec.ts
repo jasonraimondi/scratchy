@@ -1,13 +1,13 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "~/entity/role/role_entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { VerifyEmailInput } from "~/app/user/dtos/verify_email_input";
-import { User } from "~/entity/user/user_entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { Role } from "~/entity/role/role.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
+import { User } from "~/entity/user/user.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { Permission } from "~/entity/role/permission_entity";
-import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation_resolver";
+import { Permission } from "~/entity/role/permission.entity";
+import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation.resolver";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
 import { createTestingModule } from "~test/app_testing.module";

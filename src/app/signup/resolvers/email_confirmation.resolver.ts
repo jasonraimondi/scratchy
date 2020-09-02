@@ -4,7 +4,7 @@ import { Inject, Logger } from "@nestjs/common";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { VerifyEmailInput } from "~/app/user/dtos/verify_email_input";
+import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
 
 @Resolver()
 export class EmailConfirmationResolver {

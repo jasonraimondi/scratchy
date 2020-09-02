@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
 
 export interface IEmailConfirmationRepository extends IBaseRepository<EmailConfirmationToken> {

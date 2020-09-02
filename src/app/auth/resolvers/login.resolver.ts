@@ -2,9 +2,9 @@ import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
 
 import { MyContext } from "~/lib/types/my_context";
-import { LoginResponse } from "~/app/user/dtos/login_response";
+import { LoginResponse } from "~/app/user/dtos/login.response";
 import { REPOSITORY } from "~/lib/config/keys";
-import { LoginInput } from "~/app/user/dtos/login_input";
+import { LoginInput } from "~/app/user/dtos/login.input";
 import { AuthService } from "~/app/auth/auth.service";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 

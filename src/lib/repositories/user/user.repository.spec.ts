@@ -1,8 +1,8 @@
-import { User } from "~/entity/user/user_entity";
-import { Role } from "~/entity/role/role_entity";
-import { Permission } from "~/entity/role/permission_entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { User } from "~/entity/user/user.entity";
+import { Role } from "~/entity/role/role.entity";
+import { Permission } from "~/entity/role/permission.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { TestingModule } from "@nestjs/testing";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";

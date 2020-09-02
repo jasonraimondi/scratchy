@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 
-import { User } from "~/entity/user/user_entity";
+import { User } from "~/entity/user/user.entity";
 import { PagingResult } from "typeorm-cursor-pagination";
 import { Cursor } from "~/lib/repository/dtos/cursor.response";
 

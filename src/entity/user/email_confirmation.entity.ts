@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { Field, ID, ObjectType } from "type-graphql";
-import { User } from "~/entity/user/user_entity";
-import { BaseUuidEntity } from "~/entity/uuid_entity";
+import { User } from "~/entity/user/user.entity";
+import { BaseUuidEntity } from "~/entity/uuid.entity";
 
 @ObjectType()
 @Entity("email_confirmation_tokens")

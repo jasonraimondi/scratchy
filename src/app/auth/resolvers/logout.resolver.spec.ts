@@ -1,17 +1,17 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "~/entity/role/role_entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
-import { User } from "~/entity/user/user_entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
+import { Role } from "~/entity/role/role.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { AuthService } from "~/app/auth/auth.service";
-import { Permission } from "~/entity/role/permission_entity";
+import { Permission } from "~/entity/role/permission.entity";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
 import { createTestingModule } from "~test/app_testing.module";
-import { LogoutResolver } from "~/app/auth/resolvers/logout_resolver";
+import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
 
-describe("auth_resolver", () => {
+describe("auth.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;

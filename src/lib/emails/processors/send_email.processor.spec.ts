@@ -1,9 +1,9 @@
-import { Role } from "~/entity/role/role_entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password_entity";
+import { Role } from "~/entity/role/role.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { TestingModule } from "@nestjs/testing";
-import { User } from "~/entity/user/user_entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
-import { Permission } from "~/entity/role/permission_entity";
+import { User } from "~/entity/user/user.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { Permission } from "~/entity/role/permission.entity";
 import { createTestingModule } from "~test/app_testing.module";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
