@@ -36,7 +36,7 @@ type Mutation {
 type Query {
   info: AppInfoResponse!
   me: User!
-  user(id: String!): User!
+  user(email: String!): User!
   users: [User!]!
 }
 

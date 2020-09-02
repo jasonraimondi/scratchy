@@ -10,8 +10,8 @@ export class UserResolver {
   constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
 
   @Query(() => User)
-  async user(@Arg("id") id: string) {
-    return await this.userRepository.findById(id);
+  async user(@Arg("email") email: string) {
+    return await this.userRepository.findByEmail(email);
   }
 
   @Query(() => [User])
