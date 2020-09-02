@@ -37,3 +37,8 @@ open http://localhost:8025 # emails
 * [bull-board](https://www.npmjs.com/package/bull-board) for queue runner gui
 * [nodemailer](https://www.npmjs.com/package/nodemailer) for sending emails over SMTP
 * [handlebars](https://www.npmjs.com/package/handlebars) and  [mjml](https://www.npmjs.com/package/mjml) for email templating
+
+## Todo:
+
+* Pagination
+* auth service tests
