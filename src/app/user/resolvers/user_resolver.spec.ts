@@ -34,7 +34,7 @@ describe("register_resolver", () => {
       await userRepository.save(user);
 
       // act
-      const result = await resolver.user(user.id);
+      const result = await resolver.user(user.email);
 
       // assert
       expect(result.id).toBe(user.id);
