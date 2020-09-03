@@ -2,8 +2,12 @@ import { EntityRepository, Repository } from "typeorm";
 
 import { User } from "~/entity/user/user_entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
+import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
+
 
 export interface IUserRepository extends IBaseRepository<User> {
+  list(query?: PagingQuery): Promise<PagingResult<User>>;
+
   findByEmail(email: string): Promise<User>;
 
   incrementLastLogin(user: User, ipAddr: string): Promise<void>;
@@ -13,6 +17,20 @@ export interface IUserRepository extends IBaseRepository<User> {
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> implements IUserRepository {
+  async list(query?: PagingQuery) {
+    const queryBuilder = this.createQueryBuilder("users");
+    const paginator = buildPaginator({
+      entity: User,
+      alias: "users",
+      query: {
+        limit: 25,
+        order: "DESC",
+        ...query
+      },
+    });
+    return await paginator.paginate(queryBuilder);
+  }
+
   findById(id: string) {
     return this.findOneOrFail(id);
   }

@@ -9,6 +9,7 @@ import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
 import { UserResolver } from "~/app/user/resolvers/user_resolver";
 import { createTestingModule } from "~test/app_testing.module";
+import { userGenerator } from "~test/generators/user.generator";
 
 describe("register_resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -47,14 +48,17 @@ describe("register_resolver", () => {
     test("resolve list users", async () => {
       // arrange
       const resolver = container.get<UserResolver>(UserResolver);
-      await userRepository.save(await User.create({ email: "jason@raimondi.us" }));
-      await userRepository.save(await User.create({ email: "jason1@raimondi.us" }));
+      await userRepository.save(await userGenerator());
+      await userRepository.save(await userGenerator());
+      await userRepository.save(await userGenerator());
 
       // act
-      const result = await resolver.users();
+      const result = await resolver.users({ limit: 2 });
 
       // assert
-      expect(result.length).toBe(2);
+      expect(result.cursor.beforeCursor).toBeNull();
+      expect(result.cursor.afterCursor).toBeTruthy();
+      expect(result.data.length).toBe(2);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
-import { Field, ID, ObjectType, Root } from "type-graphql";
+import { ClassType, Field, ID, ObjectType, Root } from "type-graphql";
 import { compare, hash } from "bcryptjs";
 
 import { Role } from "~/entity/role/role_entity";
@@ -27,7 +27,7 @@ export class User extends BaseUuidEntity {
     user.firstName = firstName;
     user.lastName = lastName;
     user.createdIP = createdIP;
-    await user.setPassword(password);
+    if (password) await user.setPassword(password);
     return user;
   }
 
@@ -100,9 +100,8 @@ export class User extends BaseUuidEntity {
     return name.join(" ") || null;
   }
 
-  async setPassword(password?: string) {
-    this.password = undefined;
-    if (password) this.password = await hash(password, 12);
+  async setPassword(password: string) {
+    this.password = await hash(password, 12);
   }
 
   async verify(password: string) {
