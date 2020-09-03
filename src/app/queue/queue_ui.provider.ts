@@ -7,7 +7,7 @@ import { QUEUE } from "~/lib/config/keys";
 
 @Injectable()
 export class QueueUIProvider {
-  constructor(@InjectQueue(QUEUE.email) private readonly queueOne: Queue) {
-    setQueues([queueOne]);
+  constructor(@InjectQueue(QUEUE.email) private readonly emailQueue: Queue) {
+    setQueues([emailQueue]);
   }
 }

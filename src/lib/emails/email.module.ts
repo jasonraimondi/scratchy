@@ -9,7 +9,7 @@ import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor
 import { EmailService } from "~/lib/emails/services/email.service";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
-import { QueueUIProvider } from "~/app/queue_ui.provider";
+import { QueueUIProvider } from "~/app/queue/queue_ui.provider";
 
 @Module({
   imports: [
