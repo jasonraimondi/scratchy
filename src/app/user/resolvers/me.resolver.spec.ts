@@ -10,7 +10,8 @@ import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/lib/types/my_context";
 import { createTestingModule } from "~test/app_testing.module";
-import { mockRequest, mockResponse } from "~test/mock_application";
+import { userGenerator } from "~test/generators/user.generator";
+import { mockContext } from "~test/mock_application";
 
 describe("me resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -19,36 +20,29 @@ describe("me resolver", () => {
   let context: MyContext;
   let resolver: MeResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [MeResolver],
       },
       entities,
     );
-    context = {
-      req: mockRequest(),
-      res: mockResponse(),
-      container,
-    };
     resolver = container.get(MeResolver);
   });
 
   test("successfully returns user response", async () => {
     const userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    const user = await User.create({ email: "jason@raimondi.us" });
+    const user = await userGenerator();
     await userRepository.save(user);
 
-    context = {
-      req: mockRequest(),
-      res: mockResponse(),
+    context = mockContext({
       container,
       auth: {
         userId: user.id,
         email: user.email,
         isEmailConfirmed: user.isEmailConfirmed,
       },
-    };
+    });
 
     // act
     const result: User | null = await resolver.me(context);
@@ -61,11 +55,7 @@ describe("me resolver", () => {
   });
 
   test("blank authorization throws", async () => {
-    context = {
-      req: mockRequest(),
-      res: mockResponse(),
-      container,
-    };
+    context = mockContext({ container });
 
     // act
     const result = resolver.me(context);

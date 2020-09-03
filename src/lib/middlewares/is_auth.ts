@@ -4,6 +4,12 @@ import { MiddlewareFn } from "type-graphql";
 import { ENV } from "~/lib/config/environment";
 import { MyContext } from "~/lib/types/my_context";
 
+export interface AuthContext {
+  userId: string;
+  email: string;
+  isEmailConfirmed: boolean;
+}
+
 export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const authorization = context.req.get("authorization");
   if (!authorization) {

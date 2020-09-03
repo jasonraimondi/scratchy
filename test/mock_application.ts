@@ -4,15 +4,14 @@ interface IMockContent {
   container: TestingModule;
   res?: any;
   req?: any;
+  auth?: any;
 }
 
-export const mockContext = ({ container, res = mockRequest(), req = mockRequest() }: IMockContent) => {
-  return {
-    res,
-    req,
-    container,
-  };
-};
+export const mockContext = ({ res = mockRequest(), req = mockRequest(), ...context }: IMockContent) => ({
+  res,
+  req,
+  ...context,
+});
 
 export const mockRequest = (authHeader?: string, sessionData = {}): any => ({
   get: jest.fn((name: string) => {

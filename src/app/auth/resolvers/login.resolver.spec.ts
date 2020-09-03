@@ -13,6 +13,7 @@ import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/lib/types/my_context";
 import { createTestingModule } from "~test/app_testing.module";
+import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";
 
 describe("login.resolver", () => {
@@ -56,9 +57,10 @@ describe("login.resolver", () => {
 
   test("user without password throws error", async () => {
     // arrange
-    await userRepository.save(await User.create({ email: "jason@raimondi.us" }));
+    const user = await userGenerator({ password: undefined });
+    await userRepository.save(user);
     const input = new LoginInput();
-    input.email = "jason@raimondi.us";
+    input.email = user.email;
     input.password = "non-existant-password";
 
     // act

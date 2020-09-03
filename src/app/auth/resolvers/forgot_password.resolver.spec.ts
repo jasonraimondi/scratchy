@@ -12,6 +12,7 @@ import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.e
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
+import { userGenerator } from "~test/generators/user.generator";
 
 describe("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -54,7 +55,7 @@ describe("forgot password resolver", () => {
   describe("updatePasswordFromToken", () => {
     test("success", async () => {
       // arrange
-      const user = await User.create({ email: "jason@raimondi.us" });
+      const user = await userGenerator();
       user.isEmailConfirmed = true;
       await userRepository.save(user);
       const forgotPassword = new ForgotPasswordToken(user);

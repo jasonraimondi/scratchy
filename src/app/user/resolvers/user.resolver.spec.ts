@@ -31,7 +31,7 @@ describe("register.resolver", () => {
     test("resolve user by id", async () => {
       // arrange
       const resolver = container.get<UserResolver>(UserResolver);
-      const user = await User.create({ email: "jason@raimondi.us" });
+      const user = await userGenerator();
       await userRepository.save(user);
 
       // act

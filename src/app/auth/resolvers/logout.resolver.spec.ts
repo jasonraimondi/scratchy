@@ -10,6 +10,7 @@ import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
+import { userGenerator } from "~test/generators/user.generator";
 
 describe("auth.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -46,7 +47,7 @@ describe("auth.resolver", () => {
 
     test("increments the user token version", async () => {
       // arrange
-      const user = await User.create({ email: "jason@raimondi.us" });
+      const user = await userGenerator();
       await userRepository.save(user);
 
       // act
