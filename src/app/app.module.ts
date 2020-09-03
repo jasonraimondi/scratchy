@@ -11,7 +11,7 @@ import { ENV } from "~/lib/config/environment";
   imports: [
     TypeGraphQLModule.forRoot({
       debug: ENV.enableDebugging,
-      playground: true,
+      playground: !ENV.isProduction,
       emitSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
       validate: true,
       dateScalarMode: "timestamp",

@@ -1,6 +1,8 @@
 import { join } from "path";
 
 export const ENV = {
+  isProduction: process.env.NODE_ENV === "production",
+  nodeEnv: process.env.NODE_ENV,
   cookieDomain: process.env.DOMAIN,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET ?? "",
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET ?? "",
