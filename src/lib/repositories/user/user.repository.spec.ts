@@ -17,15 +17,15 @@ describe.skip("user_repository", () => {
   let users: User[];
 
   beforeAll(async () => {
-    container = await createTestingModule({}, entities,);
+    container = await createTestingModule({}, entities);
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
     users = [
       await userGenerator(),
       await userGenerator(),
       await userGenerator(),
       await userGenerator(),
-      await userGenerator()
-    ]
+      await userGenerator(),
+    ];
     for (const user of users) {
       await userRepository.save(user);
     }
@@ -33,9 +33,9 @@ describe.skip("user_repository", () => {
 
   test("limits are passed correctly", async () => {
     const { data, cursor } = await userRepository.list({ limit: 2 });
-    console.log(users.map(user => user.id));
+    console.log(users.map((user) => user.id));
 
-    expect(data[0].id).toBe("users[2].id")
+    expect(data[0].id).toBe("users[2].id");
     expect(cursor.beforeCursor).toBeNull();
     expect(typeof cursor.afterCursor === "string").toBeTruthy();
     expect(data.length).toBe(2);

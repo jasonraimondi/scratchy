@@ -12,4 +12,3 @@ export class UserPaginatorResponse implements PagingResult<User> {
   @Field(() => [User])
   data: User[];
 }
-

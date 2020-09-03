@@ -8,7 +8,8 @@ export interface IEmailConfirmationRepository extends IBaseRepository<EmailConfi
 }
 
 @EntityRepository(EmailConfirmationToken)
-export class EmailConfirmationRepository extends Repository<EmailConfirmationToken>
+export class EmailConfirmationRepository
+  extends Repository<EmailConfirmationToken>
   implements IEmailConfirmationRepository {
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
     const emailConfirmationToken = await this.createQueryBuilder("email_confirmation_tokens")

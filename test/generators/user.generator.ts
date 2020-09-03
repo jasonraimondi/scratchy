@@ -10,4 +10,4 @@ export const userGenerator = async (createUser?: Partial<ICreateUser>): Promise<
     password: "testing123",
     ...createUser,
   });
-}
+};

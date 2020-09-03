@@ -4,7 +4,6 @@ import { User } from "~/entity/user/user.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
 import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
 
-
 export interface IUserRepository extends IBaseRepository<User> {
   list(query?: PagingQuery): Promise<PagingResult<User>>;
 
@@ -25,7 +24,7 @@ export class UserRepository extends Repository<User> implements IUserRepository 
       query: {
         limit: 25,
         order: "DESC",
-        ...query
+        ...query,
       },
     });
     return await paginator.paginate(queryBuilder);

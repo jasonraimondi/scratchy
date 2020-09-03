@@ -7,5 +7,5 @@ test("route_helper", () => {
   const createdRoute = myRoute.create({ photoId: 123 });
 
   expect(template).toBe("localhost/photo/:photoId");
-  expect(createdRoute).toBe("localhost/photo/123")
+  expect(createdRoute).toBe("localhost/photo/123");
 });

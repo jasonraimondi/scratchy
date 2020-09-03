@@ -35,7 +35,7 @@ describe("Auth Controller", () => {
     userRepository = module.get(REPOSITORY.UserRepository);
     app = module.createNestApplication();
     // @todo refactor out app.use https://github.com/jasonraimondi/graphql-server/blob/master/packages/api/src/lib/express.ts
-    app.use(cookieParser())
+    app.use(cookieParser());
     await app.init();
   });
 
