@@ -12,6 +12,8 @@ import { AuthController } from "~/app/auth/auth.controller";
 import { createTestingModule } from "~test/app_testing.module";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
+import cookieParser from "cookie-parser";
+import { userGenerator } from "~test/generators/user.generator";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
 
@@ -32,6 +34,8 @@ describe("Auth Controller", () => {
     authService = module.get(AuthService);
     userRepository = module.get(REPOSITORY.UserRepository);
     app = module.createNestApplication();
+    // @todo refactor out app.use https://github.com/jasonraimondi/graphql-server/blob/master/packages/api/src/lib/express.ts
+    app.use(cookieParser())
     await app.init();
   });
 
@@ -39,16 +43,16 @@ describe("Auth Controller", () => {
     await app.close();
   });
 
-  test.skip("refresh token updates successfully", async () => {
+  test("refresh token updates successfully", async () => {
     // arrange
-    const user = await User.create({ email: "jason@raimondi.us" });
+    const user = await userGenerator();
     await userRepository.save(user);
     const refreshToken = authService.createRefreshToken(user);
 
     // act
     const response = await request(app.getHttpServer())
       .post("/auth/refresh_token")
-      .expect(200)
+      .expect(201)
       .set("Cookie", [`jid=${refreshToken}`, `rememberMe=true`])
       .expect("Content-Type", /json/);
 
@@ -61,16 +65,16 @@ describe("Auth Controller", () => {
     expect(response.body.accessToken).toMatch(/[a-zA-Z\d]+.[a-zA-Z\d]+.[a-zA-Z\d]+/);
   });
 
-  test.skip("refresh token no remember me", async () => {
+  test("refresh token no remember me", async () => {
     // arrange
-    const user = await User.create({ email: "jason@raimondi.us" });
+    const user = await userGenerator();
     await userRepository.save(user);
     const refreshToken = authService.createRefreshToken(user);
 
     // act
     const response = await request(app.getHttpServer())
       .post("/auth/refresh_token")
-      .expect(200)
+      .expect(201)
       .set("Cookie", [`jid=${refreshToken}`])
       .expect("Content-Type", /json/);
 
