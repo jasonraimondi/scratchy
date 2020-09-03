@@ -1,15 +1,15 @@
 import { TestingModule } from "@nestjs/testing";
 
+import { AuthService } from "~/app/auth/auth.service";
+import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
+import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { AuthService } from "~/app/auth/auth.service";
-import { Permission } from "~/entity/role/permission.entity";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
 
 describe("auth.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

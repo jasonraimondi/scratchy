@@ -1,6 +1,6 @@
+import { Inject } from "@nestjs/common";
 import { CookieOptions, Response } from "express";
 import { sign, verify } from "jsonwebtoken";
-import { Inject } from "@nestjs/common";
 
 import { User } from "~/entity/user/user.entity";
 import { ENV } from "~/lib/config/environment";

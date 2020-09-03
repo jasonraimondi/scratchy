@@ -1,8 +1,8 @@
 import { Controller, Post, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 
-import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
 import { AuthService } from "~/app/auth/auth.service";
+import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
 import { STATUS_CODES } from "~/lib/config/status_codes";
 
 @Controller("/auth")

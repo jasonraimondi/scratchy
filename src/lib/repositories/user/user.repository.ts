@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from "typeorm";
+import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
 
 import { User } from "~/entity/user/user.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
-import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
 
 export interface IUserRepository extends IBaseRepository<User> {
   list(query?: PagingQuery): Promise<PagingResult<User>>;

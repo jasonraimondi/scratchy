@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
 import { InjectQueue } from "@nestjs/bull";
-import { setQueues } from "bull-board";
+import { Injectable } from "@nestjs/common";
 import { Queue } from "bull";
+import { setQueues } from "bull-board";
 
 import { QUEUE } from "~/lib/config/keys";
 

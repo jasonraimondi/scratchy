@@ -1,11 +1,11 @@
-import { Arg, Query, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
+import { Arg, Query, Resolver } from "type-graphql";
 
+import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { PaginatorInputs } from "~/lib/repository/dtos/paginator.inputs";
-import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
 
 @Resolver()
 export class UserResolver {

@@ -1,16 +1,16 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "~/entity/role/role.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { MyContext } from "~/lib/types/my_context";
-import { mockRequest, mockResponse } from "~test/mock_application";
-import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { MeResolver } from "~/app/user/resolvers/me.resolver";
 import { Permission } from "~/entity/role/permission.entity";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { MyContext } from "~/lib/types/my_context";
 import { createTestingModule } from "~test/app_testing.module";
+import { mockRequest, mockResponse } from "~test/mock_application";
 
 describe("me resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

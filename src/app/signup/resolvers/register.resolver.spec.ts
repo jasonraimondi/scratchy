@@ -1,19 +1,19 @@
-import { validate } from "class-validator";
 import { TestingModule } from "@nestjs/testing";
+import { validate } from "class-validator";
 
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { EmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { RegisterInput } from "~/app/user/dtos/register.input";
-import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
-import { createTestingModule } from "~test/app_testing.module";
 import { RegisterResolver } from "~/app/signup/resolvers/register.resolver";
-import { Role } from "~/entity/role/role.entity";
+import { RegisterInput } from "~/app/user/dtos/register.input";
 import { Permission } from "~/entity/role/permission.entity";
-import { mockContext } from "~test/mock_application";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
+import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
+import { EmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { createTestingModule } from "~test/app_testing.module";
+import { mockContext } from "~test/mock_application";
 import { emails } from "~test/mock_email_service";
 
 describe("register.resolver", () => {

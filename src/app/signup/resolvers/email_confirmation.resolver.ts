@@ -1,10 +1,10 @@
-import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject, Logger } from "@nestjs/common";
+import { Arg, Mutation, Resolver } from "type-graphql";
 
-import { REPOSITORY } from "~/lib/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
+import { REPOSITORY } from "~/lib/config/keys";
+import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class EmailConfirmationResolver {

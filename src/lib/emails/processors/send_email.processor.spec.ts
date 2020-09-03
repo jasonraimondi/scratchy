@@ -1,14 +1,15 @@
-import { Role } from "~/entity/role/role.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { TestingModule } from "@nestjs/testing";
-import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { Job } from "bull";
+
 import { Permission } from "~/entity/role/permission.entity";
-import { createTestingModule } from "~test/app_testing.module";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
-import { Job } from "bull";
-import { ISendMailOptions } from "@nestjs-modules/mailer";
+import { createTestingModule } from "~test/app_testing.module";
 import { emails } from "~test/mock_email_service";
 
 describe("send_email processor", () => {

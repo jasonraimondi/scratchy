@@ -1,7 +1,7 @@
-import { Queue } from "bull";
-import { Injectable } from "@nestjs/common";
-import { InjectQueue } from "@nestjs/bull";
 import { ISendMailOptions } from "@nestjs-modules/mailer";
+import { InjectQueue } from "@nestjs/bull";
+import { Injectable } from "@nestjs/common";
+import { Queue } from "bull";
 
 import { QUEUE, QUEUE_JOBS } from "~/lib/config/keys";
 

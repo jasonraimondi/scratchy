@@ -2,17 +2,17 @@ import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
-import { Role } from "~/entity/role/role.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { AuthController } from "~/app/auth/auth.controller";
 import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission.entity";
-import { AuthController } from "~/app/auth/auth.controller";
-import { createTestingModule } from "~test/app_testing.module";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
+import { attachMiddlewares } from "~/lib/attach_middlewares";
 import { REPOSITORY } from "~/lib/config/keys";
-import cookieParser from "cookie-parser";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
@@ -34,8 +34,7 @@ describe("Auth Controller", () => {
     authService = module.get(AuthService);
     userRepository = module.get(REPOSITORY.UserRepository);
     app = module.createNestApplication();
-    // @todo refactor out app.use https://github.com/jasonraimondi/graphql-server/blob/master/packages/api/src/lib/express.ts
-    app.use(cookieParser());
+    attachMiddlewares(app);
     await app.init();
   });
 

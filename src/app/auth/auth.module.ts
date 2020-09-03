@@ -5,8 +5,8 @@ import { AuthService } from "~/app/auth/auth.service";
 import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password.resolver";
 import { LoginResolver } from "~/app/auth/resolvers/login.resolver";
 import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
 import { EmailModule } from "~/lib/emails/email.module";
+import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
   controllers: [AuthController],

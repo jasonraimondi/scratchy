@@ -1,12 +1,12 @@
-import { Process, Processor } from "@nestjs/bull";
-import { Inject, Logger } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
+import { Process, Processor } from "@nestjs/bull";
+import { Inject, Logger } from "@nestjs/common";
 import { Job } from "bull";
 
 import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/lib/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {

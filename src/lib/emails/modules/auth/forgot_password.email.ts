@@ -1,5 +1,5 @@
-import { Injectable, Logger } from "@nestjs/common";
 import { ISendMailOptions } from "@nestjs-modules/mailer";
+import { Injectable, Logger } from "@nestjs/common";
 
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { EmailService } from "~/lib/emails/services/email.service";

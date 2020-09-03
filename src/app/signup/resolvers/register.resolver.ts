@@ -1,14 +1,14 @@
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Inject } from "@nestjs/common";
+import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 
-import { REPOSITORY } from "~/lib/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
-import { RegisterResponse } from "~/app/user/dtos/register.response";
 import { RegisterInput } from "~/app/user/dtos/register.input";
-import { User } from "~/entity/user/user.entity";
+import { RegisterResponse } from "~/app/user/dtos/register.response";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { User } from "~/entity/user/user.entity";
+import { REPOSITORY } from "~/lib/config/keys";
+import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
+import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/lib/types/my_context";
 
 @Resolver()

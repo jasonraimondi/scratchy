@@ -1,12 +1,13 @@
-import { User } from "~/entity/user/user.entity";
-import { Role } from "~/entity/role/role.entity";
-import { Permission } from "~/entity/role/permission.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { TestingModule } from "@nestjs/testing";
+
+import { Permission } from "~/entity/role/permission.entity";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
+import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { REPOSITORY } from "~/lib/config/keys";
 import { userGenerator } from "~test/generators/user.generator";
 
 describe.skip("user_repository", () => {

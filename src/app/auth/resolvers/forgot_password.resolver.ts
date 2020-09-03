@@ -1,13 +1,13 @@
-import { Arg, Mutation, Resolver } from "type-graphql";
 import { Inject, Logger } from "@nestjs/common";
+import { Arg, Mutation, Resolver } from "type-graphql";
 
+import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
+import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class ForgotPasswordResolver {

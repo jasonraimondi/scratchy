@@ -1,15 +1,15 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { Role } from "~/entity/role/role.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
-import { User } from "~/entity/user/user.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { Permission } from "~/entity/role/permission.entity";
 import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation.resolver";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
+import { Permission } from "~/entity/role/permission.entity";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
+import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
+import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 
 describe("emails confirmation resolver", () => {
