@@ -8,6 +8,7 @@ import { UI as bullUI } from "bull-board";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 
 import { ENV } from "~/lib/config/environment";
 import { AppModule } from "~/app/app.module";
@@ -16,6 +17,7 @@ import { AppModule } from "~/app/app.module";
   if (ENV.enableDebugging) console.log("DEBUGGING ENABLED");
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use("/admin/queues", bullUI);
+  app.use(cookieParser());
   if (process.env.NODE_ENV === "production") {
     app.use(helmet());
     app.use(
