@@ -9,7 +9,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission_entity";
 import { AuthController } from "~/app/auth/auth.controller";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
 

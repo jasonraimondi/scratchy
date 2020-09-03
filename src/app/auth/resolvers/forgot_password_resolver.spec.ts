@@ -6,7 +6,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password_resolver";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password_input";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 import { Role } from "~/entity/role/role_entity";
 import { Permission } from "~/entity/role/permission_entity";
 import { REPOSITORY } from "~/lib/config/keys";

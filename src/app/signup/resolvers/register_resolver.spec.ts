@@ -8,7 +8,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity"
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { RegisterInput } from "~/app/user/dtos/register_input";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 import { RegisterResolver } from "~/app/signup/resolvers/register_resolver";
 import { Role } from "~/entity/role/role_entity";
 import { Permission } from "~/entity/role/permission_entity";

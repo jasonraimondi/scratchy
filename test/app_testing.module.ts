@@ -4,10 +4,10 @@ import { v4 } from "uuid";
 import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 
-import { emails, emailServiceMock } from "~test/mock_email_service";
+import { emails, emailServiceMock } from "./mock_email_service";
 
-import { databaseProviders } from "~/lib/repositories/repository.providers";
-import { EmailService } from "~/lib/emails/services/email.service";
+import { databaseProviders } from "../src/lib/repositories/repository.providers";
+import { EmailService } from "../src/lib/emails/services/email.service";
 import { MailerService } from "@nestjs-modules/mailer";
 
 const mailerServiceMock = {

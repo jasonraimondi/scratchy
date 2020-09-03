@@ -10,7 +10,7 @@ import { MeResolver } from "~/app/user/resolvers/me_resolver";
 import { Permission } from "~/entity/role/permission_entity";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 
 describe("me resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

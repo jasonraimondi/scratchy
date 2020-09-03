@@ -10,7 +10,7 @@ import { Permission } from "~/entity/role/permission_entity";
 import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation_resolver";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { REPOSITORY } from "~/lib/config/keys";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 
 describe("emails confirmation resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

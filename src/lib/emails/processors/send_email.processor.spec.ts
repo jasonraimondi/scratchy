@@ -4,7 +4,7 @@ import { TestingModule } from "@nestjs/testing";
 import { User } from "~/entity/user/user_entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation_entity";
 import { Permission } from "~/entity/role/permission_entity";
-import { createTestingModule } from "~/app/app_testing.module";
+import { createTestingModule } from "~test/app_testing.module";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { Job } from "bull";
