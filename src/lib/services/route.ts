@@ -1,6 +1,6 @@
 import { ENV } from "~/lib/config/environment";
 
-const route = (path: string) => {
+export const route = (path: string) => {
   path = `${ENV.baseURL}${path}`;
   const template = path;
   const create = (obj: any = {}) => {
