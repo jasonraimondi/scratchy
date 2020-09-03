@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, JoinTable, ManyToMany } from "typeorm";
 import { Role } from "~/entity/role/role_entity";
-import { JoinTable, ManyToMany } from "typeorm/index";
 
 @ObjectType()
 @Entity("permissions")

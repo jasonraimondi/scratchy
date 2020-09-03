@@ -28,5 +28,4 @@ import { QueueUIProvider } from "~/app/queue_ui.provider";
   providers: [EmailService, EmailTemplateService, SendEmailProcessor, QueueUIProvider, ...emailProviders],
   exports: [...emailProviders],
 })
-export class EmailModule {
-}
+export class EmailModule {}
