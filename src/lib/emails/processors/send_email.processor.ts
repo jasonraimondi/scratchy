@@ -1,5 +1,5 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
+import type { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 import { Process, Processor } from "@nestjs/bull";
 import { Inject, Logger } from "@nestjs/common";
 import { Job } from "bull";
