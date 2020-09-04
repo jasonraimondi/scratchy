@@ -1,10 +1,10 @@
 import { compare, hash } from "bcryptjs";
 import { Field, ID, ObjectType, Root } from "type-graphql";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { v4 } from "uuid";
 
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
-import { BaseUuidEntity } from "~/entity/uuid.entity";
 
 export interface ICreateUser {
   email: string;
@@ -19,7 +19,7 @@ const inet = process.env.NODE_ENV === "test" ? "text" : "inet";
 
 @ObjectType()
 @Entity("users")
-export class User extends BaseUuidEntity {
+export class User {
   static async create({ id, email, firstName, lastName, password, createdIP = "0.0.0.0" }: ICreateUser) {
     const user = new User(id);
     user.email = email.toLowerCase();
@@ -31,7 +31,7 @@ export class User extends BaseUuidEntity {
   }
 
   private constructor(id?: string) {
-    super(id);
+    this.id = id ?? v4();
     this.tokenVersion = 0;
     this.isEmailConfirmed = false;
   }

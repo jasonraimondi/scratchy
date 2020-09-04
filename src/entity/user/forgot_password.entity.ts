@@ -1,16 +1,16 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { v4 } from "uuid";
 
 import { User } from "~/entity/user/user.entity";
-import { BaseUuidEntity } from "~/entity/uuid.entity";
 
 @ObjectType()
 @Entity("forgot_password_tokens")
-export class ForgotPasswordToken extends BaseUuidEntity {
+export class ForgotPasswordToken {
   private readonly oneDay = 60 * 60 * 24 * 1 * 1000; // 1 day
 
   constructor(user?: User, id?: string) {
-    super(id);
+    this.id = id ?? v4();
     if (user) this.user = user;
     this.expiresAt = new Date(Date.now() + this.oneDay);
   }
