@@ -11,7 +11,6 @@ export interface IEmailConfirmationRepository extends IBaseRepository<EmailConfi
 export class EmailConfirmationRepository
   extends Repository<EmailConfirmationToken>
   implements IEmailConfirmationRepository {
-
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
     const emailConfirmationToken = await this.createQueryBuilder("email_confirmation_tokens")
       .leftJoinAndSelect("email_confirmation_tokens.user", "users")

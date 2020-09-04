@@ -21,11 +21,11 @@ describe("user_repository", () => {
     container = await createTestingModule({}, entities);
     userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
     users = [
-      await userGenerator({ id: "c3c5df06-b4e7-498b-bdbf-3f3138404b31"}),
-      await userGenerator({ id: "b4e46399-5401-4a58-b7d7-3a8b37bda8a0"}),
-      await userGenerator({ id: "9d589af7-234b-4fbc-b6fa-8a1343b5736e"}),
-      await userGenerator({ id: "02a5887d-9ae5-49b1-8c05-88714b506cab"}),
-      await userGenerator({ id: "55a5db1b-d585-446d-b063-71574edafa9a"}),
+      await userGenerator({ id: "c3c5df06-b4e7-498b-bdbf-3f3138404b31" }),
+      await userGenerator({ id: "b4e46399-5401-4a58-b7d7-3a8b37bda8a0" }),
+      await userGenerator({ id: "9d589af7-234b-4fbc-b6fa-8a1343b5736e" }),
+      await userGenerator({ id: "02a5887d-9ae5-49b1-8c05-88714b506cab" }),
+      await userGenerator({ id: "55a5db1b-d585-446d-b063-71574edafa9a" }),
     ];
     for (const user of users) {
       await userRepository.save(user);

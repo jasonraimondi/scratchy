@@ -10,7 +10,7 @@ const queue = [
     name: QUEUE.email,
     redis: ENV.queueURL,
   }),
-]
+];
 
 @Module({
   providers: [QueueUIProvider],
