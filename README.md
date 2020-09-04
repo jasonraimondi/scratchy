@@ -4,7 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability)
 <a href="https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage"><img src="https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage" /></a>
 
-## Install
+## Dev
 
 ```bash
 # install dependencies
