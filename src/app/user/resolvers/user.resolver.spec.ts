@@ -17,7 +17,7 @@ describe("register.resolver", () => {
   let container: TestingModule;
   let userRepository: IUserRepository;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [UserResolver],

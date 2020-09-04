@@ -17,7 +17,7 @@ export interface IUserRepository extends IBaseRepository<User> {
 @EntityRepository(User)
 export class UserRepository extends Repository<User> implements IUserRepository {
   async list(query?: PagingQuery) {
-    const queryBuilder = this.createQueryBuilder("users");
+    const queryBuilder = this.createQueryBuilder("users").orderBy("createdAt");
     const paginator = buildPaginator({
       entity: User,
       alias: "users",

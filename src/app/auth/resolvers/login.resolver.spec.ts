@@ -24,7 +24,7 @@ describe("login.resolver", () => {
   let context: MyContext;
   let resolver: LoginResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [LoginResolver, AuthService],
@@ -41,7 +41,7 @@ describe("login.resolver", () => {
     const input = new LoginInput();
     input.email = "jason@Raimondi.us";
     input.password = "jasonraimondi";
-    const user = await User.create(input);
+    const user = await userGenerator(input);
     user.isEmailConfirmed = true;
     await userRepository.save(user);
 

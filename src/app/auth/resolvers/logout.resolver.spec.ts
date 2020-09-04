@@ -19,7 +19,7 @@ describe("auth.resolver", () => {
   let userRepository: IUserRepository;
   let resolver: LogoutResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [LogoutResolver, AuthService],
@@ -33,7 +33,7 @@ describe("auth.resolver", () => {
   describe("revokeRefreshToken", () => {
     test("fails for invalid user", async () => {
       // arrange
-      const unsavedUser = await User.create({
+      const unsavedUser = await userGenerator({
         email: "control_user@example.com",
       });
 

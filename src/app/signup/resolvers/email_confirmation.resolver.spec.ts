@@ -21,7 +21,7 @@ describe("emails confirmation resolver", () => {
   let userRepository: IUserRepository;
   let emailConfirmationRepository: IEmailConfirmationRepository;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [EmailConfirmationResolver],

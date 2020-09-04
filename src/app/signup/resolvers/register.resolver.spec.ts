@@ -1,5 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 import { validate } from "class-validator";
+import faker from "faker";
 
 import { RegisterResolver } from "~/app/signup/resolvers/register.resolver";
 import { RegisterInput } from "~/app/user/dtos/register.input";
@@ -13,6 +14,7 @@ import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { EmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
+import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";
 import { emails } from "~test/mock_email_service";
 
@@ -23,7 +25,7 @@ describe("register.resolver", () => {
   let userRepository: IUserRepository;
   let context: any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [RegisterResolver, RegisterEmail],
@@ -38,7 +40,7 @@ describe("register.resolver", () => {
     test("valid register input is validated correctly", async () => {
       // arrange
       const validInput = new RegisterInput();
-      validInput.email = "jason@raimondi.us";
+      validInput.email = faker.internet.exampleEmail();
 
       // act
       const validationErrors = await validate(validInput);
@@ -50,7 +52,7 @@ describe("register.resolver", () => {
     test("invalid register input has errors thrown", async () => {
       // arrange
       const validInput = new RegisterInput();
-      validInput.email = "jason@raimondi";
+      validInput.email = "invalid@email";
 
       // act
       const validationErrors = await validate(validInput);
@@ -64,8 +66,8 @@ describe("register.resolver", () => {
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.id = "b031765a-a950-4a0d-92dd-ecd12788f3a6n";
-      input.email = "jason@raimondi.us";
-      await userRepository.save(await User.create(input));
+      input.email = faker.internet.exampleEmail();
+      await userRepository.save(await userGenerator(input));
 
       // act
       const result = resolver.register(input, context);
@@ -78,8 +80,8 @@ describe("register.resolver", () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
-      input.email = "jason@raimondi.us";
-      await userRepository.save(await User.create(input));
+      input.email = faker.internet.exampleEmail();
+      await userRepository.save(await userGenerator(input));
 
       // act
       const result = resolver.register(input, context);
@@ -92,7 +94,7 @@ describe("register.resolver", () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
-      input.email = "jason@raimondi.us";
+      input.email = faker.internet.exampleEmail();
 
       // act
       const result = await resolver.register(input, context);
@@ -101,10 +103,10 @@ describe("register.resolver", () => {
       const emailConfirmationRepository = container.get<EmailConfirmationRepository>(
         REPOSITORY.EmailConfirmationRepository,
       );
-      const emailConfirmation = await emailConfirmationRepository.findByEmail("jason@raimondi.us");
+      const emailConfirmation = await emailConfirmationRepository.findByEmail(input.email);
       expect(result.user).toBeTruthy();
       expect(result.user.id).toBe(emailConfirmation.user.id);
-      expect(result.user.email).toBe("jason@raimondi.us");
+      expect(result.user.email).toBe(input.email);
       expect(result.user.isEmailConfirmed).toBeFalsy();
     });
   });
@@ -114,11 +116,11 @@ describe("register.resolver", () => {
       // arrange
       const resolver = container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
-      input.email = "jason@raimondi.us";
+      input.email = faker.internet.exampleEmail();
       await resolver.register(input, context);
 
       // act
-      const result = await resolver.resentConfirmEmail("jason@raimondi.us");
+      const result = await resolver.resentConfirmEmail(input.email);
 
       // assert
       expect(result).toBe(true);
@@ -132,7 +134,7 @@ describe("register.resolver", () => {
       const resolver = container.get<RegisterResolver>(RegisterResolver);
 
       // act
-      const result = resolver.resentConfirmEmail("jason@raimondi.us");
+      const result = resolver.resentConfirmEmail("user-does-not-exist@example.com");
 
       // assert
       await expect(result).rejects.toThrow(new RegExp('Could not find any entity of type "EmailConfirmationToken"'));

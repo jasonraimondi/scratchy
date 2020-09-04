@@ -17,7 +17,7 @@ describe("is_auth", () => {
   let context: MyContext;
   const next = jest.fn();
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule({}, entities);
     context = mockContext({ container });
   });

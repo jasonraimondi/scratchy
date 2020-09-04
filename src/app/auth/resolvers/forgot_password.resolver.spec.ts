@@ -22,7 +22,7 @@ describe("forgot password resolver", () => {
   let userRepository: IUserRepository;
   let forgotPasswordRepository: IForgotPasswordRepository;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     container = await createTestingModule(
       {
         providers: [ForgotPasswordResolver, ForgotPasswordEmail],
@@ -37,7 +37,7 @@ describe("forgot password resolver", () => {
   describe("sendForgotPasswordEmail", () => {
     test("success", async () => {
       // arrange
-      const user = await User.create({ email: "jason1@raimondi.us" });
+      const user = await userGenerator({ email: "jason1@raimondi.us" });
       user.isEmailConfirmed = true;
       await userRepository.save(user);
 
