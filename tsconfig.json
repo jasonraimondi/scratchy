@@ -10,7 +10,6 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "~package.json": ["package.json"],
       "~/*": ["src/*"],
       "~db/*": ["db/*"],
       "~test/*": ["test/*"]

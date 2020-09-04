@@ -10,7 +10,6 @@ import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/lib/types/my_context";
-import { userGenerator } from "~test/generators/user.generator";
 
 @Resolver()
 export class RegisterResolver {
@@ -38,7 +37,7 @@ export class RegisterResolver {
     const createdIp = req.headers?.["x-forwarded-for"] || req.connection.remoteAddress;
     const { email, id, password } = registerInput;
     await this.guardAgainstDuplicateUser(email, id);
-    const user = await userGenerator({
+    const user = await User.create({
       ...registerInput,
       createdIP: createdIp,
     });

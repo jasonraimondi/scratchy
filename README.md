@@ -38,7 +38,3 @@ open http://localhost:8025 # emails
 * [nodemailer](https://www.npmjs.com/package/nodemailer) for sending emails over SMTP
 * [handlebars](https://www.npmjs.com/package/handlebars) and  [mjml](https://www.npmjs.com/package/mjml) for email templating
 
-## Todo:
-
-* Pagination
-* auth service tests
