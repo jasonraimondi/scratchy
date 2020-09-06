@@ -6,7 +6,7 @@ import { AppResolver } from "~/app/info/info.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/lib/config/environment";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 @Module({
   imports: [

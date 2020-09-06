@@ -3,9 +3,9 @@ import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
 
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
-import { isAuth } from "~/lib/middlewares/is_auth";
+import { isAuth } from "~/lib/middlewares/auth/is_auth";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 @Resolver()
 export class MeResolver {

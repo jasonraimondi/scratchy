@@ -2,7 +2,7 @@ import { verify } from "jsonwebtoken";
 import { MiddlewareFn } from "type-graphql";
 
 import { ENV } from "~/lib/config/environment";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 export interface AuthContext {
   userId: string;

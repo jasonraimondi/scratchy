@@ -4,7 +4,7 @@ import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { AuthService } from "~/app/auth/auth.service";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 @Resolver()
 export class LogoutResolver {

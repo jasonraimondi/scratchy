@@ -11,7 +11,7 @@ import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";

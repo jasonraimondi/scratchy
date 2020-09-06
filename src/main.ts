@@ -8,7 +8,7 @@ import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 
 import { AppModule } from "~/app/app.module";
-import { attachMiddlewares } from "~/lib/attach_middlewares";
+import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 import { ENV } from "~/lib/config/environment";
 
 const applicationLogger = new Logger("__main__");

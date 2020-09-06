@@ -5,7 +5,7 @@ import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { PaginatorInputs } from "~/lib/repository/dtos/paginator.inputs";
+import { PaginatorInputs } from "~/lib/repositories/dtos/paginator.inputs";
 
 @Resolver()
 export class UserResolver {

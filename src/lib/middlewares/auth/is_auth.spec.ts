@@ -5,8 +5,8 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { isAuth } from "~/lib/middlewares/is_auth";
-import { MyContext } from "~/lib/types/my_context";
+import { isAuth } from "~/lib/middlewares/auth/is_auth";
+import { MyContext } from "~/lib/config/my_context";
 import { createTestingModule } from "~test/app_testing.module";
 import { mockContext, mockRequest, mockResponse } from "~test/mock_application";
 

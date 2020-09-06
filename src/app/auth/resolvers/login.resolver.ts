@@ -6,7 +6,7 @@ import { LoginInput } from "~/app/user/dtos/login.input";
 import { LoginResponse } from "~/app/user/dtos/login.response";
 import { REPOSITORY } from "~/lib/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 @Resolver()
 export class LoginResolver {

@@ -1,4 +1,4 @@
-import { ResolveTime } from "~/lib/middlewares/resolve_time";
+import { ResolveTime } from "~/lib/middlewares/debug/resolve_time";
 
 describe("resolve_time", () => {
   const sleep = (ms: number) => {

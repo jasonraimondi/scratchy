@@ -9,7 +9,7 @@ import { REPOSITORY } from "~/lib/config/keys";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/types/my_context";
+import { MyContext } from "~/lib/config/my_context";
 
 @Resolver()
 export class RegisterResolver {
