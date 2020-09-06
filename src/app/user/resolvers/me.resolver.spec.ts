@@ -1,6 +1,7 @@
 import { TestingModule } from "@nestjs/testing";
 
 import { MeResolver } from "~/app/user/resolvers/me.resolver";
+import { UserModule } from "~/app/user/user.module";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
@@ -16,27 +17,27 @@ import { mockContext } from "~test/mock_application";
 describe("me resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let context: MyContext;
   let resolver: MeResolver;
 
   beforeAll(async () => {
-    container = await createTestingModule(
+    moduleRef = await createTestingModule(
       {
-        providers: [MeResolver],
+        imports: [UserModule],
       },
       entities,
     );
-    resolver = container.get(MeResolver);
+    resolver = moduleRef.get(MeResolver);
   });
 
   test("successfully returns user response", async () => {
-    const userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
+    const userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
     const user = await userGenerator();
     await userRepository.save(user);
 
     context = mockContext({
-      container,
+      container: moduleRef,
       auth: {
         userId: user.id,
         email: user.email,
@@ -55,7 +56,7 @@ describe("me resolver", () => {
   });
 
   test("blank authorization throws", async () => {
-    context = mockContext({ container });
+    context = mockContext({ container: moduleRef });
 
     // act
     const result = resolver.me(context);

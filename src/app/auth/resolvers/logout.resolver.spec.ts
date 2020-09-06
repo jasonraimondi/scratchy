@@ -1,4 +1,5 @@
 import { TestingModule } from "@nestjs/testing";
+import { AuthModule } from "~/app/auth/auth.module";
 
 import { AuthService } from "~/app/auth/auth.service";
 import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
@@ -12,22 +13,21 @@ import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
-describe("auth.resolver", () => {
+describe("logout resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let userRepository: IUserRepository;
   let resolver: LogoutResolver;
 
   beforeAll(async () => {
-    container = await createTestingModule(
-      {
-        providers: [LogoutResolver, AuthService],
-      },
-      entities,
-    );
-    userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    resolver = container.get(LogoutResolver);
+    moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
+    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
+    resolver = moduleRef.get(LogoutResolver);
+  });
+
+  afterAll(async () => {
+    await moduleRef.close();
   });
 
   describe("revokeRefreshToken", () => {

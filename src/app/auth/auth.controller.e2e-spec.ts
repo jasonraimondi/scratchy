@@ -3,6 +3,7 @@ import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
 import { AuthController } from "~/app/auth/auth.controller";
+import { AuthModule } from "~/app/auth/auth.module";
 import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
@@ -17,29 +18,28 @@ import { userGenerator } from "~test/generators/user.generator";
 
 const entities = [EmailConfirmationToken, User, Role, Permission, ForgotPasswordToken];
 
-describe("Auth Controller", () => {
+describe("auth controller", () => {
   let app: INestApplication;
-  let module: TestingModule;
+  let moduleRef: TestingModule;
   let authService: AuthService;
   let userRepository: IUserRepository;
 
   beforeAll(async () => {
-    module = await createTestingModule(
-      {
-        controllers: [AuthController],
-        providers: [AuthService],
-      },
-      entities,
-    );
-    authService = module.get(AuthService);
-    userRepository = module.get(REPOSITORY.UserRepository);
-    app = module.createNestApplication();
+    // moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
+    moduleRef = await createTestingModule({
+      controllers: [AuthController],
+      providers: [AuthService],
+    }, entities);
+    authService = moduleRef.get(AuthService);
+    userRepository = moduleRef.get(REPOSITORY.UserRepository);
+    app = moduleRef.createNestApplication();
     attachMiddlewares(app);
     await app.init();
   });
 
   afterAll(async () => {
     await app.close();
+    await moduleRef.close();
   });
 
   test("refresh token updates successfully", async () => {

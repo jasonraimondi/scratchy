@@ -15,6 +15,10 @@ const mailerServiceMock = {
   }),
 };
 
+const mockQueue = {
+  add: jest.fn().mockImplementation(console.log),
+};
+
 export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
   const tester = produce(metadata, (draft: ModuleMetadata) => {
     draft.imports = draft.imports ?? [];
@@ -47,5 +51,11 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
           entities,
         }),
     })
+    .overrideProvider(EmailService)
+    .useValue(emailServiceMock)
+    .overrideProvider(MailerService)
+    .useValue(mailerServiceMock)
+    .overrideProvider("BullQueue_email")
+    .useValue(mockQueue)
     .compile();
 }

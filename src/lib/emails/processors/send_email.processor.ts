@@ -18,7 +18,7 @@ export class SendEmailProcessor {
     private readonly emailTemplateService: EmailTemplateService,
   ) {}
 
-  @Process(QUEUE_JOBS.email.send)
+  @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })
   async handleSend(job: Job<ISendMailOptions>) {
     const { template, context, ...config } = job.data;
     if (!template) throw new Error(`Template not found ${template}`);

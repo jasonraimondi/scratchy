@@ -1,5 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 import jwtDecode from "jwt-decode";
+import { AuthModule } from "~/app/auth/auth.module";
 
 import { AuthService } from "~/app/auth/auth.service";
 import { LoginResolver } from "~/app/auth/resolvers/login.resolver";
@@ -16,24 +17,23 @@ import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";
 
-describe("login.resolver", () => {
+describe("login resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let userRepository: IUserRepository;
   let context: MyContext;
   let resolver: LoginResolver;
 
   beforeAll(async () => {
-    container = await createTestingModule(
-      {
-        providers: [LoginResolver, AuthService],
-      },
-      entities,
-    );
-    userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    context = mockContext({ container });
-    resolver = container.get(LoginResolver);
+    moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
+    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
+    context = mockContext({ container: moduleRef });
+    resolver = moduleRef.get(LoginResolver);
+  });
+
+  afterAll(async () => {
+    await moduleRef.close();
   });
 
   test("user logs in successfully", async () => {

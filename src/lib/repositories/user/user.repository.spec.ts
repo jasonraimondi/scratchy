@@ -10,7 +10,7 @@ import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
-describe("user_repository", () => {
+describe("user repository", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;

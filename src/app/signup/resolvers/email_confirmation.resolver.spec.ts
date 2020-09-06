@@ -1,6 +1,8 @@
 import { TestingModule } from "@nestjs/testing";
+import { AuthModule } from "~/app/auth/auth.module";
 
 import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation.resolver";
+import { SignupModule } from "~/app/signup/signup.module";
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
@@ -16,21 +18,25 @@ import { userGenerator } from "~test/generators/user.generator";
 describe("emails confirmation resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let resolver: EmailConfirmationResolver;
   let userRepository: IUserRepository;
   let emailConfirmationRepository: IEmailConfirmationRepository;
 
   beforeAll(async () => {
-    container = await createTestingModule(
+    moduleRef = await createTestingModule(
       {
-        providers: [EmailConfirmationResolver],
+        imports: [SignupModule],
       },
       entities,
     );
-    userRepository = container.get(REPOSITORY.UserRepository);
-    emailConfirmationRepository = container.get(REPOSITORY.EmailConfirmationRepository);
-    resolver = container.get(EmailConfirmationResolver);
+    userRepository = moduleRef.get(REPOSITORY.UserRepository);
+    emailConfirmationRepository = moduleRef.get(REPOSITORY.EmailConfirmationRepository);
+    resolver = moduleRef.get(EmailConfirmationResolver);
+  });
+
+  afterAll(async () => {
+    await moduleRef.close();
   });
 
   describe("verify user emails confirmation", () => {

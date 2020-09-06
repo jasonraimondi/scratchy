@@ -1,4 +1,5 @@
 import { TestingModule } from "@nestjs/testing";
+import { AuthModule } from "~/app/auth/auth.module";
 
 import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password.resolver";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
@@ -8,7 +9,6 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/lib/config/keys";
-import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
@@ -17,21 +17,25 @@ import { userGenerator } from "~test/generators/user.generator";
 describe("forgot password resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let resolver: ForgotPasswordResolver;
   let userRepository: IUserRepository;
   let forgotPasswordRepository: IForgotPasswordRepository;
 
   beforeAll(async () => {
-    container = await createTestingModule(
+    moduleRef = await createTestingModule(
       {
-        providers: [ForgotPasswordResolver, ForgotPasswordEmail],
+        imports: [AuthModule],
       },
       entities,
     );
-    userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
-    forgotPasswordRepository = container.get<IForgotPasswordRepository>(REPOSITORY.ForgotPasswordRepository);
-    resolver = container.get(ForgotPasswordResolver);
+    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
+    forgotPasswordRepository = moduleRef.get<IForgotPasswordRepository>(REPOSITORY.ForgotPasswordRepository);
+    resolver = moduleRef.get(ForgotPasswordResolver);
+  });
+
+  afterAll(async () => {
+    await moduleRef.close();
   });
 
   describe("sendForgotPasswordEmail", () => {

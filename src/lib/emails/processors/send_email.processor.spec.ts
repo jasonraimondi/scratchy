@@ -7,6 +7,7 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
+import { EmailModule } from "~/lib/emails/email.module";
 import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { createTestingModule } from "~test/app_testing.module";
@@ -15,7 +16,7 @@ import { emails } from "~test/mock_email_service";
 describe("send_email processor", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let resolver: SendEmailProcessor;
 
   const job: Job<ISendMailOptions> | any = {
@@ -31,8 +32,13 @@ describe("send_email processor", () => {
   };
 
   beforeAll(async () => {
-    container = await createTestingModule({ providers: [SendEmailProcessor, EmailTemplateService] }, entities);
-    resolver = container.get(SendEmailProcessor);
+    // moduleRef = await createTestingModule({ providers: [SendEmailProcessor, EmailTemplateService] }, entities);
+    moduleRef = await createTestingModule({ imports: [EmailModule] }, entities);
+    resolver = moduleRef.get(SendEmailProcessor);
+  });
+
+  afterAll(async () => {
+    await moduleRef.close();
   });
 
   it("sends email for valid job data", async () => {

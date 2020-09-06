@@ -5,7 +5,7 @@ import { QueueUIProvider } from "~/lib/queue/queue_ui.provider";
 import { ENV } from "~/lib/config/environment";
 import { QUEUE } from "~/lib/config/keys";
 
-const queue = [
+const queues = [
   BullModule.registerQueue({
     name: QUEUE.email,
     redis: ENV.queueURL,
@@ -14,7 +14,7 @@ const queue = [
 
 @Module({
   providers: [QueueUIProvider],
-  imports: [...queue],
-  exports: [...queue],
+  imports: [...queues],
+  exports: [...queues],
 })
 export class QueueModule {}

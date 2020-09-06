@@ -1,6 +1,7 @@
 import { TestingModule } from "@nestjs/testing";
 
 import { UserResolver } from "~/app/user/resolvers/user.resolver";
+import { UserModule } from "~/app/user/user.module";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
@@ -14,23 +15,23 @@ import { userGenerator } from "~test/generators/user.generator";
 describe("register.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-  let container: TestingModule;
+  let moduleRef: TestingModule;
   let userRepository: IUserRepository;
 
   beforeAll(async () => {
-    container = await createTestingModule(
+    moduleRef = await createTestingModule(
       {
-        providers: [UserResolver],
+        imports: [UserModule],
       },
       entities,
     );
-    userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
+    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
   });
 
   describe("user", () => {
     test("resolve user by id", async () => {
       // arrange
-      const resolver = container.get<UserResolver>(UserResolver);
+      const resolver = moduleRef.get<UserResolver>(UserResolver);
       const user = await userGenerator();
       await userRepository.save(user);
 
@@ -47,7 +48,7 @@ describe("register.resolver", () => {
   describe("users", () => {
     test("resolve list users", async () => {
       // arrange
-      const resolver = container.get<UserResolver>(UserResolver);
+      const resolver = moduleRef.get<UserResolver>(UserResolver);
       await userRepository.save(await userGenerator());
       await userRepository.save(await userGenerator());
       await userRepository.save(await userGenerator());
