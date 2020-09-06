@@ -2,8 +2,6 @@ dist
 generated
 tmp
 
-database.json
-
 # Logs
 logs
 *.log

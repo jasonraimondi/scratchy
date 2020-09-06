@@ -1,0 +1,3 @@
+{
+  "dev": "postgres://scratchy:secret@localhost:30532/scratchy"
+}
