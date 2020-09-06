@@ -26,10 +26,13 @@ describe("auth controller", () => {
 
   beforeAll(async () => {
     // moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
-    moduleRef = await createTestingModule({
-      controllers: [AuthController],
-      providers: [AuthService],
-    }, entities);
+    moduleRef = await createTestingModule(
+      {
+        controllers: [AuthController],
+        providers: [AuthService],
+      },
+      entities,
+    );
     authService = moduleRef.get(AuthService);
     userRepository = moduleRef.get(REPOSITORY.UserRepository);
     app = moduleRef.createNestApplication();

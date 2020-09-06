@@ -10,6 +10,7 @@
     "build": "nest build --config tsconfig.build.json",
     "format": "prettier --write \"{src,test}/**/*.(t|j)s*\"",
     "start": "ts-node src/main.ts",
+    "start:queue:dev": "ts-node-dev src/worker.ts",
     "start:dev": "ts-node-dev src/main.ts",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",

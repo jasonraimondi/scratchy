@@ -2,6 +2,7 @@ import { join } from "path";
 
 export const ENV = {
   isProduction: process.env.NODE_ENV === "production",
+  isDevelopment: process.env.NODE_ENV === "development",
   nodeEnv: process.env.NODE_ENV,
   cookieDomain: process.env.DOMAIN,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET ?? "",
@@ -13,4 +14,5 @@ export const ENV = {
   queueURL: process.env.QUEUE_URL ?? "redis://localhost:6379",
   baseURL: process.env.BASE_URL ?? "http://localhost:8080",
   emailTemplatesDir: join(__dirname, "../../../templates/emails"),
+
 };

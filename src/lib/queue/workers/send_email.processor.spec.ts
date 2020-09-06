@@ -8,8 +8,8 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { EmailModule } from "~/lib/emails/email.module";
-import { SendEmailProcessor } from "~/lib/emails/processors/send_email.processor";
-import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
+import { WorkerModule } from "~/lib/queue/worker.module";
+import { SendEmailProcessor } from "~/lib/queue/workers/send_email.processor";
 import { createTestingModule } from "~test/app_testing.module";
 import { emails } from "~test/mock_email_service";
 
@@ -33,7 +33,7 @@ describe("send_email processor", () => {
 
   beforeAll(async () => {
     // moduleRef = await createTestingModule({ providers: [SendEmailProcessor, EmailTemplateService] }, entities);
-    moduleRef = await createTestingModule({ imports: [EmailModule] }, entities);
+    moduleRef = await createTestingModule({ imports: [WorkerModule] }, entities);
     resolver = moduleRef.get(SendEmailProcessor);
   });
 
