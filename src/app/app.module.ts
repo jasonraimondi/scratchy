@@ -6,6 +6,7 @@ import { AppResolver } from "~/app/info/info.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/lib/config/environment";
+import { MyContext } from "~/lib/types/my_context";
 
 @Module({
   imports: [
@@ -15,7 +16,12 @@ import { ENV } from "~/lib/config/environment";
       emitSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
       validate: true,
       dateScalarMode: "timestamp",
-      context: ({ res, req }) => ({ currentUser: req.user, res, req }),
+      context: ({ res, req }): Partial<MyContext> => ({
+        currentUser: req.user,
+        ipAddr: req.headers?.["x-forwarded-for"] || req.connection.remoteAddress,
+        res,
+        req,
+      }),
     }),
     AuthModule,
     SignupModule,

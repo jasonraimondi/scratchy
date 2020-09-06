@@ -11,7 +11,7 @@ import { AppModule } from "~/app/app.module";
 import { attachMiddlewares } from "~/lib/attach_middlewares";
 import { ENV } from "~/lib/config/environment";
 
-const applicationLogger = new Logger("__app__");
+const applicationLogger = new Logger("__main__");
 
 (async () => {
   if (ENV.enableDebugging) applicationLogger.debug("DEBUGGING ENABLED");

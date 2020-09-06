@@ -18,7 +18,7 @@ export class LoginResolver {
   @Mutation(() => LoginResponse)
   async login(
     @Arg("data") { email, password, rememberMe }: LoginInput,
-    @Ctx() { req, res }: MyContext,
+    @Ctx() { ipAddr, res }: MyContext,
   ): Promise<LoginResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -26,9 +26,7 @@ export class LoginResolver {
 
     this.authService.sendRefreshToken(res, rememberMe, user);
 
-    const ipAddr = req.headers?.["x-forwarded-for"] || req.connection.remoteAddress;
-
-    await this.userRepository.incrementLastLogin(user, ipAddr);
+    await this.userRepository.incrementLastLogin(user, ipAddr ?? "127.0.1.1");
 
     return {
       accessToken: this.authService.createAccessToken(user),
