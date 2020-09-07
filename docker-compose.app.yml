@@ -1,21 +1,57 @@
 version: "3.7"
 
 services:
-  api:
+  traefik:
+    image: "traefik:v2.3"
+    command:
+      - "--log.level=INFO"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  app:
     build: .
     image: jasonraimondi/scratchy:dev
-    environment:
-      DOMAIN: localhost
-      ACCESS_TOKEN_SECRET: 6fbf61ea-5214-40d8-a08b-4846daf8280an
-      REFRESH_TOKEN_SECRET: de92ec07-29fe-457b-b71c-3aaf88ce01cbn
-      ENABLE_DEBUGGING: 1
-      MAILER: smtp://mailhog:1025
-      TYPEORM_SYNCHRONIZE: 1
-      TYPEORM_LOGGING: 1
-      TYPEORM_ENTITIES: src/entity/**/*_entity.js
-      TYPEORM_URL: postgres://scratchy:secret@pg:5432/scratchy
-      TYPEORM_CONNECTION: postgres
-#      CORS_URLS: "http://localhost"
+    ports:
+      - 3000:3000
+    env_file:
+      - .env.docker
+    depends_on:
+      - pg
+      - mailhog
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`scratchy.localdomain`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+
+  worker:
+    image: jasonraimondi/scratchy:dev
+    command:
+      - node
+      - /app/dist/worker.js
+    env_file:
+      - .env.docker
+    depends_on:
+      - pg
+      - mailhog
+      - redis
+
+  migrate-up-init:
+    image: jasonraimondi/scratchy:dev
+    command:
+      - npm
+      - run
+      - migrate:up:docker
+    env_file:
+      - .env.docker
     depends_on:
       - pg
       - mailhog

@@ -15,6 +15,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "migrate:up": "db-migrate up -m db/migrations",
+    "migrate:up:docker": "db-migrate up -m db/migrations -e docker",
     "migrate:down": "db-migrate down -m db/migrations",
     "migrate:down:all": "db-migrate down -m db/migrations 0",
     "migrate:create": "db-migrate create --sql-file -m db/migrations",

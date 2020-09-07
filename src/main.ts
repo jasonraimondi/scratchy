@@ -11,12 +11,14 @@ import { AppModule } from "~/app/app.module";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 import { ENV } from "~/lib/config/environment";
 
-const applicationLogger = new Logger("__main__");
+const logger = new Logger("__main__");
 
 (async () => {
-  if (ENV.enableDebugging) applicationLogger.debug("DEBUGGING ENABLED");
+  if (ENV.enableDebugging) {
+    logger.debug("DEBUGGING ENABLED");
+  }
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   attachMiddlewares(app);
   await app.listen(3000);
-  applicationLogger.log(`Listening on ${await app.getUrl()}`);
+  logger.log(`Listening on ${await app.getUrl()}`);
 })();

@@ -12,7 +12,7 @@ import { WorkerModule } from "~/lib/queue/worker.module";
 const imports = [
   TypeGraphQLModule.forRoot({
     debug: ENV.enableDebugging,
-    playground: !ENV.isProduction,
+    playground: ENV.enablePlayground,
     emitSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
     validate: true,
     dateScalarMode: "timestamp",
