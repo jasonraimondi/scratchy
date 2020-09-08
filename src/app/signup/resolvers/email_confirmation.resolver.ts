@@ -2,7 +2,7 @@ import { Inject, Logger } from "@nestjs/common";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
-import { REPOSITORY } from "~/lib/config/keys";
+import { REPOSITORY } from "~/config/keys";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 

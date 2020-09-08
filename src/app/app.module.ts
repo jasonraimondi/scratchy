@@ -5,9 +5,9 @@ import { AuthModule } from "~/app/auth/auth.module";
 import { AppResolver } from "~/app/info/info.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
-import { ENV } from "~/lib/config/environment";
-import { MyContext } from "~/lib/config/my_context";
-import { WorkerModule } from "~/lib/queue/worker.module";
+import { ENV } from "~/config/environment";
+import { MyContext } from "~/config/my_context";
+import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 
 const imports = [
   GraphQLModule.forRoot({
@@ -28,7 +28,7 @@ const imports = [
   UserModule,
 ];
 
-if (ENV.isDevelopment) imports.push(WorkerModule)
+if (ENV.isDevelopment) imports.push(QueueWorkerModule)
 
 @Module({
   imports,

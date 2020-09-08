@@ -9,7 +9,7 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 
 import { AppModule } from "~/app/app.module";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
-import { ENV } from "~/lib/config/environment";
+import { ENV } from "~/config/environment";
 
 const logger = new Logger("__main__");
 

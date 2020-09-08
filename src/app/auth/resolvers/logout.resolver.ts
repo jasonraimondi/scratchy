@@ -2,9 +2,9 @@ import { Inject } from "@nestjs/common";
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/auth.service";
-import { REPOSITORY } from "~/lib/config/keys";
+import { REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/config/my_context";
+import { MyContext } from "~/config/my_context";
 
 @Resolver()
 export class LogoutResolver {

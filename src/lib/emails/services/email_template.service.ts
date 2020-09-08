@@ -3,7 +3,7 @@ import { promises } from "fs";
 import { compile } from "handlebars";
 import mjml2html from "mjml";
 
-import { ENV } from "~/lib/config/environment";
+import { ENV } from "~/config/environment";
 
 @Injectable()
 export class EmailTemplateService {

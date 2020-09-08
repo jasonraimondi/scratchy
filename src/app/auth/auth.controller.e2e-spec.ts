@@ -11,7 +11,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
-import { REPOSITORY } from "~/lib/config/keys";
+import { REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";

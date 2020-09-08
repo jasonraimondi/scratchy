@@ -6,13 +6,13 @@ import "dotenv/config";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { ENV } from "~/lib/config/environment";
-import { WorkerModule } from "~/lib/queue/worker.module";
+import { ENV } from "~/config/environment";
+import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 
-const applicationLogger = new Logger("__queue__");
 
 (async () => {
+  const applicationLogger = new Logger("__queue__");
   if (ENV.enableDebugging) applicationLogger.debug("DEBUGGING ENABLED");
-  const app = await NestFactory.create(WorkerModule);
+  const app = await NestFactory.create(QueueWorkerModule);
   await app.init();
 })();

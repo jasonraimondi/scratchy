@@ -3,7 +3,7 @@ import "reflect-metadata";
 
 import { join } from "path";
 
-import { ENV } from "~/lib/config/environment";
+import { ENV } from "~/config/environment";
 
 ENV.emailTemplatesDir = join(__dirname, "templates/emails");
 ENV.baseURL = "localhost";

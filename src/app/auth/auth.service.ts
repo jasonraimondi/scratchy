@@ -3,8 +3,8 @@ import { CookieOptions, Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 
 import { User } from "~/entity/user/user.entity";
-import { ENV } from "~/lib/config/environment";
-import { REPOSITORY } from "~/lib/config/keys";
+import { ENV } from "~/config/environment";
+import { REPOSITORY } from "~/config/keys";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 export class AuthService {

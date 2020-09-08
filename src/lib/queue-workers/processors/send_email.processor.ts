@@ -4,7 +4,7 @@ import { Process, Processor } from "@nestjs/bull";
 import { Inject, Logger } from "@nestjs/common";
 import { Job } from "bull";
 
-import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/lib/config/keys";
+import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/keys";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 

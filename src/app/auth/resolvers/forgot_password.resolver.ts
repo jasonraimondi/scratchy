@@ -4,7 +4,7 @@ import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/lib/config/keys";
+import { REPOSITORY } from "~/config/keys";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";

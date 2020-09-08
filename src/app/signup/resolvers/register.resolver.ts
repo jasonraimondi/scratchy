@@ -5,11 +5,11 @@ import { RegisterInput } from "~/app/user/dtos/register.input";
 import { RegisterResponse } from "~/app/user/dtos/register.response";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/lib/config/keys";
+import { REPOSITORY } from "~/config/keys";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
-import { MyContext } from "~/lib/config/my_context";
+import { MyContext } from "~/config/my_context";
 
 @Resolver()
 export class RegisterResolver {
