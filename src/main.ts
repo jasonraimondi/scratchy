@@ -14,11 +14,12 @@ import { ENV } from "~/config/environment";
 const logger = new Logger("__main__");
 
 (async () => {
-  if (ENV.enableDebugging) {
-    logger.debug("DEBUGGING ENABLED");
-  }
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   attachMiddlewares(app);
   await app.listen(3000);
+  if (ENV.enableDebugging) {
+    logger.debug("DEBUGGING ENABLED");
+    logger.debug(ENV);
+  }
   logger.log(`Listening on ${await app.getUrl()}`);
 })();

@@ -1,4 +1,4 @@
-import { route } from "~/lib/services/route";
+import { route } from "~/lib/serviced/route";
 
 test("route_helper", () => {
   const myRoute = route("/photo/:photoId");

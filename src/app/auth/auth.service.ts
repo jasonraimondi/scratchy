@@ -1,6 +1,6 @@
 import { Inject } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { CookieOptions, Response } from "express";
-import { sign, verify } from "jsonwebtoken";
 
 import { User } from "~/entity/user/user.entity";
 import { ENV } from "~/config/environment";
@@ -12,12 +12,15 @@ export class AuthService {
   private readonly refreshTokenTimeout = "2h";
   private readonly refreshTokenTimeoutRemember = "7d";
 
-  constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
+  constructor(
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    private jwtService: JwtService,
+  ) {}
 
   async updateAccessToken(refreshToken: string) {
     let payload: any;
     try {
-      payload = verify(refreshToken, ENV.refreshTokenSecret);
+      payload = this.jwtService.verify(refreshToken);
     } catch (_) {
       throw new Error("invalid refresh token");
     }
@@ -41,7 +44,7 @@ export class AuthService {
       email: user.email,
       isEmailConfirmed: user.isEmailConfirmed,
     };
-    return sign(payload, ENV.accessTokenSecret, {
+    return this.jwtService.sign(payload, {
       expiresIn: this.accessTokenTimeout,
     });
   }
@@ -51,7 +54,7 @@ export class AuthService {
       userId: user.id,
       tokenVersion: user.tokenVersion,
     };
-    return sign(payload, ENV.refreshTokenSecret, {
+    return this.jwtService.sign(payload, {
       expiresIn: rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout,
     });
   }

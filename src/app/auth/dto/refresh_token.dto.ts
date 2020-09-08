@@ -1,8 +1,11 @@
 import jwtDecode from "jwt-decode";
 
-interface IJWTToken {
+export interface IJWTToken {
+  iat: number;
   exp: number;
-  userId?: string;
+  userId: string;
+  email: string;
+  isEmailConfirmed: boolean;
 }
 
 export class RefreshTokenDTO {
