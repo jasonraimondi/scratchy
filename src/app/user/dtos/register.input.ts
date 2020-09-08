@@ -16,6 +16,6 @@ export class RegisterInput {
   @IsEmail()
   email: string;
 
-  @Field()
-  password: string;
+  @Field({ nullable: true })
+  password?: string;
 }
