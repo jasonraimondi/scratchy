@@ -1,5 +1,5 @@
 import { IsIn } from "class-validator";
-import { Field, InputType } from "type-graphql";
+import { Field, InputType } from "@nestjs/graphql";
 import { Order, PagingQuery } from "typeorm-cursor-pagination";
 
 @InputType()

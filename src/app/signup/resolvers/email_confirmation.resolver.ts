@@ -1,5 +1,5 @@
 import { Inject, Logger } from "@nestjs/common";
-import { Arg, Mutation, Resolver } from "type-graphql";
+import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
 import { REPOSITORY } from "~/lib/config/keys";
@@ -16,7 +16,7 @@ export class EmailConfirmationResolver {
   ) {}
 
   @Mutation(() => Boolean!)
-  async verifyEmailConfirmation(@Arg("data") { id, email }: VerifyEmailInput): Promise<boolean> {
+  async verifyEmailConfirmation(@Args("data") { id, email }: VerifyEmailInput): Promise<boolean> {
     email = email.toLowerCase();
     const userConfirmation = await this.userConfirmationRepository.findById(id);
     if (userConfirmation.user.email !== email) {

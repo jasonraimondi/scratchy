@@ -1,6 +1,6 @@
 import { Inject } from "@nestjs/common";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { AuthService } from "~/app/auth/auth.service";
 import { LoginInput } from "~/app/user/dtos/login.input";
 import { LoginResponse } from "~/app/user/dtos/login.response";
@@ -17,8 +17,8 @@ export class LoginResolver {
 
   @Mutation(() => LoginResponse)
   async login(
-    @Arg("data") { email, password, rememberMe }: LoginInput,
-    @Ctx() { ipAddr, res }: MyContext,
+    @Args("data") { email, password, rememberMe }: LoginInput,
+    @Context() { ipAddr, res }: MyContext,
   ): Promise<LoginResponse> {
     const user = await this.userRepository.findByEmail(email);
 

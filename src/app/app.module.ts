@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { TypeGraphQLModule } from "typegraphql-nestjs";
+import { GraphQLModule } from "@nestjs/graphql";
 
 import { AuthModule } from "~/app/auth/auth.module";
 import { AppResolver } from "~/app/info/info.resolver";
@@ -10,12 +10,12 @@ import { MyContext } from "~/lib/config/my_context";
 import { WorkerModule } from "~/lib/queue/worker.module";
 
 const imports = [
-  TypeGraphQLModule.forRoot({
+  GraphQLModule.forRoot({
     debug: ENV.enableDebugging,
     playground: ENV.enablePlayground,
-    emitSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
-    validate: true,
-    dateScalarMode: "timestamp",
+    autoSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
+    // validate: true,
+    // dateScalarMode: "timestamp",
     context: ({ res, req }): Partial<MyContext> => ({
       currentUser: req.user,
       ipAddr: req.headers?.["x-forwarded-for"] || req.connection.remoteAddress,

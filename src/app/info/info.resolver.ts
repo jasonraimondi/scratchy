@@ -1,4 +1,4 @@
-import { Query, Resolver } from "type-graphql";
+import { Query, Resolver } from "@nestjs/graphql";
 
 import { AppInfoResponse } from "~/app/info/info/info.response";
 import { author, license, name, version } from "../../../package.json";

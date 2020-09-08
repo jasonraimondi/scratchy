@@ -1,5 +1,5 @@
 import { Inject, Logger } from "@nestjs/common";
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { RegisterInput } from "~/app/user/dtos/register.input";
 import { RegisterResponse } from "~/app/user/dtos/register.response";
@@ -22,7 +22,7 @@ export class RegisterResolver {
   ) {}
 
   @Mutation(() => Boolean!)
-  async resentConfirmEmail(@Arg("email") email: string): Promise<boolean> {
+  async resentConfirmEmail(@Args("email") email: string): Promise<boolean> {
     const emailConfirmation = await this.emailConfirmationRepository.findByEmail(email);
 
     try {
@@ -35,7 +35,7 @@ export class RegisterResolver {
   }
 
   @Mutation(() => RegisterResponse!)
-  async register(@Arg("data") registerInput: RegisterInput, @Ctx() { ipAddr }: MyContext): Promise<RegisterResponse> {
+  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<RegisterResponse> {
     registerInput.email = registerInput.email.toLowerCase();
 
     const { email, id, password } = registerInput;

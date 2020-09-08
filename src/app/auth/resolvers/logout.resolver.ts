@@ -1,5 +1,5 @@
 import { Inject } from "@nestjs/common";
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/auth.service";
 import { REPOSITORY } from "~/lib/config/keys";
@@ -14,13 +14,13 @@ export class LogoutResolver {
   ) {}
 
   @Mutation(() => Boolean)
-  async logout(@Ctx() { res }: MyContext) {
+  async logout(@Context() { res }: MyContext) {
     this.authService.sendRefreshToken(res, false, undefined);
     return true;
   }
 
   @Mutation(() => Boolean)
-  async revokeRefreshToken(@Arg("userId", () => String) userId: string) {
+  async revokeRefreshToken(@Args({ name: "userId", type: () => String }) userId: string) {
     try {
       await this.userRepository.findById(userId);
       await this.userRepository.incrementToken(userId);

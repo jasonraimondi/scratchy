@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
 import { PagingResult } from "typeorm-cursor-pagination";
 
 import { User } from "~/entity/user/user.entity";

@@ -1,5 +1,5 @@
 import { compare, hash } from "bcryptjs";
-import { Field, ID, ObjectType, Root } from "type-graphql";
+import { Field, ID, ObjectType, Root } from "@nestjs/graphql";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { v4 } from "uuid";
 

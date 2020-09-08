@@ -1,5 +1,5 @@
 import { Inject } from "@nestjs/common";
-import { Arg, Query, Resolver } from "type-graphql";
+import { Args, Query, Resolver } from "@nestjs/graphql";
 
 import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
 import { User } from "~/entity/user/user.entity";
@@ -12,12 +12,12 @@ export class UserResolver {
   constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
 
   @Query(() => User)
-  async user(@Arg("email") email: string) {
+  async user(@Args("email") email: string) {
     return await this.userRepository.findByEmail(email);
   }
 
   @Query(() => UserPaginatorResponse)
-  users(@Arg("query", { nullable: true }) query?: PaginatorInputs) {
+  users(@Args("query", { nullable: true }) query?: PaginatorInputs) {
     return this.userRepository.list(query);
   }
 }

@@ -1,5 +1,5 @@
 import { Inject, Logger } from "@nestjs/common";
-import { Arg, Mutation, Resolver } from "type-graphql";
+import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
@@ -20,7 +20,7 @@ export class ForgotPasswordResolver {
   ) {}
 
   @Mutation(() => Boolean!)
-  async validateForgotPasswordToken(@Arg("token") token: string, @Arg("email") email: string) {
+  async validateForgotPasswordToken(@Args("token") token: string, @Args("email") email: string) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
     if (forgotPassword.user.email !== email.toLowerCase()) {
       throw new Error("invalid emails or token");
@@ -29,7 +29,7 @@ export class ForgotPasswordResolver {
   }
 
   @Mutation(() => Boolean)
-  async sendForgotPasswordEmail(@Arg("data") { email }: SendForgotPasswordInput) {
+  async sendForgotPasswordEmail(@Args("data") { email }: SendForgotPasswordInput) {
     const user = await this.userRepository.findByEmail(email);
     const forgotPassword = await this.getForgotPasswordForUser(user);
     try {
@@ -43,7 +43,7 @@ export class ForgotPasswordResolver {
   }
 
   @Mutation(() => Boolean)
-  async updatePasswordFromToken(@Arg("data") { token, email, password }: UpdatePasswordInput) {
+  async updatePasswordFromToken(@Args("data") { token, email, password }: UpdatePasswordInput) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
     const { user } = forgotPassword;
     if (email !== user.email) {
