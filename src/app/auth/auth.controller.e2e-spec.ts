@@ -2,7 +2,6 @@ import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
-import { AuthController } from "~/app/auth/auth.controller";
 import { AuthModule } from "~/app/auth/auth.module";
 import { AuthService } from "~/app/auth/auth.service";
 import { Permission } from "~/entity/role/permission.entity";
@@ -25,14 +24,7 @@ describe("auth controller", () => {
   let userRepository: IUserRepository;
 
   beforeAll(async () => {
-    // moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
-    moduleRef = await createTestingModule(
-      {
-        controllers: [AuthController],
-        providers: [AuthService],
-      },
-      entities,
-    );
+    moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
     authService = moduleRef.get(AuthService);
     userRepository = moduleRef.get(REPOSITORY.UserRepository);
     app = moduleRef.createNestApplication();

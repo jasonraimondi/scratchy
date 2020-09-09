@@ -2,7 +2,6 @@ import { TestingModule } from "@nestjs/testing";
 import jwtDecode from "jwt-decode";
 import { AuthModule } from "~/app/auth/auth.module";
 
-import { AuthService } from "~/app/auth/auth.service";
 import { LoginResolver } from "~/app/auth/resolvers/login.resolver";
 import { LoginInput } from "~/app/user/dtos/login.input";
 import { Permission } from "~/entity/role/permission.entity";

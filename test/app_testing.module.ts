@@ -5,6 +5,12 @@ import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
 
+import { SERVICES } from "~/config/keys";
+import { Permission } from "~/entity/role/permission.entity";
+import { Role } from "~/entity/role/role.entity";
+import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
+import { User } from "~/entity/user/user.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
 import { emails, emailServiceMock } from "./mock_email_service";
@@ -18,6 +24,8 @@ const mailerServiceMock = {
 const mockQueue = {
   add: jest.fn().mockImplementation(console.log),
 };
+
+const baseEntities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
 export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
   const tester = produce(metadata, (draft: ModuleMetadata) => {
@@ -39,7 +47,7 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
   });
 
   return Test.createTestingModule(tester)
-    .overrideProvider("DATABASE_CONNECTION")
+    .overrideProvider(SERVICES.connection)
     .useFactory({
       factory: async () =>
         await createConnection({
@@ -48,7 +56,10 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
           database: ":memory:",
           logging,
           synchronize: entities.length > 0,
-          entities,
+          entities: [
+            ...baseEntities,
+            ...entities,
+          ],
         }),
     })
     .overrideProvider(EmailService)

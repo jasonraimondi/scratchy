@@ -7,7 +7,6 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { EmailModule } from "~/lib/emails/email.module";
 import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 import { SendEmailProcessor } from "~/lib/queue-workers/processors/send_email.processor";
 import { createTestingModule } from "~test/app_testing.module";

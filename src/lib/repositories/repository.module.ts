@@ -1,12 +1,13 @@
 import { Module } from "@nestjs/common";
 import { createConnection } from "typeorm";
+import { SERVICES } from "~/config/keys";
 
 import { databaseProviders } from "~/lib/repositories/repository.providers";
 
 @Module({
   providers: [
     {
-      provide: "DATABASE_CONNECTION",
+      provide: SERVICES.connection,
       useFactory: async () => await createConnection(),
     },
     ...databaseProviders,

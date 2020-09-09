@@ -46,7 +46,7 @@ describe("me resolver", () => {
     });
 
     // act
-    const result: User | null = await resolver.me(context);
+    const result: User | null = await resolver.me(context.req.user);
 
     // assert
     expect(result).toBeTruthy();
@@ -59,7 +59,7 @@ describe("me resolver", () => {
     context = mockContext({ container: moduleRef });
 
     // act
-    const result = resolver.me(context);
+    const result = resolver.me(context.req.user);
 
     // assert
     await expect(result).rejects.toThrowError(/Cannot read property 'userId' of undefined/);

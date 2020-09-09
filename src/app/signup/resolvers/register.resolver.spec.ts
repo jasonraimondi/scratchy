@@ -108,10 +108,13 @@ describe("register.resolver", () => {
         REPOSITORY.EmailConfirmationRepository,
       );
       const emailConfirmation = await emailConfirmationRepository.findByEmail(input.email);
-      expect(result.user).toBeTruthy();
-      expect(result.user.id).toBe(emailConfirmation.user.id);
-      expect(result.user.email).toBe(input.email);
-      expect(result.user.isEmailConfirmed).toBeFalsy();
+      expect(result).toBeTruthy();
+      expect(result.id).toBe(emailConfirmation.user.id);
+      expect(result.email).toBe(input.email.toLowerCase());
+      expect(result.isEmailConfirmed).toBeFalsy();
+      expect(emails.length).toBe(1);
+      expect(emails[0].to).toBe(input.email.toLowerCase());
+      expect(emails[0].context!.url).toBe(`localhost/verify_email?e=${result.email}&u=${emailConfirmation.id}`);
     });
   });
 

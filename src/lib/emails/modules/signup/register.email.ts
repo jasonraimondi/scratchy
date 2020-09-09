@@ -3,10 +3,10 @@ import { Injectable, Logger } from "@nestjs/common";
 
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { API_ROUTES } from "~/lib/serviced/route";
+import { API_ROUTES } from "~/lib/routes/route.service";
 
 interface IEmailService {
-  send<T>(context: any): Promise<void>;
+  send(context: any): Promise<void>;
 }
 
 @Injectable()

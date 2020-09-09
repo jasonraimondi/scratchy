@@ -12,6 +12,7 @@ export class EmailConfirmationRepository
   extends Repository<EmailConfirmationToken>
   implements IEmailConfirmationRepository {
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
+    email = email.toLowerCase();
     const emailConfirmationToken = await this.createQueryBuilder("email_confirmation_tokens")
       .leftJoinAndSelect("email_confirmation_tokens.user", "users")
       .where("users.email = :email", { email })

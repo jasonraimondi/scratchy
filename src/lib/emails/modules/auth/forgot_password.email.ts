@@ -3,7 +3,7 @@ import { Injectable, Logger } from "@nestjs/common";
 
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { API_ROUTES } from "~/lib/serviced/route";
+import { API_ROUTES } from "~/lib/routes/route.service";
 
 @Injectable()
 export class ForgotPasswordEmail {

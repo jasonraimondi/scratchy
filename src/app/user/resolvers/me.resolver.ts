@@ -17,7 +17,6 @@ export class MeResolver {
   @Query(() => User)
   @UseGuards(JwtAuthGqlGuard)
   me(@ContextUser() user: User) {
-    console.log(user.encode())
     return this.userRepository.findByEmail(user.email);
   }
 }
