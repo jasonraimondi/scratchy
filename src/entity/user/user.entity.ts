@@ -1,5 +1,5 @@
 import { compare, hash } from "bcryptjs";
-import { Field, ID, ObjectType, Root } from "@nestjs/graphql";
+import { Field, ID, ObjectType} from "@nestjs/graphql";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { v4 } from "uuid";
 
@@ -86,16 +86,16 @@ export class User {
   @JoinTable({ name: "user_permissions" })
   permissions: Permission[];
 
-  @Field()
-  isActive(@Root() user: User): boolean {
-    return user.isEmailConfirmed && !!user.password;
+  @Field(() => Boolean)
+  get isActive(): boolean {
+    return this.isEmailConfirmed && !!this.password;
   }
 
-  @Field(() => String!, { nullable: true })
-  name(@Root() { firstName, lastName }: User): string | null {
+  @Field(() => String, { nullable: true })
+  get name() {
     const name = [];
-    if (firstName) name.push(firstName);
-    if (lastName) name.push(lastName);
+    if (this.firstName) name.push(this.firstName);
+    if (this.lastName) name.push(this.lastName);
     return name.join(" ") || null;
   }
 
@@ -105,7 +105,11 @@ export class User {
 
   async verify(password: string) {
     if (!this.password) throw new Error("user must create password");
-    if (!this.isActive(this)) throw new Error("user is not active");
+    if (!this.isActive) throw new Error("user is not active");
     if (!(await compare(password, this.password))) throw new Error("invalid password");
+  }
+
+  encode() {
+    return JSON.stringify(this);
   }
 }

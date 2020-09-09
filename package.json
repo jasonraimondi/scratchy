@@ -61,7 +61,6 @@
     "rxjs": "^6.6.2",
     "source-map-support": "^0.5.19",
     "tsconfig-paths": "^3.9.0",
-    "type-graphql": "^1.0.0",
     "typegraphql-nestjs": "^0.2.3",
     "typeorm": "^0.2.25",
     "typeorm-cursor-pagination": "^0.4.1",

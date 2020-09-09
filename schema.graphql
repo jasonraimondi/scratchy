@@ -30,10 +30,6 @@ type AppInfoResponse {
   license: String!
 }
 
-type RegisterResponse {
-  user: User!
-}
-
 type Cursor {
   beforeCursor: String
   afterCursor: String
@@ -67,7 +63,7 @@ type Mutation {
   revokeRefreshToken(userId: String!): Boolean!
   verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
   resentConfirmEmail(email: String!): Boolean!
-  register(data: RegisterInput!): RegisterResponse!
+  register(data: RegisterInput!): User!
 }
 
 input SendForgotPasswordInput {

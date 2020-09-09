@@ -34,10 +34,8 @@ export class RegisterResolver {
     return false;
   }
 
-  @Mutation(() => RegisterResponse!)
-  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<RegisterResponse> {
-    registerInput.email = registerInput.email.toLowerCase();
-
+  @Mutation(() => User!)
+  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
     const { email, id, password } = registerInput;
 
     await this.guardAgainstDuplicateUser(email, id);
@@ -57,7 +55,7 @@ export class RegisterResolver {
 
     await this.registerEmail.send(emailConfirmation);
 
-    return { user };
+    return user;
   }
 
   private async guardAgainstDuplicateUser(email: string, id?: string) {

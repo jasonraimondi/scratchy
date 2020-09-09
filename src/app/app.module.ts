@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Logger, Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { AuthModule } from "~/app/auth/auth.module";
@@ -7,17 +7,18 @@ import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/config/environment";
 import { MyContext } from "~/config/my_context";
+import { GraphqlLogger } from "~/lib/graphql/graphql.logger";
 import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 
 const imports = [
   GraphQLModule.forRoot({
+    logger: new GraphqlLogger(GraphQLModule.name),
     debug: ENV.enableDebugging,
     playground: ENV.enablePlayground,
     autoSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
     // validate: true,
     // dateScalarMode: "timestamp",
-    context: ({ res, req }): Partial<MyContext> => ({
-      currentUser: req.user,
+    context: ({ res, req }): Partial<MyContext|any> => ({
       ipAddr: req.headers?.["x-forwarded-for"] || req.connection.remoteAddress,
       res,
       req,
