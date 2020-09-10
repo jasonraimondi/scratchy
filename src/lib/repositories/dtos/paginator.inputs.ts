@@ -13,7 +13,11 @@ export class PaginatorInputs implements PagingQuery {
   @Field(() => Number, { nullable: true })
   limit?: number;
 
-  @Field(() => String, { nullable: true })
-  @IsIn(["ASC", "DESC"])
+  @Field(() => PaginationOrder, { nullable: true })
   order?: Order;
+}
+
+export enum PaginationOrder {
+  ASC = "ASC",
+  DESC = "DESC",
 }

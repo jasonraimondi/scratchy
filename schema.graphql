@@ -57,7 +57,12 @@ input PaginatorInputs {
   afterCursor: String
   beforeCursor: String
   limit: Float
-  order: String
+  order: Order
+}
+
+enum Order {
+  ASC
+  DESC
 }
 
 type Mutation {
