@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Role {
+  id: ID!
+  name: String!
+}
+
 type User {
   id: ID!
   email: String!
@@ -9,6 +14,7 @@ type User {
   lastName: String
   isEmailConfirmed: Boolean!
   lastLoginAt: DateTime
+  roles: [Role]
   isActive: Boolean!
   name: String
 }

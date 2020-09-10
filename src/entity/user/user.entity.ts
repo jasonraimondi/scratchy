@@ -1,6 +1,15 @@
 import { compare, hash } from "bcryptjs";
-import { Field, ID, ObjectType} from "@nestjs/graphql";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTableOptions,
+} from "typeorm";
 import { v4 } from "uuid";
 
 import { Permission } from "~/entity/role/permission.entity";
@@ -78,8 +87,13 @@ export class User {
   @Column("int")
   tokenVersion: number;
 
+  @Field(() => [Role], { nullable: "itemsAndList", defaultValue: [] })
   @ManyToMany(() => Role)
-  @JoinTable({ name: "user_roles" })
+  @JoinTable({
+    name: "user_roles",
+    joinColumn: { name: "userId", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "roleId", referencedColumnName: "id" },
+  })
   roles: Role[];
 
   @ManyToMany(() => Permission)
