@@ -2,7 +2,6 @@ import { Inject, Logger } from "@nestjs/common";
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { RegisterInput } from "~/app/user/dtos/register.input";
-import { RegisterResponse } from "~/app/user/dtos/register.response";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/config/keys";

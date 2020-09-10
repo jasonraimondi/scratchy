@@ -1,15 +1,14 @@
 import { ENV } from "~/config/environment";
 
+type RouteParams = { [key: string]: string | number };
+
 export const route = (path: string) => {
   const template = ENV.domain + path;
-  const create = (obj: any = {}) => {
+  const create = (obj: RouteParams = {}) => {
     let result = template;
-    if (!obj) return result;
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        result = result.replace(`:${key}`, obj[key]);
-      }
-    }
+    Object.keys(obj).forEach((key) => {
+      result = result.replace(`:${key}`, obj[key].toString());
+    });
     return result;
   };
   return { template, create };
