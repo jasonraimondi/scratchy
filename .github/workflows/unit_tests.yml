@@ -33,8 +33,7 @@ jobs:
         env:
           CI: true
           DOMAIN: localhost
-          ACCESS_TOKEN_SECRET: testing-access-token-secret
-          REFRESH_TOKEN_SECRET: testing-refresh-token-secret
+          JWT_SECRET: testing-access-token-secret
       - run: npm run build --if-present
       - name: report coverage to code climate
         run: |
