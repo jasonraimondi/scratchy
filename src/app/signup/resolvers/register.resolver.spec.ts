@@ -32,7 +32,7 @@ describe("register.resolver", () => {
       },
       entities,
     );
-    context = mockContext({ container: moduleRef });
+    context = mockContext();
     userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
   });
 
