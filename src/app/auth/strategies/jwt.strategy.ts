@@ -20,12 +20,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: IJWTToken): Promise<any> {
-    console.log(payload);
+    this.logger.debug(payload);
     this.logger.debug("JASON I AM IN THE jwt.strategy")
-    const user = await this.userRepository.findByEmail(payload.email);
-    // if (!user) {
-    //   throw new UnauthorizedException();
-    // }
-    return user;
+    try {
+      return await this.userRepository.findByEmail(payload.email);
+    } catch (_) {
+      throw new UnauthorizedException();
+    }
   }
 }

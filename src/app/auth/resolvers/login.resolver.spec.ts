@@ -27,7 +27,7 @@ describe("login resolver", () => {
   beforeAll(async () => {
     moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
     userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
-    context = mockContext({ container: moduleRef });
+    context = mockContext();
     resolver = moduleRef.get(LoginResolver);
   });
 
@@ -52,6 +52,10 @@ describe("login resolver", () => {
     expect(decode.userId).toBe(user.id);
     expect(result.user.id).toBe(user.id);
     expect(result.user.email).toBe(user.email);
+    expect(context.res.cookies.length).toBe(2);
+    const [name, value] = context.res.cookies[1];
+    expect(name).toBe("jid");
+    expect(value).toMatch(/[a-zA-Z]/);
   });
 
   test("user without password throws error", async () => {

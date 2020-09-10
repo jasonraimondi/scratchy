@@ -1,19 +1,18 @@
-import { TestingModule } from "@nestjs/testing";
+import { MyContext } from "~/config/my_context";
 
-interface IMockContent {
-  container: TestingModule;
-  res?: any;
-  req?: any;
-  auth?: any;
-}
+// export interface IMockContext {
+//   res?: Partial<Express.Request>;
+//   req?: Partial<Express.Request>;
+//   auth?: any;
+// }
 
-export const mockContext = ({ res = mockRequest(), req = mockRequest(), ...context }: IMockContent) => ({
-  res,
-  req,
+export const mockContext = (context?: Partial<MyContext>): MyContext => ({
   ...context,
+  res: context?.res ?? mockResponse(),
+  req: context?.req ?? mockRequest(),
 });
 
-export const mockRequest = (authHeader?: string, sessionData = {}): any => ({
+export const mockRequest = ({ user, authHeader, sessionData = {}}: any = {}): any => ({
   get: jest.fn((name: string) => {
     if (name === "authorization") return authHeader;
     return null;
@@ -25,10 +24,16 @@ export const mockRequest = (authHeader?: string, sessionData = {}): any => ({
     authorization: "bearer iamacookie",
   }),
   session: { data: sessionData },
+  user
 });
 
 export const mockResponse = () => {
-  const res: any = {};
+  const res: any = {
+    cookies: [],
+  };
+  res.cookie = jest.fn().mockImplementation((key, value) => {
+    res.cookies.push([key, value]);
+  });
   res.status = jest.fn().mockReturnValue(res);
   res.json = jest.fn().mockReturnValue(res);
   return res;
