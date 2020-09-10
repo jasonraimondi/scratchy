@@ -6,19 +6,21 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/config/keys";
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
+import { LoggerService } from "~/lib/logger/logger.service";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/config/my_context";
 
 @Resolver()
 export class RegisterResolver {
-  private readonly logger = new Logger(RegisterResolver.name);
-
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     @Inject(REPOSITORY.EmailConfirmationRepository) private emailConfirmationRepository: IEmailConfirmationRepository,
     private registerEmail: RegisterEmail,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(RegisterResolver.name);
+  }
 
   @Mutation(() => Boolean!)
   async resentConfirmEmail(@Args("email") email: string): Promise<boolean> {

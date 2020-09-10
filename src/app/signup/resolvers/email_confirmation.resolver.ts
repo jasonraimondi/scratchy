@@ -3,17 +3,19 @@ import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
 import { REPOSITORY } from "~/config/keys";
+import { LoggerService } from "~/lib/logger/logger.service";
 import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class EmailConfirmationResolver {
-  private readonly logger = new Logger(EmailConfirmationResolver.name);
-
   constructor(
     @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
     @Inject(REPOSITORY.EmailConfirmationRepository) private userConfirmationRepository: IEmailConfirmationRepository,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    logger.setContext(EmailConfirmationResolver.name);
+  }
 
   @Mutation(() => Boolean!)
   async verifyEmailConfirmation(@Args("data") { id, email }: VerifyEmailInput): Promise<boolean> {

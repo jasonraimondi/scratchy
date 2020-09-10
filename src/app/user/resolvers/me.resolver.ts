@@ -1,18 +1,21 @@
 import { Inject, Logger, UseGuards } from "@nestjs/common";
-import { Context, Query, Resolver } from "@nestjs/graphql";
-import { MyContext } from "~/config/my_context";
+import { Query, Resolver } from "@nestjs/graphql";
 
 import { User } from "~/entity/user/user.entity";
 import { REPOSITORY } from "~/config/keys";
 import { ContextUser } from "~/lib/graphql/context_user.decorator";
 import { JwtAuthGqlGuard } from "~/lib/guards/jwt_auth.gql-guard";
+import { LoggerService } from "~/lib/logger/logger.service";
 import { IUserRepository } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class MeResolver {
-  private readonly logger = new Logger(MeResolver.name);
-
-  constructor(@Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository) {}
+  constructor(
+    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
+    private readonly logger: LoggerService,
+  ) {
+    logger.setContext(MeResolver.name);
+  }
 
   @Query(() => User)
   @UseGuards(JwtAuthGqlGuard)

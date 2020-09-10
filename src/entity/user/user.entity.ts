@@ -1,15 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinTableOptions,
-} from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { v4 } from "uuid";
 
 import { Permission } from "~/entity/role/permission.entity";

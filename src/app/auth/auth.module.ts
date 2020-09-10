@@ -10,6 +10,7 @@ import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
 import { JwtStrategy } from "~/app/auth/strategies/jwt.strategy";
 import { ENV } from "~/config/environment";
 import { EmailModule } from "~/lib/emails/email.module";
+import { LoggerModule } from "~/lib/logger/logger.module";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
@@ -17,6 +18,7 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
   imports: [
     EmailModule,
     PassportModule,
+    LoggerModule,
     RepositoryModule,
     JwtModule.register({
       secret: ENV.jwtSecret,
