@@ -12,7 +12,7 @@ export const mockContext = (context?: Partial<MyContext>): MyContext => ({
   req: context?.req ?? mockRequest(),
 });
 
-export const mockRequest = ({ user, authHeader, sessionData = {}}: any = {}): any => ({
+export const mockRequest = ({ user, authHeader, sessionData = {} }: any = {}): any => ({
   get: jest.fn((name: string) => {
     if (name === "authorization") return authHeader;
     return null;
@@ -24,7 +24,7 @@ export const mockRequest = ({ user, authHeader, sessionData = {}}: any = {}): an
     authorization: "bearer iamacookie",
   }),
   session: { data: sessionData },
-  user
+  user,
 });
 
 export const mockResponse = () => {

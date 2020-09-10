@@ -18,7 +18,7 @@ const imports = [
     autoSchemaFile: ENV.isDevelopment ? "schema.graphql" : false,
     // validate: true,
     // dateScalarMode: "timestamp",
-    context: ({ res, req }): Partial<MyContext|any> => ({
+    context: ({ res, req }): Partial<MyContext | any> => ({
       ipAddr: req.headers?.["x-forwarded-for"] || req.connection.remoteAddress,
       res,
       req,
@@ -29,7 +29,7 @@ const imports = [
   UserModule,
 ];
 
-if (ENV.isDevelopment) imports.push(QueueWorkerModule)
+if (ENV.isDevelopment) imports.push(QueueWorkerModule);
 
 @Module({
   imports,

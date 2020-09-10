@@ -14,15 +14,14 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
   controllers: [AuthController],
-  imports: [EmailModule, PassportModule, RepositoryModule, JwtModule.register({
-    secret: ENV.jwtSecret,
-  })],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    ForgotPasswordResolver,
-    LogoutResolver,
-    LoginResolver,
+  imports: [
+    EmailModule,
+    PassportModule,
+    RepositoryModule,
+    JwtModule.register({
+      secret: ENV.jwtSecret,
+    }),
   ],
+  providers: [AuthService, JwtStrategy, ForgotPasswordResolver, LogoutResolver, LoginResolver],
 })
 export class AuthModule {}

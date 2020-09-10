@@ -9,7 +9,6 @@ import { NestFactory } from "@nestjs/core";
 import { ENV } from "~/config/environment";
 import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 
-
 (async () => {
   const applicationLogger = new Logger("__queue__");
   if (ENV.enableDebugging) applicationLogger.debug("DEBUGGING ENABLED");

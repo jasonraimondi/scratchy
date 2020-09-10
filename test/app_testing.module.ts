@@ -56,10 +56,7 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
           database: ":memory:",
           logging,
           synchronize: entities.length > 0,
-          entities: [
-            ...baseEntities,
-            ...entities,
-          ],
+          entities: [...baseEntities, ...entities],
         }),
     })
     .overrideProvider(EmailService)

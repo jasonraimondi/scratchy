@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User> implements IUserRepository 
     const queryBuilder = this.createQueryBuilder("users")
       .leftJoinAndSelect("users.roles", "roles")
       .orderBy("createdAt");
-    return this.paginate(queryBuilder, query)
+    return this.paginate(queryBuilder, query);
   }
 
   findById(id: string) {
@@ -30,7 +30,7 @@ export class UserRepository extends Repository<User> implements IUserRepository 
 
   findByEmail(email: string) {
     email = email.toLowerCase();
-    return this.findOneOrFail({ where: { email }});
+    return this.findOneOrFail({ where: { email } });
   }
 
   async incrementLastLogin(user: User, ipAddr: string) {

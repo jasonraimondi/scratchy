@@ -1,5 +1,5 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { PassportStrategy } from '@nestjs/passport';
+import { PassportStrategy } from "@nestjs/passport";
 import { Inject, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 
 import type { IJWTToken } from "~/app/auth/dto/refresh_token.dto";
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: IJWTToken): Promise<any> {
     this.logger.debug(payload);
-    this.logger.debug("JASON I AM IN THE jwt.strategy")
+    this.logger.debug("JASON I AM IN THE jwt.strategy");
     try {
       return await this.userRepository.findByEmail(payload.email);
     } catch (_) {

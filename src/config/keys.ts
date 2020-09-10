@@ -7,8 +7,7 @@ export const REPOSITORY = {
 export const SERVICES = {
   connection: "DATABASE_CONNECTION",
   routes: "routes",
-
-}
+};
 
 export const QUEUE = {
   email: "email",

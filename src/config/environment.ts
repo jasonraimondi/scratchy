@@ -1,6 +1,6 @@
 import { join } from "path";
 
-const required = ["JWT_SECRET", "DOMAIN"].filter(key => !process.env.hasOwnProperty(key));
+const required = ["JWT_SECRET", "DOMAIN"].filter((key) => !process.env.hasOwnProperty(key));
 
 if (required.length > 0) {
   throw new Error(`missing required envs: (${required.join(", ")})`);

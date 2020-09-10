@@ -11,7 +11,7 @@ describe("route service", () => {
 
   beforeAll(async () => {
     container = await createTestingModule({
-      imports: [RoutesModule]
+      imports: [RoutesModule],
     });
     routeService = container.get(SERVICES.routes);
   });

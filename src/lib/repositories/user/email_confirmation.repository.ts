@@ -32,7 +32,10 @@ export class EmailConfirmationRepository
     });
   }
 
-  createQueryBuilder(alias = 'email_confirmation_tokens', queryRunner?: QueryRunner): SelectQueryBuilder<EmailConfirmationToken> {
+  createQueryBuilder(
+    alias = "email_confirmation_tokens",
+    queryRunner?: QueryRunner,
+  ): SelectQueryBuilder<EmailConfirmationToken> {
     return super.createQueryBuilder(alias, queryRunner);
   }
 }

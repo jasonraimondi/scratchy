@@ -6,10 +6,7 @@ import { EmailModule } from "~/lib/emails/email.module";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
-  imports: [
-    EmailModule,
-    RepositoryModule,
-  ],
+  imports: [EmailModule, RepositoryModule],
   providers: [MeResolver, UserResolver],
 })
 export class UserModule {}

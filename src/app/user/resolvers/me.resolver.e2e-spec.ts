@@ -63,7 +63,7 @@ describe("me resolver", () => {
         operationName: null,
         query: meQuery,
       })
-      .set('Authorization', `Bearer ${authService.createAccessToken(user)}`)
+      .set("Authorization", `Bearer ${authService.createAccessToken(user)}`)
       .expect(({ body }) => {
         const data = body.data.me;
         expect(data).toBeTruthy();
@@ -85,7 +85,7 @@ describe("me resolver", () => {
       .expect(({ body }) => {
         const errors = body.errors;
         expect(errors.length).toBe(1);
-        expect(errors[0].message).toBe("Unauthorized")
+        expect(errors[0].message).toBe("Unauthorized");
       })
       .expect(200)
       .expect("Content-Type", /json/);
