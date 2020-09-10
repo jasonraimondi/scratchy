@@ -1,8 +1,7 @@
 import { ENV } from "~/config/environment";
 
 export const route = (path: string) => {
-  path = `${ENV.baseURL}${path}`;
-  const template = path;
+  const template = ENV.domain + path;
   const create = (obj: any = {}) => {
     let result = template;
     if (!obj) return result;

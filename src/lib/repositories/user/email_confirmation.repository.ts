@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, QueryRunner, Repository, SelectQueryBuilder } from "typeorm";
 
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
@@ -13,7 +13,7 @@ export class EmailConfirmationRepository
   implements IEmailConfirmationRepository {
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
     email = email.toLowerCase();
-    const emailConfirmationToken = await this.createQueryBuilder("email_confirmation_tokens")
+    const emailConfirmationToken = await this.createQueryBuilder()
       .leftJoinAndSelect("email_confirmation_tokens.user", "users")
       .where("users.email = :email", { email })
       .getOne();
@@ -30,5 +30,9 @@ export class EmailConfirmationRepository
         },
       },
     });
+  }
+
+  createQueryBuilder(alias = 'email_confirmation_tokens', queryRunner?: QueryRunner): SelectQueryBuilder<EmailConfirmationToken> {
+    return super.createQueryBuilder(alias, queryRunner);
   }
 }

@@ -15,7 +15,7 @@ const imports = [
     logger: new GraphqlLogger(GraphQLModule.name),
     debug: ENV.enableDebugging,
     playground: ENV.enablePlayground,
-    autoSchemaFile: ENV.enableOutputSchema ? "schema.graphql" : false,
+    autoSchemaFile: ENV.isDevelopment ? "schema.graphql" : false,
     // validate: true,
     // dateScalarMode: "timestamp",
     context: ({ res, req }): Partial<MyContext|any> => ({

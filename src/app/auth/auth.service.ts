@@ -68,7 +68,7 @@ export class AuthService {
 
     const options: CookieOptions = {
       httpOnly: true,
-      domain: ENV.cookieDomain,
+      domain: ENV.domain,
       expires: token === "" ? new Date() : new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
     };
 
