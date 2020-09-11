@@ -12,7 +12,8 @@ import { UserRepository } from "~/lib/repositories/user/user.repository";
 export const databaseProviders: Provider[] = [
   {
     provide: REPOSITORY.EmailConfirmationRepository,
-    useFactory: (connection: Connection) => new EmailConfirmationRepository(connection.getRepository(EmailConfirmationToken)),
+    useFactory: (connection: Connection) =>
+      new EmailConfirmationRepository(connection.getRepository(EmailConfirmationToken)),
     inject: [SERVICES.connection],
   },
   {

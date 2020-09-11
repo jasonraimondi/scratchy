@@ -1,7 +1,7 @@
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { BaseRepository, IBaseRepository } from "~/lib/repositories/base.repository";
+import { BaseRepository, IBaseRepo } from "~/lib/repositories/base.repository";
 
-export interface IForgotPasswordRepository extends IBaseRepository<ForgotPasswordToken> {
+export interface IForgotPasswordRepository extends IBaseRepo<ForgotPasswordToken> {
   findForUser(userId: string): Promise<ForgotPasswordToken>;
 }
 

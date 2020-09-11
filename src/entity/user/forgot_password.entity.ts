@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { IsUUID } from "class-validator";
+import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
 import { User } from "~/entity/user/user.entity";
@@ -21,8 +22,14 @@ export class ForgotPasswordToken {
 
   @Field(() => User)
   @OneToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: "userId" })
   user: User;
+
+  @Field()
+  @Index()
+  @Column("uuid")
+  @IsUUID()
+  userId: string;
 
   @Field()
   @Column()

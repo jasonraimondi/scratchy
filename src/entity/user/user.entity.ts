@@ -64,15 +64,15 @@ export class User {
   lastLoginAt?: Date;
 
   @Column(inet, { nullable: true })
-  lastLoginIP: string;
+  lastLoginIP?: string;
 
   @Column(inet, { nullable: true })
-  createdIP: string;
+  createdIP?: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ nullable: true })
   updatedAt?: Date;
 
   @Column("int")

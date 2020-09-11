@@ -5,23 +5,22 @@ import { BaseRepository, IBaseRepo } from "~/lib/repositories/base.repository";
 import { PagingQuery } from "~/lib/repositories/dtos/paginator.inputs";
 
 export interface IUserRepository extends IBaseRepo<User> {
-  list(query?: PagingQuery): Promise<PagingResult<User>>;
+  list(pagingQuery?: PagingQuery): Promise<PagingResult<User>>;
   findByEmail(email: string): Promise<User>;
   incrementLastLogin(user: User, ipAddr: string): Promise<void>;
   incrementToken(id: string): Promise<void>;
 }
 
 export class UserRepository extends BaseRepository<User> implements IUserRepository {
-  async list(query?: PagingQuery) {
+  async list(pagingQuery: PagingQuery = {}) {
     const queryBuilder = this.qb.leftJoinAndSelect("users.roles", "roles");
     return this.paginate(queryBuilder, {
       entity: User,
       alias: "users",
-      // paginationKeys: ['email', 'createdAt'],
       query: {
         limit: 25,
         order: "DESC",
-        ...query,
+        ...pagingQuery,
       },
     });
   }
