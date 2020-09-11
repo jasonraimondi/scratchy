@@ -3,6 +3,7 @@ import "source-map-support/register";
 import "tsconfig-paths/register";
 import "dotenv/config";
 
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 
@@ -16,6 +17,7 @@ const logger = new LoggerService("__main__");
 (async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   attachMiddlewares(app);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   if (ENV.enableDebugging) {
     logger.debug("DEBUGGING ENABLED");
     logger.debug(ENV);
