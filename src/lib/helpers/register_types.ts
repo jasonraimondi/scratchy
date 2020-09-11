@@ -1,8 +1,8 @@
 import { registerEnumType } from "@nestjs/graphql";
-import { PaginationOrder } from "~/lib/repositories/dtos/paginator.inputs";
+import { Order } from "~/lib/repositories/dtos/paginator.inputs";
 
 export const registerTypes = () => {
-  registerEnumType(PaginationOrder, {
+  registerEnumType(Order, {
     name: "Order",
   });
 };

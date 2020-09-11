@@ -1,6 +1,12 @@
-import { IsIn } from "class-validator";
-import { Field, InputType } from "@nestjs/graphql";
-import { Order, PagingQuery } from "typeorm-cursor-pagination";
+import { IsOptional, Max, Min } from "class-validator";
+import { Field, InputType, Int } from "@nestjs/graphql";
+
+export interface PagingQuery {
+  afterCursor?: string;
+  beforeCursor?: string;
+  limit?: number;
+  order?: Order;
+}
 
 @InputType()
 export class PaginatorInputs implements PagingQuery {
@@ -10,14 +16,17 @@ export class PaginatorInputs implements PagingQuery {
   @Field(() => String, { nullable: true })
   beforeCursor?: string;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @Min(0)
+  @Max(500)
   limit?: number;
 
-  @Field(() => PaginationOrder, { nullable: true })
+  @Field(() => Order, { nullable: true })
   order?: Order;
 }
 
-export enum PaginationOrder {
+export enum Order {
   ASC = "ASC",
   DESC = "DESC",
 }

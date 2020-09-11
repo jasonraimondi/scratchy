@@ -1,9 +1,10 @@
-import { EntityRepository, Repository } from "typeorm";
-import { buildPaginator, PagingQuery, PagingResult } from "typeorm-cursor-pagination";
+import { EntityRepository, QueryRunner, Repository } from "typeorm";
+import { buildPaginator, PagingResult } from "typeorm-cursor-pagination";
 import { SelectQueryBuilder } from "typeorm/query-builder/SelectQueryBuilder";
 
 import { User } from "~/entity/user/user.entity";
 import { IBaseRepository } from "~/lib/repositories/base.repository";
+import { PagingQuery } from "~/lib/repositories/dtos/paginator.inputs";
 
 export interface IUserRepository extends IBaseRepository<User> {
   list(query?: PagingQuery): Promise<PagingResult<User>>;
@@ -18,9 +19,7 @@ export interface IUserRepository extends IBaseRepository<User> {
 @EntityRepository(User)
 export class UserRepository extends Repository<User> implements IUserRepository {
   async list(query?: PagingQuery) {
-    const queryBuilder = this.createQueryBuilder("users")
-      .leftJoinAndSelect("users.roles", "roles")
-      .orderBy("createdAt");
+    const queryBuilder = this.qb.leftJoinAndSelect("users.roles", "roles");
     return this.paginate(queryBuilder, query);
   }
 
@@ -47,6 +46,7 @@ export class UserRepository extends Repository<User> implements IUserRepository 
     const paginator = buildPaginator({
       entity: User,
       alias: "users",
+      // paginationKeys: ['email', 'createdAt'],
       query: {
         limit: 25,
         order: "DESC",
@@ -54,5 +54,9 @@ export class UserRepository extends Repository<User> implements IUserRepository 
       },
     });
     return await paginator.paginate(queryBuilder);
+  }
+
+  private get qb() {
+    return this.createQueryBuilder("users");
   }
 }

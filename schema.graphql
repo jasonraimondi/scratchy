@@ -56,7 +56,7 @@ type Query {
 input PaginatorInputs {
   afterCursor: String
   beforeCursor: String
-  limit: Float
+  limit: Int
   order: Order
 }
 

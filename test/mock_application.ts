@@ -8,6 +8,7 @@ import { MyContext } from "~/config/my_context";
 
 export const mockContext = (context?: Partial<MyContext>): MyContext => ({
   ...context,
+  ipAddr: "::testing",
   res: context?.res ?? mockResponse(),
   req: context?.req ?? mockRequest(),
 });
