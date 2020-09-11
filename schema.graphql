@@ -29,13 +29,6 @@ type LoginResponse {
   user: User!
 }
 
-type AppInfoResponse {
-  name: String!
-  version: String!
-  author: String!
-  license: String!
-}
-
 type Cursor {
   beforeCursor: String
   afterCursor: String
@@ -47,7 +40,6 @@ type UserPaginatorResponse {
 }
 
 type Query {
-  info: AppInfoResponse!
   me: User!
   user(email: String!): User!
   users(query: PaginatorInputs): UserPaginatorResponse!

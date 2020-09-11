@@ -1,16 +1,13 @@
-import { EntityRepository, Repository } from "typeorm";
-
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { IBaseRepository } from "~/lib/repositories/base.repository";
+import { BaseRepository, IBaseRepository } from "~/lib/repositories/base.repository";
 
 export interface IForgotPasswordRepository extends IBaseRepository<ForgotPasswordToken> {
   findForUser(userId: string): Promise<ForgotPasswordToken>;
 }
 
-@EntityRepository(ForgotPasswordToken)
-export class ForgotPasswordRepository extends Repository<ForgotPasswordToken> implements IForgotPasswordRepository {
-  findById(id: string): Promise<ForgotPasswordToken> {
-    return this.findOneOrFail(id, {
+export class ForgotPasswordRepository extends BaseRepository<ForgotPasswordToken> implements IForgotPasswordRepository {
+  async findById(id: string) {
+    return super.findById(id, {
       join: {
         alias: "forgot_password_token",
         leftJoinAndSelect: {
@@ -21,7 +18,7 @@ export class ForgotPasswordRepository extends Repository<ForgotPasswordToken> im
   }
 
   findForUser(userId: string): Promise<ForgotPasswordToken> {
-    return this.findOneOrFail({
+    return this.repository.findOneOrFail({
       where: {
         user: userId,
       },

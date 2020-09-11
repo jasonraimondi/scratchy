@@ -11,8 +11,6 @@ import { LoggerModule } from "~/lib/logger/logger.module";
 import { GraphqlLogger } from "~/lib/graphql/graphql_logger.service";
 import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 import { HealthcheckController } from "./healthcheck/healthcheck.controller";
-import { InfoModule } from './info/info.module';
-import { OauthService } from './oauth/oauth.service';
 
 const imports = [];
 
@@ -20,7 +18,6 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
 
 @Module({
   imports: [
-    InfoModule,
     AuthModule,
     SignupModule,
     UserModule,
