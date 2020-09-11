@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { IsUUID } from "class-validator";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
 import { User } from "~/entity/user/user.entity";
@@ -11,6 +12,7 @@ export class EmailConfirmationToken {
 
   constructor(user: User, id?: string) {
     this.id = id ?? v4();
+    this.userId = user.id;
     this.user = user;
     this.expiresAt = new Date(Date.now() + this.sevenDays);
   }
@@ -21,8 +23,14 @@ export class EmailConfirmationToken {
 
   @Field(() => User)
   @OneToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: "userId" })
   user: User;
+
+  @Field()
+  @Index()
+  @Column("uuid")
+  @IsUUID()
+  userId: string;
 
   @Field()
   @Column()
