@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class AppInfoResponse {
+export class InfoResponse {
   @Field()
   name: string;
   @Field()

@@ -1,12 +1,12 @@
 import { Query, Resolver } from "@nestjs/graphql";
 
-import { AppInfoResponse } from "~/app/info/info/info.response";
+import { InfoResponse } from "~/app/info/info/info.response";
 import { author, license, name, version } from "../../../package.json";
 
 @Resolver()
-export class AppResolver {
-  @Query(() => AppInfoResponse!)
-  info(): AppInfoResponse {
+export class InfoResolver {
+  @Query(() => InfoResponse!)
+  info(): InfoResponse {
     return { author, license, name, version };
   }
 }

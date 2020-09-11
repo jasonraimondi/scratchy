@@ -1,10 +1,10 @@
-import { AppResolver } from "~/app/info/info.resolver";
+import { InfoResolver } from "~/app/info/info.resolver";
 
 import pkg from "../../../package.json";
 
-describe("app.resolver", () => {
+describe("info resolver", () => {
   test("info info from package.json is resolved correctly", async () => {
-    const appResolver = new AppResolver();
+    const appResolver = new InfoResolver();
 
     const { version, name, license } = appResolver.info();
 
