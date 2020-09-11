@@ -40,12 +40,14 @@ describe("login resolver", () => {
     const input = new LoginInput();
     input.email = "jason@Raimondi.us";
     input.password = "jasonraimondi";
-    const user = await userGenerator(input);
+    let user = await userGenerator(input);
     user.isEmailConfirmed = true;
     await userRepository.save(user);
+    const originalLoggedInAt = user.lastLoginAt;
 
     // act
     const result = await resolver.login(input, context);
+    user = await userRepository.findByEmail(user.email);
 
     // assert
     const decode = jwtDecode<any>(result.accessToken);
@@ -56,6 +58,9 @@ describe("login resolver", () => {
     const [name, value] = context.res.cookies[1];
     expect(name).toBe("jid");
     expect(value).toMatch(/[a-zA-Z]/);
+    expect(originalLoggedInAt).toBeNull();
+    expect(user.lastLoginAt).toBeTruthy();
+    expect(user.lastLoginIP).toBe("::testing");
   });
 
   test("user without password throws error", async () => {
