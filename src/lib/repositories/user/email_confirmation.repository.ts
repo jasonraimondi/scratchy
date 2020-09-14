@@ -1,13 +1,13 @@
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { BaseRepository, IBaseRepo } from "~/lib/repositories/base.repository";
+import { BaseRepo } from "~/lib/repositories/base.repository";
 
-export interface IEmailConfirmationRepository extends IBaseRepo<EmailConfirmationToken> {
-  findByEmail(email: string): Promise<EmailConfirmationToken>;
-}
+export class EmailConfirmationRepo extends BaseRepo<EmailConfirmationToken> {
+  constructor(@InjectRepository(EmailConfirmationToken) userRepository: Repository<EmailConfirmationToken>) {
+    super(userRepository);
+  }
 
-export class EmailConfirmationRepository
-  extends BaseRepository<EmailConfirmationToken>
-  implements IEmailConfirmationRepository {
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
     const emailConfirmationToken = await this.qb
       .leftJoinAndSelect("email_confirmation_tokens.user", "users")

@@ -9,8 +9,7 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/config/my_context";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
@@ -20,13 +19,13 @@ describe("login resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let moduleRef: TestingModule;
-  let userRepository: IUserRepository;
+  let userRepository: UserRepo;
   let context: MyContext;
   let resolver: LoginResolver;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
-    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
+    userRepository = moduleRef.get<UserRepo>(UserRepo);
     context = mockContext();
     resolver = moduleRef.get(LoginResolver);
   });

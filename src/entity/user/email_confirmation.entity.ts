@@ -12,7 +12,7 @@ export class EmailConfirmationToken {
 
   constructor(user: User, id?: string) {
     this.id = id ?? v4();
-    this.userId = user.id;
+    this.userId = user?.id;
     this.user = user;
     this.expiresAt = new Date(Date.now() + this.sevenDays);
   }

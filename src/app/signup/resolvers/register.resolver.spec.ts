@@ -10,9 +10,8 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/config/keys";
-import { EmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { EmailConfirmationRepo } from "~/lib/repositories/user/email_confirmation.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";
@@ -22,7 +21,7 @@ describe("register.resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let moduleRef: TestingModule;
-  let userRepository: IUserRepository;
+  let userRepository: UserRepo;
   let context: any;
 
   beforeAll(async () => {
@@ -33,7 +32,7 @@ describe("register.resolver", () => {
       entities,
     );
     context = mockContext();
-    userRepository = moduleRef.get<IUserRepository>(REPOSITORY.UserRepository);
+    userRepository = moduleRef.get<UserRepo>(UserRepo);
   });
 
   afterAll(async () => {
@@ -104,9 +103,7 @@ describe("register.resolver", () => {
       const result = await resolver.register(input, context);
 
       // assert
-      const emailConfirmationRepository = moduleRef.get<EmailConfirmationRepository>(
-        REPOSITORY.EmailConfirmationRepository,
-      );
+      const emailConfirmationRepository = moduleRef.get<EmailConfirmationRepo>(EmailConfirmationRepo);
       const emailConfirmation = await emailConfirmationRepository.findByEmail(input.email);
       expect(result).toBeTruthy();
       expect(result.id).toBe(emailConfirmation.user.id);

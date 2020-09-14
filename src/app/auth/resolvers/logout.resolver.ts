@@ -1,17 +1,13 @@
-import { Inject } from "@nestjs/common";
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/auth.service";
-import { REPOSITORY } from "~/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/config/my_context";
 
 @Resolver()
 export class LogoutResolver {
-  constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    private authService: AuthService,
-  ) {}
+  constructor(private userRepository: UserRepo, private authService: AuthService) {}
 
   @Mutation(() => Boolean)
   async logout(@Context() { res }: MyContext) {

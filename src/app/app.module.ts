@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { join } from "path";
 
 import { AuthModule } from "~/app/auth/auth.module";
 import { SignupModule } from "~/app/signup/signup.module";
@@ -22,6 +24,14 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
     SignupModule,
     UserModule,
     LoggerModule,
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      url: ENV.databaseURL,
+      entities: [join(__dirname, "../entity/**/*.entity.ts")],
+      logging: true,
+      synchronize: false,
+      maxQueryExecutionTime: 0.1, // To log request runtime
+    }),
     GraphQLModule.forRoot({
       logger: new GraphqlLogger(GraphQLModule.name),
       debug: ENV.enableDebugging,

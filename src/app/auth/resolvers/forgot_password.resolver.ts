@@ -1,20 +1,18 @@
-import { Inject } from "@nestjs/common";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/user/dtos/forgot_password.input";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/config/keys";
 import { ForgotPasswordEmail } from "~/lib/emails/modules/auth/forgot_password.email";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { IForgotPasswordRepository } from "~/lib/repositories/user/forgot_password.repository";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { ForgotPasswordRepo } from "~/lib/repositories/user/forgot_password.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class ForgotPasswordResolver {
   constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @Inject(REPOSITORY.ForgotPasswordRepository) private forgotPasswordRepository: IForgotPasswordRepository,
+    private userRepository: UserRepo,
+    private forgotPasswordRepository: ForgotPasswordRepo,
     private forgotPasswordEmail: ForgotPasswordEmail,
     private logger: LoggerService,
   ) {

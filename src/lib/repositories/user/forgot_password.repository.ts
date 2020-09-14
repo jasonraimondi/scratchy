@@ -1,11 +1,15 @@
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { BaseRepository, IBaseRepo } from "~/lib/repositories/base.repository";
+import { BaseRepo } from "~/lib/repositories/base.repository";
 
-export interface IForgotPasswordRepository extends IBaseRepo<ForgotPasswordToken> {
-  findForUser(userId: string): Promise<ForgotPasswordToken>;
-}
+@Injectable()
+export class ForgotPasswordRepo extends BaseRepo<ForgotPasswordToken> {
+  constructor(@InjectRepository(ForgotPasswordToken) userRepository: Repository<ForgotPasswordToken>) {
+    super(userRepository);
+  }
 
-export class ForgotPasswordRepository extends BaseRepository<ForgotPasswordToken> implements IForgotPasswordRepository {
   async findById(id: string) {
     return super.findById(id, {
       join: {
@@ -20,7 +24,7 @@ export class ForgotPasswordRepository extends BaseRepository<ForgotPasswordToken
   findForUser(userId: string): Promise<ForgotPasswordToken> {
     return this.repository.findOneOrFail({
       where: {
-        user: userId,
+        userId: userId,
       },
       join: {
         alias: "forgot_password_token",

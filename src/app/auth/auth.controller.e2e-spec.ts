@@ -10,8 +10,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
-import { REPOSITORY } from "~/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -21,12 +20,12 @@ describe("auth controller", () => {
   let app: INestApplication;
   let moduleRef: TestingModule;
   let authService: AuthService;
-  let userRepository: IUserRepository;
+  let userRepository: UserRepo;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule({ imports: [AuthModule] }, entities);
     authService = moduleRef.get(AuthService);
-    userRepository = moduleRef.get(REPOSITORY.UserRepository);
+    userRepository = moduleRef.get(UserRepo);
     app = moduleRef.createNestApplication();
     attachMiddlewares(app);
     await app.init();

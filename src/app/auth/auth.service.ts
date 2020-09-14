@@ -1,21 +1,18 @@
-import { Inject } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { CookieOptions, Response } from "express";
 
 import { User } from "~/entity/user/user.entity";
 import { ENV } from "~/config/environment";
-import { REPOSITORY } from "~/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 
+@Injectable()
 export class AuthService {
   private readonly accessTokenTimeout = "15m";
   private readonly refreshTokenTimeout = "2h";
   private readonly refreshTokenTimeoutRemember = "7d";
 
-  constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private userRepository: UserRepo, private jwtService: JwtService) {}
 
   async updateAccessToken(refreshToken: string) {
     let payload: any;

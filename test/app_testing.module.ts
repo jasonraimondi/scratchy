@@ -1,11 +1,12 @@
-import produce from "immer";
-import { createConnection } from "typeorm";
-import { v4 } from "uuid";
+import { JwtModule } from "@nestjs/jwt";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type";
 import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
+import { v4 } from "uuid";
+// import { ENV } from "~/config/environment";
 
-import { SERVICES } from "~/config/keys";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
@@ -27,14 +28,29 @@ const mockQueue = {
 
 const baseEntities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
-export async function createTestingModule(metadata: ModuleMetadata, entities: any[] = [], logging = false) {
-  const tester = produce(metadata, (draft: ModuleMetadata) => {
-    draft.imports = draft.imports ?? [];
-    draft.providers = draft.providers ?? [];
-
-    draft.imports.push(RepositoryModule);
-
-    draft.providers.push(
+export async function createTestingModule(
+  metadata: ModuleMetadata,
+  entities: EntityClassOrSchema[] = [],
+  logging = false,
+) {
+  entities = [...baseEntities, ...entities];
+  metadata = {
+    ...metadata,
+    imports: [
+      TypeOrmModule.forRoot({
+        // name: v4(), // @todo this breaks everything, wasted at least 2 hours on this
+        retryAttempts: 0,
+        type: "sqlite",
+        database: ":memory:",
+        logging,
+        keepConnectionAlive: false,
+        synchronize: entities.length > 0, // true since base entities exist, otherwise entities.length > 0
+        entities,
+      }),
+      RepositoryModule,
+      ...(metadata.imports ?? []),
+    ],
+    providers: [
       {
         provide: EmailService,
         useValue: emailServiceMock,
@@ -43,22 +59,11 @@ export async function createTestingModule(metadata: ModuleMetadata, entities: an
         provide: MailerService,
         useValue: mailerServiceMock,
       },
-    );
-  });
+      ...(metadata.providers ?? []),
+    ],
+  };
 
-  return Test.createTestingModule(tester)
-    .overrideProvider(SERVICES.connection)
-    .useFactory({
-      factory: async () =>
-        await createConnection({
-          name: v4(),
-          type: "sqlite",
-          database: ":memory:",
-          logging,
-          synchronize: entities.length > 0,
-          entities: [...baseEntities, ...entities],
-        }),
-    })
+  return Test.createTestingModule(metadata)
     .overrideProvider(EmailService)
     .useValue(emailServiceMock)
     .overrideProvider(MailerService)

@@ -1,5 +1,4 @@
 import { TestingModule } from "@nestjs/testing";
-import { AuthModule } from "~/app/auth/auth.module";
 
 import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
@@ -9,9 +8,8 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/config/keys";
-import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { EmailConfirmationRepo } from "~/lib/repositories/user/email_confirmation.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -20,8 +18,8 @@ describe("emails confirmation resolver", () => {
 
   let moduleRef: TestingModule;
   let resolver: EmailConfirmationResolver;
-  let userRepository: IUserRepository;
-  let emailConfirmationRepository: IEmailConfirmationRepository;
+  let userRepository: UserRepo;
+  let emailConfirmationRepository: EmailConfirmationRepo;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule(
@@ -30,8 +28,8 @@ describe("emails confirmation resolver", () => {
       },
       entities,
     );
-    userRepository = moduleRef.get(REPOSITORY.UserRepository);
-    emailConfirmationRepository = moduleRef.get(REPOSITORY.EmailConfirmationRepository);
+    userRepository = moduleRef.get(UserRepo);
+    emailConfirmationRepository = moduleRef.get(EmailConfirmationRepo);
     resolver = moduleRef.get(EmailConfirmationResolver);
   });
 

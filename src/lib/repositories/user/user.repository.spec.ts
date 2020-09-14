@@ -5,8 +5,8 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-import { REPOSITORY } from "~/config/keys";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { Order } from "~/lib/repositories/dtos/paginator.inputs";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -14,12 +14,12 @@ describe("user repository", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let container: TestingModule;
-  let userRepository: IUserRepository;
+  let userRepository: UserRepo;
   let users: User[];
 
   beforeAll(async () => {
     container = await createTestingModule({}, entities);
-    userRepository = container.get<IUserRepository>(REPOSITORY.UserRepository);
+    userRepository = container.get<UserRepo>(UserRepo);
     users = [
       await userGenerator({ id: "c3c5df06-b4e7-498b-bdbf-3f3138404b31" }),
       await userGenerator({ id: "b4e46399-5401-4a58-b7d7-3a8b37bda8a0" }),
@@ -33,7 +33,7 @@ describe("user repository", () => {
   });
 
   test("limits and order desc", async () => {
-    const { data, cursor } = await userRepository.list({ limit: 3, order: "DESC" });
+    const { data, cursor } = await userRepository.list({ limit: 3, order: Order.DESC });
     const [user1, user2, user3] = users;
 
     expect(data.length).toBe(3);

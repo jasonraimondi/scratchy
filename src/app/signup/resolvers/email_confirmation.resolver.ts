@@ -1,17 +1,15 @@
-import { Inject, Logger } from "@nestjs/common";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
-import { REPOSITORY } from "~/config/keys";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { IEmailConfirmationRepository } from "~/lib/repositories/user/email_confirmation.repository";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { EmailConfirmationRepo } from "~/lib/repositories/user/email_confirmation.repository";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Resolver()
 export class EmailConfirmationResolver {
   constructor(
-    @Inject(REPOSITORY.UserRepository) private userRepository: IUserRepository,
-    @Inject(REPOSITORY.EmailConfirmationRepository) private userConfirmationRepository: IEmailConfirmationRepository,
+    private userRepository: UserRepo,
+    private userConfirmationRepository: EmailConfirmationRepo,
     private readonly logger: LoggerService,
   ) {
     logger.setContext(EmailConfirmationResolver.name);

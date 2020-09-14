@@ -1,6 +1,6 @@
 import { join } from "path";
 
-const required = ["JWT_SECRET", "DOMAIN"].filter((key) => !process.env.hasOwnProperty(key));
+const required = ["DATABASE_URL", "JWT_SECRET", "DOMAIN"].filter((key) => !process.env.hasOwnProperty(key));
 
 if (required.length > 0) {
   throw new Error(`missing required envs: (${required.join(", ")})`);
@@ -17,6 +17,7 @@ export const ENV = {
   jwtSecret: process.env.JWT_SECRET,
   enableDebugging: !!(process.env.ENABLE_DEBUGGING ?? isDevelopment),
   enablePlayground: !!(process.env.ENABLE_PLAYGROUND ?? isDevelopment),
+  databaseURL: process.env.DATABASE_URL,
   mailerURL: process.env.MAILER_URL,
   queueURL: process.env.QUEUE_URL,
   baseURL: process.env.BASE_URL,

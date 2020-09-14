@@ -1,11 +1,4 @@
-export const REPOSITORY = {
-  UserRepository: "UserRepository",
-  EmailConfirmationRepository: "EmailConfirmationRepository",
-  ForgotPasswordRepository: "ForgotPasswordRepository",
-};
-
 export const SERVICES = {
-  connection: "DATABASE_CONNECTION",
   routes: "routes",
 };
 

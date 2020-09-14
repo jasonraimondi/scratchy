@@ -1,22 +1,23 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import type { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 import { Process, Processor } from "@nestjs/bull";
-import { Inject, Logger } from "@nestjs/common";
 import { Job } from "bull";
 
-import { QUEUE, QUEUE_JOBS, REPOSITORY } from "~/config/keys";
+import { QUEUE, QUEUE_JOBS } from "~/config/keys";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
-import { IUserRepository } from "~/lib/repositories/user/user.repository";
+import { LoggerService } from "~/lib/logger/logger.service";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {
-  private readonly logger = new Logger(SendEmailProcessor.name);
-
   constructor(
-    @Inject(REPOSITORY.UserRepository) private readonly userRepository: IUserRepository,
+    private readonly userRepository: UserRepo,
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    logger.setContext(SendEmailProcessor.name);
+  }
 
   @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })
   async handleSend(job: Job<ISendMailOptions>) {

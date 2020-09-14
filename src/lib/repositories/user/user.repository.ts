@@ -1,17 +1,17 @@
-import { PagingResult } from "typeorm-cursor-pagination";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 import { User } from "~/entity/user/user.entity";
-import { BaseRepository, IBaseRepo } from "~/lib/repositories/base.repository";
+import { BaseRepo } from "~/lib/repositories/base.repository";
 import { PagingQuery } from "~/lib/repositories/dtos/paginator.inputs";
 
-export interface IUserRepository extends IBaseRepo<User> {
-  list(pagingQuery?: PagingQuery): Promise<PagingResult<User>>;
-  findByEmail(email: string): Promise<User>;
-  incrementLastLogin(user: User, ipAddr: string): Promise<void>;
-  incrementToken(id: string): Promise<void>;
-}
+@Injectable()
+export class UserRepo extends BaseRepo<User> {
+  constructor(@InjectRepository(User) userRepository: Repository<User>) {
+    super(userRepository);
+  }
 
-export class UserRepository extends BaseRepository<User> implements IUserRepository {
   async list(pagingQuery: PagingQuery = {}) {
     const queryBuilder = this.qb.leftJoinAndSelect("users.roles", "roles");
     return this.paginate(queryBuilder, {
