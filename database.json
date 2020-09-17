@@ -1,4 +1,0 @@
-{
-  "dev": "postgres://scratchy:secret@localhost:30532/scratchy",
-  "docker": "postgres://scratchy:secret@pg:5432/scratchy"
-}

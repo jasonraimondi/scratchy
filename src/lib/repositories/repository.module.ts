@@ -1,5 +1,7 @@
 import { Module, Provider } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AccessToken } from "~/entity/oauth/access_token.entity";
+import { Client } from "~/entity/oauth/client.entity";
 
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";

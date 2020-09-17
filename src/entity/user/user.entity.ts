@@ -1,6 +1,16 @@
-import { compare, hash } from "bcryptjs";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { compare, hash } from "bcryptjs";
+import { IsEmail, IsIP } from "class-validator";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from "typeorm";
 import { v4 } from "uuid";
 
 import { Permission } from "~/entity/role/permission.entity";
@@ -30,8 +40,8 @@ export class User {
     return user;
   }
 
-  private constructor(id?: string) {
-    this.id = id ?? v4();
+  private constructor(id = v4()) {
+    this.id = id;
     this.tokenVersion = 0;
     this.isEmailConfirmed = false;
   }
@@ -41,18 +51,20 @@ export class User {
   id: string;
 
   @Field()
-  @Column("text", { unique: true })
+  @Index({ unique: true })
+  @Column({ length: 255 })
+  @IsEmail()
   email: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 255, nullable: true })
   password?: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ length: 255, nullable: true })
   firstName?: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ length: 255, nullable: true })
   lastName?: string;
 
   @Field()
@@ -64,9 +76,11 @@ export class User {
   lastLoginAt?: Date;
 
   @Column(inet, { nullable: true })
+  @IsIP()
   lastLoginIP?: string;
 
   @Column(inet, { nullable: true })
+  @IsIP()
   createdIP?: string;
 
   @CreateDateColumn()
@@ -79,7 +93,7 @@ export class User {
   tokenVersion: number;
 
   @Field(() => [Role], { nullable: "itemsAndList", defaultValue: [] })
-  @ManyToMany(() => Role)
+  @ManyToMany(() => Role, { onDelete: "CASCADE" })
   @JoinTable({
     name: "user_roles",
     joinColumn: { name: "userId", referencedColumnName: "id" },
@@ -87,7 +101,7 @@ export class User {
   })
   roles: Role[];
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Permission, { onDelete: "CASCADE" })
   @JoinTable({ name: "user_permissions" })
   permissions: Permission[];
 
@@ -114,7 +128,11 @@ export class User {
     if (!(await compare(password, this.password))) throw new Error("invalid password");
   }
 
-  encode() {
-    return JSON.stringify(this);
+  get jwtPayload() {
+    return {
+      id: this.id,
+      email: this.email,
+      isActive: this.isActive,
+    };
   }
 }

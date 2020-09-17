@@ -1,11 +1,8 @@
-import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type";
 import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
-import { v4 } from "uuid";
-// import { ENV } from "~/config/environment";
 
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
@@ -13,6 +10,7 @@ import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity"
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
+import { CustomNamingStrategy } from "~/lib/naming";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
 import { emails, emailServiceMock } from "./mock_email_service";
 
@@ -38,13 +36,13 @@ export async function createTestingModule(
     ...metadata,
     imports: [
       TypeOrmModule.forRoot({
-        // name: v4(), // @todo this breaks everything, wasted at least 2 hours on this
         retryAttempts: 0,
         type: "sqlite",
         database: ":memory:",
         logging,
         keepConnectionAlive: false,
         synchronize: entities.length > 0, // true since base entities exist, otherwise entities.length > 0
+        namingStrategy: new CustomNamingStrategy(),
         entities,
       }),
       RepositoryModule,

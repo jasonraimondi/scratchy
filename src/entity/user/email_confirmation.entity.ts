@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsUUID } from "class-validator";
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
 import { User } from "~/entity/user/user.entity";
@@ -22,7 +22,7 @@ export class EmailConfirmationToken {
   id: string;
 
   @Field(() => User)
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "userId" })
   user: User;
 

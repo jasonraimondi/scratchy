@@ -10,8 +10,8 @@ import { User } from "~/entity/user/user.entity";
 export class ForgotPasswordToken {
   private readonly oneDay = 60 * 60 * 24 * 1 * 1000; // 1 day
 
-  constructor(user?: User, id?: string) {
-    this.id = id ?? v4();
+  constructor(user?: User, id = v4()) {
+    this.id = id;
     if (user) this.user = user;
     this.expiresAt = new Date(Date.now() + this.oneDay);
   }
@@ -21,7 +21,7 @@ export class ForgotPasswordToken {
   id: string;
 
   @Field(() => User)
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "userId" })
   user: User;
 

@@ -1,0 +1,19 @@
+POST http://localhost:3000/oauth/authenticate
+Content-Type: application/x-www-form-urlencoded
+
+id=99&content=new-element
+
+###
+POST http://localhost:3000/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+id=99&content=new-element
+
+###
+POST http://localhost:3000/oauth/authorize
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer Foobart
+
+client_id=a1e45dfd-9505-40de-b5ac-220b9e417177&redirect_uri=http://localhost:3000
+
+###

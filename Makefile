@@ -11,3 +11,12 @@ down:
 
 bash:
 	docker-compose -f docker-compose.app.yml -f docker-compose.yml run app ash
+
+dev:
+	docker-compose up -d
+
+migrate:
+	sleep 2.5
+	npm run migrate:up
+
+restart: down dev migrate
