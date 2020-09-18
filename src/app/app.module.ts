@@ -5,7 +5,6 @@ import { join } from "path";
 import { Request, Response } from "express";
 
 import { AuthModule } from "~/app/auth/auth.module";
-import { OauthModule } from "~/app/oauth/oauth.module";
 import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/config/environment";
@@ -23,7 +22,6 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
 
 @Module({
   imports: [
-    OauthModule,
     AuthModule,
     SignupModule,
     UserModule,
