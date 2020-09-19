@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import OAuth2Server from "oauth2-server";
 import { OAuthServerService } from "~/app/oauth/services/oauth_server.service";
 
-@Controller("oauth")
+@Controller("entities")
 export class OauthController {
   constructor(private readonly oauth: OAuthServerService) {
   }

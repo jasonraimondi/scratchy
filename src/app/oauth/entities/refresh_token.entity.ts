@@ -6,9 +6,6 @@ export class RefreshToken {
   @PrimaryColumn("uuid")
   readonly token: string;
 
-  // @OneToMany(() => AccessToken, (accessToken) => accessToken.refreshToken)
-  // accessTokens: AccessToken[];
-
   @Column({ nullable: false })
   expiresAt: Date;
 

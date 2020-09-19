@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { AccessToken } from "~/entity/oauth/access_token.entity";
+
+import { Scope } from "~/app/oauth/entities/scope.entity";
 import { BaseRepo } from "~/lib/repositories/base.repository";
 
 @Injectable()
-export class AccessTokenRepo extends BaseRepo<AccessToken> {
-  constructor(@InjectRepository(AccessToken) repository: Repository<AccessToken>) {
+export class ScopeRepo extends BaseRepo<Scope> {
+  constructor(@InjectRepository(Scope) repository: Repository<Scope>) {
     super(repository);
   }
 }

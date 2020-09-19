@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { AuthorizationCode } from "~/entity/oauth/authorization_code.entity";
+import { AuthorizationCode } from "~/app/oauth/entities/authorization_code.entity";
 
 import { BaseRepo } from "~/lib/repositories/base.repository";
 

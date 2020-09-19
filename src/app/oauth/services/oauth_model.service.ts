@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import OAuth2Server, { AuthorizationCodeModel, Client } from "oauth2-server";
-import { AccessTokenRepo } from "~/app/oauth/repository/access_token.repository";
-import { AuthorizationCodeRepo } from "~/app/oauth/repository/authorization_code.repository";
-import { ClientRepo } from "~/app/oauth/repository/client.repository";
-import { RefreshTokenRepo } from "~/app/oauth/repository/refresh_token.repository";
-import { AuthorizationCode } from "~/entity/oauth/authorization_code.entity";
+import { AccessTokenRepo } from "~/app/oauth/repositories/access_token.repository";
+import { AuthorizationCodeRepo } from "~/app/oauth/repositories/authorization_code.repository";
+import { ClientRepo } from "~/app/oauth/repositories/client.repository";
+import { RefreshTokenRepo } from "~/app/oauth/repositories/refresh_token.repository";
+import { AuthorizationCode } from "~/app/oauth/entities/authorization_code.entity";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 

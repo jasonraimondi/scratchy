@@ -11,24 +11,14 @@ import {
   PrimaryColumn,
 } from "typeorm";
 import { v4 } from "uuid";
-
-import { Client } from "~/entity/oauth/client.entity";
-import { RefreshToken } from "~/entity/oauth/refresh_token.entity";
-import { Scope } from "~/entity/oauth/scope.entity";
+import { Client } from "~/app/oauth/entities/client.entity";
+import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 
-@Entity("oauth_access_tokens")
-export class AccessToken {
+@Entity("oauth_auth_codes")
+export class AuthorizationCode {
   @PrimaryColumn("uuid")
   readonly token: string;
-
-  @ManyToOne(() => Client)
-  @JoinColumn({ name: "clientId" })
-  client: Client;
-
-  @Index()
-  @Column("uuid")
-  clientId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "userId" })
@@ -39,12 +29,16 @@ export class AccessToken {
   @IsUUID()
   userId: string;
 
-  @ManyToOne(() => RefreshToken)
-  @JoinColumn({ name: "refreshTokenToken" })
-  refreshToken?: RefreshToken;
+  @ManyToOne(() => Client)
+  client: Client;
 
+  @Index()
   @Column("uuid")
-  refreshTokenToken?: string;
+  @IsUUID()
+  clientId: string;
+
+  @Column()
+  redirectUri: string;
 
   @Column()
   expiresAt: Date;
@@ -54,15 +48,25 @@ export class AccessToken {
 
   @ManyToMany(() => Scope)
   @JoinTable({
-    name: "oauth_access_token_scopes",
-    joinColumn: { name: "accessTokenToken", referencedColumnName: "token" },
+    name: "oauth_auth_code_scopes",
+    joinColumn: { name: "authCodeToken", referencedColumnName: "token" },
     inverseJoinColumn: { name: "scopeId", referencedColumnName: "id" },
   })
   scopes: Scope[];
+
+  revoke() {
+    this.expiresAt = new Date(0);
+  }
 
   constructor(client: Client, user: User, token?: string) {
     this.client = client;
     this.user = user;
     this.token = token ?? v4();
+    this.expiresAt = addDays(new Date(), 30);
   }
 }
+
+export const addDays = (date: Date, days: number) => {
+  date.setDate(date.getDate() + days);
+  return date;
+};

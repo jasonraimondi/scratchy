@@ -3,20 +3,20 @@ import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
 import { OauthModule } from "~/app/oauth/oauth.module";
-import { AuthorizationCodeRepo } from "~/app/oauth/repository/authorization_code.repository";
-import { ClientRepo } from "~/app/oauth/repository/client.repository";
-import { AccessToken } from "~/entity/oauth/access_token.entity";
-import { AuthorizationCode } from "~/entity/oauth/authorization_code.entity";
-import { Client } from "~/entity/oauth/client.entity";
-import { RefreshToken } from "~/entity/oauth/refresh_token.entity";
-import { Scope } from "~/entity/oauth/scope.entity";
+import { AuthorizationCodeRepo } from "~/app/oauth/repositories/authorization_code.repository";
+import { ClientRepo } from "~/app/oauth/repositories/client.repository";
+import { AccessToken } from "~/app/oauth/entities/access_token.entity";
+import { AuthorizationCode } from "~/app/oauth/entities/authorization_code.entity";
+import { Client } from "~/app/oauth/entities/client.entity";
+import { RefreshToken } from "~/app/oauth/entities/refresh_token.entity";
+import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
-describe("oauth controller", () => {
+describe("entities controller", () => {
   let app: INestApplication;
   let moduleRef: TestingModule;
 
@@ -54,7 +54,7 @@ describe("oauth controller", () => {
 
   test("authorize()", async () => {
     const response = await request(app.getHttpServer())
-      .post("/oauth/authorize")
+      .post("/entities/authorize")
       .query({
         response_type: "code",
         client_id: client.id,
@@ -74,7 +74,7 @@ describe("oauth controller", () => {
   //   const authCodeRepo = moduleRef.get(AuthorizationCodeRepo);
   //   const authCode = await authCodeRepo.create({ client: client, user, redirectUri: "http://localhost" });
   //   const response = await request(app.getHttpServer())
-  //     .post("/oauth/token")
+  //     .post("/entities/token")
   //     .set("Content-Type", "application/x-www-form-urlencoded")
   //     .send({
   //       grant_type: "authorization_code",
@@ -96,7 +96,7 @@ describe("oauth controller", () => {
 
   // test("token() password grant", async () => {
   //   const response = await request(app.getHttpServer())
-  //     .post("/oauth/token")
+  //     .post("/entities/token")
   //     .set("Content-Type", "application/x-www-form-urlencoded")
   //     .send({
   //       grant_type: "password",
