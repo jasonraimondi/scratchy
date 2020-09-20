@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res } from "@nestjs/common";
+import { Controller, HttpException, Post, Req, Res, UnauthorizedException } from "@nestjs/common";
 import { Request, Response } from "express";
 
 import { OAuthServerService } from "~/app/oauth/services/oauth_server.service";
@@ -9,6 +9,14 @@ export class OAuthController {
 
   @Post("/access_token")
   async accessToken(@Req() req: Request, @Res() res: Response) {
-    return this.oauth.respondToAccessTokenRequest(req, res);
+    try {
+      return await this.oauth.respondToAccessTokenRequest(req, res);
+    } catch (e) {
+      // @todo fix exception handling...
+      if (e instanceof HttpException) {
+        throw e;
+      }
+      throw new HttpException(e.message, 500)
+    }
   }
 }

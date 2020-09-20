@@ -1,5 +1,5 @@
 import { DateInterval } from "@jmondi/date-interval";
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import type { Request, Response } from "express";
 import { AccessToken } from "~/app/oauth/entities/access_token.entity";
@@ -16,6 +16,8 @@ import { base64decode } from "~/lib/utils/base64";
 export class ClientCredentialsGrant {
   private readonly SCOPE_DELIMITER_STRING = " ";
 
+  private readonly GRANT_TYPE = "client_credentials";
+
   constructor(
     private readonly jwt: JwtService,
     private readonly clientRepository: ClientRepo,
@@ -26,10 +28,16 @@ export class ClientCredentialsGrant {
   async respondToAccessTokenRequest(request: Request, response: Response, accessTokenTTL: DateInterval) {
     const [clientId, clientSecret] = this.getClientCredentials(request);
 
+    const grantType = this.getGrantType(request);
+
+    if (grantType !== this.GRANT_TYPE) {
+      throw new Error("invalid grant_type")
+    }
+
     const client = await this.clientRepository.getClientById(clientId);
 
-    if (!(await this.clientRepository.validateClient(clientId, clientSecret))) {
-      throw new Error("invalid client and client secret");
+    if (!(await this.clientRepository.validateClient(grantType, clientId, clientSecret))) {
+      throw new HttpException(`invalid client`, 400);
     }
 
     const bodyScopes = request.body?.scopes ?? [];
@@ -117,5 +125,11 @@ export class ClientCredentialsGrant {
     }
 
     return validScopes;
+  }
+
+  private getGrantType(request: Request): string {
+    const result = request.body?.grant_type;
+    if (!result) throw new Error("invalid request, missing grant_type`");
+    return result;
   }
 }

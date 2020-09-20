@@ -8,7 +8,7 @@ describe("naming", () => {
   });
 
   test("foreign key name", () => {
-    const output = naming.foreignKeyName("oauth_authorization_codes", ["userId"], "users", ["id"]);
+    const output = naming.foreignKeyName("oauth_authorization_codes", ["userId"], "users");
     expect(output).toBe("fkey_oauthauthorizationcodes_users_userid");
   });
 

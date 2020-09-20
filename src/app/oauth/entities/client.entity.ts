@@ -16,6 +16,9 @@ export class Client {
   @Column("simple-array")
   redirectUris: string[];
 
+  @Column("simple-array")
+  allowedGrants: string[];
+
   get isConfidential(): boolean {
     return !!this.secret;
   }
@@ -24,9 +27,10 @@ export class Client {
     return this.secret === s;
   }
 
-  constructor(name: string, secret?: string, id?: string) {
-    this.name = name;
-    this.id = id ?? v4();
-    this.redirectUris = [];
+  constructor(data?: Partial<Client>) {
+    if (data?.name) this.name = data.name;
+    this.id = data?.id ?? v4();
+    this.redirectUris = data?.redirectUris ?? [];
+    this.allowedGrants = data?.allowedGrants ?? [];
   }
 }

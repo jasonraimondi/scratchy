@@ -9,7 +9,7 @@ export class CustomNamingStrategy extends DefaultNamingStrategy implements Namin
     return `pkey_${name.toLowerCase()}`;
   }
 
-  indexName(tableOrName: Table | string, columnNames: string[], where?: string): string {
+  indexName(tableOrName: Table | string, columnNames: string[]): string {
     tableOrName = typeof tableOrName === "string" ? tableOrName : tableOrName.name;
     tableOrName = tableOrName.replace(/_/g, "");
 
@@ -17,12 +17,7 @@ export class CustomNamingStrategy extends DefaultNamingStrategy implements Namin
     return `idx_${name.toLowerCase()}`;
   }
 
-  foreignKeyName(
-    tableOrName: Table | string,
-    columnNames: string[],
-    referencedTablePath?: string,
-    referencedColumnNames?: string[],
-  ): string {
+  foreignKeyName(tableOrName: Table | string, columnNames: string[], referencedTablePath?: string): string {
     tableOrName = typeof tableOrName === "string" ? tableOrName : tableOrName.name;
     tableOrName = tableOrName.replace(/_/g, "");
     referencedTablePath = referencedTablePath?.replace(/_/g, "");

@@ -14,11 +14,12 @@ import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 import { base64encode } from "~/lib/utils/base64";
 import { createTestingModule } from "~test/app_testing.module";
 
-describe("oauth controller", () => {
+describe("oauth2 client_credentials e2e", () => {
   let app: INestApplication;
   let moduleRef: TestingModule;
 
   let client: Client;
+  let clientNoClientCredentialsAllowed: Client;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule(
@@ -31,11 +32,22 @@ describe("oauth controller", () => {
     const clientRepo = moduleRef.get(ClientRepo);
     const scopeRepo = moduleRef.get(ScopeRepo);
 
-    client = await clientRepo.create({
-      name: "test client",
-      secret: "f6ce22eb-5bf7-4de6-9017-a5383facbb49",
-      redirectUris: ["http://localhost"],
-    });
+    client = await clientRepo.create(
+      new Client({
+        name: "test client",
+        secret: "f6ce22eb-5bf7-4de6-9017-a5383facbb49",
+        redirectUris: ["http://localhost"],
+        allowedGrants: ["client_credentials"],
+      }),
+    );
+
+    clientNoClientCredentialsAllowed = await clientRepo.create(
+      new Client({
+        name: "disallow-client-credentials",
+        secret: "f6ce22eb-5bf7-4de6-9017-a5383facbb49",
+        redirectUris: ["http://localhost"],
+      }),
+    );
 
     await scopeRepo.create({ name: "scope-1" });
     await scopeRepo.create({ name: "scope-2" });
@@ -50,9 +62,8 @@ describe("oauth controller", () => {
     await moduleRef.close();
   });
 
-  test("client_credentials with ", () => {
+  it("allows client credentials as basicAuth header", () => {
     const basicAuth = "Basic " + base64encode(`${client.id}:${client.secret}`);
-
     return request(app.getHttpServer())
       .post("/oauth2/access_token")
       .set("Authorization", basicAuth)
@@ -60,18 +71,18 @@ describe("oauth controller", () => {
         grant_type: "client_credentials",
         scopes: ["scope-1", "scope-2"],
       })
+      .expect(201)
+      .expect("Content-Type", /json/)
       .expect((response) => {
         const { token_type, expires_in, access_token } = response.body;
         expect(token_type).toBe("Bearer");
         expect(expires_in).toBe(3600);
         expect(access_token).toBeTruthy();
         expect(access_token.split(".").length).toBe(3);
-      })
-      .expect(201)
-      .expect("Content-Type", /json/);
+      });
   });
 
-  test("client_credentials with creds in body", () => {
+  it("allows client credentials in body", () => {
     return request(app.getHttpServer())
       .post("/oauth2/access_token")
       .send({
@@ -80,14 +91,31 @@ describe("oauth controller", () => {
         client_secret: client.secret,
         scopes: ["scope-1"],
       })
+      .expect(201)
+      .expect("Content-Type", /json/)
       .expect((response) => {
         const { token_type, expires_in, access_token } = response.body;
         expect(token_type).toBe("Bearer");
         expect(expires_in).toBe(3600);
         expect(access_token).toBeTruthy();
         expect(access_token.split(".").length).toBe(3);
+      });
+  });
+
+  it("throws for client without allowed client_credentials", () => {
+    return request(app.getHttpServer())
+      .post("/oauth2/access_token")
+      .send({
+        grant_type: "client_credentials",
+        client_id: clientNoClientCredentialsAllowed.id,
+        client_secret: clientNoClientCredentialsAllowed.secret,
+        scopes: ["scope-1"],
       })
-      .expect(201)
-      .expect("Content-Type", /json/);
+      .expect(400)
+      .expect("Content-Type", /json/)
+      .expect(({ body }) => {
+        expect(body.statusCode).toBe(400);
+        expect(body.message).toBe("invalid client")
+      });
   });
 });

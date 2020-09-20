@@ -15,8 +15,14 @@ export class ClientRepo extends BaseRepo<Client> {
     return this.findById(clientId);
   }
 
-  async validateClient(clientId: string, clientSecret?: string): Promise<boolean> {
+  async validateClient(grantType: string, clientId: string, clientSecret?: string): Promise<boolean> {
     const client = await this.getClientById(clientId);
-    return client.secret === clientSecret;
+    if (client.secret === clientSecret) {
+      return false;
+    }
+    if (!client.allowedGrants.includes(grantType)) {
+      return false;
+    }
+    return true;
   }
 }
