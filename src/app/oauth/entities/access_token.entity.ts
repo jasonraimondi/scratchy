@@ -39,11 +39,11 @@ export class AccessToken {
   @IsUUID()
   userId?: string;
 
-  @ManyToOne(() => RefreshToken)
+  @ManyToOne(() => RefreshToken, { nullable: true })
   @JoinColumn({ name: "refreshTokenToken" })
   refreshToken?: RefreshToken;
 
-  @Column("uuid")
+  @Column("uuid", { nullable: true })
   refreshTokenToken?: string;
 
   @Column()
@@ -52,13 +52,22 @@ export class AccessToken {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToMany(() => Scope)
+  @ManyToMany(() => Scope, { nullable: true })
   @JoinTable({
     name: "oauth_access_token_scopes",
     joinColumn: { name: "accessTokenToken", referencedColumnName: "token" },
     inverseJoinColumn: { name: "scopeId", referencedColumnName: "id" },
   })
-  scopes: Scope[];
+  scopes?: Scope[];
+
+  get toJWT() {
+    return {
+      token: this.token,
+      email: this.user?.email,
+      userId: this.userId,
+      isActive: this.user?.isActive,
+    };
+  }
 
   constructor(client: Client, user?: User, token?: string) {
     this.client = client;

@@ -1,18 +1,14 @@
+import { DateInterval } from "@jmondi/date-interval";
 import { Injectable } from "@nestjs/common";
-import { OAuthModelService } from "~/app/oauth/services/oauth_model.service";
-import OAuth2Server from "oauth2-server";
+import { Request, Response } from "express";
+import { ClientCredentialsGrant } from "~/app/oauth/grants/client-credentials.grant";
 
 @Injectable()
-export class OAuthServerService extends OAuth2Server {
-  constructor(options: OAuth2Server.ServerOptions) {
-    super(options);
-  }
+export class OAuthServerService {
+  constructor(private readonly clientCredentialsGrant: ClientCredentialsGrant) {}
 
-  static forFeature() {
-    return {
-      provide: OAuthServerService,
-      useFactory: (model: OAuthModelService) => new OAuthServerService({ model }),
-      inject: [OAuthModelService],
-    };
+  respondToAccessTokenRequest(req: Request, res: Response) {
+    const accessTokenTTL = new DateInterval({ hours: 1 });
+    return this.clientCredentialsGrant.respondToAccessTokenRequest(req, res, accessTokenTTL);
   }
 }

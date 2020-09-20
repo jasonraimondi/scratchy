@@ -16,8 +16,9 @@ export class Client {
   @Column("simple-array")
   redirectUris: string[];
 
-  @Column("simple-array")
-  grants: string[];
+  get isConfidential(): boolean {
+    return !!this.secret;
+  }
 
   verify(s: string) {
     return this.secret === s;
@@ -27,6 +28,5 @@ export class Client {
     this.name = name;
     this.id = id ?? v4();
     this.redirectUris = [];
-    this.grants = [];
   }
 }

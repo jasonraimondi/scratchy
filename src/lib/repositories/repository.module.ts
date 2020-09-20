@@ -16,6 +16,6 @@ const databaseProviders: Provider[] = [UserRepo, ForgotPasswordRepo, EmailConfir
 @Module({
   imports: [TypeOrmModule.forFeature([EmailConfirmationToken, ForgotPasswordToken, User, Role, Permission])],
   providers: [...databaseProviders],
-  exports: [TypeOrmModule, ...databaseProviders],
+  exports: [...databaseProviders],
 })
 export class RepositoryModule {}

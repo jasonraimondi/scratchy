@@ -11,7 +11,6 @@ import { Role } from "~/entity/role/role.entity";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
 import { User } from "~/entity/user/user.entity";
-
 import { registerTypes } from "~/lib/helpers/register_types";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { createTestingModule } from "~test/app_testing.module";

@@ -10,4 +10,13 @@ export class ClientRepo extends BaseRepo<Client> {
   constructor(@InjectRepository(Client) repository: Repository<Client>) {
     super(repository);
   }
+
+  async getClientById(clientId: string): Promise<Client> {
+    return this.findById(clientId);
+  }
+
+  async validateClient(clientId: string, clientSecret?: string): Promise<boolean> {
+    const client = await this.getClientById(clientId);
+    return client.secret === clientSecret;
+  }
 }

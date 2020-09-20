@@ -8,7 +8,7 @@ import { PagniationOtions } from "typeorm-cursor-pagination/src/index";
 type id = number | string;
 
 export abstract class BaseRepo<T> {
-  constructor(protected readonly repository: Repository<T>) {}
+  constructor(readonly repository: Repository<T>) {}
 
   async paginate(queryBuilder: SelectQueryBuilder<T>, options: PagniationOtions<T>) {
     const paginator = buildPaginator(options);
