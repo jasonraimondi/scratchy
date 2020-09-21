@@ -1,4 +1,4 @@
-import { Controller, HttpException, Post, Req, Res, UnauthorizedException } from "@nestjs/common";
+import { Controller, Get, HttpException, Post, Req, Res, UnauthorizedException } from "@nestjs/common";
 import { Request, Response } from "express";
 
 import { OAuthServerService } from "~/app/oauth/services/oauth_server.service";
@@ -18,5 +18,10 @@ export class OAuthController {
       }
       throw new HttpException(e.message, 500);
     }
+  }
+
+  @Get("/authorize")
+  async authorize(@Req() req: Request, @Res() res: Response) {
+    return this.oauth.validateAuthorizationRequest(req);
   }
 }

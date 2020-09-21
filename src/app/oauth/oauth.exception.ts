@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class OAuthException extends HttpException {
-  private constructor(response: string | Record<string, any>, status: number) {
+  constructor(response: string | Record<string, any>, status: number) {
     super(`oauth exception: ${response.toString()}`, status);
   }
 
@@ -16,5 +16,9 @@ export class OAuthException extends HttpException {
 
   static invalidGrant() {
     return new OAuthException("invalid grant_type", HttpStatus.NOT_ACCEPTABLE);
+  }
+
+  static unsupportedGrantType() {
+    return new OAuthException("unsupported grant_type", HttpStatus.NOT_ACCEPTABLE);
   }
 }
