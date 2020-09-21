@@ -2,17 +2,17 @@ import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
-import { OAuthModule } from "~/app/oauth/oauth.module";
-import { ClientRepo } from "~/app/oauth/repositories/client.repository";
-import { AccessToken } from "~/app/oauth/entities/access_token.entity";
-import { AuthorizationCode } from "~/app/oauth/entities/authorization_code.entity";
-import { Client } from "~/app/oauth/entities/client.entity";
-import { RefreshToken } from "~/app/oauth/entities/refresh_token.entity";
-import { Scope } from "~/app/oauth/entities/scope.entity";
-import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
-import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
-import { base64encode } from "~/lib/utils/base64";
-import { createTestingModule } from "~test/app_testing.module";
+import { OAuthModule } from "../src/app/oauth/oauth.module";
+import { ClientRepo } from "../src/app/oauth/repositories/client.repository";
+import { AccessToken } from "../src/app/oauth/entities/access_token.entity";
+import { AuthCode } from "../src/app/oauth/entities/auth_code.entity";
+import { Client } from "../src/app/oauth/entities/client.entity";
+import { RefreshToken } from "../src/app/oauth/entities/refresh_token.entity";
+import { Scope } from "../src/app/oauth/entities/scope.entity";
+import { ScopeRepo } from "../src/app/oauth/repositories/scope.repository";
+import { attachMiddlewares } from "../src/lib/middlewares/attach_middlewares";
+import { base64encode } from "../src/lib/utils/base64";
+import { createTestingModule } from "../test/app_testing.module";
 
 describe("oauth2 client_credentials e2e", () => {
   let app: INestApplication;
@@ -26,7 +26,7 @@ describe("oauth2 client_credentials e2e", () => {
       {
         imports: [OAuthModule],
       },
-      [AccessToken, RefreshToken, AuthorizationCode, Client, Scope],
+      [AccessToken, RefreshToken, AuthCode, Client, Scope],
     );
 
     const clientRepo = moduleRef.get(ClientRepo);

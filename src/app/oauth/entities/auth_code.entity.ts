@@ -11,27 +11,17 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from "typeorm";
-import { v4 } from "uuid";
 
 import { Client } from "~/app/oauth/entities/client.entity";
 import { generateRandomToken } from "~/app/oauth/entities/random_token";
-import { RefreshToken } from "~/app/oauth/entities/refresh_token.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 
-@Entity("oauth_access_tokens")
-export class AccessToken {
+@Entity("oauth_auth_codes")
+export class AuthCode {
   @PrimaryColumn("varchar", { length: 128 })
   @Length(64, 128)
-  readonly token: string;
-
-  @ManyToOne(() => Client)
-  @JoinColumn({ name: "clientId" })
-  client: Client;
-
-  @Index()
-  @Column("uuid")
-  clientId: string;
+  token: string;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: "userId" })
@@ -42,12 +32,16 @@ export class AccessToken {
   @IsUUID()
   userId?: string;
 
-  @ManyToOne(() => RefreshToken, { nullable: true })
-  @JoinColumn({ name: "refreshTokenToken" })
-  refreshToken?: RefreshToken;
+  @ManyToOne(() => Client)
+  client: Client;
 
-  @Column("varchar", { length: 128, nullable: true })
-  refreshTokenToken?: string;
+  @Index()
+  @Column("uuid")
+  @IsUUID()
+  clientId: string;
+
+  @Column({ nullable: true })
+  redirectUri?: string;
 
   @Column()
   expiresAt: Date;
@@ -55,30 +49,25 @@ export class AccessToken {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToMany(() => Scope, { nullable: true })
+  @ManyToMany(() => Scope)
   @JoinTable({
-    name: "oauth_access_token_scopes",
-    joinColumn: { name: "accessTokenToken", referencedColumnName: "token" },
+    name: "oauth_auth_code_scopes",
+    joinColumn: { name: "authCodeToken", referencedColumnName: "token" },
     inverseJoinColumn: { name: "scopeId", referencedColumnName: "id" },
   })
-  scopes?: Scope[];
+  scopes: Scope[];
 
-  get toJWT() {
-    return {
-      token: this.token,
-      email: this.user?.email,
-      userId: this.userId,
-      isActive: this.user?.isActive,
-    };
+  revoke() {
+    this.expiresAt = new Date(0);
   }
 
-  constructor(data?: Partial<AccessToken>) {
+  constructor(data?: Partial<AuthCode>) {
     this.setClient(data?.client);
-    this.setRefreshToken(data?.refreshToken);
     this.setUser(data?.user);
+    if (data?.scopes) this.scopes = data.scopes;
     this.token = data?.token ?? generateRandomToken();
     // @todo the new date interval is misleading here;
-    this.expiresAt = data?.expiresAt ?? new DateInterval({ months: 1 }).end();
+    this.expiresAt = data?.expiresAt ?? new DateInterval({ minutes: 10 }).end();
   }
 
   private setClient(client?: Client) {
@@ -94,11 +83,9 @@ export class AccessToken {
       this.userId = user?.id;
     }
   }
-
-  private setRefreshToken(refreshToken?: RefreshToken) {
-    if (refreshToken) {
-      this.refreshToken = refreshToken;
-      this.refreshTokenToken = refreshToken.token;
-    }
-  }
 }
+
+export const addDays = (date: Date, days: number) => {
+  date.setDate(date.getDate() + days);
+  return date;
+};

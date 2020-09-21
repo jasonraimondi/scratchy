@@ -1,9 +1,10 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
-import { v4 } from "uuid";
+
+import { generateRandomToken } from "~/app/oauth/entities/random_token";
 
 @Entity("oauth_refresh_tokens")
 export class RefreshToken {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn("varchar", { length: 128 })
   readonly token: string;
 
   @Column({ nullable: false })
@@ -12,7 +13,7 @@ export class RefreshToken {
   @CreateDateColumn()
   createdAt: Date;
 
-  constructor(token?: string) {
-    this.token = token ?? v4();
+  constructor(data?: Partial<RefreshToken>) {
+    this.token = data?.token ?? generateRandomToken();
   }
 }

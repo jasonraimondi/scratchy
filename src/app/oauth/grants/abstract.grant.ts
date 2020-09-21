@@ -1,36 +1,42 @@
 import { DateInterval } from "@jmondi/date-interval";
-import { HttpStatus } from "@nestjs/common";
-import { Request } from "express";
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import type { Request } from "express";
 
 import { AccessToken } from "~/app/oauth/entities/access_token.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { OAuthException } from "~/app/oauth/oauth.exception";
+import { AuthCodeGrant } from "~/app/oauth/grants/auth_code.grant";
+import { ClientCredentialsGrant } from "~/app/oauth/grants/client_credentials.grant";
+import { OAuthException } from "~/app/oauth/exceptions/oauth.exception";
 import { AccessTokenRepo } from "~/app/oauth/repositories/access_token.repository";
+import { AuthCodeRepo } from "~/app/oauth/repositories/auth_code.repository";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { arrayDiff } from "~/lib/helpers/array";
+import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { base64decode } from "~/lib/utils/base64";
 
-export interface IGrantType {
-  readonly GRANT_TYPE: string;
+export type IGrantType = ClientCredentialsGrant | AuthCodeGrant;
 
-  validateAuthorizationRequest(req: Request): any;
+export type GrantType = "authorization_code" | "client_credentials";
 
-  canRespondToAuthorizationRequest(req: Request): boolean;
-}
+@Injectable()
+export abstract class AbstractGrant {
+  protected readonly scopeDelimiterString = " ";
 
-export abstract class AbstractGrant implements IGrantType {
-  protected readonly SCOPE_DELIMITER_STRING = " ";
+  protected readonly supportedGrantTypes: GrantType[] = ["client_credentials", "authorization_code"];
 
-  abstract readonly GRANT_TYPE: string;
+  abstract readonly identifier: GrantType;
 
   protected constructor(
     protected readonly clientRepository: ClientRepo,
     protected readonly accessTokenRepository: AccessTokenRepo,
+    protected readonly authCodeRepo: AuthCodeRepo,
     protected readonly scopeRepository: ScopeRepo,
-  ) {
-  }
+    protected readonly userRepository: UserRepo,
+    protected readonly jwt: JwtService,
+  ) {}
 
   protected getBasicAuthCredentials(request: Request) {
     if (!request.headers?.hasOwnProperty("authorization")) {
@@ -63,9 +69,9 @@ export abstract class AbstractGrant implements IGrantType {
     return await this.accessTokenRepository.persistNewAccessToken(accessToken);
   }
 
-  protected async validateScopes(scopes: string | string[]) {
+  protected async validateScopes(scopes: string | string[], redirectUri?: string) {
     if (typeof scopes === "string") {
-      scopes = scopes.split(this.SCOPE_DELIMITER_STRING);
+      scopes = scopes.split(this.scopeDelimiterString);
     }
 
     const validScopes = await this.scopeRepository.getScopesByIdentifier(scopes);
@@ -76,27 +82,24 @@ export abstract class AbstractGrant implements IGrantType {
     );
 
     if (invalidScopes.length > 0) {
-      throw OAuthException.invalidRequest(`invalid scopes: (${invalidScopes.join(" ")})`);
+      throw OAuthException.invalidScopes(invalidScopes, redirectUri);
     }
 
     return validScopes;
   }
 
-  protected getGrantType(request: Request): string {
-    const result = request.body?.grant_type;
+  protected getGrantType(request: Request): GrantType {
+    const result = request.body?.grant_type ?? request.query?.grant_type;
     if (!result) throw OAuthException.invalidRequest("grant_type");
+    if (!this.supportedGrantTypes.includes(result)) throw OAuthException.invalidRequest("grant_type");
     return result;
   }
 
-  canRespondToAuthorizationRequest(request: Request): boolean {
-    return false;
+  protected encrypt(unencryptedData: string): Promise<string> {
+    return this.jwt.signAsync(unencryptedData);
   }
 
-  validateAuthorizationRequest(request: Request): any {
-    throw new OAuthException("This grant cannot validate an authorization request", HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  completeAuthorizationRequest(authorizationRequest: any) {
-    throw new OAuthException("This grant cannot complete an authorization request", HttpStatus.INTERNAL_SERVER_ERROR);
+  protected decrypt(encryptedData: string) {
+    return this.jwt.decode(encryptedData);
   }
 }

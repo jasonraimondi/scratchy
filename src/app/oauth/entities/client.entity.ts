@@ -1,29 +1,29 @@
+import { IsOptional, Length } from "class-validator";
 import { Column, Entity, PrimaryColumn } from "typeorm";
-
 import { v4 } from "uuid";
+
+import type { GrantType } from "~/app/oauth/grants/abstract.grant";
 
 @Entity("oauth_clients")
 export class Client {
   @PrimaryColumn("uuid")
   readonly id: string;
 
-  @Column({ nullable: true })
+  @Column("varchar", { length: 128, nullable: true })
+  @Length(64, 128)
+  @IsOptional()
   secret?: string;
 
-  @Column({ unique: true })
+  @Column("varchar", { length: 128 })
   name: string;
 
   @Column("simple-array")
   redirectUris: string[];
 
   @Column("simple-array")
-  allowedGrants: string[];
+  allowedGrants: GrantType[];
 
-  get isConfidential(): boolean {
-    return !!this.secret;
-  }
-
-  verify(s: string) {
+  verify(s?: string) {
     return this.secret === s;
   }
 

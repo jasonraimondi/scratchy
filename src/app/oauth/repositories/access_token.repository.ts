@@ -7,6 +7,10 @@ import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { BaseRepo } from "~/lib/repositories/base.repository";
 
+// export interface IAccessTokenRepo {
+//   getNewToken(client: Client, scopes: Scope[], userId?: string): Promise<AccessToken>;
+// }
+
 @Injectable()
 export class AccessTokenRepo extends BaseRepo<AccessToken> {
   constructor(@InjectRepository(AccessToken) repository: Repository<AccessToken>) {
@@ -14,9 +18,9 @@ export class AccessTokenRepo extends BaseRepo<AccessToken> {
   }
 
   async getNewToken(client: Client, scopes: Scope[], userId: string | undefined) {
-    const accessToken = new AccessToken(client);
+    const accessToken = new AccessToken({ client });
     accessToken.userId = userId;
-    // @todo check scopes
+    // @todo check scopes, have they already been checked before coming here?
     scopes.forEach((scope) => accessToken.scopes?.push(scope) ?? [scope]);
     return accessToken;
   }

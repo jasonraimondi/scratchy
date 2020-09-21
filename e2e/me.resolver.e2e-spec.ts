@@ -2,20 +2,20 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { TestingModule } from "@nestjs/testing";
 import request from "supertest";
-import { AuthModule } from "~/app/auth/auth.module";
-import { AuthService } from "~/app/auth/auth.service";
+import { AuthModule } from "../src/app/auth/auth.module";
+import { AuthService } from "../src/app/auth/auth.service";
 
-import { UserModule } from "~/app/user/user.module";
-import { Permission } from "~/entity/role/permission.entity";
-import { Role } from "~/entity/role/role.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { User } from "~/entity/user/user.entity";
-import { registerTypes } from "~/lib/helpers/register_types";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
-import { createTestingModule } from "~test/app_testing.module";
-import { userGenerator } from "~test/generators/user.generator";
-import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
+import { UserModule } from "../src/app/user/user.module";
+import { Permission } from "../src/entity/role/permission.entity";
+import { Role } from "../src/entity/role/role.entity";
+import { EmailConfirmationToken } from "../src/entity/user/email_confirmation.entity";
+import { ForgotPasswordToken } from "../src/entity/user/forgot_password.entity";
+import { User } from "../src/entity/user/user.entity";
+import { registerTypes } from "../src/lib/helpers/register_types";
+import { UserRepo } from "../src/lib/repositories/user/user.repository";
+import { createTestingModule } from "../test/app_testing.module";
+import { userGenerator } from "../test/generators/user.generator";
+import { attachMiddlewares } from "../src/lib/middlewares/attach_middlewares";
 
 describe("me resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
