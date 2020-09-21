@@ -7,4 +7,8 @@ export class Scope {
 
   @Column()
   name: string;
+
+  constructor(data?: Partial<Scope>) {
+    if (data?.name) this.name = data.name;
+  }
 }

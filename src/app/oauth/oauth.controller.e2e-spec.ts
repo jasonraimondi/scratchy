@@ -49,8 +49,8 @@ describe("oauth2 client_credentials e2e", () => {
       }),
     );
 
-    await scopeRepo.create({ name: "scope-1" });
-    await scopeRepo.create({ name: "scope-2" });
+    await scopeRepo.create(new Scope({ name: "scope-1" }));
+    await scopeRepo.create(new Scope({ name: "scope-2" }));
 
     app = moduleRef.createNestApplication();
     attachMiddlewares(app);
@@ -74,11 +74,10 @@ describe("oauth2 client_credentials e2e", () => {
       .expect(201)
       .expect("Content-Type", /json/)
       .expect((response) => {
-        const { token_type, expires_in, access_token } = response.body;
-        expect(token_type).toBe("Bearer");
-        expect(expires_in).toBe(3600);
-        expect(access_token).toBeTruthy();
-        expect(access_token.split(".").length).toBe(3);
+        expect(response.body.token_type).toBe("Bearer");
+        expect(response.body.expires_in).toBe(3600);
+        expect(response.body.access_token).toBeTruthy();
+        expect(response.body.access_token.split(".").length).toBe(3);
       });
   });
 
@@ -94,15 +93,14 @@ describe("oauth2 client_credentials e2e", () => {
       .expect(201)
       .expect("Content-Type", /json/)
       .expect((response) => {
-        const { token_type, expires_in, access_token } = response.body;
-        expect(token_type).toBe("Bearer");
-        expect(expires_in).toBe(3600);
-        expect(access_token).toBeTruthy();
-        expect(access_token.split(".").length).toBe(3);
+        expect(response.body.token_type).toBe("Bearer");
+        expect(response.body.expires_in).toBe(3600);
+        expect(response.body.access_token).toBeTruthy();
+        expect(response.body.access_token.split(".").length).toBe(3);
       });
   });
 
-  it("throws for client without allowed client_credentials", () => {
+  it("throws for client without client_credentials", () => {
     return request(app.getHttpServer())
       .post("/oauth2/access_token")
       .send({
@@ -111,11 +109,10 @@ describe("oauth2 client_credentials e2e", () => {
         client_secret: clientNoClientCredentialsAllowed.secret,
         scopes: ["scope-1"],
       })
-      .expect(400)
+      .expect(403)
       .expect("Content-Type", /json/)
       .expect(({ body }) => {
-        expect(body.statusCode).toBe(400);
-        expect(body.message).toBe("invalid client")
+        expect(body.message).toBe("oauth exception: error validating client");
       });
   });
 });

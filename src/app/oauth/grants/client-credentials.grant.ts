@@ -1,10 +1,11 @@
 import { DateInterval } from "@jmondi/date-interval";
-import { HttpException, Injectable } from "@nestjs/common";
+import { HttpCode, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import type { Request, Response } from "express";
 import { AccessToken } from "~/app/oauth/entities/access_token.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
+import { OAuthException } from "~/app/oauth/oauth.exception";
 
 import { AccessTokenRepo } from "~/app/oauth/repositories/access_token.repository";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
@@ -31,13 +32,13 @@ export class ClientCredentialsGrant {
     const grantType = this.getGrantType(request);
 
     if (grantType !== this.GRANT_TYPE) {
-      throw new Error("invalid grant_type")
+      throw OAuthException.invalidGrant();
     }
 
     const client = await this.clientRepository.getClientById(clientId);
 
     if (!(await this.clientRepository.validateClient(grantType, clientId, clientSecret))) {
-      throw new HttpException(`invalid client`, 400);
+      throw OAuthException.errorValidatingClient();
     }
 
     const bodyScopes = request.body?.scopes ?? [];
@@ -65,7 +66,7 @@ export class ClientCredentialsGrant {
     // @todo is this being body okay?
     let clientId = request.body?.["client_id"] ?? basicAuthUser;
 
-    if (!clientId) throw new Error("invalid request missing `client_id`");
+    if (!clientId) throw OAuthException.invalidRequest("client_id");
 
     // @todo is this being body okay?
     let clientSecret = request.body?.["client_secret"] ?? basicAuthPass;
@@ -121,7 +122,7 @@ export class ClientCredentialsGrant {
     );
 
     if (invalidScopes.length > 0) {
-      throw new Error(`invalid scopes: (${invalidScopes.join(" ")})`);
+      throw OAuthException.invalidRequest(`invalid scopes: (${invalidScopes.join(" ")})`);
     }
 
     return validScopes;
@@ -129,7 +130,7 @@ export class ClientCredentialsGrant {
 
   private getGrantType(request: Request): string {
     const result = request.body?.grant_type;
-    if (!result) throw new Error("invalid request, missing grant_type`");
+    if (!result) throw OAuthException.invalidRequest("grant_type");
     return result;
   }
 }

@@ -16,7 +16,7 @@ export class OAuthController {
       if (e instanceof HttpException) {
         throw e;
       }
-      throw new HttpException(e.message, 500)
+      throw new HttpException(e.message, 500);
     }
   }
 }
