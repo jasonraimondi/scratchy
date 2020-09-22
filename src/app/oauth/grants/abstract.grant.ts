@@ -17,7 +17,7 @@ import { arrayDiff } from "~/lib/helpers/array";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { base64decode } from "~/lib/utils/base64";
 
-export type IGrantType = ClientCredentialsGrant | AuthCodeGrant;
+export type IGrantType = ClientCredentialsGrant | AuthCodeGrant | AbstractGrant;
 
 export type GrantType = "authorization_code" | "client_credentials";
 
@@ -27,7 +27,7 @@ export abstract class AbstractGrant {
 
   protected readonly supportedGrantTypes: GrantType[] = ["client_credentials", "authorization_code"];
 
-  abstract readonly identifier: GrantType;
+  public abstract readonly identifier: GrantType;
 
   protected constructor(
     protected readonly clientRepository: ClientRepo,
@@ -37,6 +37,10 @@ export abstract class AbstractGrant {
     protected readonly userRepository: UserRepo,
     protected readonly jwt: JwtService,
   ) {}
+
+  public canRespondToAccessTokenRequest(request: Request): boolean {
+    return request.body?.grant_type === this.identifier;
+  }
 
   protected getBasicAuthCredentials(request: Request) {
     if (!request.headers?.hasOwnProperty("authorization")) {
@@ -56,6 +60,24 @@ export abstract class AbstractGrant {
     }
 
     return decoded.split(":");
+  }
+
+  protected getClientCredentials(request: Request): [string, string | undefined] {
+    const [basicAuthUser, basicAuthPass] = this.getBasicAuthCredentials(request);
+
+    // @todo is this being body okay?
+    let clientId = request.body?.["client_id"] ?? basicAuthUser;
+
+    if (!clientId) throw OAuthException.invalidRequest("client_id");
+
+    // @todo is this being body okay?
+    let clientSecret = request.body?.["client_secret"] ?? basicAuthPass;
+
+    if (Array.isArray(clientId)) clientId = clientId[0];
+
+    if (Array.isArray(clientSecret)) clientSecret = clientSecret[0];
+
+    return [clientId, clientSecret];
   }
 
   protected async issueAccessToken(

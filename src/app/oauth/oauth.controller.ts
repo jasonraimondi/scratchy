@@ -1,13 +1,13 @@
 import { HttpException, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 
-import { OAuthServerService } from "~/app/oauth/services/oauth_server.service";
+import { AuthorizationServer } from "~/app/oauth/services/oauth_server.service";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { userGenerator } from "~test/generators/user.generator";
 
 @Controller("oauth2")
 export class OAuthController {
-  constructor(private readonly oauth: OAuthServerService, private readonly userRepository: UserRepo) {}
+  constructor(private readonly oauth: AuthorizationServer, private readonly userRepository: UserRepo) {}
 
   @Post("/access_token")
   async accessToken(@Req() req: Request, @Res() res: Response) {

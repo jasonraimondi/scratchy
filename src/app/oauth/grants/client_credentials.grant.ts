@@ -13,7 +13,7 @@ import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Injectable()
 export class ClientCredentialsGrant extends AbstractGrant {
-  readonly identifier = "client_credentials";
+  public readonly identifier = "client_credentials";
 
   constructor(
     protected readonly clientRepository: ClientRepo,
@@ -58,23 +58,5 @@ export class ClientCredentialsGrant extends AbstractGrant {
       expires_in: accessTokenTTL.toSeconds(),
       access_token: jwtSignedToken,
     });
-  }
-
-  private getClientCredentials(request: Request): [string, string | undefined] {
-    const [basicAuthUser, basicAuthPass] = this.getBasicAuthCredentials(request);
-
-    // @todo is this being body okay?
-    let clientId = request.body?.["client_id"] ?? basicAuthUser;
-
-    if (!clientId) throw OAuthException.invalidRequest("client_id");
-
-    // @todo is this being body okay?
-    let clientSecret = request.body?.["client_secret"] ?? basicAuthPass;
-
-    if (Array.isArray(clientId)) clientId = clientId[0];
-
-    if (Array.isArray(clientSecret)) clientSecret = clientSecret[0];
-
-    return [clientId, clientSecret];
   }
 }

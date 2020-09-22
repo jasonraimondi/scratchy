@@ -23,6 +23,11 @@ export class Client {
   @Column("simple-array")
   allowedGrants: GrantType[];
 
+
+  get isConfidential(): boolean {
+    return !!this.secret;
+  }
+
   verify(s?: string) {
     return this.secret === s;
   }

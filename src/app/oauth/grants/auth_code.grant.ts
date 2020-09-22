@@ -1,6 +1,7 @@
 import { DateInterval } from "@jmondi/date-interval";
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { Response } from "express";
 import type { Request } from "express";
 
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
@@ -20,9 +21,9 @@ import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Injectable()
 export class AuthCodeGrant extends AbstractAuthorizedGrant {
-  readonly identifier = "authorization_code";
+  public readonly identifier: GrantType = "authorization_code";
 
-  private readonly authCodeTTL: DateInterval = new DateInterval({ minutes: 15 });
+  protected readonly authCodeTTL: DateInterval = new DateInterval({ minutes: 15 });
 
   constructor(
     protected readonly clientRepository: ClientRepo,
@@ -33,6 +34,40 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
     protected readonly jwt: JwtService,
   ) {
     super(clientRepository, accessTokenRepository, authCodeRepository, scopeRepository, userRepository, jwt);
+  }
+
+  async respondToAccessTokenRequest(request: Request, response: Response, accessTokenTTL: DateInterval) {
+    const [clientId] = this.getClientCredentials(request);
+
+    const client = await this.clientRepository.getClientById(clientId);
+
+    if (client.isConfidential) await this.validateClient(request);
+
+    const encryptedAuthCode = request.body?.code;
+
+    if (!encryptedAuthCode) {
+      throw OAuthException.invalidRequest("code");
+    }
+
+    try {
+
+    const payload = this.jwt.decode(encryptedAuthCode)
+
+    this.validateAuthorizationCode(payload, client, request)
+
+    console.log({payload});
+    } catch (e) {
+      console.log(e)
+    }
+
+    // @todo HERE HERE
+    // throw new OAuthException("HERERE");
+    return response.send({
+      token_type: "Bearer",
+      expires_in: "",
+      acccess_token: "",
+      refresh_token: "",
+    })
   }
 
   async canRespondToAuthorizationRequest(request: Request): Promise<boolean> {
@@ -148,6 +183,18 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
 
     // @todo consider adding max generation loop
     return await this.authCodeRepository.persistNewAuthCode(authCode);
+  }
+
+  private async validateClient(request: Request) {
+    const [clientId, clientSecret] = this.getClientCredentials(request);
+
+    if (!(await this.clientRepository.validateClient(this.identifier, clientId, clientSecret))) {
+      throw OAuthException.errorValidatingClient();
+    }
+  }
+
+  private validateAuthorizationCode(payload: any, client: Client, request: Request) {
+    console.log({ payload, client, request })
   }
 }
 

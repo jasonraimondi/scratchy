@@ -4,10 +4,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { IGrantType } from "~/app/oauth/grants/abstract.grant";
 import { AuthCodeGrant } from "~/app/oauth/grants/auth_code.grant";
 import { ClientCredentialsGrant } from "~/app/oauth/grants/client_credentials.grant";
-import { grantProviders } from "~/app/oauth/grants/grant.providers";
+import { grantProviders } from "~/app/oauth/grant.providers";
 
 import { repositoryProviders } from "~/app/oauth/repositories/repository.providers";
-import { OAuthServerService } from "~/app/oauth/services/oauth_server.service";
+import { AuthorizationServer } from "~/app/oauth/services/oauth_server.service";
 import { AccessToken } from "~/app/oauth/entities/access_token.entity";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
@@ -32,9 +32,9 @@ import { OAuthController } from "./oauth.controller";
     ...grantProviders,
     ...repositoryProviders,
     {
-      provide: OAuthServerService,
+      provide: AuthorizationServer,
       useFactory: async (...grants: IGrantType[]) => {
-        const oauthServerService = new OAuthServerService();
+        const oauthServerService = new AuthorizationServer();
         grants.forEach(grant => oauthServerService.enableGrantType(grant));
         return oauthServerService;
       },
