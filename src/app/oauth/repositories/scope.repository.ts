@@ -17,13 +17,17 @@ export class ScopeRepo extends BaseRepo<Scope> {
     return this.qb.where("scopes.name IN (:...names)", { names: scopeNames }).getMany();
   }
 
-  get qb() {
-    return this.repository.createQueryBuilder("scopes");
+  async finalizeScopes(scopes: Scope[], identifier: GrantId, client: Client, user_id?: string): Promise<Scope[]> {
+    // Example of programmatically modifying the final scope of the access token
+    if (user_id === "admin-user") {
+      const scope = new Scope({ name: "admin" });
+      scopes.push(scope);
+    }
+
+    return scopes;
   }
 
-  async finalizeScopes(scopes: Scope[], identifier: GrantId, client: Client, user_id?: string): Promise<Scope[]> {
-    // @todo important!!!
-    console.log("MUST IMPLEMENT FINALIZE SCOPES");
-    return scopes;
+  private get qb() {
+    return this.repository.createQueryBuilder("scopes");
   }
 }

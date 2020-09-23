@@ -45,7 +45,7 @@ export abstract class BaseRepo<T> {
     return this.findById(id, options);
   }
 
-  async save(entity: T, options: SaveOptions = {}) {
+  async save(entity: T, options: SaveOptions = {}): Promise<T> {
     return await this.repository.save<T>(entity, options);
   }
 

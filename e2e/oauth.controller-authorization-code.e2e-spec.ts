@@ -4,19 +4,18 @@ import crypto from "crypto";
 import jwtDecode from "jwt-decode";
 import * as querystring from "querystring";
 import request from "supertest";
+
 import { AccessToken } from "../src/app/oauth/entities/access_token.entity";
 import { AuthCode } from "../src/app/oauth/entities/auth_code.entity";
 import { Client } from "../src/app/oauth/entities/client.entity";
-import { generateRandomToken } from "../src/app/oauth/entities/random_token";
 import { RefreshToken } from "../src/app/oauth/entities/refresh_token.entity";
 import { Scope } from "../src/app/oauth/entities/scope.entity";
-
 import { IAuthCodePayload } from "../src/app/oauth/grants/auth_code.grant";
 import { OAuthModule } from "../src/app/oauth/oauth.module";
 import { ClientRepo } from "../src/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "../src/app/oauth/repositories/scope.repository";
 import { attachMiddlewares } from "../src/lib/middlewares/attach_middlewares";
-import { base64encode } from "../src/lib/utils/base64";
+import { base64encode, base64urlencode } from "../src/lib/utils/base64";
 import { createTestingModule } from "../test/app_testing.module";
 
 describe("oauth2 authorization_code e2e", () => {
@@ -58,12 +57,11 @@ describe("oauth2 authorization_code e2e", () => {
     await moduleRef.close();
   });
 
-  it("allows auth code grant with PKCE s256", async () => {
+  it("allows auth code grant with PKCE S256", async () => {
     const http = app.getHttpServer();
 
-    const codeVerifierBytes = crypto.randomBytes(40)
-    const codeVerifier = codeVerifierBytes.toString("hex");
-    const codeChallenge = crypto.createHash("sha256").update(codeVerifierBytes).digest("hex");
+    const codeVerifier = base64urlencode(crypto.randomBytes(40));
+    const codeChallenge = base64urlencode(crypto.createHash("sha256").update(codeVerifier).digest("hex"));
 
     const authorizeResponse = await request(http)
       .get("/oauth2/authorize")
@@ -73,30 +71,27 @@ describe("oauth2 authorization_code e2e", () => {
         redirect_uri: "http://localhost",
         scope: "scope-1 scope-2",
         state: "state-is-a-secret",
-        code_challenge: base64encode(codeChallenge),
-        code_verifier: codeVerifier, // @todo are you sure this is also required on the authorize request?
+        code_challenge: codeChallenge,
         code_challenge_method: "S256",
       });
 
-    const { code, state } = querystring.parse(authorizeResponse.headers.location)
+    const authorizeResponseQuery = querystring.parse(authorizeResponse.headers.location);
+    const decodedCode: IAuthCodePayload = jwtDecode(authorizeResponseQuery.code!.toString());
 
     expect(authorizeResponse.status).toBe(302);
-    expect(typeof authorizeResponse.headers.location === "string").toBeTruthy()
     expect(authorizeResponse.headers.location).toMatch(new RegExp("http://localhost"));
-    const decodedCode: IAuthCodePayload = jwtDecode(code!.toString());
     expect(decodedCode.client_id).toBe(client.id);
-    expect(typeof decodedCode.expire_time === "number").toBeTruthy();
-    expect(state).toBe("state-is-a-secret");
+    expect(decodedCode.expire_time).toBeGreaterThan(Date.now() / 1000);
+    expect(authorizeResponseQuery.state).toBe("state-is-a-secret");
 
     const tokenResponse = await request(http)
       .post("/oauth2/access_token")
       .send({
         grant_type: "authorization_code",
-        client_id: client.id,
-        client_secret: client.secret, // @todo this doesnt seem right
+        code: authorizeResponseQuery.code,
         redirect_uri: "http://localhost",
+        client_id: client.id,
         code_verifier: codeVerifier,
-        code,
       });
 
     console.log(tokenResponse.body);

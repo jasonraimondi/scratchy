@@ -25,6 +25,6 @@ export class RefreshToken {
   constructor(data?: Partial<RefreshToken>) {
     this.token = data?.token ?? generateRandomToken();
     // @todo dont set the date interval here maybe
-    this.expiresAt = data?.expiresAt ?? (new DateInterval({ hours: 1})).end()
+    this.expiresAt = data?.expiresAt ?? new DateInterval({ hours: 1 }).end();
   }
 }

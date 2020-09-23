@@ -25,7 +25,7 @@ export class AccessTokenRepo extends BaseRepo<AccessToken> {
     return accessToken;
   }
 
-  async persistNewAccessToken(accessToken: AccessToken) {
-    return await this.create(accessToken);
+  async persistNewAccessToken(accessToken: AccessToken): Promise<AccessToken> {
+    return await this.save(accessToken);
   }
 }

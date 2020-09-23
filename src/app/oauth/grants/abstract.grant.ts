@@ -50,7 +50,7 @@ export abstract class AbstractGrant implements IGrant {
 
   abstract readonly identifier: GrantId;
 
-  protected constructor(
+  constructor(
     protected readonly clientRepository: ClientRepo,
     protected readonly accessTokenRepository: AccessTokenRepo,
     protected readonly refreshTokenRepository: RefreshTokenRepo,
@@ -151,6 +151,8 @@ export abstract class AbstractGrant implements IGrant {
     client: Client,
     userIdentifier?: string,
     redirectUri?: string,
+    codeChallenge?: string,
+    codeChallengeMethod?: string,
     scopes: Scope[] = [],
   ): Promise<AuthCode> {
     const user = userIdentifier ? await this.userRepository.getByUserIdentifier(userIdentifier) : undefined;
@@ -160,6 +162,9 @@ export abstract class AbstractGrant implements IGrant {
     authCode.expiresAt = authCodeTTL.end();
 
     authCode.redirectUri = redirectUri;
+
+    authCode.codeChallenge = codeChallenge;
+    authCode.codeChallengeMethod = codeChallengeMethod;
 
     scopes.forEach((scope) => (authCode.scopes ? authCode.scopes.push(scope) : (authCode.scopes = [scope])));
 

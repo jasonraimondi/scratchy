@@ -13,7 +13,8 @@ export class ClientRepo extends BaseRepo<Client> {
   }
 
   async getClientById(clientId: string): Promise<Client> {
-    return this.findById(clientId);
+    const client = await this.findById(clientId);
+    return client;
   }
 
   async validateClient(grantType: GrantId, clientId: string, clientSecret?: string): Promise<boolean> {

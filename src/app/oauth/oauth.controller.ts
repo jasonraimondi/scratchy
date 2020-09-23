@@ -7,8 +7,7 @@ import { userGenerator } from "~test/generators/user.generator";
 
 @Controller("oauth2")
 export class OAuthController {
-  constructor(private readonly oauth: AuthorizationServer, private readonly userRepository: UserRepo) {
-  }
+  constructor(private readonly oauth: AuthorizationServer, private readonly userRepository: UserRepo) {}
 
   @Get("/authorize")
   async authorize(@Req() req: Request, @Res() res: Response) {
@@ -21,6 +20,7 @@ export class OAuthController {
 
       // Once the user has logged in set the user on the AuthorizationRequest
       const user = await this.userRepository.create(await userGenerator());
+      console.log({ message: "this user needs to come from somewhere else", user });
       authRequest.user = user;
 
       // At this point you should redirect the user to an authorization page.
@@ -42,9 +42,15 @@ export class OAuthController {
     try {
       return await this.oauth.respondToAccessTokenRequest(req, res);
     } catch (e) {
+      console.log(e);
       this.handleError(e);
       return;
     }
+  }
+
+  @Post("/token_info")
+  async tokenInfo(@Req() req: Request, @Res() res: Response) {
+    return res.status(500).send("TODO");
   }
 
   private handleError(e: any) {

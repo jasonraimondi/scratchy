@@ -1,22 +1,18 @@
 import { DateInterval } from "@jmondi/date-interval";
 import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import type { Request, Response } from "express";
 
+import { PlainVerifier } from "~/app/oauth/code_verifiers/plain.verifier";
+import { S256Verifier } from "~/app/oauth/code_verifiers/s265.verifier";
+import { ICodeChallenge } from "~/app/oauth/code_verifiers/verifier";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { OAuthException } from "~/app/oauth/exceptions/oauth.exception";
 import { GrantId } from "~/app/oauth/grants/abstract.grant";
-
 import { AbstractAuthorizedGrant } from "~/app/oauth/grants/abstract_authorized.grant";
-import { AccessTokenRepo } from "~/app/oauth/repositories/access_token.repository";
-import { AuthCodeRepo } from "~/app/oauth/repositories/auth_code.repository";
-import { ClientRepo } from "~/app/oauth/repositories/client.repository";
-import { RefreshTokenRepo } from "~/app/oauth/repositories/refresh_token.repository";
-import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationRequest } from "~/app/oauth/requests/authorization.request";
 import { RedirectResponse } from "~/app/oauth/responses/redirect.response";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { base64decode } from "~/lib/utils/base64";
 
 export interface IAuthCodePayload {
   client_id: string;
@@ -27,32 +23,6 @@ export interface IAuthCodePayload {
   redirect_uri?: string;
   code_challenge?: string;
   code_challenge_method?: string;
-}
-
-export type CodeChallengeMethod = "S256" | "plain";
-
-export interface ICodeChallenge {
-  method: CodeChallengeMethod;
-
-  verifyCodeChallenge(codeVerifier: string, codeChallenge: string): boolean;
-}
-
-export class PlainVerifier implements ICodeChallenge {
-  public readonly method = "plain";
-
-  verifyCodeChallenge(codeVerifier: string, codeChallenge: string): boolean {
-    console.log("verifyCodeChallenge plain")
-    return false;
-  }
-}
-
-export class S256Verifier implements ICodeChallenge {
-  public readonly method = "S256";
-
-  verifyCodeChallenge(codeVerifier: string, codeChallenge: string): boolean {
-    console.log("verifyCodeChallenge s256")
-    return false;
-  }
 }
 
 @Injectable()
@@ -66,31 +36,11 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
     S256: new S256Verifier(),
   };
 
-  constructor(
-    protected readonly clientRepository: ClientRepo,
-    protected readonly accessTokenRepository: AccessTokenRepo,
-    protected readonly refreshTokenRepository: RefreshTokenRepo,
-    protected readonly authCodeRepository: AuthCodeRepo,
-    protected readonly scopeRepository: ScopeRepo,
-    protected readonly userRepository: UserRepo,
-    protected readonly jwt: JwtService,
-  ) {
-    super(
-      clientRepository,
-      accessTokenRepository,
-      refreshTokenRepository,
-      authCodeRepository,
-      scopeRepository,
-      userRepository,
-      jwt,
-    );
-  }
-
   async respondToAccessTokenRequest(
     request: Request,
     response: Response,
     accessTokenTTL: DateInterval,
-  ): Promise<Response<any>> {
+  ): Promise<Response> {
     const [clientId] = this.getClientCredentials(request);
 
     const client = await this.clientRepository.getClientById(clientId);
@@ -123,6 +73,8 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
       throw OAuthException.invalidRequest("code", "cannot verify scopes");
     }
 
+    const authCode = await this.authCodeRepository.getAuthCodeByIdentifier(validatedPayload.auth_code_id);
+
     /**
      * If the authorization server requires public clients to use PKCE,
      * and the authorization request is missing the code challenge,
@@ -130,6 +82,10 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
      * error=invalid_request and the error_description or error_uri
      * should explain the nature of the error.
      */
+    if (authCode.codeChallenge !== validatedPayload.code_challenge) {
+      throw OAuthException.invalidRequest("code_challenge", "Provided code challenge does not match auth code");
+    }
+
     if (validatedPayload.code_challenge) {
       const codeVerifier = this.getRequestParameter("code_verifier", request);
 
@@ -155,7 +111,9 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
         } else if (validatedPayload.code_challenge_method === "plain") {
           verifier = this.codeChallengeVerifiers.plain;
         } else {
-          throw OAuthException.serverError(`Unsupported code challenge method ${validatedPayload.code_challenge_method}`);
+          throw OAuthException.serverError(
+            `Unsupported code challenge method ${validatedPayload.code_challenge_method}`,
+          );
         }
 
         if (!verifier.verifyCodeChallenge(codeVerifier, validatedPayload.code_challenge)) {
@@ -172,7 +130,7 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
 
     return response.send({
       token_type: "Bearer",
-      expires_in: (accessToken.expiresAt.getTime() - Date.now()),
+      expires_in: Math.ceil((accessToken.expiresAt.getTime() - Date.now()) / 1000),
       access_token: accessToken.token,
       refresh_token: refreshToken?.token,
     });
@@ -183,26 +141,23 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
   }
 
   async validateAuthorizationRequest(request: Request): Promise<AuthorizationRequest> {
-    const clientId = request.query?.client_id;
+    const clientId = this.getQueryStringParameter("client_id", request);
 
-    if (!clientId || Array.isArray(clientId)) {
+    if (typeof clientId !== "string") {
       throw OAuthException.invalidRequest("client_id");
     }
 
-    const client = await this.clientRepository.getClientById(clientId.toString());
+    const client = await this.clientRepository.getClientById(clientId);
 
-    let redirectUri = String(request.query?.redirect_uri);
+    let redirectUri = this.getQueryStringParameter("redirect_uri", request);
 
     if (Array.isArray(redirectUri) && redirectUri.length === 1) redirectUri = redirectUri[0];
 
-    if (redirectUri) {
-      this.validateRedirectUri(redirectUri, client);
-    } else {
-      redirectUri = client.redirectUris?.[0];
-    }
+    // @todo this might only need to be run if the redirect uri is actually here aka redirect url might be allowed to be null
+    this.validateRedirectUri(redirectUri, client);
 
     // @todo add test for scopes as string or string[]
-    let bodyScopes = (request.query as any)?.scope ?? [];
+    let bodyScopes = this.getQueryStringParameter("scope", request, []);
 
     if (typeof bodyScopes === "string") bodyScopes = bodyScopes.split(this.scopeDelimiterString);
 
@@ -218,12 +173,18 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
 
     if (redirectUri) authorizationRequest.redirectUri = redirectUri;
 
-    const codeChallenge = this.getQueryStringParameter("code_challenge", request);
+    let codeChallenge = this.getQueryStringParameter("code_challenge", request);
 
     if (codeChallenge) {
       const codeChallengeMethod = this.getQueryStringParameter("code_challenge_method", request, "plain");
 
       const codeChallengeRegExp = /^[A-Za-z0-9-._~]{43,128}$/g;
+
+      try {
+        codeChallenge = base64decode(codeChallenge);
+      } catch (e) {
+        throw OAuthException.invalidRequest("code_challenge", "Code challenge must be base64 encoded.");
+      }
 
       if (!codeChallengeRegExp.test(codeChallenge)) {
         throw OAuthException.invalidRequest(
@@ -252,6 +213,8 @@ export class AuthCodeGrant extends AbstractAuthorizedGrant {
         authorizationRequest.client,
         authorizationRequest.user?.id,
         authorizationRequest.redirectUri,
+        authorizationRequest.codeChallenge,
+        authorizationRequest.codeChallengeMethod,
         authorizationRequest.scopes,
       );
 

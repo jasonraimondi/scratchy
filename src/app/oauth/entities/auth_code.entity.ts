@@ -1,5 +1,5 @@
 import { DateInterval } from "@jmondi/date-interval";
-import { IsUUID, Length } from "class-validator";
+import { IsIn, IsOptional, IsUUID, Length } from "class-validator";
 import {
   Column,
   CreateDateColumn,
@@ -42,6 +42,14 @@ export class AuthCode {
 
   @Column({ nullable: true })
   redirectUri?: string;
+
+  @Column("varchar", { nullable: true, length: 128 })
+  codeChallenge?: string;
+
+  @Column("varchar", { nullable: true, length: 128 })
+  @IsOptional()
+  @IsIn(["s256", "plain"])
+  codeChallengeMethod?: string;
 
   @Column()
   expiresAt: Date;

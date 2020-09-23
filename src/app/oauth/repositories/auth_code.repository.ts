@@ -27,6 +27,10 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> {
     return authCode.isExpired;
   }
 
+  async getAuthCodeByIdentifier(authCodeCode: string) {
+    return this.findById(authCodeCode);
+  }
+
   async revokeAuthCode(authCodeCode: string) {
     const authCode = await this.findById(authCodeCode);
     authCode.revoke();

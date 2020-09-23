@@ -19,7 +19,7 @@ export class OAuthException extends HttpException {
   }
 
   static invalidGrant(message?: string) {
-    return new OAuthException("invalid grant_type" + message, HttpStatus.NOT_ACCEPTABLE);
+    return new OAuthException("invalid grant_type: " + message, HttpStatus.NOT_ACCEPTABLE);
   }
 
   static unsupportedGrantType() {
