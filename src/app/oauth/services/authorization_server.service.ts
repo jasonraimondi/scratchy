@@ -1,16 +1,15 @@
 import { DateInterval } from "@jmondi/date-interval";
 import { Request, Response } from "express";
 
-import { IGrantType } from "~/app/oauth/grants/abstract.grant";
-import { AuthCodeGrant, AuthorizationRequest } from "~/app/oauth/grants/auth_code.grant";
+import { IGrant } from "~/app/oauth/grants/abstract.grant";
 import { OAuthException } from "~/app/oauth/exceptions/oauth.exception";
-import { ClientCredentialsGrant } from "~/app/oauth/grants/client_credentials.grant";
+import { AuthorizationRequest } from "~/app/oauth/requests/authorization.request";
 
 export class AuthorizationServer {
-  private readonly enabledGrantTypes: { [key: string]: IGrantType } = {};
+  private readonly enabledGrantTypes: { [key: string]: IGrant } = {};
   private readonly grantTypeAccessTokenTTL: { [key: string]: DateInterval } = {};
 
-  enableGrantType(grantType: IGrantType, accessTokenTTL?: DateInterval) {
+  enableGrantType(grantType: IGrant, accessTokenTTL?: DateInterval) {
     if (!accessTokenTTL) accessTokenTTL = new DateInterval("PT1H");
     this.enabledGrantTypes[grantType.identifier] = grantType;
     this.grantTypeAccessTokenTTL[grantType.identifier] = accessTokenTTL;
@@ -21,10 +20,8 @@ export class AuthorizationServer {
       if (!grantType.canRespondToAccessTokenRequest(req)) {
         continue;
       }
-      if (grantType instanceof ClientCredentialsGrant || grantType instanceof AuthCodeGrant) {
-        const accessTokenTTL = this.grantTypeAccessTokenTTL[grantType.identifier];
-        return grantType.respondToAccessTokenRequest(req, res, accessTokenTTL);
-      }
+      const accessTokenTTL = this.grantTypeAccessTokenTTL[grantType.identifier];
+      return grantType.respondToAccessTokenRequest(req, res, accessTokenTTL);
     }
 
     throw OAuthException.unsupportedGrantType();
@@ -32,10 +29,8 @@ export class AuthorizationServer {
 
   validateAuthorizationRequest(req: Request) {
     for (const grantType of Object.values(this.enabledGrantTypes)) {
-      if (grantType instanceof AuthCodeGrant) {
-        if (grantType.canRespondToAuthorizationRequest(req)) {
-          return grantType.validateAuthorizationRequest(req);
-        }
+      if (grantType.canRespondToAuthorizationRequest(req)) {
+        return grantType.validateAuthorizationRequest(req);
       }
     }
 
@@ -44,9 +39,7 @@ export class AuthorizationServer {
 
   async completeAuthorizationRequest(authorizationRequest: AuthorizationRequest, response: Response): Promise<void> {
     const grant = this.enabledGrantTypes[authorizationRequest.grantTypeId];
-    if (grant instanceof AuthCodeGrant) {
-      const completedRequest = await grant.completeAuthorizationRequest(authorizationRequest);
-      return completedRequest.generateHttpResponse(response);
-    }
+    const completedRequest = await grant.completeAuthorizationRequest(authorizationRequest);
+    await completedRequest.generateHttpResponse(response);
   }
 }

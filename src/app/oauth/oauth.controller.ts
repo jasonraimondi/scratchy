@@ -1,25 +1,13 @@
 import { HttpException, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 
-import { AuthorizationServer } from "~/app/oauth/services/oauth_server.service";
+import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { userGenerator } from "~test/generators/user.generator";
 
 @Controller("oauth2")
 export class OAuthController {
-  constructor(private readonly oauth: AuthorizationServer, private readonly userRepository: UserRepo) {}
-
-  @Post("/access_token")
-  async accessToken(@Req() req: Request, @Res() res: Response) {
-    try {
-      return await this.oauth.respondToAccessTokenRequest(req, res);
-    } catch (e) {
-      // @todo fix exception handling...
-      if (e instanceof HttpException) {
-        throw e;
-      }
-      throw new HttpException(e.message, 500);
-    }
+  constructor(private readonly oauth: AuthorizationServer, private readonly userRepository: UserRepo) {
   }
 
   @Get("/authorize")
@@ -33,7 +21,7 @@ export class OAuthController {
 
       // Once the user has logged in set the user on the AuthorizationRequest
       const user = await this.userRepository.create(await userGenerator());
-      authRequest.user = user
+      authRequest.user = user;
 
       // At this point you should redirect the user to an authorization page.
       // This form will ask the user to approve the client and the scopes requested.
@@ -44,13 +32,26 @@ export class OAuthController {
 
       // Return the HTTP redirect response
       await this.oauth.completeAuthorizationRequest(authRequest, res);
-      return;
     } catch (e) {
-      // @todo fix exception handling...
-      if (e instanceof HttpException) {
-        throw e;
-      }
-      throw new HttpException(e.message, 500);
+      this.handleError(e);
     }
+  }
+
+  @Post("/access_token")
+  async accessToken(@Req() req: Request, @Res() res: Response) {
+    try {
+      return await this.oauth.respondToAccessTokenRequest(req, res);
+    } catch (e) {
+      this.handleError(e);
+      return;
+    }
+  }
+
+  private handleError(e: any) {
+    // @todo fix exception handling...
+    if (e instanceof HttpException) {
+      throw e;
+    }
+    throw new HttpException(e.message, 500);
   }
 }

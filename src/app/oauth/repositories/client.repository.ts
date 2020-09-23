@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
-import { GrantType } from "~/app/oauth/grants/abstract.grant";
+import { GrantId } from "~/app/oauth/grants/abstract.grant";
 import { BaseRepo } from "~/lib/repositories/base.repository";
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ClientRepo extends BaseRepo<Client> {
     return this.findById(clientId);
   }
 
-  async validateClient(grantType: GrantType, clientId: string, clientSecret?: string): Promise<boolean> {
+  async validateClient(grantType: GrantId, clientId: string, clientSecret?: string): Promise<boolean> {
     const client = await this.getClientById(clientId);
     if (client.secret === clientSecret) {
       return false;

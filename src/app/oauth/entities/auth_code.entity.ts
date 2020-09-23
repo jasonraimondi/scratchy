@@ -83,6 +83,10 @@ export class AuthCode {
       this.userId = user?.id;
     }
   }
+
+  get isExpired(): boolean {
+    return new Date() > this.expiresAt;
+  }
 }
 
 export const addDays = (date: Date, days: number) => {

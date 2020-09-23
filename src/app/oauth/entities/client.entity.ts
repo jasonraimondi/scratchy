@@ -2,7 +2,7 @@ import { IsOptional, Length } from "class-validator";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
-import type { GrantType } from "~/app/oauth/grants/abstract.grant";
+import type { GrantId } from "~/app/oauth/grants/abstract.grant";
 
 @Entity("oauth_clients")
 export class Client {
@@ -21,8 +21,7 @@ export class Client {
   redirectUris: string[];
 
   @Column("simple-array")
-  allowedGrants: GrantType[];
-
+  allowedGrants: GrantId[];
 
   get isConfidential(): boolean {
     return !!this.secret;

@@ -21,4 +21,15 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> {
   async persistNewAuthCode(authCode: AuthCode): Promise<AuthCode> {
     return this.create(authCode);
   }
+
+  async isAuthCodeRevoked(authCodeCode: string) {
+    const authCode = await this.findById(authCodeCode);
+    return authCode.isExpired;
+  }
+
+  async revokeAuthCode(authCodeCode: string) {
+    const authCode = await this.findById(authCodeCode);
+    authCode.revoke();
+    await this.save(authCode);
+  }
 }

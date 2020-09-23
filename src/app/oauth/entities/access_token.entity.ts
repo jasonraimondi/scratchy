@@ -9,6 +9,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
 } from "typeorm";
 import { v4 } from "uuid";
@@ -42,7 +43,7 @@ export class AccessToken {
   @IsUUID()
   userId?: string;
 
-  @ManyToOne(() => RefreshToken, { nullable: true })
+  @OneToOne(() => RefreshToken, { nullable: true })
   @JoinColumn({ name: "refreshTokenToken" })
   refreshToken?: RefreshToken;
 

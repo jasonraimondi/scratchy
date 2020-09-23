@@ -11,6 +11,6 @@ export class RedirectResponse extends AbstractResponse {
 
   async generateHttpResponse(response: Response) {
     if (!this._redirectUri) throw OAuthException.missingRedirectUri();
-    return response.status(HttpStatus.FOUND).redirect(this._redirectUri);
+    return response.redirect(HttpStatus.FOUND, this._redirectUri);
   }
 }
