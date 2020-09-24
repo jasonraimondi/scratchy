@@ -1,3 +1,4 @@
+import { OAuthUser } from "@jmondi/oauth2-server";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { compare, hash } from "bcryptjs";
 import { IsEmail, IsIP } from "class-validator";
@@ -29,7 +30,7 @@ const inet = process.env.NODE_ENV === "test" ? "text" : "inet";
 
 @ObjectType()
 @Entity("users")
-export class User {
+export class User implements OAuthUser {
   static async create({ id, email, firstName, lastName, password, createdIP = "0.0.0.0" }: ICreateUser) {
     const user = new User(id);
     user.email = email.toLowerCase();
@@ -38,6 +39,10 @@ export class User {
     user.createdIP = createdIP;
     if (password) await user.setPassword(password);
     return user;
+  }
+
+  get identifier() {
+    return this.id;
   }
 
   private constructor(id = v4()) {

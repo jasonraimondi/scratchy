@@ -111,8 +111,8 @@ describe("oauth2 client_credentials e2e", () => {
       })
       .expect(403)
       .expect("Content-Type", /json/)
-      .expect(({ body }) => {
-        expect(body.message).toBe("oauth exception: error validating client");
+      .expect((response) => {
+        expect(response.body.message).toBe("oauth exception: error validating client");
       });
   });
 });

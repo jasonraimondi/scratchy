@@ -1,12 +1,10 @@
+import { AuthCodeGrant, ClientCredentialsGrant } from "@jmondi/oauth2-server";
+import { IGrant } from "@jmondi/oauth2-server";
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { IGrant } from "~/app/oauth/grants/abstract.grant";
-import { AuthCodeGrant } from "~/app/oauth/grants/auth_code.grant";
-import { ClientCredentialsGrant } from "~/app/oauth/grants/client_credentials.grant";
-import { grantProviders } from "~/app/oauth/grant.providers";
+import { grantProviders, repositoryProviders } from "~/app/oauth/oauth.providers";
 
-import { repositoryProviders } from "~/app/oauth/repositories/repository.providers";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { AccessToken } from "~/app/oauth/entities/access_token.entity";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";

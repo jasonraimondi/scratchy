@@ -1,4 +1,5 @@
 import { DateInterval } from "@jmondi/date-interval";
+import { OAuthAccessToken } from "@jmondi/oauth2-server";
 import { IsUUID, Length } from "class-validator";
 import {
   Column,
@@ -12,7 +13,6 @@ import {
   OneToOne,
   PrimaryColumn,
 } from "typeorm";
-import { v4 } from "uuid";
 
 import { Client } from "~/app/oauth/entities/client.entity";
 import { generateRandomToken } from "~/app/oauth/entities/random_token";
@@ -21,7 +21,7 @@ import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 
 @Entity("oauth_access_tokens")
-export class AccessToken {
+export class AccessToken implements OAuthAccessToken {
   @PrimaryColumn("varchar", { length: 128 })
   @Length(64, 128)
   readonly token: string;
@@ -64,6 +64,10 @@ export class AccessToken {
   })
   scopes?: Scope[];
 
+  get identifier() {
+    return this.token;
+  }
+
   get toJWT() {
     return {
       token: this.token,
@@ -99,7 +103,7 @@ export class AccessToken {
   private setRefreshToken(refreshToken?: RefreshToken) {
     if (refreshToken) {
       this.refreshToken = refreshToken;
-      this.refreshTokenToken = refreshToken.token;
+      this.refreshTokenToken = refreshToken.refreshToken;
     }
   }
 }

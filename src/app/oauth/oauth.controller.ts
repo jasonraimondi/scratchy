@@ -1,3 +1,4 @@
+import { OAuthException } from "@jmondi/oauth2-server";
 import { HttpException, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 
@@ -19,8 +20,8 @@ export class OAuthController {
       // You will probably want to redirect the user at this point to a login endpoint.
 
       // Once the user has logged in set the user on the AuthorizationRequest
+      console.log("this user needs to come from somewhere else");
       const user = await this.userRepository.create(await userGenerator());
-      console.log({ message: "this user needs to come from somewhere else", user });
       authRequest.user = user;
 
       // At this point you should redirect the user to an authorization page.
@@ -42,7 +43,6 @@ export class OAuthController {
     try {
       return await this.oauth.respondToAccessTokenRequest(req, res);
     } catch (e) {
-      console.log(e);
       this.handleError(e);
       return;
     }
@@ -54,8 +54,10 @@ export class OAuthController {
   }
 
   private handleError(e: any) {
-    // @todo fix exception handling...
-    if (e instanceof HttpException) {
+    // @todo clean up error handling
+    if (e instanceof OAuthException) {
+      throw new HttpException(e.message, e.status);
+    } else if (e instanceof HttpException) {
       throw e;
     }
     throw new HttpException(e.message, 500);

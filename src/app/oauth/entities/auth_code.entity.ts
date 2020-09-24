@@ -1,4 +1,5 @@
 import { DateInterval } from "@jmondi/date-interval";
+import { OAuthAuthCode } from "@jmondi/oauth2-server";
 import { IsIn, IsOptional, IsUUID, Length } from "class-validator";
 import {
   Column,
@@ -18,7 +19,7 @@ import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 
 @Entity("oauth_auth_codes")
-export class AuthCode {
+export class AuthCode implements OAuthAuthCode {
   @PrimaryColumn("varchar", { length: 128 })
   @Length(64, 128)
   token: string;

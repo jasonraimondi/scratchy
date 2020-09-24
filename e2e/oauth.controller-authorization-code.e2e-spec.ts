@@ -1,3 +1,4 @@
+import { IAuthCodePayload } from "@jmondi/oauth2-server";
 import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import crypto from "crypto";
@@ -10,12 +11,11 @@ import { AuthCode } from "../src/app/oauth/entities/auth_code.entity";
 import { Client } from "../src/app/oauth/entities/client.entity";
 import { RefreshToken } from "../src/app/oauth/entities/refresh_token.entity";
 import { Scope } from "../src/app/oauth/entities/scope.entity";
-import { IAuthCodePayload } from "../src/app/oauth/grants/auth_code.grant";
 import { OAuthModule } from "../src/app/oauth/oauth.module";
 import { ClientRepo } from "../src/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "../src/app/oauth/repositories/scope.repository";
 import { attachMiddlewares } from "../src/lib/middlewares/attach_middlewares";
-import { base64encode, base64urlencode } from "../src/lib/utils/base64";
+import { base64urlencode } from "../src/lib/utils/base64";
 import { createTestingModule } from "../test/app_testing.module";
 
 describe("oauth2 authorization_code e2e", () => {
@@ -94,10 +94,10 @@ describe("oauth2 authorization_code e2e", () => {
         code_verifier: codeVerifier,
       });
 
-    console.log(tokenResponse.body);
     expect(tokenResponse.status).toBe(201);
     expect(tokenResponse.body.token_type).toBe("Bearer");
     expect(tokenResponse.body.access_token.length).toBe(80);
     expect(tokenResponse.body.refresh_token.length).toBe(80);
   });
 });
+

@@ -1,11 +1,11 @@
+import { OAuthClient } from "@jmondi/oauth2-server";
+import { GrantTypeIdentifiers } from "@jmondi/oauth2-server";
 import { IsOptional, Length } from "class-validator";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
-import type { GrantId } from "~/app/oauth/grants/abstract.grant";
-
 @Entity("oauth_clients")
-export class Client {
+export class Client implements OAuthClient {
   @PrimaryColumn("uuid")
   readonly id: string;
 
@@ -21,7 +21,7 @@ export class Client {
   redirectUris: string[];
 
   @Column("simple-array")
-  allowedGrants: GrantId[];
+  allowedGrants: GrantTypeIdentifiers[];
 
   get isConfidential(): boolean {
     return !!this.secret;
