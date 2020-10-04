@@ -1,4 +1,4 @@
-import { OAuthAuthCodeRepository, OAuthScope } from "@jmondi/oauth2-server";
+import { OAuthAuthCodeRepository } from "@jmondi/oauth2-server";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -15,32 +15,33 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRep
     super(repository);
   }
 
-  getNewAuthCode(client: Client, user?: User, scopes: OAuthScope[] | Scope[] = []) {
+  getByIdentifier(authCodeCode: string): Promise<AuthCode> {
+    return this.findById(authCodeCode);
+  }
+
+  async isRevoked(authCodeCode: string): Promise<boolean> {
+    const authCode = await this.getByIdentifier(authCodeCode);
+    return authCode.isExpired;
+  }
+
+  issueAuthCode(client: Client, user: User | undefined, scopes: Scope[]) {
     const authCode = new AuthCode({ user, client });
     scopes.forEach((scope) => {
-      if (scope instanceof Scope) {
-        if (authCode.scopes) authCode.scopes?.push(scope);
-        else authCode.scopes = [scope];
+      if (authCode.scopes) {
+        authCode.scopes.push(scope)
+      } else {
+        authCode.scopes = [scope];
       }
     });
     return authCode;
   }
 
-  async persistNewAuthCode(authCode: AuthCode) {
+  async persist(authCode: AuthCode): Promise<void> {
     await this.create(authCode);
   }
 
-  async isAuthCodeRevoked(authCodeCode: string) {
-    const authCode = await this.findById(authCodeCode);
-    return authCode.isExpired;
-  }
-
-  async getAuthCodeByIdentifier(authCodeCode: string) {
-    return this.findById(authCodeCode);
-  }
-
-  async revokeAuthCode(authCodeCode: string) {
-    const authCode = await this.findById(authCodeCode);
+  async revoke(authCodeCode: string): Promise<void> {
+    const authCode = await this.getByIdentifier(authCodeCode);
     authCode.revoke();
     await this.save(authCode);
   }

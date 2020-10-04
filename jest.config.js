@@ -9,7 +9,7 @@ module.exports = {
   ],
   modulePathIgnorePatterns: ['<rootDir>/dist'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: "<rootDir>/",
+    prefix: "<rootDir>",
   }),
   rootDir: "./",
   testRegex: ".spec.ts$",

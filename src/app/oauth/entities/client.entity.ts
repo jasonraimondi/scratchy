@@ -1,8 +1,9 @@
-import { OAuthClient } from "@jmondi/oauth2-server";
-import { GrantTypeIdentifiers } from "@jmondi/oauth2-server";
+import { GrantIdentifier, OAuthClient } from "@jmondi/oauth2-server";
 import { IsOptional, Length } from "class-validator";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
+import { Scope } from "~/app/oauth/entities/scope.entity";
+import { generateRandomToken } from "~/lib/random_token";
 
 @Entity("oauth_clients")
 export class Client implements OAuthClient {
@@ -21,7 +22,18 @@ export class Client implements OAuthClient {
   redirectUris: string[];
 
   @Column("simple-array")
-  allowedGrants: GrantTypeIdentifiers[];
+  allowedGrants: GrantIdentifier[];
+
+  @ManyToMany(() => Scope)
+  @JoinTable({
+    name: "oauth_client_scopes",
+    joinColumn: { name: "clientId", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "scopeId", referencedColumnName: "id" },
+  })
+  scopes: Scope[];
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   get isConfidential(): boolean {
     return !!this.secret;
@@ -34,6 +46,7 @@ export class Client implements OAuthClient {
   constructor(data?: Partial<Client>) {
     if (data?.name) this.name = data.name;
     this.id = data?.id ?? v4();
+    this.secret = data?.secret;
     this.redirectUris = data?.redirectUris ?? [];
     this.allowedGrants = data?.allowedGrants ?? [];
   }

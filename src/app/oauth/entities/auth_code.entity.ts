@@ -1,5 +1,4 @@
-import { DateInterval } from "@jmondi/date-interval";
-import { OAuthAuthCode } from "@jmondi/oauth2-server";
+import { DateInterval, OAuthAuthCode } from "@jmondi/oauth2-server";
 import { IsIn, IsOptional, IsUUID, Length } from "class-validator";
 import {
   Column,
@@ -14,7 +13,7 @@ import {
 } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
-import { generateRandomToken } from "~/app/oauth/entities/random_token";
+import { generateRandomToken } from "~/lib/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
 
@@ -22,7 +21,7 @@ import { User } from "~/entity/user/user.entity";
 export class AuthCode implements OAuthAuthCode {
   @PrimaryColumn("varchar", { length: 128 })
   @Length(64, 128)
-  token: string;
+  code: string;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: "userId" })
@@ -61,7 +60,7 @@ export class AuthCode implements OAuthAuthCode {
   @ManyToMany(() => Scope)
   @JoinTable({
     name: "oauth_auth_code_scopes",
-    joinColumn: { name: "authCodeToken", referencedColumnName: "token" },
+    joinColumn: { name: "authCodeCode", referencedColumnName: "code" },
     inverseJoinColumn: { name: "scopeId", referencedColumnName: "id" },
   })
   scopes: Scope[];
@@ -74,9 +73,9 @@ export class AuthCode implements OAuthAuthCode {
     this.setClient(data?.client);
     this.setUser(data?.user);
     if (data?.scopes) this.scopes = data.scopes;
-    this.token = data?.token ?? generateRandomToken();
+    this.code = data?.code ?? generateRandomToken();
     // @todo the new date interval is misleading here;
-    this.expiresAt = data?.expiresAt ?? new DateInterval({ minutes: 10 }).end();
+    this.expiresAt = data?.expiresAt ?? new DateInterval("10m").getEndDate();
   }
 
   private setClient(client?: Client) {

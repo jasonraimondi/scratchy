@@ -1,4 +1,4 @@
-import { IAuthCodePayload } from "@jmondi/oauth2-server";
+import { IAuthCodePayload, REGEX_ACCESS_TOKEN } from "@jmondi/oauth2-server";
 import { INestApplication } from "@nestjs/common";
 import { TestingModule } from "@nestjs/testing";
 import crypto from "crypto";
@@ -6,10 +6,9 @@ import jwtDecode from "jwt-decode";
 import * as querystring from "querystring";
 import request from "supertest";
 
-import { AccessToken } from "../src/app/oauth/entities/access_token.entity";
+import { Token } from "../src/app/oauth/entities/token.entity";
 import { AuthCode } from "../src/app/oauth/entities/auth_code.entity";
 import { Client } from "../src/app/oauth/entities/client.entity";
-import { RefreshToken } from "../src/app/oauth/entities/refresh_token.entity";
 import { Scope } from "../src/app/oauth/entities/scope.entity";
 import { OAuthModule } from "../src/app/oauth/oauth.module";
 import { ClientRepo } from "../src/app/oauth/repositories/client.repository";
@@ -29,7 +28,7 @@ describe("oauth2 authorization_code e2e", () => {
       {
         imports: [OAuthModule],
       },
-      [AccessToken, RefreshToken, AuthCode, Client, Scope],
+      [Token, AuthCode, Client, Scope],
     );
 
     const clientRepo = moduleRef.get(ClientRepo);
@@ -37,10 +36,11 @@ describe("oauth2 authorization_code e2e", () => {
 
     client = await clientRepo.create(
       new Client({
+        id: "becd6a60-7b2f-4454-9f77-ab31c05ca8d6",
         name: "test client",
-        secret: "f6ce22eb-5bf7-4de6-9017-a5383facbb49",
+        secret: undefined,
         redirectUris: ["http://localhost"],
-        allowedGrants: ["client_credentials"],
+        allowedGrants: ["authorization_code"],
       }),
     );
 
@@ -60,7 +60,7 @@ describe("oauth2 authorization_code e2e", () => {
   it("allows auth code grant with PKCE S256", async () => {
     const http = app.getHttpServer();
 
-    const codeVerifier = base64urlencode(crypto.randomBytes(40));
+    const codeVerifier = crypto.randomBytes(40).toString("hex");
     const codeChallenge = base64urlencode(crypto.createHash("sha256").update(codeVerifier).digest("hex"));
 
     const authorizeResponse = await request(http)
@@ -85,7 +85,7 @@ describe("oauth2 authorization_code e2e", () => {
     expect(authorizeResponseQuery.state).toBe("state-is-a-secret");
 
     const tokenResponse = await request(http)
-      .post("/oauth2/access_token")
+      .post("/oauth2/token")
       .send({
         grant_type: "authorization_code",
         code: authorizeResponseQuery.code,
@@ -94,10 +94,9 @@ describe("oauth2 authorization_code e2e", () => {
         code_verifier: codeVerifier,
       });
 
-    expect(tokenResponse.status).toBe(201);
+    expect(tokenResponse.status).toBe(200);
     expect(tokenResponse.body.token_type).toBe("Bearer");
-    expect(tokenResponse.body.access_token.length).toBe(80);
-    expect(tokenResponse.body.refresh_token.length).toBe(80);
+    expect(tokenResponse.body.access_token).toMatch(REGEX_ACCESS_TOKEN);
   });
 });
 

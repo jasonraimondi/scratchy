@@ -26,8 +26,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "@jmondi/date-interval": "^0.2.0",
-    "@jmondi/oauth2-server": "file:../typescript-oauth2-server",
+    "@jmondi/oauth2-server": "^1.0.0-beta.1",
     "@nestjs-modules/mailer": "^1.5.1",
     "@nestjs/bull": "^0.1.2",
     "@nestjs/common": "^7.4.2",
