@@ -1,0 +1,28 @@
+{% extends "oauth/layouts/index.njk" %}
+
+{% block main %}
+<main class="">
+    <form action="" method="post">
+        <h1 class="">Login</h1>
+        <h3>{{ message }}</h3>
+        <fieldset>
+            <div class="">
+                <input class="form-control margin-bottom-sm" type="email" name="username" required>
+            </div>
+            <div class="">
+                <input class="form-control margin-bottom-sm" type="password" name="password" required>
+            </div>
+
+            <a href="/users/forgotPassword" class="display-block text-align-center forgot-password">Forgot Your Password?</a>
+
+            <div class="text-align-center">
+                <button class="bg-primary btn btn-block btn-primary btn-round login" type="submit">Login</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="resend-verification">
+        <a href="/users/register"><i class="fa fa-envelope-o"></i> Resend Verification Email</a>
+    </div>
+</main>
+{% endblock %}

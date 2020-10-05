@@ -13,9 +13,10 @@ import { ENV } from "~/config/environment";
 import { User } from "~/entity/user/user.entity";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { LoginController } from './login/login.controller';
 
 @Module({
-  controllers: [OAuthController],
+  controllers: [OAuthController, LoginController],
   imports: [
     TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]),
     RepositoryModule,
