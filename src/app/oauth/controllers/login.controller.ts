@@ -1,5 +1,5 @@
 import { DateInterval } from "@jmondi/oauth2-server";
-import { Controller, Get, HttpException, HttpStatus, Post, Render, Req, Res } from "@nestjs/common";
+import { Controller, Get, HttpException, HttpStatus, Ip, Post, Render, Req, Res } from "@nestjs/common";
 import { IsEmail } from "class-validator";
 import { query } from "express";
 import type { Request, Response } from "express";
@@ -42,30 +42,29 @@ export class LoginController {
   }
 
   @Post()
-  async post(@Req() req: Request, @Res() res: Response) {
+  async post(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
     await this.oauth.validateAuthorizationRequest(req);
 
     const { email, password } = req.body;
 
     const query = req.query as any;
 
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository.findByEmail(email);
 
     await user.verify(password);
 
-    if (!user) {
-      throw new HttpException("user not found fix this error", 400);
-    }
+    await this.userRepository.incrementLastLogin(user, ipAddr);
 
-    const payload = {
+    const jwt = await this.jwt.sign({
       userId: user.id,
       email: user.email,
       isEmailConfirmed: user.isEmailConfirmed,
-    };
+    });
 
-    const jwt = await this.jwt.sign(payload);
+    // @todo extract cookie ttl to config
+    const options = this.oauth.cookieOptions(new DateInterval("1m"));
 
-    res.cookie("jwt", jwt, this.oauth.cookieOptions(new DateInterval("1m"))); // @todo extract cookie ttl to config
+    res.cookie("jwt", jwt, options);
     res.status(HttpStatus.FOUND);
     res.redirect("/oauth2/authorize?" + querystring.stringify(query));
     return res;

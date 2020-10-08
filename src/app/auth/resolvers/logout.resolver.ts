@@ -1,17 +1,17 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
-import { AuthService } from "~/app/auth/auth.service";
-
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { MyContext } from "~/config/my_context";
 
 @Resolver()
 export class LogoutResolver {
-  constructor(private userRepository: UserRepo, private authService: AuthService) {}
+  constructor(private userRepository: UserRepo) {}
 
   @Mutation(() => Boolean)
   async logout(@Context() { res }: MyContext) {
-    this.authService.sendRefreshToken(res, false, undefined);
+    console.log("FIX LOGOUT");
+    // @todo fix logout
+    // this.authService.sendRefreshToken(res, false, undefined);
     return true;
   }
 

@@ -1,9 +1,8 @@
 {% extends "oauth/layouts/index.njk" %}
 
 {% block main %}
-<form action="{{ loginFormAction }}" method="POSt">
+<form action="{{ loginFormAction }}" method="POST">
     <h1>Login</h1>
-    <h2><a href="/login/help">OAUTH LOGIN</a></h2>
 
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
@@ -23,6 +22,8 @@
             <button type="submit">Login</button>
         </div>
     </fieldset>
+
+    <p><a href="/oauth2/help">OAUTH LOGIN</a></p>
 </form>
 {% endblock %}
 

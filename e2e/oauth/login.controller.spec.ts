@@ -1,5 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 import crypto from "crypto";
+import jwtDecode from "jwt-decode";
 
 import { AuthCode } from "../../src/app/oauth/entities/auth_code.entity";
 import { Client } from "../../src/app/oauth/entities/client.entity";
@@ -9,6 +10,7 @@ import { OAuthModule } from "../../src/app/oauth/oauth.module";
 import { ClientRepo } from "../../src/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "../../src/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "../../src/app/oauth/repositories/scope.repository";
+import { LoginInput } from "../../src/app/user/dtos/login.input";
 import { User } from "../../src/entity/user/user.entity";
 import { base64urlencode } from "../../src/lib/utils/base64";
 import { createTestingModule } from "../../test/app_testing.module";
@@ -57,6 +59,35 @@ describe.skip("LoginController", () => {
     expect(controller).toBeDefined();
   });
 
+
+  // test("user logs in successfully", async () => {
+  //   // arrange
+  //   const input = new LoginInput();
+  //   input.email = "jason@Raimondi.us";
+  //   input.password = "jasonraimondi";
+  //   let user = await userGenerator(input);
+  //   user.isEmailConfirmed = true;
+  //   await userRepository.save(user);
+  //   const originalLoggedInAt = user.lastLoginAt;
+  //
+  //   // act
+  //   const result = await resolver.login(input, context);
+  //   user = await userRepository.findByEmail(user.email);
+  //
+  //   // assert
+  //   const decode = jwtDecode<any>(result.accessToken);
+  //   expect(decode.userId).toBe(user.id);
+  //   expect(result.user.id).toBe(user.id);
+  //   expect(result.user.email).toBe(user.email);
+  //   expect(context.res.cookies.length).toBe(2);
+  //   const [name, value] = context.res.cookies[1];
+  //   expect(name).toBe("jid");
+  //   expect(value).toMatch(/[a-zA-Z]/);
+  //   expect(originalLoggedInAt).toBeNull();
+  //   expect(user.lastLoginAt).toBeTruthy();
+  //   expect(user.lastLoginIP).toBe("::testing");
+  // });
+
   it("should validate successful login", async () => {
     const codeVerifier = crypto.randomBytes(40).toString("hex");
     const codeChallenge = base64urlencode(crypto.createHash("sha256").update(codeVerifier).digest("hex"));
@@ -81,9 +112,38 @@ describe.skip("LoginController", () => {
       },
       body: { email: user.email, password: "testing123" },
     };
-    const result = await controller.post(req, res);
+    const result = await controller.post(req, res, "127.0.0.1");
     // console.log({ location: result });
     expect(controller).toBeDefined();
     console.log(res.cookie.results)
   });
+
+
+  // test("user without password throws error", async () => {
+  //   // arrange
+  //   const user = await userGenerator({ password: undefined });
+  //   await userRepository.save(user);
+  //   const input = new LoginInput();
+  //   input.email = user.email;
+  //   input.password = "non-existant-password";
+  //
+  //   // act
+  //   const result = resolver.login(input, context);
+  //
+  //   // assert
+  //   await expect(result).rejects.toThrowError("user must create password");
+  // });
+  //
+  // test("non existant user throws", async () => {
+  //   // arrange
+  //   const input = new LoginInput();
+  //   input.email = "emails@notfound.com";
+  //   input.password = "thisuserdoesntexist";
+  //
+  //   // act
+  //   const result = resolver.login(input, context);
+  //
+  //   // assert
+  //   await expect(result).rejects.toThrowError(new RegExp('Could not find any entity of type "User"'));
+  // });
 });

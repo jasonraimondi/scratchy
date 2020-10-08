@@ -24,11 +24,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type LoginResponse {
-  accessToken: String!
-  user: User!
-}
-
 type Cursor {
   beforeCursor: String
   afterCursor: String
@@ -61,7 +56,6 @@ type Mutation {
   validateForgotPasswordToken(email: String!, token: String!): Boolean!
   sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
   updatePasswordFromToken(data: UpdatePasswordInput!): Boolean!
-  login(data: LoginInput!): LoginResponse!
   logout: Boolean!
   revokeRefreshToken(userId: String!): Boolean!
   verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
@@ -77,12 +71,6 @@ input UpdatePasswordInput {
   password: String!
   token: String!
   email: String!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-  rememberMe: Boolean!
 }
 
 input VerifyEmailInput {
