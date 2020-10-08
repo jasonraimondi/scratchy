@@ -28,7 +28,7 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRep
     const authCode = new AuthCode({ user, client });
     scopes.forEach((scope) => {
       if (authCode.scopes) {
-        authCode.scopes.push(scope)
+        authCode.scopes.push(scope);
       } else {
         authCode.scopes = [scope];
       }

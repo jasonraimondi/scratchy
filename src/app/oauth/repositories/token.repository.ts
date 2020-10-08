@@ -21,7 +21,7 @@ export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {
     accessToken.userId = user?.id;
     scopes.forEach((scope) => {
       if (accessToken.scopes) {
-        accessToken.scopes.push(scope)
+        accessToken.scopes.push(scope);
       } else {
         accessToken.scopes = [scope];
       }

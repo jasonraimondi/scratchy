@@ -15,5 +15,6 @@ export class Scope implements OAuthScope {
 
   constructor(data?: Partial<Scope>) {
     if (data?.name) this.name = data.name;
+    if (data?.description) this.description = data.description;
   }
 }

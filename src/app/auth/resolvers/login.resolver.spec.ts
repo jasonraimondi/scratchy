@@ -15,7 +15,7 @@ import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockContext } from "~test/mock_application";
 
-describe("login resolver", () => {
+describe("controllers resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let moduleRef: TestingModule;

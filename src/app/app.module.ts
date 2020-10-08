@@ -3,6 +3,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
 import { Request, Response } from "express";
+import { AppController } from "~/app/app.controller";
 
 import { AuthModule } from "~/app/auth/auth.module";
 import { OAuthModule } from "~/app/oauth/oauth.module";
@@ -35,7 +36,7 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
       logging: true,
       synchronize: true,
       namingStrategy: new CustomNamingStrategy(),
-      maxQueryExecutionTime: 0.2, // To log request runtime
+      // maxQueryExecutionTime: 0.2, // To log request runtime
     }),
     GraphQLModule.forRoot({
       logger: new GraphqlLogger(GraphQLModule.name),
@@ -50,7 +51,7 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
     }),
     ...imports,
   ],
-  controllers: [HealthcheckController],
+  controllers: [AppController, HealthcheckController],
 })
 export class AppModule {
   constructor() {

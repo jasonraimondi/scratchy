@@ -45,7 +45,7 @@ export class User implements OAuthUser {
     return this.id;
   }
 
-  private constructor(id = v4()) {
+  constructor(id = v4()) {
     this.id = id;
     this.tokenVersion = 0;
     this.isEmailConfirmed = false;
@@ -130,7 +130,9 @@ export class User implements OAuthUser {
   async verify(password: string) {
     if (!this.password) throw new Error("user must create password");
     if (!this.isActive) throw new Error("user is not active");
-    if (!(await compare(password, this.password))) throw new Error("invalid password");
+    if (!(await compare(password, this.password))) {
+      throw new Error("invalid password");
+    }
   }
 
   get jwtPayload() {

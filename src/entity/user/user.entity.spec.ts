@@ -2,7 +2,7 @@ import { userGenerator } from "~test/generators/user.generator";
 
 describe("user entity", () => {
   test("isActive computed correctly", async () => {
-    const user1 = await userGenerator({ email: "charlie@kelly.us" });
+    const user1 = await userGenerator({ email: "charlie@kelly.us" }, false);
     user1.password = "anything";
 
     const user2 = await userGenerator({ email: "charlie@kelly.us" });

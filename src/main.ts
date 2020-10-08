@@ -21,15 +21,11 @@ const logger = new LoggerService("__main__");
   attachMiddlewares(app);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-
-  // app.useStaticAssets(join(__dirname, '..', 'public'));
-  // app.setBaseViewsDir(join(__dirname, '..', 'templates'));
-  app.setViewEngine('njk');
-
-  nunjucks.configure(join(__dirname, '../templates'), {
+  nunjucks.configure(join(__dirname, "../templates"), {
     autoescape: true,
-    express: app
+    express: app,
   });
+  app.setViewEngine("njk");
 
   if (ENV.enableDebugging) {
     logger.debug("DEBUGGING ENABLED");

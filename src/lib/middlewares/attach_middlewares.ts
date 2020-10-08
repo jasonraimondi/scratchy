@@ -1,10 +1,12 @@
 import { INestApplication } from "@nestjs/common";
+import { urlencoded } from "body-parser";
 import { UI as bullUI } from "bull-board";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
 export const attachMiddlewares = (app: INestApplication) => {
+  app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
 
   if (process.env.NODE_ENV === "production") {
