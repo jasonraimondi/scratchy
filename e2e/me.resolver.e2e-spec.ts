@@ -57,15 +57,19 @@ describe.skip("me resolver", () => {
     user = await userGenerator();
     await userRepository.save(user);
 
-    await request(app.getHttpServer())
+    const http = app.getHttpServer();
+
+    await request(http)
       .post("/graphql")
       .send({
         // operationName: null,
         query: meQuery,
       })
       .set("Authorization", `Bearer ${"authService.createAccessToken(user)"}`)
-      .expect(({ body }) => {
+      .expect(({ body, status }) => {
+        console.log({ body }, body.errors)
         const data = body.data.me;
+        expect(status).toBe(200);
         expect(data).toBeTruthy();
         expect(data.id).toBe(user.id);
         expect(data.email).toBe(user.email);

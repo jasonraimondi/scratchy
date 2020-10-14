@@ -24,7 +24,7 @@ export class Client implements OAuthClient {
   @Column("simple-array")
   allowedGrants: GrantIdentifier[];
 
-  @ManyToMany(() => Scope)
+  @ManyToMany(() => Scope, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({
     name: "oauth_client_scopes",
     joinColumn: { name: "clientId", referencedColumnName: "id" },
@@ -34,10 +34,6 @@ export class Client implements OAuthClient {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  get isConfidential(): boolean {
-    return !!this.secret;
-  }
 
   verify(s?: string) {
     return this.secret === s;

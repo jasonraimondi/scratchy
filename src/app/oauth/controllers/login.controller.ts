@@ -1,7 +1,6 @@
 import { DateInterval } from "@jmondi/oauth2-server";
-import { Controller, Get, HttpException, HttpStatus, Ip, Post, Render, Req, Res } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Ip, Post, Render, Req, Res } from "@nestjs/common";
 import { IsEmail } from "class-validator";
-import { query } from "express";
 import type { Request, Response } from "express";
 import querystring from "querystring";
 
@@ -10,7 +9,6 @@ import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
-import { User } from "~/entity/user/user.entity";
 
 export class LoginForm {
   @IsEmail()
@@ -67,6 +65,5 @@ export class LoginController {
     res.cookie("jwt", jwt, options);
     res.status(HttpStatus.FOUND);
     res.redirect("/oauth2/authorize?" + querystring.stringify(query));
-    return res;
   }
 }

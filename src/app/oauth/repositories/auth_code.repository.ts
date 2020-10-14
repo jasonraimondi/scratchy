@@ -1,4 +1,4 @@
-import { OAuthAuthCodeRepository } from "@jmondi/oauth2-server";
+import { DateInterval, OAuthAuthCodeRepository } from "@jmondi/oauth2-server";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -21,6 +21,7 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRep
 
   async isRevoked(authCodeCode: string): Promise<boolean> {
     const authCode = await this.getByIdentifier(authCodeCode);
+    console.log({ authCode, revoked: authCode.isExpired });
     return authCode.isExpired;
   }
 
@@ -33,6 +34,9 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRep
         authCode.scopes = [scope];
       }
     });
+    console.log(new Date());
+    console.log(new DateInterval("1m").getEndDate());
+    console.log(authCode);
     return authCode;
   }
 

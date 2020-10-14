@@ -42,7 +42,7 @@ export class Token implements OAuthToken {
   @Column("uuid")
   clientId: string;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE"  })
   @JoinColumn({ name: "userId" })
   user?: User;
 
@@ -51,7 +51,7 @@ export class Token implements OAuthToken {
   @IsUUID()
   userId?: string;
 
-  @ManyToMany(() => Scope)
+  @ManyToMany(() => Scope, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({
     name: "oauth_token_scopes",
     joinColumn: { name: "tokenAccessToken", referencedColumnName: "accessToken" },
@@ -97,7 +97,7 @@ export class Token implements OAuthToken {
   private setRefreshToken(refreshToken?: string) {
     if (refreshToken) {
       this.refreshToken = refreshToken ?? generateRandomToken();
-      this.refreshTokenExpiresAt = new DateInterval("1 month").getEndDate();
+      this.refreshTokenExpiresAt = new DateInterval("30d").getEndDate();
     }
   }
 }

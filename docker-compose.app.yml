@@ -44,12 +44,12 @@ services:
       - mailhog
       - redis
 
-  migrate-up-init:
+  seed-init:
     image: jasonraimondi/scratchy:dev
     command:
       - npm
       - run
-      - migrate:up:docker
+      - seed
     env_file:
       - .env.docker
     depends_on:

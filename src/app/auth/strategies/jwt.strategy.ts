@@ -9,7 +9,7 @@ import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  private readonly logger = new Logger(JwtStrategy.name);
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(private userRepository: UserRepo) {
     super({

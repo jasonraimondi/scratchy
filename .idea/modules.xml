@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../scratchy-nextjs/.idea/graphql-nextjs.iml" filepath="$PROJECT_DIR$/../scratchy-nextjs/.idea/graphql-nextjs.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/graphql-scratchy.iml" filepath="$PROJECT_DIR$/.idea/graphql-scratchy.iml" />
     </modules>
   </component>

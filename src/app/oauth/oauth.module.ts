@@ -6,6 +6,7 @@ import csurf from "csurf";
 import { HelpController } from "~/app/oauth/controllers/_help.controller";
 import { AuthorizeController } from "~/app/oauth/controllers/authorize.controller";
 import { LoginController } from "~/app/oauth/controllers/login.controller";
+import { LogoutController } from "~/app/oauth/controllers/logout.controller";
 import { ScopesController } from "~/app/oauth/controllers/scopes.controller";
 import { TokenController } from "~/app/oauth/controllers/token.controller";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
@@ -21,7 +22,14 @@ import { LoggerModule } from "~/lib/logger/logger.module";
 import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
-  controllers: [HelpController, AuthorizeController, LoginController, ScopesController, TokenController],
+  controllers: [
+    HelpController,
+    AuthorizeController,
+    LoginController,
+    LogoutController,
+    ScopesController,
+    TokenController,
+  ],
   imports: [
     TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]),
     RepositoryModule,
@@ -34,7 +42,7 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
 })
 export class OAuthModule {
   constructor(private readonly oauth: AuthorizationServer) {
-    this.oauth.enableGrantType("client_credentials");
+    // this.oauth.enableGrantType("client_credentials");
     this.oauth.enableGrantType("authorization_code");
     this.oauth.enableGrantType("refresh_token");
   }

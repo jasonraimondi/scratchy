@@ -7,6 +7,8 @@ services:
       POSTGRES_DB: scratchy
       POSTGRES_USER: scratchy
       POSTGRES_PASSWORD: secret
+      TZ: UTC
+      PGTZ: UTC
     ports:
       - 30532:5432
     volumes:

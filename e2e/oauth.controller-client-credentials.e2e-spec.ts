@@ -13,7 +13,7 @@ import { ScopeRepo } from "../src/app/oauth/repositories/scope.repository";
 import { attachMiddlewares } from "../src/lib/middlewares/attach_middlewares";
 import { createTestingModule } from "../test/app_testing.module";
 
-describe("oauth2 client_credentials e2e", () => {
+describe.skip("oauth2 client_credentials e2e", () => {
   let app: INestApplication;
   let moduleRef: TestingModule;
 

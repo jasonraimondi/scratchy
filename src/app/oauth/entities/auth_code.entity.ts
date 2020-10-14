@@ -23,7 +23,7 @@ export class AuthCode implements OAuthAuthCode {
   @Length(64, 128)
   code: string;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE"  })
   @JoinColumn({ name: "userId" })
   user?: User;
 
@@ -57,7 +57,7 @@ export class AuthCode implements OAuthAuthCode {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToMany(() => Scope)
+  @ManyToMany(() => Scope, { onDelete: "CASCADE", onUpdate: "CASCADE"  })
   @JoinTable({
     name: "oauth_auth_code_scopes",
     joinColumn: { name: "authCodeCode", referencedColumnName: "code" },
@@ -75,7 +75,7 @@ export class AuthCode implements OAuthAuthCode {
     if (data?.scopes) this.scopes = data.scopes;
     this.code = data?.code ?? generateRandomToken();
     // @todo the new date interval is misleading here;
-    this.expiresAt = data?.expiresAt ?? new DateInterval("10m").getEndDate();
+    this.expiresAt = data?.expiresAt ?? new DateInterval("1m").getEndDate();
   }
 
   private setClient(client?: Client) {
@@ -93,6 +93,7 @@ export class AuthCode implements OAuthAuthCode {
   }
 
   get isExpired(): boolean {
+    console.log(new Date(), this.expiresAt);
     return new Date() > this.expiresAt;
   }
 }

@@ -21,6 +21,5 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
     }),
   ],
   providers: [JwtStrategy, ForgotPasswordResolver, LogoutResolver],
-  exports: [JwtModule],
 })
 export class AuthModule {}
