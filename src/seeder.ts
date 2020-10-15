@@ -3,20 +3,20 @@ import "dotenv/config";
 import "reflect-metadata";
 import "source-map-support/register";
 import "tsconfig-paths/register";
+
 import { AppModule } from "~/app/app.module";
-import {
-  exampleClientId,
-  exampleClientRedirectUri, exampleScope1Name,
-  exampleScope2Name,
-  exampleUserId,
-} from "~/app/oauth/controllers/_help.controller";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { User } from "~/entity/user/user.entity";
-
 import { UserRepo } from "~/lib/repositories/user/user.repository";
+
+const exampleUserId = "dcaecd32-00e7-4505-bf90-db917fff7c89";
+const exampleClientId = "39ce3891-7e0f-4f87-9bc0-db7cc2902266";
+const exampleClientRedirectUri = "http://localhost:8080/oauth2/callback/self";
+const exampleScope1Name = "contacts.read";
+const exampleScope2Name = "contacts.write";
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

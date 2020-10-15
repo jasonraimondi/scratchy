@@ -1,36 +1,49 @@
 {% extends "oauth/layouts/index.njk" %}
 
 {% block main %}
-<form action="{{ loginFormAction }}" method="POST">
+  <p>Here we need to decide if we want to log in with google or with email</p>
+  <p>If it is with email, then we should show the following form:</p>
+
+
+  <a href="/oauth2/google" class="button">Login With Google</a>
+
+  <form action="{{ loginFormAction }}" method="POST">
     <h1>Login</h1>
 
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     <fieldset>
-        <label>
-            Email
-            <input type="email" name="email" value="jason@raimondi.us" required>
-        </label>
-        <label>
-            Password
-            <input type="password" name="password" value="jasonraimondi" required>
-        </label>
+      <label>
+        Email
+        <input type="email" name="email" value="jason@raimondi.us" required>
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" value="jasonraimondi" required>
+      </label>
 
-        <a href="{{ forgotPasswordLink }}">Forgot Your Password?</a>
+      <a href="{{ forgotPasswordLink }}">Forgot Your Password?</a>
 
-        <div>
-            <button type="submit">Login</button>
-        </div>
+      <div>
+        <button type="submit" class="button">Login</button>
+      </div>
     </fieldset>
 
-    <p><a href="/oauth2/help">OAUTH LOGIN</a></p>
-</form>
+  </form>
 {% endblock %}
 
 {% block styles %}
-<style>
+  <style>
+    .button {
+      background-color: tomato;
+      color: white;
+      padding: 1rem;
+      text-decoration: none;
+    }
+
+
     label {
       display: block;
     }
-</style>
+  </style>
 {% endblock %}

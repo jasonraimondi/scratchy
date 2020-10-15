@@ -16,6 +16,7 @@ import { v4 } from "uuid";
 
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
+import { UnauthorizedException } from "~/entity/user/exceptions/unauthorized.exception";
 
 export interface ICreateUser {
   email: string;
@@ -97,6 +98,9 @@ export class User implements OAuthUser {
   @Column("int")
   tokenVersion: number;
 
+  @Column({ nullable: true })
+  oauthGoogleIdentifier?: string;
+
   @Field(() => [Role], { nullable: "itemsAndList", defaultValue: [] })
   @ManyToMany(() => Role, { onDelete: "CASCADE" })
   @JoinTable({
@@ -112,7 +116,7 @@ export class User implements OAuthUser {
 
   @Field(() => Boolean)
   get isActive(): boolean {
-    return this.isEmailConfirmed && !!this.password;
+    return this.isEmailConfirmed;
   }
 
   @Field(() => String, { nullable: true })
@@ -128,10 +132,11 @@ export class User implements OAuthUser {
   }
 
   async verify(password: string) {
-    if (!this.password) throw new Error("user must create password");
-    if (!this.isActive) throw new Error("user is not active");
+    if (!this.password && this.oauthGoogleIdentifier) throw UnauthorizedException.invalidUser("user must login with google or reset password");
+    if (!this.password) throw UnauthorizedException.invalidUser("user must create password");
+    if (!this.isActive) throw UnauthorizedException.invalidUser("user is not active");
     if (!(await compare(password, this.password))) {
-      throw new Error("invalid password");
+      throw UnauthorizedException.invalidUser("invalid password");
     }
   }
 
@@ -143,3 +148,5 @@ export class User implements OAuthUser {
     };
   }
 }
+
+

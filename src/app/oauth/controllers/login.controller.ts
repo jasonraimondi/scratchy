@@ -9,6 +9,7 @@ import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
+import { LoginService } from "~/app/oauth/services/login.service";
 
 export class LoginForm {
   @IsEmail()
@@ -23,7 +24,7 @@ export class LoginController {
     private readonly scopeRepo: ScopeRepo,
     private readonly userRepository: OAuthUserRepo,
     private readonly oauth: AuthorizationServer,
-    private readonly jwt: MyJwtService,
+    private readonly loginService: LoginService,
   ) {}
 
   @Get()
@@ -31,39 +32,25 @@ export class LoginController {
   async get(@Req() req: Request) {
     await this.oauth.validateAuthorizationRequest(req);
 
-    const query = req.query as any;
-
     return {
       csrfToken: req.csrfToken(),
-      loginFormAction: "/oauth2/login?" + querystring.stringify(query),
+      loginFormAction: "/oauth2/login?" + querystring.stringify(req.query as any),
     };
   }
 
   @Post()
   async post(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
+
     await this.oauth.validateAuthorizationRequest(req);
 
     const { email, password } = req.body;
-
-    const query = req.query as any;
 
     const user = await this.userRepository.findByEmail(email);
 
     await user.verify(password);
 
-    await this.userRepository.incrementLastLogin(user, ipAddr);
+    const query = querystring.stringify(req.query as any)
 
-    const jwt = await this.jwt.sign({
-      userId: user.id,
-      email: user.email,
-      isEmailConfirmed: user.isEmailConfirmed,
-    });
-
-    // @todo extract cookie ttl to config
-    const options = this.oauth.cookieOptions(new DateInterval("1m"));
-
-    res.cookie("jwt", jwt, options);
-    res.status(HttpStatus.FOUND);
-    res.redirect("/oauth2/authorize?" + querystring.stringify(query));
+    await this.loginService.loginAndRedirect(user, ipAddr, res, query);
   }
 }

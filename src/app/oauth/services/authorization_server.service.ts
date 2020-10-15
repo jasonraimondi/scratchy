@@ -26,11 +26,12 @@ export class AuthorizationServer extends JmondiAuthorizationServer {
     throw e;
   }
 
-  cookieOptions(cookieTTL?: DateInterval): CookieOptions {
+  cookieOptions(cookieTTL?: DateInterval, extraParams?: Record<string, unknown>): CookieOptions {
     return {
       httpOnly: true,
       domain: ENV.domain,
       expires: cookieTTL?.getEndDate() ?? new Date(0),
+      ...extraParams,
     };
   }
 

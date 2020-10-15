@@ -4,7 +4,6 @@ import { PassportModule } from "@nestjs/passport";
 
 import { ForgotPasswordResolver } from "~/app/auth/resolvers/forgot_password.resolver";
 import { LogoutResolver } from "~/app/auth/resolvers/logout.resolver";
-import { JwtStrategy } from "~/app/auth/strategies/jwt.strategy";
 import { ENV } from "~/config/environment";
 import { EmailModule } from "~/lib/emails/email.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
@@ -20,6 +19,6 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
       secret: ENV.jwtSecret,
     }),
   ],
-  providers: [JwtStrategy, ForgotPasswordResolver, LogoutResolver],
+  providers: [ForgotPasswordResolver, LogoutResolver],
 })
 export class AuthModule {}

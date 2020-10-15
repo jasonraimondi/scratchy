@@ -13,8 +13,6 @@ export class TokenController {
     const request = new OAuthRequest(req);
     const response = new OAuthResponse(res);
 
-    console.log("I AM HERE");
-
     try {
       const tokenResponse = await this.oauth.respondToAccessTokenRequest(request, response);
       res.set(tokenResponse.headers);

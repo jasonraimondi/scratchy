@@ -3,8 +3,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import csurf from "csurf";
 
-import { HelpController } from "~/app/oauth/controllers/_help.controller";
 import { AuthorizeController } from "~/app/oauth/controllers/authorize.controller";
+import { GoogleController } from "~/app/oauth/controllers/providers/google.controller";
 import { LoginController } from "~/app/oauth/controllers/login.controller";
 import { LogoutController } from "~/app/oauth/controllers/logout.controller";
 import { ScopesController } from "~/app/oauth/controllers/scopes.controller";
@@ -16,6 +16,8 @@ import { Token } from "~/app/oauth/entities/token.entity";
 import { repositoryProviders } from "~/app/oauth/oauth.providers";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
+import { LoginService } from "~/app/oauth/services/login.service";
+import { GoogleStrategy } from "~/app/oauth/strategies/google.strategy";
 import { ENV } from "~/config/environment";
 import { User } from "~/entity/user/user.entity";
 import { LoggerModule } from "~/lib/logger/logger.module";
@@ -23,12 +25,12 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
 
 @Module({
   controllers: [
-    HelpController,
     AuthorizeController,
     LoginController,
     LogoutController,
     ScopesController,
     TokenController,
+    GoogleController,
   ],
   imports: [
     TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]),
@@ -38,7 +40,10 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
       secret: ENV.jwtSecret,
     }),
   ],
-  providers: [...repositoryProviders, AuthorizationServer.register(), MyJwtService],
+  providers: [
+    GoogleStrategy,
+    LoginService,
+    ...repositoryProviders, AuthorizationServer.register(), MyJwtService],
 })
 export class OAuthModule {
   constructor(private readonly oauth: AuthorizationServer) {

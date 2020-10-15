@@ -43,8 +43,4 @@ export class UserRepo extends BaseRepo<User> {
   private get qb() {
     return this.repository.createQueryBuilder("users");
   }
-
-  async getByUserIdentifier(userIdentifier: string): Promise<User> {
-    return await this.findById(userIdentifier);
-  }
 }
