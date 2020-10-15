@@ -101,6 +101,9 @@ export class User implements OAuthUser {
   @Column({ nullable: true })
   oauthGoogleIdentifier?: string;
 
+  @Column({ nullable: true })
+  oauthGithubIdentifier?: string;
+
   @Field(() => [Role], { nullable: "itemsAndList", defaultValue: [] })
   @ManyToMany(() => Role, { onDelete: "CASCADE" })
   @JoinTable({

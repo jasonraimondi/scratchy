@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import csurf from "csurf";
 
 import { AuthorizeController } from "~/app/oauth/controllers/authorize.controller";
+import { GithubController } from "~/app/oauth/controllers/providers/github.controller";
 import { GoogleController } from "~/app/oauth/controllers/providers/google.controller";
 import { LoginController } from "~/app/oauth/controllers/login.controller";
 import { LogoutController } from "~/app/oauth/controllers/logout.controller";
@@ -17,6 +18,7 @@ import { repositoryProviders } from "~/app/oauth/oauth.providers";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
 import { LoginService } from "~/app/oauth/services/login.service";
+import { GithubStrategy } from "~/app/oauth/strategies/github.strategy";
 import { GoogleStrategy } from "~/app/oauth/strategies/google.strategy";
 import { ENV } from "~/config/environment";
 import { User } from "~/entity/user/user.entity";
@@ -31,6 +33,7 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
     ScopesController,
     TokenController,
     GoogleController,
+    GithubController,
   ],
   imports: [
     TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]),
@@ -42,6 +45,7 @@ import { RepositoryModule } from "~/lib/repositories/repository.module";
   ],
   providers: [
     GoogleStrategy,
+    GithubStrategy,
     LoginService,
     ...repositoryProviders, AuthorizationServer.register(), MyJwtService],
 })
