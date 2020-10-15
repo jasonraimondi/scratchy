@@ -33,6 +33,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
 
     try {
       user = await this.userRepository.findByEmail(email);
+      if (!user.oauthGoogleIdentifier) {
+        user.oauthGoogleIdentifier = profile.id;
+        await this.userRepository.save(user);
+      }
     } catch (e) {
       user = await User.create({
         email,
