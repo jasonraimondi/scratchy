@@ -135,7 +135,8 @@ export class User implements OAuthUser {
   }
 
   async verify(password: string) {
-    if (!this.password && this.oauthGoogleIdentifier) throw UnauthorizedException.invalidUser("user must login with google or reset password");
+    if (!this.password && this.oauthGoogleIdentifier)
+      throw UnauthorizedException.invalidUser("user must login with google or reset password");
     if (!this.password) throw UnauthorizedException.invalidUser("user must create password");
     if (!this.isActive) throw UnauthorizedException.invalidUser("user is not active");
     if (!(await compare(password, this.password))) {
@@ -151,5 +152,3 @@ export class User implements OAuthUser {
     };
   }
 }
-
-

@@ -13,6 +13,7 @@ import {
 } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
+import { ENV } from "~/config/environment";
 import { generateRandomToken } from "~/lib/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
@@ -42,7 +43,7 @@ export class Token implements OAuthToken {
   @Column("uuid")
   clientId: string;
 
-  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE"  })
+  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinColumn({ name: "userId" })
   user?: User;
 
@@ -68,7 +69,7 @@ export class Token implements OAuthToken {
     this.setUser(data?.user);
     this.accessToken = data?.accessToken ?? generateRandomToken();
     // @todo the new date interval is misleading here;
-    this.accessTokenExpiresAt = data?.accessTokenExpiresAt ?? new DateInterval("1h").getEndDate();
+    this.accessTokenExpiresAt = data?.accessTokenExpiresAt ?? ENV.accessTokenDuration.getEndDate();
   }
 
   get isRevoked() {
@@ -97,7 +98,7 @@ export class Token implements OAuthToken {
   private setRefreshToken(refreshToken?: string) {
     if (refreshToken) {
       this.refreshToken = refreshToken ?? generateRandomToken();
-      this.refreshTokenExpiresAt = new DateInterval("30d").getEndDate();
+      this.refreshTokenExpiresAt = ENV.refreshTokenDuration.getEndDate();
     }
   }
 }

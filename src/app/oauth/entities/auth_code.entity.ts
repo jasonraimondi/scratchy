@@ -13,6 +13,7 @@ import {
 } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
+import { ENV } from "~/config/environment";
 import { generateRandomToken } from "~/lib/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/entity/user/user.entity";
@@ -23,7 +24,7 @@ export class AuthCode implements OAuthAuthCode {
   @Length(64, 128)
   code: string;
 
-  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE"  })
+  @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinColumn({ name: "userId" })
   user?: User;
 
@@ -57,7 +58,7 @@ export class AuthCode implements OAuthAuthCode {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToMany(() => Scope, { onDelete: "CASCADE", onUpdate: "CASCADE"  })
+  @ManyToMany(() => Scope, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinTable({
     name: "oauth_auth_code_scopes",
     joinColumn: { name: "authCodeCode", referencedColumnName: "code" },
@@ -74,8 +75,7 @@ export class AuthCode implements OAuthAuthCode {
     this.setUser(data?.user);
     if (data?.scopes) this.scopes = data.scopes;
     this.code = data?.code ?? generateRandomToken();
-    // @todo the new date interval is misleading here;
-    this.expiresAt = data?.expiresAt ?? new DateInterval("1m").getEndDate();
+    this.expiresAt = data?.expiresAt ?? ENV.authCodeDuration.getEndDate();
   }
 
   private setClient(client?: Client) {

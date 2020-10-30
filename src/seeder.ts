@@ -1,8 +1,9 @@
-import { NestFactory } from "@nestjs/core";
 import "dotenv/config";
 import "reflect-metadata";
 import "source-map-support/register";
 import "tsconfig-paths/register";
+
+import { NestFactory } from "@nestjs/core";
 
 import { AppModule } from "~/app/app.module";
 import { Client } from "~/app/oauth/entities/client.entity";

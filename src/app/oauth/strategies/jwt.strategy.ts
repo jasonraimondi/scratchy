@@ -1,17 +1,16 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { Token } from "~/app/oauth/entities/token.entity";
 
-import type { IJWTToken } from "~/app/auth/dto/refresh_token.dto";
+import { TokenRepo } from "~/app/oauth/repositories/token.repository";
 import { ENV } from "~/config/environment";
-
-import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   private readonly logger = new Logger(this.constructor.name);
 
-  constructor(private userRepository: UserRepo) {
+  constructor(private tokenRepo: TokenRepo) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -19,13 +18,33 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: IJWTToken): Promise<any> {
-    this.logger.debug(payload);
-    this.logger.debug("JASON I AM IN THE jwt.strategy");
-    try {
-      return await this.userRepository.findByEmail(payload.email);
-    } catch (_) {
+  async validate(payload: any): Promise<any> {
+    const { jti, exp } = payload;
+
+    const isExpired = Date.now() / 1000 > (exp ?? 0);
+    this.logger.log({ jti, isExpired })
+
+    if (isExpired) {
       throw new UnauthorizedException();
     }
+
+    let token: Token;
+
+    try {
+      token = await this.tokenRepo.findById(jti);
+      this.logger.log("FOUND TOKEN")
+    } catch (_) {
+      throw new UnauthorizedException("token not found");
+    }
+
+    if (!token || token.isRevoked) {
+      this.logger.log("TOKEN IS EXPIRED")
+      throw new UnauthorizedException("token revoked");
+    }
+
+    this.logger.log("SUCCESS")
+
+
+    return token.user;
   }
 }

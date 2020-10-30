@@ -10,7 +10,7 @@ export class MyJwtService implements JwtInterface {
     return this.jwt.decode(encryptedData);
   }
 
-  sign(payload: string | Buffer | Record<string, unknown>): Promise<string> {
+  sign(payload: string | Buffer | Record<string, unknown> | any): Promise<string> {
     return this.jwt.signAsync(payload);
   }
 

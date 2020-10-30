@@ -1,10 +1,12 @@
-import { AuthorizationRequest, base64encode, DateInterval, OAuthException, OAuthRequest } from "@jmondi/oauth2-server";
+import { AuthorizationRequest, base64encode, DateInterval, OAuthRequest } from "@jmondi/oauth2-server";
 import { Controller, Get, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 import querystring from "querystring";
+import { AuthorizationCookie, COOKIES } from "~/app/oauth/controllers/scopes.controller";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
 import { User } from "~/entity/user/user.entity";
+import { LoggerService } from "~/lib/logger/logger.service";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 
 @Controller("oauth2/authorize")
@@ -13,7 +15,9 @@ export class AuthorizeController {
     private readonly oauth: AuthorizationServer,
     private readonly userRepository: UserRepo,
     private readonly jwt: MyJwtService,
+    private readonly logger: LoggerService,
   ) {
+    this.logger.setContext(this.constructor.name);
   }
 
   @Get()
@@ -29,14 +33,25 @@ export class AuthorizeController {
 
       if (!authRequest.user) {
         const str = this.getRedirectQuery(authRequest);
-        res.cookie("redirect_query_string", base64encode(str), this.oauth.cookieOptions(new DateInterval("10m")))
+        res.cookie(COOKIES.redirectHelper, base64encode(str), this.oauth.cookieOptions({ maxAge: 0 }));
         res.redirect("/oauth2/login?" + str);
         return;
       }
 
+      let authorizationCookie: AuthorizationCookie | any = undefined;
+
+      this.logger.log("COOKIES THINGS" + req.cookies[COOKIES.authorization]);
+
+      if (req.cookies[COOKIES.authorization]) {
+        authorizationCookie = await this.jwt.verify(req.cookies[COOKIES.authorization]);
+      }
+
+      this.logger.log({ authorizationCookie });
+
       // At this point you should redirect the user to an authorization page.
       // This form will ask the user to approve the client and the scopes requested.
-      authRequest.isAuthorizationApproved = authRequest.scopes.length === 0 || req.cookies.isAuthenticated === "true";
+      authRequest.isAuthorizationApproved =
+        authRequest.scopes.length === 0 || authorizationCookie?.isAuthorizationApproved;
 
       // Once the user has approved or denied the client update the status
       // (true = approved, false = denied)
@@ -59,11 +74,11 @@ export class AuthorizeController {
   }
 
   private async getUserFromRequest(req: any): Promise<User | undefined> {
-    if (!req.cookies.jwt) {
+    if (!req.cookies[COOKIES.token]) {
       return;
     }
 
-    const decoded: any = this.jwt.decode(req.cookies.jwt);
+    const decoded: any = this.jwt.decode(req.cookies[COOKIES.token]);
 
     if (!decoded.userId) {
       return;
@@ -73,7 +88,7 @@ export class AuthorizeController {
   }
 
   private getRedirectQuery(authRequest: AuthorizationRequest): string {
-    const query = querystring.stringify({
+    return querystring.stringify({
       response_type: "code",
       client_id: authRequest.client?.id,
       redirect_uri: authRequest.redirectUri,
@@ -83,8 +98,5 @@ export class AuthorizeController {
       code_challenge_method: authRequest.codeChallengeMethod,
       user_id: authRequest.user?.id,
     });
-    return query;
-    // const encodedQueryString = base64encode(query);
-    // return encodedQueryString;
   }
 }

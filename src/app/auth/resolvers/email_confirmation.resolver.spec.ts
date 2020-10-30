@@ -1,6 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { EmailConfirmationResolver } from "~/app/signup/resolvers/email_confirmation.resolver";
+import { EmailConfirmationResolver } from "~/app/auth/resolvers/email_confirmation.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
 import { VerifyEmailInput } from "~/app/user/dtos/verify_email.input";
 import { Permission } from "~/entity/role/permission.entity";

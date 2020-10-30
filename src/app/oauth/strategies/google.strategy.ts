@@ -21,7 +21,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     this.logger = new Logger(this.constructor.name);
   }
 
-  async validate(req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback): Promise<any> {
+  async validate(
+    req: Request,
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+    done: VerifyCallback,
+  ): Promise<any> {
     const { name, emails } = profile;
     this.logger.log(profile);
     this.logger.log(req.query);

@@ -2,7 +2,7 @@ import { TestingModule } from "@nestjs/testing";
 import { validate } from "class-validator";
 import faker from "faker";
 
-import { RegisterResolver } from "~/app/signup/resolvers/register.resolver";
+import { RegisterResolver } from "~/app/auth/resolvers/register.resolver";
 import { SignupModule } from "~/app/signup/signup.module";
 import { RegisterInput } from "~/app/user/dtos/register.input";
 import { Permission } from "~/entity/role/permission.entity";

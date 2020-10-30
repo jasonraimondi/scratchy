@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
+import { ENV } from "~/config/environment";
 import { User } from "~/entity/user/user.entity";
 import { generateRandomToken } from "~/lib/random_token";
 import { BaseRepo } from "~/lib/repositories/base.repository";
@@ -14,6 +15,17 @@ import { BaseRepo } from "~/lib/repositories/base.repository";
 export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {
   constructor(@InjectRepository(Token) repository: Repository<Token>) {
     super(repository);
+  }
+
+  async findById(id: string): Promise<Token> {
+    return super.findById(id, {
+      join: {
+        alias: "token",
+        leftJoinAndSelect: {
+          user: "token.user",
+        },
+      },
+    });
   }
 
   async issueToken(client: Client, scopes: Scope[], user?: User): Promise<Token> {
@@ -40,7 +52,7 @@ export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {
 
   async issueRefreshToken(accessToken: Token): Promise<Token> {
     accessToken.refreshToken = generateRandomToken();
-    accessToken.refreshTokenExpiresAt = new DateInterval("1h").getEndDate();
+    accessToken.refreshTokenExpiresAt = ENV.refreshTokenDuration.getEndDate();
     return await this.save(accessToken);
   }
 

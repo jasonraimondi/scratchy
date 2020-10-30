@@ -19,8 +19,10 @@ export class ScopeRepo extends BaseRepo<Scope> implements OAuthScopeRepository {
     client: Client,
     userIdentifier?: string,
   ): Promise<Scope[]> {
-
-    console.log("SCOPES", client.scopes?.map(scope => scope.name))
+    console.log(
+      "SCOPES",
+      client.scopes?.map((scope) => scope.name),
+    );
 
     return scopes;
   }

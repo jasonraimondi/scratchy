@@ -1,4 +1,3 @@
-import { DateInterval } from "@jmondi/oauth2-server";
 import { Controller, Get, Post, Render, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 import querystring from "querystring";
@@ -6,6 +5,11 @@ import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
+import { MyJwtService } from "~/app/oauth/services/jwt.service";
+
+export interface AuthorizationCookie {
+  isAuthorizationApproved: boolean;
+}
 
 @Controller("oauth2/scopes")
 export class ScopesController {
@@ -14,6 +18,7 @@ export class ScopesController {
     private readonly clientRepo: ClientRepo,
     private readonly scopeRepo: ScopeRepo,
     private readonly userRepository: OAuthUserRepo,
+    private readonly jwt: MyJwtService,
   ) {}
 
   @Get()
@@ -53,16 +58,20 @@ export class ScopesController {
 
     const query = req.query as any;
 
-    if (accept === "yes") {
-      res.cookie("isAuthenticated", true, this.oauth.cookieOptions(new DateInterval("1m")));
-      res.redirect("/oauth2/authorize?" + querystring.stringify(query));
+    if (accept !== "yes") {
+      res.redirect(query.redirect_uri + "?error=user declined scopes");
       return;
     }
 
-    const qs = querystring.stringify({
-      error: querystring.escape("user declined scopes"),
-    });
-
-    res.redirect(query.redirect_uri + "?" + qs);
+    const authorizationCookie: AuthorizationCookie = { isAuthorizationApproved: true };
+    const fooby = await this.jwt.sign(authorizationCookie);
+    res.cookie(COOKIES.authorization, fooby, this.oauth.cookieOptions());
+    res.redirect("/oauth2/authorize?" + querystring.stringify(query));
   }
+}
+
+export enum COOKIES {
+  authorization = "axs__authorization", // accepted scopes
+  token = "axs__user", // logged in
+  redirectHelper = "axs__redirect", // catch cb from external oauth
 }

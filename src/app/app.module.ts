@@ -1,15 +1,15 @@
 import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { JwtModule } from "@nestjs/jwt";
+import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
 import type { Request, Response } from "express";
-import { AppController } from "~/app/app.controller";
 
+import { AppController } from "~/app/app.controller";
 import { AuthModule } from "~/app/auth/auth.module";
 import { OAuthModule } from "~/app/oauth/oauth.module";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
-import { SignupModule } from "~/app/signup/signup.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/config/environment";
 import { MyContext } from "~/config/my_context";
@@ -22,6 +22,7 @@ import { CustomNamingStrategy } from "~/lib/naming";
 import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
 import { UserRepo } from "~/lib/repositories/user/user.repository";
 import { HealthcheckController } from "./healthcheck/healthcheck.controller";
+import { RoomModule } from "./room/room.module";
 
 const imports = [];
 
@@ -29,20 +30,21 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
 
 @Module({
   imports: [
+    RoomModule,
+    OAuthModule,
+    AuthModule,
+    UserModule,
+    LoggerModule,
     JwtModule.register({
       secret: ENV.jwtSecret,
     }),
-    OAuthModule,
-    AuthModule,
-    SignupModule,
-    UserModule,
-    LoggerModule,
+    ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forRoot({
       type: "postgres",
       url: ENV.databaseURL,
       entities: [join(__dirname, "../**/*.entity.ts")],
-      logging: true,
+      logging: false,
       synchronize: true,
       namingStrategy: new CustomNamingStrategy(),
       // maxQueryExecutionTime: 0.2, // To log request runtime
@@ -53,7 +55,7 @@ if (ENV.isDevelopment) imports.push(QueueWorkerModule);
       playground: ENV.enablePlayground,
       autoSchemaFile: ENV.isDevelopment ? "schema.graphql" : false,
       context: ({ res, req }: { res: Response; req: Request }): Partial<MyContext | any> => ({
-        ipAddr: req.headers?.["x-forwarded-for"] || req.connection.remoteAddress,
+        ipAddr: req.ip,
         res,
         req,
       }),

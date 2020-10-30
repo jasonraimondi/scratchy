@@ -8,7 +8,6 @@ import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
 import { LoginService } from "~/app/oauth/services/login.service";
 
 export class LoginForm {
@@ -40,7 +39,6 @@ export class LoginController {
 
   @Post()
   async post(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
-
     await this.oauth.validateAuthorizationRequest(req);
 
     const { email, password } = req.body;
@@ -49,7 +47,7 @@ export class LoginController {
 
     await user.verify(password);
 
-    const query = querystring.stringify(req.query as any)
+    const query = querystring.stringify(req.query as any);
 
     await this.loginService.loginAndRedirect(user, ipAddr, res, query);
   }

@@ -1,51 +1,84 @@
 {% extends "oauth/layouts/index.njk" %}
 
 {% block main %}
-  <p>Here we need to decide if we want to log in with google or with email</p>
-  <p>If it is with email, then we should show the following form:</p>
 
+  <h1>Scratchy Login</h1>
 
-  <a href="/oauth2/google" class="button">Login With Google</a>
+  <div x-data="{ open: false }">
+    <button @click="open = !open" class="button email">Login with Email</button>
 
-  <a href="/oauth2/github" class="button">Login With GitHub</a>
+    <a href="/oauth2/google" class="button google">{% include "oauth/partials/google_svg.njk" %}Login with Google</a>
 
-  <form action="{{ loginFormAction }}" method="POST">
-    <h1>Login</h1>
+    <a href="/oauth2/github" class="button github">{% include "oauth/partials/github_svg.njk" %}Login with GitHub</a>
 
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <form action="{{ loginFormAction }}" method="POST" x-show="open">
 
-    <fieldset>
-      <label>
-        Email
-        <input type="email" name="email" value="jason@raimondi.us" required>
-      </label>
-      <label>
-        Password
-        <input type="password" name="password" value="jasonraimondi" required>
-      </label>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-      <a href="{{ forgotPasswordLink }}">Forgot Your Password?</a>
+      <fieldset>
+        <label>
+          Email
+          <input type="email" name="email" value="jason@raimondi.us" required>
+        </label>
 
-      <div>
-        <button type="submit" class="button">Login</button>
-      </div>
-    </fieldset>
+        <label>
+          Password
+          <input type="password" name="password" value="jasonraimondi" required>
+        </label>
 
-  </form>
+        <a href="{{ forgotPasswordLink }}">Forgot Your Password?</a>
+
+        <div>
+          <button type="submit" class="button">Login</button>
+        </div>
+      </fieldset>
+
+    </form>
+  </div>
 {% endblock %}
 
 {% block styles %}
   <style>
+    html {
+      font-family: Helvetica, Arial, sans-serif;
+    }
+
     .button {
       background-color: tomato;
       color: white;
-      padding: 1rem;
+      padding: 0.5rem;
       text-decoration: none;
+      font-weight: 600;
+      border-radius: 4px;
     }
 
+    .button svg {
+      max-height: 1em;
+      fill: currentColor;
+      stroke: currentColor;
+      margin-right: 0.3rem;
+      position: relative;
+      top: 2px;
+    }
+
+    .button.google {
+      background-color: #4285F4;
+    }
+
+    .button.github {
+      background-color: #181717;
+    }
 
     label {
       display: block;
     }
+
+    fieldset {
+      padding: 0;
+    }
   </style>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.0/dist/alpine.min.js" defer></script>
 {% endblock %}

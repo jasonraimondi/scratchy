@@ -1,3 +1,4 @@
+import { DateInterval } from "@jmondi/oauth2-server";
 import { join } from "path";
 
 const required = ["JWT_SECRET", "DOMAIN"].filter((key) => !process.env.hasOwnProperty(key));
@@ -23,4 +24,8 @@ export const ENV = {
   baseURL: process.env.BASE_URL,
   corsURLS: (process.env.CORS_URLS ?? "").split(","),
   emailTemplatesDir: join(__dirname, "../../templates/emails"),
+  loginDuration: new DateInterval("1h"),
+  authCodeDuration: new DateInterval("10m"),
+  accessTokenDuration: new DateInterval("1h"),
+  refreshTokenDuration: new DateInterval("30d"),
 };

@@ -6,4 +6,4 @@ import { AuthCodeRepo } from "~/app/oauth/repositories/auth_code.repository";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 
-export const repositoryProviders: Provider[] = [ClientRepo, TokenRepo, AuthCodeRepo, ScopeRepo, OAuthUserRepo];
+export const repositories: Provider[] = [ClientRepo, TokenRepo, AuthCodeRepo, ScopeRepo, OAuthUserRepo];

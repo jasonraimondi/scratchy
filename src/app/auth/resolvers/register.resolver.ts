@@ -3,7 +3,6 @@ import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import { RegisterInput } from "~/app/user/dtos/register.input";
 import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
 import { User } from "~/entity/user/user.entity";
-
 import { RegisterEmail } from "~/lib/emails/modules/signup/register.email";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { EmailConfirmationRepo } from "~/lib/repositories/user/email_confirmation.repository";

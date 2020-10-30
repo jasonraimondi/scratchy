@@ -22,7 +22,13 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
     this.logger = new Logger(this.constructor.name);
   }
 
-  async validate(req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback): Promise<any> {
+  async validate(
+    req: Request,
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+    done: VerifyCallback,
+  ): Promise<any> {
     const { emails } = profile;
     const email = emails?.[0].value;
     let user: User;

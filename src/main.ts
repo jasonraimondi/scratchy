@@ -1,14 +1,15 @@
 process.env.TZ = "UTC";
 
-import { ValidationPipe } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
-import type { NestExpressApplication } from "@nestjs/platform-express";
-import "dotenv/config";
-import nunjucks from "nunjucks";
-import { join } from "path";
 import "reflect-metadata";
 import "source-map-support/register";
 import "tsconfig-paths/register";
+import "dotenv/config";
+
+import { ValidationPipe } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import type { NestExpressApplication } from "@nestjs/platform-express";
+import nunjucks from "nunjucks";
+import { join } from "path";
 
 import { AppModule } from "~/app/app.module";
 import { ENV } from "~/config/environment";
@@ -20,6 +21,7 @@ const logger = new LoggerService("__main__");
 (async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   attachMiddlewares(app);
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   // @todo configure cors

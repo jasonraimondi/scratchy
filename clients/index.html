@@ -1,0 +1,51 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"
+            integrity="sha512-RjPwl9YNS2z4nf50767Vg8dW2WLVv8WmKMYhZVBgiCJaiGVNIjXcVcpzVLUzuojaUM5ACZefP6sXnaWkR0lj0w=="
+            crossorigin="anonymous"></script>
+    <script>
+      function appendEvent(list, text) {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(text));
+        list.appendChild(li);
+      }
+
+      function bootstrap() {
+        const list = document.getElementById("list-of-events");
+
+        const socket = io("http://localhost:3000");
+        socket.on("connect", function() {
+          console.log("Connected");
+          appendEvent(list, `connected`);
+
+          socket.emit("events", { test: "test" });
+          socket.emit("identity", 0, response => {
+            console.log("Identity:", response);
+            appendEvent(list, `Identity: ${JSON.stringify(response)}`);
+          });
+        });
+        socket.on("events", function(data) {
+          console.log("event", data);
+          appendEvent(list, `events: ${JSON.stringify(data)}`);
+        });
+        socket.on("exception", function(data) {
+          console.log("exception", data);
+          appendEvent(list, `exception: ${JSON.stringify(data)}`);
+        });
+        socket.on("disconnect", function() {
+          appendEvent(list, `disconnected`);
+          console.log("disconnect", data);
+          console.log("Disconnected");
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", bootstrap);
+    </script>
+</head>
+
+<body>
+<h1>Hello world</h1>
+<ul id="list-of-events">
+</ul>
+</body>
+</html>

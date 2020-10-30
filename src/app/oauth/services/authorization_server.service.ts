@@ -1,8 +1,8 @@
 import {
   AuthorizationServer as JmondiAuthorizationServer,
+  AuthorizationServerOptions,
   DateInterval,
   OAuthException,
-  AuthorizationServerOptions,
 } from "@jmondi/oauth2-server";
 import { CookieOptions, Response } from "express";
 import { AuthCodeRepo } from "~/app/oauth/repositories/auth_code.repository";
@@ -12,6 +12,8 @@ import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { TokenRepo } from "~/app/oauth/repositories/token.repository";
 import { MyJwtService } from "~/app/oauth/services/jwt.service";
 import { ENV } from "~/config/environment";
+
+type CustomCookieOptions = { cookieTTL?: DateInterval } & CookieOptions;
 
 export class AuthorizationServer extends JmondiAuthorizationServer {
   handleError(e: any, res: Response) {
@@ -26,11 +28,11 @@ export class AuthorizationServer extends JmondiAuthorizationServer {
     throw e;
   }
 
-  cookieOptions(cookieTTL?: DateInterval, extraParams?: Record<string, unknown>): CookieOptions {
+  cookieOptions({ cookieTTL, ...extraParams }: CustomCookieOptions = {}): CookieOptions {
     return {
       httpOnly: true,
       domain: ENV.domain,
-      expires: cookieTTL?.getEndDate() ?? new Date(0),
+      ...(cookieTTL ? { expires: cookieTTL?.getEndDate() } : {}),
       ...extraParams,
     };
   }
