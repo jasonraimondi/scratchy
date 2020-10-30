@@ -24,8 +24,8 @@ export class SendEmailProcessor {
     const { template, context, ...config } = job.data;
     if (!template) throw new Error(`Template not found ${template}`);
     await job.progress(5);
-    const html = await this.emailTemplateService.html(template, context);
-    const text = await this.emailTemplateService.txt(template, context);
+    const html = this.emailTemplateService.html(template, context);
+    const text = this.emailTemplateService.txt(template, context);
     await job.progress(25);
     await this.mailerService.sendMail({ ...config, html, text });
     await job.progress(100);

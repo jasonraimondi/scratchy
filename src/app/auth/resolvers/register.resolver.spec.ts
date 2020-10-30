@@ -1,9 +1,9 @@
 import { TestingModule } from "@nestjs/testing";
 import { validate } from "class-validator";
 import faker from "faker";
+import { AuthModule } from "~/app/auth/auth.module";
 
 import { RegisterResolver } from "~/app/auth/resolvers/register.resolver";
-import { SignupModule } from "~/app/signup/signup.module";
 import { RegisterInput } from "~/app/user/dtos/register.input";
 import { Permission } from "~/entity/role/permission.entity";
 import { Role } from "~/entity/role/role.entity";
@@ -27,7 +27,7 @@ describe("register.resolver", () => {
   beforeAll(async () => {
     moduleRef = await createTestingModule(
       {
-        imports: [SignupModule],
+        imports: [AuthModule],
       },
       entities,
     );
@@ -129,8 +129,8 @@ describe("register.resolver", () => {
       // assert
       expect(result).toBe(true);
       expect(emails.length).toBe(2);
-      expect(emails[0].template).toBe("signup/register");
-      expect(emails[1].template).toBe("signup/register");
+      expect(emails[0].template).toBe("auth/register");
+      expect(emails[1].template).toBe("auth/register");
     });
 
     test("resend emails throws for invalid user", async () => {

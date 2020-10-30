@@ -27,10 +27,11 @@ const logger = new LoggerService("__main__");
   // @todo configure cors
   app.enableCors();
 
-  nunjucks.configure(join(__dirname, "../templates"), {
+  nunjucks.configure(join(__dirname, ENV.templatesDir), {
     autoescape: true,
     express: app,
   });
+
   app.setViewEngine("njk");
 
   if (ENV.enableDebugging) {

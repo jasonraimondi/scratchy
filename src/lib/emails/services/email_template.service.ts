@@ -1,23 +1,21 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { promises } from "fs";
-import { compile } from "handlebars";
+import { Injectable } from "@nestjs/common";
 import mjml2html from "mjml";
+import nunjucks from "nunjucks";
 
 import { ENV } from "~/config/environment";
 
 @Injectable()
 export class EmailTemplateService {
-  private readonly logger = new Logger(EmailTemplateService.name);
-  private templatesDir = ENV.emailTemplatesDir;
+  private readonly nunjucks = nunjucks.configure(ENV.templatesDir, {
+    autoescape: true,
+  });
 
-  async txt(path: string, context = {}): Promise<string> {
-    const handlebarsTemplate = compile(await this.getFileFromPath(`${path}.txt`));
-    return handlebarsTemplate(this.mergeContext(context));
+  txt(path: string, context = {}): string {
+    return this.nunjucks.render(`emails/${path}.txt.njk`, this.mergeContext(context))
   }
 
-  async html(path: string, context = {}): Promise<string> {
-    const handlebarsTemplate = compile(await this.getFileFromPath(`${path}.html`));
-    let result = handlebarsTemplate(this.mergeContext(context));
+  html(path: string, context = {}): string {
+    let result = this.nunjucks.render(`emails/${path}.html.njk`, this.mergeContext(context));
     if (result.includes("<mjml>")) {
       const { html } = mjml2html(result);
       result = html;
@@ -31,14 +29,5 @@ export class EmailTemplateService {
       app_name: "Scratchy",
       app_homepage: "https://jasonraimondi.com",
     };
-  }
-
-  private async getFileFromPath(path: string) {
-    path = `${this.getTemplatesDir(path)}.hbs`;
-    return promises.readFile(path, "utf8");
-  }
-
-  private getTemplatesDir(template: string) {
-    return this.templatesDir + "/" + template;
   }
 }

@@ -8,17 +8,17 @@ describe("email_template", () => {
   });
 
   it("txt email templates render", async () => {
-    const foo = await emailTemplateService.txt("test/hello-world", { name: "World" });
+    const foo = emailTemplateService.txt("test/hello-world", { name: "World" });
     expect(foo).toBe("Hello World");
   });
 
   it("html email templates render", async () => {
-    const foo = await emailTemplateService.html("test/hello-world", { name: "World" });
+    const foo = emailTemplateService.html("test/hello-world", { name: "World" });
     expect(foo).toBe("<p>Hello World</p>");
   });
 
   it("mjml email templates render", async () => {
-    const foo = await emailTemplateService.html("test/hello-mjml", { name: "World" });
+    const foo = emailTemplateService.html("test/hello-mjml", { name: "World" });
     expect(foo.includes("<!doctype html>")).toBeTruthy();
     expect(foo.trim().endsWith("</html>")).toBeTruthy();
   });

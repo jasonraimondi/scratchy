@@ -23,7 +23,7 @@ export const ENV = {
   queueURL: process.env.QUEUE_URL,
   baseURL: process.env.BASE_URL,
   corsURLS: (process.env.CORS_URLS ?? "").split(","),
-  emailTemplatesDir: join(__dirname, "../../templates/emails"),
+  templatesDir: join(__dirname, "../../templates"),
   loginDuration: new DateInterval("1h"),
   authCodeDuration: new DateInterval("10m"),
   accessTokenDuration: new DateInterval("1h"),

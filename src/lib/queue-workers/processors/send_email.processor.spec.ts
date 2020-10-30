@@ -53,7 +53,7 @@ describe("send_email processor", () => {
   it("throws error when template not found", async () => {
     job.data.template = "foo/bar";
     const result = resolver.handleSend(job);
-    await expect(result).rejects.toThrowError(new RegExp("no such file or directory"));
+    await expect(result).rejects.toThrowError(new RegExp("template not found: emails/foo/bar.html.njk"));
     expect(emails.length).toBe(0);
   });
 });
