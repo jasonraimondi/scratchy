@@ -1,4 +1,4 @@
-import { MyContext } from "~/config/my_context";
+import { MyContext } from "~/lib/graphql/my_context";
 
 // export interface IMockContext {
 //   res?: Partial<Express.Request>;

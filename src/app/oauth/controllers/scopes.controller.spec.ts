@@ -2,19 +2,20 @@ import { TestingModule } from "@nestjs/testing";
 import crypto from "crypto";
 import * as querystring from "querystring";
 
-import { COOKIES, ScopesController } from "~/app/oauth/controllers/scopes.controller";
+import { ScopesController } from "~/app/oauth/controllers/scopes.controller";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
 import { OAuthModule } from "~/app/oauth/oauth.module";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { base64urlencode } from "~/lib/utils/base64";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockRequest, mockResponse } from "~test/mock_application";
+import { COOKIES } from "~/config/cookies";
 
 describe("ScopesController", () => {
   let controller: ScopesController;
@@ -74,7 +75,7 @@ describe("ScopesController", () => {
 
     // assert
     expect(response.csrfToken).toBe("sample-csrf-token");
-    expect(path).toBe("/oauth2/scopes");
+    expect(path).toBe("http://localhost/oauth2/scopes");
     expect(parsedResponseQuery).toEqual(query);
   });
 
@@ -90,7 +91,7 @@ describe("ScopesController", () => {
     // assert
     const [path, responseQuery] = response.redirect.split("?");
     const parsedResponseQuery = querystring.parse(responseQuery);
-    expect(path).toBe("/oauth2/authorize");
+    expect(path).toBe("http://localhost/oauth2/authorize");
     expect(parsedResponseQuery).toEqual(query);
     expect(response.cookies[COOKIES.authorization]).toBeTruthy();
   });

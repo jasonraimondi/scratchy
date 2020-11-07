@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { Queue } from "bull";
 import { setQueues } from "bull-board";
 
-import { QUEUE } from "~/config/keys";
+import { QUEUE } from "~/config/queues";
 
 @Injectable()
 export class QueueUIProvider {

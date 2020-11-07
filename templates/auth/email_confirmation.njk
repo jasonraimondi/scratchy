@@ -1,0 +1,23 @@
+{% extends "auth/layouts/index.njk" %}
+
+{% block main %}
+  <h1>Scratchy Reset Password Form</h1>
+
+  <form id="reset-password-form" action="{{ formAction }}" method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <input type="hidden" name="e" value="{{ e }}">
+    <input type="hidden" name="u" value="{{ u }}">
+  </form>
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var resetPasswordForm = document.getElementById("reset-password-form");
+    setTimeout(() => {
+      resetPasswordForm.submit();
+    }, 2500);
+  </script>
+{% endblock %}

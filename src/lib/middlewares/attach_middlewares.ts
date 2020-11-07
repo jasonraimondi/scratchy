@@ -4,10 +4,11 @@ import { UI as bullUI } from "bull-board";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import { ENV } from "~/config/configuration";
 
 export const attachMiddlewares = (app: INestApplication) => {
   app.use(urlencoded({ extended: false }));
-  app.use(cookieParser());
+  app.use(cookieParser(ENV.secret));
 
   if (process.env.NODE_ENV === "production") {
     app.use(helmet());

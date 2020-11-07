@@ -5,7 +5,9 @@ import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
+import { API_ROUTES } from "~/config/routes";
+import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { COOKIES } from "~/config/cookies";
 
 export interface AuthorizationCookie {
   isAuthorizationApproved: boolean;
@@ -22,7 +24,7 @@ export class ScopesController {
   ) {}
 
   @Get()
-  @Render("oauth/scopes")
+  @Render("auth/scopes")
   async get(@Req() req: Request) {
     await this.oauth.validateAuthorizationRequest(req);
 
@@ -43,7 +45,7 @@ export class ScopesController {
 
     return {
       csrfToken: req.csrfToken(),
-      submitUrl: "/oauth2/scopes?" + querystring.stringify(query),
+      submitUrl: API_ROUTES.scopes.template + "?" + querystring.stringify(query),
       user,
       scopes,
       client,
@@ -66,12 +68,6 @@ export class ScopesController {
     const authorizationCookie: AuthorizationCookie = { isAuthorizationApproved: true };
     const fooby = await this.jwt.sign(authorizationCookie);
     res.cookie(COOKIES.authorization, fooby, this.oauth.cookieOptions());
-    res.redirect("/oauth2/authorize?" + querystring.stringify(query));
+    res.redirect(API_ROUTES.authorize.template + "?" + querystring.stringify(query));
   }
-}
-
-export enum COOKIES {
-  authorization = "axs__authorization", // accepted scopes
-  token = "axs__user", // logged in
-  redirectHelper = "axs__redirect", // catch cb from external oauth
 }

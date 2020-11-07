@@ -1,5 +1,4 @@
-import { MiddlewareConsumer, Module, Provider } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import csurf from "csurf";
 
@@ -14,19 +13,13 @@ import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
-import { repositories } from "~/app/oauth/oauth.providers";
+import { repositories, strategies } from "~/app/oauth/oauth.providers";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
 import { LoginService } from "~/app/oauth/services/login.service";
-import { GithubStrategy } from "~/app/oauth/strategies/github.strategy";
-import { GoogleStrategy } from "~/app/oauth/strategies/google.strategy";
-import { JwtStrategy } from "~/app/oauth/strategies/jwt.strategy";
-import { ENV } from "~/config/environment";
-import { User } from "~/entity/user/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { LoggerModule } from "~/lib/logger/logger.module";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
-
-const strategies: Provider[] = [GoogleStrategy, GithubStrategy, JwtStrategy];
+import { DatabaseModule } from "~/lib/database/database.module";
+import { JwtModule } from "~/lib/jwt/jwt.module";
 
 @Module({
   controllers: [
@@ -38,25 +31,12 @@ const strategies: Provider[] = [GoogleStrategy, GithubStrategy, JwtStrategy];
     GoogleController,
     GithubController,
   ],
-  imports: [
-    TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]),
-    RepositoryModule,
-    LoggerModule,
-    JwtModule.register({
-      secret: ENV.jwtSecret,
-    }),
-  ],
-  providers: [
-    ...strategies,
-    ...repositories,
-    LoginService,
-    AuthorizationServer.register(),
-    MyJwtService,
-  ],
+  imports: [TypeOrmModule.forFeature([Token, AuthCode, Client, Scope, User]), DatabaseModule, LoggerModule, JwtModule],
+  providers: [...strategies, ...repositories, LoginService, AuthorizationServer.register()],
 })
 export class OAuthModule {
   constructor(private readonly oauth: AuthorizationServer) {
-    // this.oauth.enableGrantType("client_credentials");
+    this.oauth.enableGrantType("client_credentials");
     this.oauth.enableGrantType("authorization_code");
     this.oauth.enableGrantType("refresh_token");
   }

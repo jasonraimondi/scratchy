@@ -2,9 +2,10 @@ import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import type { Request } from "express";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
+import { ENV } from "~/config/configuration";
 
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
@@ -13,8 +14,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   constructor(private readonly userRepository: UserRepo) {
     super({
       passReqToCallback: true,
-      clientID: process.env.OAUTH_GOOGLE_ID,
-      clientSecret: process.env.OAUTH_GOOGLE_SECRET,
+      clientID: ENV.oauth.google.clientId,
+      clientSecret: ENV.oauth.google.clientSecret,
       callbackURL: "http://localhost:3000/oauth2/google/callback",
       scope: ["email", "profile"],
     });

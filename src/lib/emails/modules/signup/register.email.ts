@@ -1,9 +1,9 @@
 import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
+import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { API_ROUTES } from "~/lib/routes/route.service";
+import { API_ROUTES } from "~/config/routes";
 
 interface IEmailService {
   send(context: any): Promise<void>;

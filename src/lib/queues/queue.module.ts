@@ -2,8 +2,8 @@ import { BullModule } from "@nestjs/bull";
 import { Module } from "@nestjs/common";
 
 import { QueueUIProvider } from "~/lib/queues/queue_ui.provider";
-import { ENV } from "~/config/environment";
-import { QUEUE } from "~/config/keys";
+import { ENV } from "~/config/configuration";
+import { QUEUE } from "~/config/queues";
 
 const queues = [
   BullModule.registerQueue({

@@ -3,9 +3,10 @@ import { PassportStrategy } from "@nestjs/passport";
 import type { Request } from "express";
 import { Profile, Strategy } from "passport-github";
 import { VerifyCallback } from "passport-google-oauth20";
-import { User } from "~/entity/user/user.entity";
+import { ENV } from "~/config/configuration";
+import { User } from "~/app/user/entities/user.entity";
 
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
@@ -14,8 +15,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
   constructor(private readonly userRepository: UserRepo) {
     super({
       passReqToCallback: true,
-      clientID: process.env.OAUTH_GITHUB_ID,
-      clientSecret: process.env.OAUTH_GITHUB_SECRET,
+      clientID: ENV.oauth.github.clientId,
+      clientSecret: ENV.oauth.github.clientSecret,
       callbackURL: "http://localhost:3000/oauth2/github/callback",
       scope: ["email", "profile"],
     });

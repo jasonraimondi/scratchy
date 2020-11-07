@@ -2,12 +2,12 @@ import { TestingModule } from "@nestjs/testing";
 
 import { UserResolver } from "~/app/user/resolvers/user.resolver";
 import { UserModule } from "~/app/user/user.module";
-import { Permission } from "~/entity/role/permission.entity";
-import { Role } from "~/entity/role/role.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { Permission } from "~/app/user/entities/permission.entity";
+import { Role } from "~/app/user/entities/role.entity";
+import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 

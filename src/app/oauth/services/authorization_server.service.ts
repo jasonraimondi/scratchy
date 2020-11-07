@@ -10,8 +10,8 @@ import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { TokenRepo } from "~/app/oauth/repositories/token.repository";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
-import { ENV } from "~/config/environment";
+import { ENV } from "~/config/configuration";
+import { MyJwtService } from "~/lib/jwt/jwt.service";
 
 type CustomCookieOptions = { cookieTTL?: DateInterval } & CookieOptions;
 
@@ -28,10 +28,17 @@ export class AuthorizationServer extends JmondiAuthorizationServer {
     throw e;
   }
 
+  get domain(): string {
+    let domain = ENV.domain!;
+    if (domain.includes(":")) domain = domain.split(":")[0];
+    return domain;
+  }
+
   cookieOptions({ cookieTTL, ...extraParams }: CustomCookieOptions = {}): CookieOptions {
     return {
+      domain: this.domain,
       httpOnly: true,
-      domain: ENV.domain,
+      sameSite: "strict",
       ...(cookieTTL ? { expires: cookieTTL?.getEndDate() } : {}),
       ...extraParams,
     };

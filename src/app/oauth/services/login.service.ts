@@ -1,15 +1,16 @@
-import { DateInterval } from "@jmondi/oauth2-server";
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { Request, Response } from "express";
-import querystring from "querystring";
-import { COOKIES } from "~/app/oauth/controllers/scopes.controller";
+import type { Response } from "express";
+
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
-import { ENV } from "~/config/environment";
-import { User } from "~/entity/user/user.entity";
+import { ENV } from "~/config/configuration";
+import { User } from "~/app/user/entities/user.entity";
+import { API_ROUTES } from "~/config/routes";
+import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { DateInterval } from "@jmondi/oauth2-server";
+import { COOKIES } from "~/config/cookies";
 
 @Injectable()
 export class LoginService {
@@ -27,13 +28,13 @@ export class LoginService {
     const jwt = await this.jwt.sign({
       userId: user.id,
       email: user.email,
-      isEmailConfirmed: user.isEmailConfirmed,
     });
 
-    const options = this.oauth.cookieOptions({ cookieTTL: ENV.loginDuration });
+    const cookieTTL = new DateInterval(ENV.oauth.authorizationServer.loginDuration);
+    const options = this.oauth.cookieOptions({ cookieTTL });
 
     res.cookie(COOKIES.token, jwt, options);
     res.status(HttpStatus.FOUND);
-    res.redirect("/oauth2/authorize?" + query);
+    res.redirect(API_ROUTES.authorize.template + "?" + query);
   }
 }

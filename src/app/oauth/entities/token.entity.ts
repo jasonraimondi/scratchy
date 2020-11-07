@@ -13,10 +13,10 @@ import {
 } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
-import { ENV } from "~/config/environment";
+import { ENV } from "~/config/configuration";
 import { generateRandomToken } from "~/lib/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { User } from "~/entity/user/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 
 @Entity("oauth_tokens")
 export class Token implements OAuthToken {
@@ -68,8 +68,8 @@ export class Token implements OAuthToken {
     this.setRefreshToken(data?.refreshToken);
     this.setUser(data?.user);
     this.accessToken = data?.accessToken ?? generateRandomToken();
-    // @todo the new date interval is misleading here;
-    this.accessTokenExpiresAt = data?.accessTokenExpiresAt ?? ENV.accessTokenDuration.getEndDate();
+    this.accessTokenExpiresAt =
+      data?.accessTokenExpiresAt ?? new DateInterval(ENV.oauth.authorizationServer.accessTokenDuration).getEndDate();
   }
 
   get isRevoked() {
@@ -98,7 +98,7 @@ export class Token implements OAuthToken {
   private setRefreshToken(refreshToken?: string) {
     if (refreshToken) {
       this.refreshToken = refreshToken ?? generateRandomToken();
-      this.refreshTokenExpiresAt = ENV.refreshTokenDuration.getEndDate();
+      this.refreshTokenExpiresAt = new DateInterval(ENV.oauth.authorizationServer.refreshTokenDuration).getEndDate();
     }
   }
 }

@@ -3,12 +3,12 @@ import { Controller, Get, Ip, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import type { Request, Response } from "express";
 import { InvalidRequestError } from "oauth2-server";
-import { COOKIES } from "~/app/oauth/controllers/scopes.controller";
 import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 
 import { LoginService } from "~/app/oauth/services/login.service";
-import { UnauthorizedException } from "~/entity/user/exceptions/unauthorized.exception";
-import { User } from "~/entity/user/user.entity";
+import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
+import { User } from "~/app/user/entities/user.entity";
+import { COOKIES } from "~/config/cookies";
 
 @Controller("oauth2/google")
 export class GoogleController {

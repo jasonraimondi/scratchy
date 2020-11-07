@@ -6,8 +6,8 @@ import { Repository } from "typeorm";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { User } from "~/entity/user/user.entity";
-import { BaseRepo } from "~/lib/repositories/base.repository";
+import { User } from "~/app/user/entities/user.entity";
+import { BaseRepo } from "~/lib/database/base.repository";
 
 @Injectable()
 export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRepository {
@@ -26,10 +26,7 @@ export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRep
 
   issueAuthCode(client: Client, user: User | undefined, scopes: Scope[]) {
     const authCode = new AuthCode({ user, client });
-    scopes.forEach((scope) => authCode.scopes
-      ? authCode.scopes.push(scope)
-      : authCode.scopes = [scope]
-    );
+    scopes.forEach((scope) => (authCode.scopes ? authCode.scopes.push(scope) : (authCode.scopes = [scope])));
     return authCode;
   }
 

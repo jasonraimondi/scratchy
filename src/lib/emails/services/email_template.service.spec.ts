@@ -1,6 +1,6 @@
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 
-describe("email_template", () => {
+describe(EmailTemplateService.name, () => {
   let emailTemplateService: EmailTemplateService;
 
   beforeAll(() => {

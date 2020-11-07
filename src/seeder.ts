@@ -10,12 +10,12 @@ import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 
 const exampleUserId = "dcaecd32-00e7-4505-bf90-db917fff7c89";
 const exampleClientId = "39ce3891-7e0f-4f87-9bc0-db7cc2902266";
-const exampleClientRedirectUri = "http://localhost:8080/oauth2/callback/self";
+const exampleClientRedirectUri = "http://localhost:8080/oauth/callback";
 const exampleScope1Name = "contacts.read";
 const exampleScope2Name = "contacts.write";
 

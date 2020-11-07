@@ -5,7 +5,7 @@ import { Repository } from "typeorm";
 import { Client } from "~/app/oauth/entities/client.entity";
 
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { BaseRepo } from "~/lib/repositories/base.repository";
+import { BaseRepo } from "~/lib/database/base.repository";
 
 @Injectable()
 export class ScopeRepo extends BaseRepo<Scope> implements OAuthScopeRepository {

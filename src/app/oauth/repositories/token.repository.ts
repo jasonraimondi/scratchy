@@ -6,10 +6,10 @@ import { Repository } from "typeorm";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
-import { ENV } from "~/config/environment";
-import { User } from "~/entity/user/user.entity";
+import { ENV } from "~/config/configuration";
+import { User } from "~/app/user/entities/user.entity";
 import { generateRandomToken } from "~/lib/random_token";
-import { BaseRepo } from "~/lib/repositories/base.repository";
+import { BaseRepo } from "~/lib/database/base.repository";
 
 @Injectable()
 export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {
@@ -52,7 +52,9 @@ export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {
 
   async issueRefreshToken(accessToken: Token): Promise<Token> {
     accessToken.refreshToken = generateRandomToken();
-    accessToken.refreshTokenExpiresAt = ENV.refreshTokenDuration.getEndDate();
+    accessToken.refreshTokenExpiresAt = new DateInterval(
+      ENV.oauth.authorizationServer.refreshTokenDuration,
+    ).getEndDate();
     return await this.save(accessToken);
   }
 

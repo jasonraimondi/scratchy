@@ -1,9 +1,9 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
 
 import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
-import { PaginatorInputs } from "~/lib/repositories/dtos/paginator.inputs";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { PaginatorInputs } from "~/lib/database/dtos/paginator.inputs";
 
 @Resolver()
 export class UserResolver {

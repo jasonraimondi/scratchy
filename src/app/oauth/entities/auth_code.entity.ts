@@ -13,10 +13,10 @@ import {
 } from "typeorm";
 
 import { Client } from "~/app/oauth/entities/client.entity";
-import { ENV } from "~/config/environment";
+import { ENV } from "~/config/configuration";
 import { generateRandomToken } from "~/lib/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { User } from "~/entity/user/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 
 @Entity("oauth_auth_codes")
 export class AuthCode implements OAuthAuthCode {
@@ -34,6 +34,7 @@ export class AuthCode implements OAuthAuthCode {
   userId?: string;
 
   @ManyToOne(() => Client)
+  @JoinColumn({ name: "clientId" })
   client: Client;
 
   @Index()
@@ -75,7 +76,7 @@ export class AuthCode implements OAuthAuthCode {
     this.setUser(data?.user);
     if (data?.scopes) this.scopes = data.scopes;
     this.code = data?.code ?? generateRandomToken();
-    this.expiresAt = data?.expiresAt ?? ENV.authCodeDuration.getEndDate();
+    this.expiresAt = data?.expiresAt ?? new DateInterval(ENV.oauth.authorizationServer.authCodeDuration).getEndDate();
   }
 
   private setClient(client?: Client) {

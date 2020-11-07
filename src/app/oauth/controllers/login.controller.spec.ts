@@ -3,21 +3,21 @@ import crypto from "crypto";
 import * as querystring from "querystring";
 
 import { LoginController } from "~/app/oauth/controllers/login.controller";
-import { COOKIES } from "~/app/oauth/controllers/scopes.controller";
 import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
 import { OAuthModule } from "~/app/oauth/oauth.module";
 import { ClientRepo } from "~/app/oauth/repositories/client.repository";
-import { User } from "~/entity/user/user.entity";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { base64urlencode } from "~/lib/utils/base64";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 import { mockRequest, mockResponse } from "~test/mock_application";
+import { COOKIES } from "~/config/cookies";
 
-describe("LoginController", () => {
+describe(LoginController.name, () => {
   let controller: LoginController;
   let client: Client;
   let user: User;
@@ -75,7 +75,7 @@ describe("LoginController", () => {
 
     // assert
     expect(response.csrfToken).toBe("sample-csrf-token");
-    expect(path).toBe("/oauth2/login");
+    expect(path).toBe("http://localhost/oauth2/login");
     expect(parsedResponseQuery).toEqual(query);
   });
 
@@ -86,12 +86,12 @@ describe("LoginController", () => {
     const response = mockResponse();
 
     // act
-    await controller.post(request, response, "127.0.1.1");
+    await controller.post(request, response);
 
     // assert
     const [path, responseQuery] = response.redirect.split("?");
     const parsedResponseQuery = querystring.parse(responseQuery);
-    expect(path).toBe("/oauth2/authorize");
+    expect(path).toBe("http://localhost/oauth2/authorize");
     expect(parsedResponseQuery).toEqual(query);
     expect(response.cookies[COOKIES.token]).toBeTruthy();
     expect(response.status).toBe(302);

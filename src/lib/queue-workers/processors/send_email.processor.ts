@@ -3,10 +3,10 @@ import type { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/se
 import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 
-import { QUEUE, QUEUE_JOBS } from "~/config/keys";
+import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/lib/emails/services/email_template.service";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {

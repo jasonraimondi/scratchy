@@ -3,10 +3,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Client } from "~/app/oauth/entities/client.entity";
-import { UnauthorizedException } from "~/entity/user/exceptions/unauthorized.exception";
-import { User } from "~/entity/user/user.entity";
+import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
+import { User } from "~/app/user/entities/user.entity";
 
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 
 @Injectable()
 export class OAuthUserRepo extends UserRepo implements OAuthUserRepository {

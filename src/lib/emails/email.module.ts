@@ -2,14 +2,14 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 
 import { QueueModule } from "~/lib/queues/queue.module";
-import { ENV } from "~/config/environment";
+import { ENV } from "~/config/configuration";
 import { emailProviders } from "~/lib/emails/email.providers";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { DatabaseModule } from "~/lib/database/database.module";
 
 @Module({
   imports: [
     QueueModule,
-    RepositoryModule,
+    DatabaseModule,
     MailerModule.forRoot({
       transport: ENV.mailerURL,
       defaults: {

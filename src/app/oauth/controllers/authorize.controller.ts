@@ -2,12 +2,14 @@ import { AuthorizationRequest, base64encode, DateInterval, OAuthRequest } from "
 import { Controller, Get, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
 import querystring from "querystring";
-import { AuthorizationCookie, COOKIES } from "~/app/oauth/controllers/scopes.controller";
+import { AuthorizationCookie } from "~/app/oauth/controllers/scopes.controller";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
-import { MyJwtService } from "~/app/oauth/services/jwt.service";
-import { User } from "~/entity/user/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { UserRepo } from "~/lib/repositories/user/user.repository";
+import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { API_ROUTES } from "~/config/routes";
+import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { COOKIES } from "~/config/cookies";
 
 @Controller("oauth2/authorize")
 export class AuthorizeController {
@@ -34,19 +36,15 @@ export class AuthorizeController {
       if (!authRequest.user) {
         const str = this.getRedirectQuery(authRequest);
         res.cookie(COOKIES.redirectHelper, base64encode(str), this.oauth.cookieOptions({ maxAge: 0 }));
-        res.redirect("/oauth2/login?" + str);
+        res.redirect(API_ROUTES.login.template + "?" + str);
         return;
       }
 
       let authorizationCookie: AuthorizationCookie | any = undefined;
 
-      this.logger.log("COOKIES THINGS" + req.cookies[COOKIES.authorization]);
-
       if (req.cookies[COOKIES.authorization]) {
         authorizationCookie = await this.jwt.verify(req.cookies[COOKIES.authorization]);
       }
-
-      this.logger.log({ authorizationCookie });
 
       // At this point you should redirect the user to an authorization page.
       // This form will ask the user to approve the client and the scopes requested.
@@ -57,7 +55,7 @@ export class AuthorizeController {
       // (true = approved, false = denied)
       if (!authRequest.isAuthorizationApproved) {
         const str = this.getRedirectQuery(authRequest);
-        res.redirect("/oauth2/scopes?" + str);
+        res.redirect(API_ROUTES.scopes.template + "?" + str);
         return;
       }
 

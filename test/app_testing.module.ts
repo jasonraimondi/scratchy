@@ -4,14 +4,14 @@ import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
 
-import { Permission } from "~/entity/role/permission.entity";
-import { Role } from "~/entity/role/role.entity";
-import { EmailConfirmationToken } from "~/entity/user/email_confirmation.entity";
-import { ForgotPasswordToken } from "~/entity/user/forgot_password.entity";
-import { User } from "~/entity/user/user.entity";
+import { Permission } from "~/app/user/entities/permission.entity";
+import { Role } from "~/app/user/entities/role.entity";
+import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { EmailService } from "~/lib/emails/services/email.service";
-import { CustomNamingStrategy } from "~/lib/naming";
-import { RepositoryModule } from "~/lib/repositories/repository.module";
+import { CustomNamingStrategy } from "~/lib/database/naming";
+import { DatabaseModule } from "~/lib/database/database.module";
 import { emails, emailServiceMock } from "./mock_email_service";
 
 const mailerServiceMock = {
@@ -45,7 +45,7 @@ export async function createTestingModule(
         namingStrategy: new CustomNamingStrategy(),
         entities,
       }),
-      RepositoryModule,
+      DatabaseModule,
       ...(metadata.imports ?? []),
     ],
     providers: [
