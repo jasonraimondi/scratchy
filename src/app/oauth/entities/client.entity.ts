@@ -3,7 +3,7 @@ import { IsOptional, Length } from "class-validator";
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 import { Scope } from "~/app/oauth/entities/scope.entity";
-import { generateRandomToken } from "~/lib/random_token";
+import { generateRandomToken } from "~/lib/utils/random_token";
 
 @Entity("oauth_clients")
 export class Client implements OAuthClient {

@@ -8,7 +8,7 @@ import { AuthorizationServer } from "~/app/oauth/services/authorization_server.s
 import { ENV } from "~/config/configuration";
 import { User } from "~/app/user/entities/user.entity";
 import { API_ROUTES } from "~/config/routes";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { MyJwtService } from "~/app/jwt/jwt.service";
 import { DateInterval } from "@jmondi/oauth2-server";
 import { COOKIES } from "~/config/cookies";
 

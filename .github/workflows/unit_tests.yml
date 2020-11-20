@@ -34,6 +34,11 @@ jobs:
           CI: true
           DOMAIN: localhost
           JWT_SECRET: testing-access-token-secret
+          OAUTH_GOOGLE_ID: abcdefg
+          OAUTH_GOOGLE_SECRET: abcdefg
+          OAUTH_GITHUB_ID: abcdefg
+          OAUTH_GITHUB_SECRET: abcdefg
+
       - run: npm run build --if-present
       - name: report coverage to code climate
         run: |

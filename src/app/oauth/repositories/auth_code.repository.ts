@@ -7,7 +7,7 @@ import { AuthCode } from "~/app/oauth/entities/auth_code.entity";
 import { Client } from "~/app/oauth/entities/client.entity";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { BaseRepo } from "~/lib/database/base.repository";
+import { BaseRepo } from "~/app/database/base.repository";
 
 @Injectable()
 export class AuthCodeRepo extends BaseRepo<AuthCode> implements OAuthAuthCodeRepository {

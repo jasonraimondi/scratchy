@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
-import { BaseRepo } from "~/lib/database/base.repository";
+import { BaseRepo } from "~/app/database/base.repository";
 
 @Injectable()
 export class ForgotPasswordRepo extends BaseRepo<ForgotPasswordToken> {

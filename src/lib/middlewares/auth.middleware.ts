@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 import { User } from "~/app/user/entities/user.entity";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { MyJwtService } from "~/app/jwt/jwt.service";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

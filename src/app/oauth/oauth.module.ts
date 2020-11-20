@@ -17,9 +17,9 @@ import { repositories, strategies } from "~/app/oauth/oauth.providers";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { LoginService } from "~/app/oauth/services/login.service";
 import { User } from "~/app/user/entities/user.entity";
-import { LoggerModule } from "~/lib/logger/logger.module";
-import { DatabaseModule } from "~/lib/database/database.module";
-import { JwtModule } from "~/lib/jwt/jwt.module";
+import { LoggerModule } from "~/app/logger/logger.module";
+import { DatabaseModule } from "~/app/database/database.module";
+import { JwtModule } from "~/app/jwt/jwt.module";
 
 @Module({
   controllers: [

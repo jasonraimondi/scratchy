@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsUUID } from "class-validator";
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 
 import { User } from "~/app/user/entities/user.entity";
@@ -35,4 +35,7 @@ export class EmailConfirmationToken {
   @Field()
   @Column()
   expiresAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

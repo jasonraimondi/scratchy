@@ -9,9 +9,9 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { EmailService } from "~/lib/emails/services/email.service";
-import { CustomNamingStrategy } from "~/lib/database/naming";
-import { DatabaseModule } from "~/lib/database/database.module";
+import { EmailService } from "~/app/emails/services/email.service";
+import { CustomNamingStrategy } from "~/app/database/naming";
+import { DatabaseModule } from "~/app/database/database.module";
 import { emails, emailServiceMock } from "./mock_email_service";
 
 const mailerServiceMock = {

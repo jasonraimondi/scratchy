@@ -12,7 +12,7 @@ import nunjucks from "nunjucks";
 
 import { AppModule } from "~/app/app.module";
 import { ENV } from "~/config/configuration";
-import { LoggerService } from "~/lib/logger/logger.service";
+import { LoggerService } from "~/app/logger/logger.service";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 
 const logger = new LoggerService("__main__");

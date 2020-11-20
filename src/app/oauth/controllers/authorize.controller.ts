@@ -5,10 +5,10 @@ import querystring from "querystring";
 import { AuthorizationCookie } from "~/app/oauth/controllers/scopes.controller";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { User } from "~/app/user/entities/user.entity";
-import { LoggerService } from "~/lib/logger/logger.service";
+import { LoggerService } from "~/app/logger/logger.service";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { API_ROUTES } from "~/config/routes";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { MyJwtService } from "~/app/jwt/jwt.service";
 import { COOKIES } from "~/config/cookies";
 
 @Controller("oauth2/authorize")

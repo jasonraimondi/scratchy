@@ -19,9 +19,7 @@ ENV NODE_ENV=production \
 WORKDIR /app
 RUN mkdir -p /app && chown node:node /app
 USER node
-COPY --chown=node:node db /app/db
 COPY --chown=node:node templates /app/templates
-COPY --chown=node:node database.json /app/database.json
 COPY --from=builder --chown=node:node /app/package* /app/
 COPY --from=builder --chown=node:node /app/tsconfig.json /app/tsconfig.json
 COPY --from=builder --chown=node:node /app/dist/src /app/dist

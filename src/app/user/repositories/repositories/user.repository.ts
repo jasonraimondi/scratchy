@@ -3,8 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { User } from "~/app/user/entities/user.entity";
-import { BaseRepo } from "~/lib/database/base.repository";
-import { PagingQuery } from "~/lib/database/dtos/paginator.inputs";
+import { BaseRepo } from "~/app/database/base.repository";
+import { PagingQuery } from "~/app/database/dtos/paginator.inputs";
 
 @Injectable()
 export class UserRepo extends BaseRepo<User> {

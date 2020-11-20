@@ -1,4 +1,4 @@
-.PHONY: clean
+.PHONY: start build down bash dev migrate restart
 
 start:
 	docker-compose -f docker-compose.app.yml -f docker-compose.yml up -d --force-recreate --remove-orphans

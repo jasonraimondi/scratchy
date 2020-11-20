@@ -6,7 +6,7 @@ import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { API_ROUTES } from "~/config/routes";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { MyJwtService } from "~/app/jwt/jwt.service";
 import { COOKIES } from "~/config/cookies";
 
 export interface AuthorizationCookie {

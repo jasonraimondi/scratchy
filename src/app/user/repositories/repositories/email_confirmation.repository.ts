@@ -2,7 +2,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
-import { BaseRepo } from "~/lib/database/base.repository";
+import { BaseRepo } from "~/app/database/base.repository";
 
 export class EmailConfirmationRepo extends BaseRepo<EmailConfirmationToken> {
   constructor(@InjectRepository(EmailConfirmationToken) userRepository: Repository<EmailConfirmationToken>) {

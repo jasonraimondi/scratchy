@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { LoggerService } from "~/lib/logger/logger.service";
+import { LoggerService } from "~/app/logger/logger.service";
 import { EmailConfirmationRepo } from "~/app/user/repositories/repositories/email_confirmation.repository";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 

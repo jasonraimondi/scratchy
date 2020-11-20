@@ -8,9 +8,9 @@ import { ResetPasswordController } from "~/app/account/controllers/reset_passwor
 import { EmailConfirmationService } from "~/app/account/services/email_confirmation.service";
 import { ForgotPasswordService } from "~/app/account/services/forgot_password.service";
 import { RegisterResolver } from "~/app/account/resolvers/register.resolver";
-import { EmailModule } from "~/lib/emails/email.module";
-import { LoggerModule } from "~/lib/logger/logger.module";
-import { DatabaseModule } from "~/lib/database/database.module";
+import { EmailModule } from "~/app/emails/email.module";
+import { LoggerModule } from "~/app/logger/logger.module";
+import { DatabaseModule } from "~/app/database/database.module";
 
 const controllers = [ForgotPasswordController, ResetPasswordController, EmailConfirmationController];
 

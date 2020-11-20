@@ -1,11 +1,12 @@
-import { DateInterval } from "@jmondi/oauth2-server";
 import { join } from "path";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 const isProduction = process.env.NODE_ENV === "production";
 const isTesting = process.env.NODE_ENV === "test";
 
-const required = ["PROTOCOL", "DOMAIN", "DATABASE_URL", "JWT_SECRET"].filter((key) => !process.env.hasOwnProperty(key));
+const required = ["PROTOCOL", "DOMAIN", "DATABASE_URL", "JWT_SECRET", "STRIPE_API_KEY"].filter(
+  (key) => !process.env.hasOwnProperty(key),
+);
 
 if (!isTesting && required.length > 0) {
   throw new Error(`missing required envs: (${required.join(", ")})`);
@@ -27,6 +28,8 @@ const ENV = {
   queueURL: process.env.QUEUE_URL,
   corsURLS: (process.env.CORS_URLS ?? "").split(","),
   templatesDir: join(__dirname, "../../templates"),
+  stripeApiKey: process.env.STRIPE_API_KEY!,
+  scalablePressApiKey: process.env.SCALABLE_PRESS_API_KEY!,
   oauth: {
     authorizationServer: {
       loginDuration: "1h",
@@ -42,6 +45,12 @@ const ENV = {
       clientId: process.env.OAUTH_GITHUB_ID,
       clientSecret: process.env.OAUTH_GITHUB_SECRET,
     },
+  },
+  aws: {
+    host: process.env.AWS_S3_HOST!,
+    bucket: process.env.AWS_S3_BUCKET!,
+    accessKey: process.env.AWS_S3_ACCESS_KEY!,
+    secretKey: process.env.AWS_S3_SECRET_KEY!,
   },
 };
 

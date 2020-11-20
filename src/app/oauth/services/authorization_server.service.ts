@@ -11,7 +11,7 @@ import { OAuthUserRepo } from "~/app/oauth/repositories/oauth_user.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { TokenRepo } from "~/app/oauth/repositories/token.repository";
 import { ENV } from "~/config/configuration";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
+import { MyJwtService } from "~/app/jwt/jwt.service";
 
 type CustomCookieOptions = { cookieTTL?: DateInterval } & CookieOptions;
 

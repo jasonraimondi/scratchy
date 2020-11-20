@@ -13,22 +13,22 @@ import { ENV } from "~/config/configuration";
 import { MyContext } from "~/lib/graphql/my_context";
 import { User } from "~/app/user/entities/user.entity";
 import { AuthMiddleware } from "~/lib/middlewares/auth.middleware";
-import { registerTypes } from "~/lib/database/register_types";
-import { LoggerModule } from "~/lib/logger/logger.module";
+import { registerTypes } from "~/app/database/register_types";
+import { LoggerModule } from "~/app/logger/logger.module";
 import { GraphqlLogger } from "~/lib/graphql/graphql_logger.service";
-import { CustomNamingStrategy } from "~/lib/database/naming";
-import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
+import { CustomNamingStrategy } from "~/app/database/naming";
+import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
-import { JwtModule } from "~/lib/jwt/jwt.module";
-import { RoomModule } from "~/app/room/room.module";
-import { HealthcheckController } from "~/app/info/controllers/healthcheck.controller";
+import { JwtModule } from "~/app/jwt/jwt.module";
+import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
+import { StoreModule } from "~/app/store/store.module";
 
 @Module({
   imports: [
     ...(ENV.isProduction ? [] : [QueueWorkerModule]),
-    RoomModule,
     OAuthModule,
     AccountModule,
+    StoreModule,
     UserModule,
     LoggerModule,
     JwtModule,

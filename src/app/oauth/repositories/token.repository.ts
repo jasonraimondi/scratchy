@@ -8,8 +8,8 @@ import { Scope } from "~/app/oauth/entities/scope.entity";
 import { Token } from "~/app/oauth/entities/token.entity";
 import { ENV } from "~/config/configuration";
 import { User } from "~/app/user/entities/user.entity";
-import { generateRandomToken } from "~/lib/random_token";
-import { BaseRepo } from "~/lib/database/base.repository";
+import { generateRandomToken } from "~/lib/utils/random_token";
+import { BaseRepo } from "~/app/database/base.repository";
 
 @Injectable()
 export class TokenRepo extends BaseRepo<Token> implements OAuthTokenRepository {

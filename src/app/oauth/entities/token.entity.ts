@@ -14,7 +14,7 @@ import {
 
 import { Client } from "~/app/oauth/entities/client.entity";
 import { ENV } from "~/config/configuration";
-import { generateRandomToken } from "~/lib/random_token";
+import { generateRandomToken } from "~/lib/utils/random_token";
 import { Scope } from "~/app/oauth/entities/scope.entity";
 import { User } from "~/app/user/entities/user.entity";
 

@@ -7,7 +7,7 @@ import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import { ENV } from "~/config/configuration";
-import { QueueWorkerModule } from "~/lib/queue-workers/queue_worker.module";
+import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 
 (async () => {
   const applicationLogger = new Logger("__queue__");

@@ -5,7 +5,7 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { Order } from "~/lib/database/dtos/paginator.inputs";
+import { Order } from "~/app/database/dtos/paginator.inputs";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";

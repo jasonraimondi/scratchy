@@ -1,5 +1,5 @@
 import * as path from "path";
-import { CustomNamingStrategy } from "./src/lib/database/naming";
+import { CustomNamingStrategy } from "./src/app/database/naming";
 
 module.exports = {
   name: "default",

@@ -1,11 +1,15 @@
-export enum QUEUE {
-  email = "email",
-}
+export const QUEUE = {
+  email: "email",
+  image: "image",
+};
 
-type QueueJobs = Record<QUEUE, Record<string, string>>;
+type QueueJobs = Record<string, Record<string, string>>;
 
 export const QUEUE_JOBS: QueueJobs = {
   email: {
     send: "send",
+  },
+  image: {
+    sync: "sync",
   },
 };

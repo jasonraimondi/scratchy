@@ -8,7 +8,7 @@ import { UserModule } from "../../src/app/user/user.module";
 import { Permission } from "../../src/app/user/entities/permission.entity";
 import { Role } from "../../src/app/user/entities/role.entity";
 import { User } from "../../src/app/user/entities/user.entity";
-import { registerTypes } from "../../src/lib/database/register_types";
+import { registerTypes } from "../../src/app/database/register_types";
 import { UserRepo } from "../../src/app/user/repositories/repositories/user.repository";
 import { createTestingModule } from "../app_testing.module";
 import { userGenerator } from "../generators/user.generator";
