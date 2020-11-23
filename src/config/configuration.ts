@@ -17,6 +17,8 @@ const domain = process.env.DOMAIN;
 
 const ENV = {
   isProduction,
+  isDevelopment,
+  isTesting,
   protocol,
   domain: domain,
   url: `${protocol}://${domain}`,
@@ -30,6 +32,10 @@ const ENV = {
   templatesDir: join(__dirname, "../../templates"),
   stripeApiKey: process.env.STRIPE_API_KEY!,
   scalablePressApiKey: process.env.SCALABLE_PRESS_API_KEY!,
+  typeorm: {
+    entities: join(__dirname, "../**/*.entity{.ts,.js}"),
+    synchronize: !!process.env.TYPEORM_SYNCHRONIZE,
+  },
   oauth: {
     authorizationServer: {
       loginDuration: "1h",

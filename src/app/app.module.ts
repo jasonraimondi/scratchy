@@ -22,24 +22,25 @@ import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/app/jwt/jwt.module";
 import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 import { StoreModule } from "~/app/store/store.module";
+import { Role } from "~/app/user/entities/role.entity";
 
 @Module({
   imports: [
     ...(ENV.isProduction ? [] : [QueueWorkerModule]),
     OAuthModule,
     AccountModule,
-    StoreModule,
+    // StoreModule,
     UserModule,
     LoggerModule,
     JwtModule,
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role]),
     TypeOrmModule.forRoot({
       type: "postgres",
       url: ENV.databaseURL,
-      entities: [join(__dirname, "../**/*.entity.ts")],
-      logging: false,
-      synchronize: true,
+      entities: [ENV.typeorm.entities],
+      logging: ENV.enableDebugging,
+      synchronize: ENV.typeorm.synchronize,
       namingStrategy: new CustomNamingStrategy(),
       maxQueryExecutionTime: 250, // To log request runtime
     }),
@@ -47,7 +48,7 @@ import { StoreModule } from "~/app/store/store.module";
       logger: new GraphqlLogger(),
       debug: ENV.enableDebugging,
       playground: ENV.enablePlayground,
-      autoSchemaFile: ENV.isProduction ? false : "schema.graphql",
+      autoSchemaFile: "schema.graphql",
       context: ({ res, req }: { res: Response; req: Request }): Partial<MyContext | any> => ({
         ipAddr: req.ip,
         res,

@@ -5,7 +5,7 @@ import { PresignedUrlController } from "~/app/store/storage/presigned_url.contro
 
 @Module({
   controllers: [PresignedUrlController],
-  exports: [WasabiService],
   providers: [WasabiService],
+  exports: [WasabiService],
 })
 export class StorageModule {}
