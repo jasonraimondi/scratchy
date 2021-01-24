@@ -34,58 +34,10 @@ type UserPaginatorResponse {
   data: [User!]!
 }
 
-type TrackStatusResponse {
-  number: Float!
-  name: String!
-  description: String!
-  orderId: String!
-  createdAt: DateTime!
-  eventId: String!
-}
-
-type QuoteOrderResponse {
-  orderToken: String!
-  total: Float!
-  subtotal: Float!
-  fees: Float!
-  tax: Float!
-  shipping: Float!
-}
-
-type UploadDesignResponse {
-  designId: String!
-}
-
-type OrderResponse {
-  orderId: String!
-  orderedAt: DateTime!
-  total: Float!
-  subtotal: Float!
-  fees: Float!
-  shipping: Float!
-  tax: Float!
-  orderToken: String!
-  mode: String!
-  status: String!
-  items: [Item!]!
-}
-
-type Item {
-  designId: String!
-  type: String!
-  status: String!
-  designURL: String!
-}
-
-type CheckoutSessionResponse {
-  sessionId: String!
-}
-
 type Query {
   me: User!
   user(email: String!): User!
   users(query: PaginatorInputs): UserPaginatorResponse!
-  trackOrder(orderId: String!): [TrackStatusResponse!]!
 }
 
 input PaginatorInputs {
@@ -103,10 +55,6 @@ enum Order {
 type Mutation {
   resentConfirmEmail(email: String!): Boolean!
   register(data: RegisterInput!): User!
-  uploadDesign(artworkURL: String!, name: String!): UploadDesignResponse!
-  quoteOrder(address: Address!, designId: String!): QuoteOrderResponse!
-  submitOrder(orderToken: String!): OrderResponse!
-  createCheckoutSession(productId: String!): CheckoutSessionResponse!
 }
 
 input RegisterInput {
@@ -115,13 +63,4 @@ input RegisterInput {
   lastName: String
   email: String!
   password: String
-}
-
-input Address {
-  name: String
-  address1: String!
-  address2: String
-  city: String!
-  state: String!
-  zip: String!
 }
