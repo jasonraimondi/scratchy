@@ -1,0 +1,14 @@
+overwrite: true
+schema: ../schema.graphql
+documents: "graphql/**/*.graphql"
+generates:
+  generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+#      rawRequest: true
+      scalars:
+        DateTime: Date
+        JSON: "{ [key: string]: any }"

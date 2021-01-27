@@ -1,0 +1,10 @@
+mutation Register($data: RegisterInput!) {
+  register(data: $data) {
+    id
+    name
+    email
+  }
+}
+# mutation VerifyEmailConfirmation($data: VerifyEmailInput!) {
+#   verifyEmailConfirmation(data: $data)
+# }

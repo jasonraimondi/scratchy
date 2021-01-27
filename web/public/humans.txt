@@ -1,0 +1,7 @@
+/* AUTHOR */
+
+	Name:        Jason Raimondi
+	Title:       Software Engineer/Developer whatever you want
+	Location:    Los Angeles
+	Site:        https://jasonraimondi.com/
+	Site:        https://git.jasonraimondi.com/
