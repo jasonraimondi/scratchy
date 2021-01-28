@@ -1,9 +1,5 @@
-import 'sanitize.css';
-
 import { Header } from "@/app/components/layouts/partials/header";
 import { useAuth } from "@/app/lib/use_auth";
-import { colors } from "@/styles/theme";
-import { css } from "emotion";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -35,23 +31,9 @@ export const Layout: React.FC<{ title?: string; isPrivate?: boolean; }> = ({ chi
       {/*<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>*/}
       {/*<link rel="manifest" href="/site.webmanifest"/>*/}
     </Head>
-    <main
-      className={css`
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            color: ${colors.black};
-            background-color: ${colors.blue["500"]};
-          `}
-    >
+    <main>
       <Header/>
-      <div
-        className={css`
-              flex: 1;
-              color: ${colors.black};
-              background-color: ${colors.blue["300"]};
-            `}
-      >
+      <div>
         {body}
       </div>
     </main>

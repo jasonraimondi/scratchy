@@ -1,24 +1,7 @@
-import styled from "@emotion/styled";
+import React from "react";
 
-export const Label = styled.label`
-  display: block;
-  padding-bottom: 0.5rem;
-  span {
-    display: block;
-    color: black;
-    padding-bottom: 0.1rem;
+import el from "./element.module.css";
 
-    &.inline {
-      display: inline;
-      padding: 0 0.5rem;
-    }
-  }
-`;
+export const Label: React.FC = ({ children, ...props }) => <label {...props} className={el.label}>{children}</label>
 
-export const Button = styled.button`
-  font-size: 1em;
-  background-color: lightslategrey;
-  color: black;
-  margin: 0;
-  border: none;
-`;
+export const Button: React.FC = ({ children, ...props }) => <button {...props} className={el.button}>{children}</button>

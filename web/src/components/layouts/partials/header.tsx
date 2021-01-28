@@ -1,9 +1,6 @@
 import React from "react";
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
 
 import { Link } from "@/app/components/links/link";
-import { colors } from "@/styles/theme";
 import { useAuth } from "@/app/lib/use_auth";
 
 export function Header() {
@@ -12,35 +9,32 @@ export function Header() {
   return (
     <header>
       <nav
-        css={css`
-          display: flex;
-        `}
       >
         <Link href="/">
-          <NavAnchor>Home</NavAnchor>
+          <a>Home</a>
         </Link>
         {isAuthenticated() ? (
           <>
             <Link href="/app/dashboard">
-              <NavAnchor>Dashboard</NavAnchor>
+              <a>Dashboard</a>
             </Link>
             <Link href="/app/profile">
-              <NavAnchor>Profile</NavAnchor>
+              <a>Profile</a>
             </Link>
             <Link href="/logout">
-              <NavAnchor data-test="logout-link">Logout</NavAnchor>
+              <a data-test="logout-link">Logout</a>
             </Link>
           </>
         ) : (
           <>
             <Link href="/app/profile">
-              <NavAnchor data-test="register-link">RESTRICTED</NavAnchor>
+              <a data-test="register-link">RESTRICTED</a>
             </Link>
             <Link href="/register">
-              <NavAnchor data-test="register-link">Register</NavAnchor>
+              <a data-test="register-link">Register</a>
             </Link>
             <Link href="/login">
-              <NavAnchor data-test="login-link">Login</NavAnchor>
+              <a data-test="login-link">Login</a>
             </Link>
           </>
         )}
@@ -49,24 +43,24 @@ export function Header() {
   );
 };
 
-const NavAnchor = styled.a`
-  color: ${colors.gray["100"]};
-  font-weight: 500;
-  padding: 0.5rem 0;
+// const NavAnchor = styled.a`
+//   color: ${colors.gray["100"]};
+//   font-weight: 500;
+//   padding: 0.5rem 0;
 
-  &:hover,
-  &:active {
-    color: ${colors.gray["400"]};
-  }
+//   &:hover,
+//   &:active {
+//     color: ${colors.gray["400"]};
+//   }
 
-  &:after {
-    content: "|";
-    color: ${colors.black};
-    text-decoration: none;
-    padding: 0 2px;
-  }
-  &:last-child:after {
-    content: "";
-    padding: 0;
-  }
-`;
+//   &:after {
+//     content: "|";
+//     color: ${colors.black};
+//     text-decoration: none;
+//     padding: 0 2px;
+//   }
+//   &:last-child:after {
+//     content: "";
+//     padding: 0;
+//   }
+// `;

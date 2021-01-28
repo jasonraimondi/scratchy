@@ -2,7 +2,7 @@ import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
 import { Button, Label } from "@/app/components/forms/elements";
-import { validEmail } from "@/app/pages/register";
+import { validEmail } from "@/app/../../../pages/register";
 
 export type ResetPasswordFormData = {
   token: string;
