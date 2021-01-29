@@ -12,22 +12,18 @@ import { ClientRepo } from "~/app/oauth/repositories/client.repository";
 import { ScopeRepo } from "~/app/oauth/repositories/scope.repository";
 import { User } from "~/app/user/entities/user.entity";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
-import { ProductRepo } from "~/app/store/payments/repositories/product.repository";
-import { Product, ProductType } from "~/app/store/payments/entities/product.entity";
 
 const exampleUserId = "dcaecd32-00e7-4505-bf90-db917fff7c89";
 const exampleClientId = "39ce3891-7e0f-4f87-9bc0-db7cc2902266";
-const exampleClientRedirectUri = "http://localhost:8080/oauth/callback";
+const exampleClientRedirectUri = ["http://localhost:8080/oauth2/callback/self"];
 const exampleScope1Name = "contacts.read";
 const exampleScope2Name = "contacts.write";
-const examplePaymentId = "3d5f4d7c-5815-4798-ab44-4bce19ae93ec";
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const userRepository = app.get(UserRepo);
   const clientRepository = app.get(ClientRepo);
   const scopeRepository = app.get(ScopeRepo);
-  const productRepository = app.get(ProductRepo);
 
   let user: User;
   try {
@@ -79,7 +75,7 @@ async function bootstrap() {
     client = new Client({
       id: exampleClientId,
       name: "Scratchy Next.js",
-      redirectUris: [exampleClientRedirectUri],
+      redirectUris: exampleClientRedirectUri,
       allowedGrants: ["authorization_code", "refresh_token"],
     });
     client.scopes = [];
@@ -87,20 +83,7 @@ async function bootstrap() {
     client = await clientRepository.create(client);
   }
 
-  let product: Product;
-
-  try {
-    product = await productRepository.findById(examplePaymentId);
-  } catch (e) {
-    product = new Product({
-      id: examplePaymentId,
-      type: ProductType.TUMBLER,
-      unitPrice: 2499,
-    });
-    product = await productRepository.create(product);
-  }
-
-  console.log({ client, scope1, scope2, user, product });
+  console.log({ client, scope1, scope2, user });
 }
 
 bootstrap();

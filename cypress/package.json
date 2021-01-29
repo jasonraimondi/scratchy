@@ -1,0 +1,18 @@
+{
+  "name": "cypress-e2e",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open"
+  },
+  "keywords": [],
+  "author": "Jason Raimondi",
+  "devDependencies": {
+    "@types/faker": "^5.1.5",
+    "cypress": "^6.3.0",
+    "faker": "^5.2.0",
+    "mailparser": "^3.0.1",
+    "typescript": "^4.1.3"
+  }
+}

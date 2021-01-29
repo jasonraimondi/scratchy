@@ -51,8 +51,10 @@ export class LoginController {
       await user.verify(password);
       const query = querystring.stringify(req.query as any);
       await this.loginService.loginAndRedirect(user, req.ip, res, query);
+      return;
     } catch (e) {
-      throw UnauthorizedException.invalid();
     }
+
+    throw UnauthorizedException.invalid();
   }
 }

@@ -39,6 +39,7 @@ export class OAuthModule {
     this.oauth.enableGrantType("client_credentials");
     this.oauth.enableGrantType("authorization_code");
     this.oauth.enableGrantType("refresh_token");
+    this.oauth.enableGrantType("password");
   }
 
   configure(consumer: MiddlewareConsumer) {

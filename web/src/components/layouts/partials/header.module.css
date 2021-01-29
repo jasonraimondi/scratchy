@@ -1,0 +1,23 @@
+.a {
+  color: var(--colors-black);
+  font-weight: 500;
+  padding: 0.5rem 0;
+
+}
+
+.a:hover,
+.a:active {
+   color: var(--colors-purple-500);
+ }
+
+.a:after {
+   content: "|";
+   color: var(--colors-black);
+   text-decoration: none;
+   padding: 0 2px;
+ }
+
+.a:last-child:after {
+   content: "";
+   padding: 0;
+ }
