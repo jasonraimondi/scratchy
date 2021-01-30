@@ -6,8 +6,8 @@
     "pack": "run-s clean build",
     "gen": "graphql-codegen --config codegen.yml",
     "prestart": "npm run gen",
-    "start:prod": "next start -p 8080",
-    "start:dev": "next -p 8080"
+    "start:prod": "next start -p 3000",
+    "start:dev": "next -p 3000"
   },
   "author": "Jason Raimondi <jason@raimondi.us>",
   "license": "UNLICENSED",

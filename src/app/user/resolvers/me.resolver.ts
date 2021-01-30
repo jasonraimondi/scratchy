@@ -4,7 +4,7 @@ import { Query, Resolver } from "@nestjs/graphql";
 import { User } from "~/app/user/entities/user.entity";
 
 import { ContextUser } from "~/lib/graphql/context_user.decorator";
-import { JwtAuthGqlGuard } from "~/lib/guards/jwt_auth.gql-guard";
+import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.gql-guard";
 import { LoggerService } from "~/app/logger/logger.service";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 

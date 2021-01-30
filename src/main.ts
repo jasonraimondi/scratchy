@@ -40,6 +40,6 @@ const logger = new LoggerService("__main__");
     logger.debug("DEBUGGING ENABLED");
     logger.debug(ENV);
   }
-  await app.listen(3000);
+  await app.listen(3001);
   logger.log(`Listening on ${await app.getUrl()}`);
 })();

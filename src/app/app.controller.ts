@@ -5,6 +5,6 @@ import type { Response } from "express";
 export class AppController {
   @Get()
   async index(@Res() res: Response) {
-    return res.redirect("http://localhost:8080");
+    return res.redirect("http://localhost:3000");
   }
 }

@@ -9,7 +9,6 @@ import { ResetPasswordFormData } from "@/app/components/forms/reset_password_for
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, Label } from "@/app/components/forms/elements";
 
-const ResetPasswordForm = dynamic(() => import("@/app/components/forms/reset_password_form"), { ssr: false });
 
 export default function ResetPassword() {
   const { handleLoginRedirect } = useAuth();
@@ -36,7 +35,6 @@ export default function ResetPassword() {
   return (
     <Layout title="Reset Password">
       <h1 className="h5">Reset Password Page</h1>
-      <ResetPasswordForm token={token} email={email} handleSubmit={handleSubmit} />
 
       <form onSubmit={handleSubmit(onSubmit)} data-test="reset-password-form">
         <Label data-test="reset-password-form--password">

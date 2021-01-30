@@ -11,7 +11,7 @@ services:
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8080:8080"
+      - "3000:3000"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
@@ -19,7 +19,7 @@ services:
     build: .
     image: jasonraimondi/scratchy:dev
     ports:
-      - 3000:3000
+      - 3001:3001
     env_file:
       - .env.docker
     depends_on:
@@ -30,7 +30,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`scratchy.localdomain`)"
       - "traefik.http.routers.app.entrypoints=web"
-      - "traefik.http.services.app.loadbalancer.server.port=3000"
+      - "traefik.http.services.app.loadbalancer.server.port=3001"
 
   worker:
     image: jasonraimondi/scratchy:dev

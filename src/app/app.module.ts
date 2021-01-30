@@ -20,6 +20,7 @@ import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/app/jwt/jwt.module";
 import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 import { Role } from "~/app/user/entities/role.entity";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { Role } from "~/app/user/entities/role.entity";
         req,
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController, HealthcheckController],
   providers: [UserRepo],

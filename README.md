@@ -20,10 +20,10 @@ npm run migrate:up
 npm run start:dev
 
 # graphql playground
-open http://localhost:3000/graphql 
+open http://localhost:3001/graphql 
 
 # queue runner status via bull-board
-open http://localhost:3000/admin/queues # queue runner status
+open http://localhost:3001/admin/queues # queue runner status
 
 # email box via mailcatcher
 open http://localhost:8025 # emails
