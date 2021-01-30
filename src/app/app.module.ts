@@ -2,12 +2,10 @@ import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { join } from "path";
 import type { Request, Response } from "express";
 
 import { AppController } from "~/app/app.controller";
 import { AccountModule } from "~/app/account/account.module";
-import { OAuthModule } from "~/app/oauth/oauth.module";
 import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/config/configuration";
 import { MyContext } from "~/lib/graphql/my_context";
@@ -21,15 +19,12 @@ import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/app/jwt/jwt.module";
 import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
-import { StoreModule } from "~/app/store/store.module";
 import { Role } from "~/app/user/entities/role.entity";
 
 @Module({
   imports: [
     ...(ENV.isProduction ? [] : [QueueWorkerModule]),
-    OAuthModule,
     AccountModule,
-    // StoreModule,
     UserModule,
     LoggerModule,
     JwtModule,
