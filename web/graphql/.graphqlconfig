@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "http://localhost:3001/graphql",
+        "url": "http://api.scratchy.localdomain:8080/graphql",
         "headers": {
           "user-agent": "JS GraphQL"
         },

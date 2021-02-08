@@ -10,8 +10,7 @@ export function Header() {
 
   return (
     <header>
-      <nav
-      >
+      <nav>
         <Link href="/">
           <a className={style.a}>Home</a>
         </Link>
