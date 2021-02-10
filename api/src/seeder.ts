@@ -31,8 +31,9 @@ async function bootstrap() {
     user = await userRepository.create(user);
   }
 
-
   console.log({ user });
+
+  await app.close();
 }
 
-bootstrap().then(() => process.exit(0)).catch(() => process.exit(1));
+bootstrap();
