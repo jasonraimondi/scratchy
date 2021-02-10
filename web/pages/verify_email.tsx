@@ -13,14 +13,14 @@ export default function VerifyEmail() {
   const verifyEmailData: any = { email, id };
   const [status, setStatus] = useState("Verifying Email...");
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleVerifyUser = async () => {
     if (!email || !id) {
-      await router.push("/?message=something went wrong")
+      await router.push("/?message=something went wrong");
       return;
     }
-    await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch(e => {
+    await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e) => {
       setStatus(e.message);
       router.push(`/login?message=${encodeURI(e.message)}`);
     });
@@ -30,10 +30,12 @@ export default function VerifyEmail() {
   };
 
   useEffect(() => {
-    handleVerifyUser().catch(e => console.error(e));
+    handleVerifyUser().catch((e) => console.error(e));
   }, []);
 
-  return <Layout title="Verify Email">
-    <h1 className="h5">{status}</h1>
-  </Layout>;
-};
+  return (
+    <Layout title="Verify Email">
+      <h1 className="h5">{status}</h1>
+    </Layout>
+  );
+}

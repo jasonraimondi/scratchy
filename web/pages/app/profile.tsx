@@ -28,5 +28,9 @@ export default function Profile() {
     body = <div>hello {JSON.stringify(data)}!</div>;
   }
 
-  return <Layout title="profile" isPrivate={true}>{body}</Layout>;
-};
+  return (
+    <Layout title="profile" isPrivate={true}>
+      {body}
+    </Layout>
+  );
+}

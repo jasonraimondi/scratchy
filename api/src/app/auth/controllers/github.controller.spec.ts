@@ -1,9 +1,9 @@
-import { TestingModule } from '@nestjs/testing';
-import { GithubController } from './github.controller';
+import { TestingModule } from "@nestjs/testing";
+import { GithubController } from "./github.controller";
 import { createTestingModule } from "~test/app_testing.module";
 import { AuthModule } from "~/app/auth/auth.module";
 
-describe('GithubController', () => {
+describe("GithubController", () => {
   let controller: GithubController;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('GithubController', () => {
     controller = module.get<GithubController>(GithubController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

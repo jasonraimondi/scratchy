@@ -20,7 +20,7 @@ import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 import { Role } from "~/app/user/entities/role.entity";
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from "./auth/auth.module";
 import { corsSettings } from "~/lib/middlewares/attach_middlewares";
 
 @Module({

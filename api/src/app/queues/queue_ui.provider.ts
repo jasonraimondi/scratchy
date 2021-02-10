@@ -8,8 +8,6 @@ import { QUEUE } from "~/config/queues";
 @Injectable()
 export class QueueUIProvider {
   constructor(@InjectQueue(QUEUE.email) private readonly emailQueue: Queue) {
-    setQueues([
-      new BullAdapter(emailQueue),
-    ]);
+    setQueues([new BullAdapter(emailQueue)]);
   }
 }

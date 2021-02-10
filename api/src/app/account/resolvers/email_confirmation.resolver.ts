@@ -7,9 +7,7 @@ import { EmailConfirmationService } from "~/app/account/services/email_confirmat
 @Injectable()
 @Resolver()
 export class EmailConfirmationResolver {
-  constructor(
-    private readonly emailConfirmationService: EmailConfirmationService,
-  ) {}
+  constructor(private readonly emailConfirmationService: EmailConfirmationService) {}
 
   @Mutation(() => Boolean!)
   async verifyEmailConfirmation(@Args("data") { uuid, email }: VerifyEmailInput): Promise<boolean> {

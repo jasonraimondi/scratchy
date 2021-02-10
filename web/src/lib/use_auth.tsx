@@ -17,7 +17,6 @@ export interface DecodedJWT {
   sub: string;
 }
 
-
 export interface LoginParams {
   email: string;
   password: string;
@@ -26,8 +25,10 @@ export interface LoginParams {
 
 function AuthProvider(props: any) {
   const router = useRouter();
-  const [state, setState] = useState<{ user?: Partial<User>; accessToken?: string; }>({});
-  const decodedToken = useMemo(() => state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined, [state.accessToken]);
+  const [state, setState] = useState<{ user?: Partial<User>; accessToken?: string }>({});
+  const decodedToken = useMemo(() => (state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined), [
+    state.accessToken,
+  ]);
 
   const handleLogin = async (loginParams: LoginParams) => {
     const { data, errors } = await graphQLSdk.Login({ data: loginParams });
@@ -77,22 +78,27 @@ function AuthProvider(props: any) {
   console.log({ isAuthenticated: isAuthenticated() });
   console.log(state, decodedToken);
 
-  return <AuthContext.Provider value={{
-    isAuthenticated,
-    handleLogin,
-    handleLogout,
-    handleRefreshToken,
-    handleRevokeToken,
-  }} {...props} />;
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        handleLogin,
+        handleLogout,
+        handleRefreshToken,
+        handleRevokeToken,
+      }}
+      {...props}
+    />
+  );
 }
 
 type UseAuth = {
   isAuthenticated(): () => boolean;
   handleLogin(data: LoginParams): Promise<void>;
   handleLogout(): Promise<void>;
-  handleRefreshToken(): Promise<void>
+  handleRefreshToken(): Promise<void>;
   handleRevokeToken(): Promise<void>;
-}
+};
 
 const useAuth = () => useContext<UseAuth>(AuthContext);
 

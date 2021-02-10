@@ -7,9 +7,7 @@ import { SendForgotPasswordInput, UpdatePasswordInput } from "~/app/account/reso
 @Injectable()
 @Resolver()
 export class ForgotPasswordResolver {
-  constructor(
-    private readonly forgotPasswordService: ForgotPasswordService,
-  ) {}
+  constructor(private readonly forgotPasswordService: ForgotPasswordService) {}
 
   @Mutation(() => Boolean!)
   validateForgotPasswordToken(@Args("token") token: string, @Args("email") email: string) {

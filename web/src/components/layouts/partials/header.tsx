@@ -23,24 +23,31 @@ export function Header() {
               <a className={style.a}>Profile</a>
             </Link>
             <Link href="/logout">
-              <a className={style.a} data-test="logout-link">Logout</a>
+              <a className={style.a} data-test="logout-link">
+                Logout
+              </a>
             </Link>
           </>
         ) : (
           <>
             <Link href="/app/profile">
-              <a className={style.a} data-test="register-link">RESTRICTED</a>
+              <a className={style.a} data-test="register-link">
+                RESTRICTED
+              </a>
             </Link>
             <Link href="/register">
-              <a className={style.a} data-test="register-link">Register</a>
+              <a className={style.a} data-test="register-link">
+                Register
+              </a>
             </Link>
             <Link href="/login">
-              <a className={style.a} data-test="login-link">Login</a>
+              <a className={style.a} data-test="login-link">
+                Login
+              </a>
             </Link>
           </>
         )}
       </nav>
     </header>
   );
-};
-
+}

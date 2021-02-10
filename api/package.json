@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "seed": "ts-node-dev src/seeder.ts",
+    "seed": "ts-node src/seeder.ts",
     "typeorm": "node --require ts-node/register --require tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "prebuild": "rimraf dist",
     "build": "nest build --config tsconfig.build.json",
@@ -117,7 +117,6 @@
     "eslint-plugin-import": "^2.22.1",
     "faker": "^5.3.1",
     "jest": "^26.6.3",
-    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.1",
     "supertest": "^6.1.3",

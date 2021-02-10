@@ -1,0 +1,28 @@
+{
+  "name": "scratchy",
+  "version": "1.0.0",
+  "description": "[![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)](https://github.com/jasonraimondi/scratchy/actions?query=workflow%3A%22Node.js+CI%22) [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability) <a href=\"https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage\"><img src=\"https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage\" /></a>",
+  "main": "index.js",
+  "dependencies": {
+    "cookie": "^0.4.0",
+    "cookie-parser": "^1.4.5",
+    "cookie-signature": "^1.0.6"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonraimondi/scratchy.git"
+  },
+  "keywords": [],
+  "author": "Jason Raimondi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jasonraimondi/scratchy/issues"
+  },
+  "homepage": "https://github.com/jasonraimondi/scratchy#readme"
+}

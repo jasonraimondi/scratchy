@@ -7,10 +7,9 @@ export function getAuthHeaders() {
 
   if (accessToken) {
     try {
-      const decodedToken: any =  JSON.parse(accessToken);
+      const decodedToken: any = JSON.parse(accessToken);
       headers.authorization = "Bearer " + decodedToken.token;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   return headers;

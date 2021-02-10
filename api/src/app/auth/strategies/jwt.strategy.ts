@@ -11,7 +11,7 @@ export type TokenPayload = {
   email: string;
   tokenVersion: number;
   iat?: number;
-}
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userRepository.findById(userId);
 
     if (Number(tokenVersion) !== user.tokenVersion) {
-      throw new UnauthorizedException("invalid token")
+      throw new UnauthorizedException("invalid token");
     }
 
     return user;

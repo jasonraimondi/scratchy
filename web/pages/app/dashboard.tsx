@@ -10,12 +10,16 @@ export default function Dashboard() {
   if (!isAuthenticated()) {
     body = <p>Invalid Token</p>;
   } else {
-    body = <ul>
-      <li>IS AUTHENTICATED YES</li>
-    </ul>;
+    body = (
+      <ul>
+        <li>IS AUTHENTICATED YES</li>
+      </ul>
+    );
   }
 
-  return <Layout title="I am the dashboard" isPrivate={true}>
-    {body}
-  </Layout>;
-};
+  return (
+    <Layout title="I am the dashboard" isPrivate={true}>
+      {body}
+    </Layout>
+  );
+}

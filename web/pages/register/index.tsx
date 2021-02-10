@@ -29,7 +29,7 @@ export default function Register() {
     try {
       await graphQLSdk.Register({ data });
       setSubmitting(false);
-      await router.push("/register/success")
+      await router.push("/register/success");
     } catch (e) {
       setStatus(e.message);
     }
@@ -44,22 +44,27 @@ export default function Register() {
         {status && <span className="bg-red-500 text-white text-center px-6 py-1 my-2 rounded">{status}</span>}
         <Label data-test="register-form--email">
           <span>Email</span>
-          <input type="email" name="email" placeholder="john.doe@example.com" ref={register({ required: true, pattern: validEmail})}/>
+          <input
+            type="email"
+            name="email"
+            placeholder="john.doe@example.com"
+            ref={register({ required: true, pattern: validEmail })}
+          />
           {errors.email && <span>{errors.email}</span>}
         </Label>
         <Label data-test="register-form--password">
           <span>Password</span>
-          <input type="password" name="password" placeholder="**************" ref={register}/>
+          <input type="password" name="password" placeholder="**************" ref={register} />
           {errors.password && <span>{errors.password}</span>}
         </Label>
         <Label data-test="register-form--first">
           <span>First Name</span>
-          <input type="text" name="firstName" placeholder="John" ref={register}/>
+          <input type="text" name="firstName" placeholder="John" ref={register} />
           {errors.firstName && <span>{errors.firstName}</span>}
         </Label>
         <Label data-test="register-form--last">
           <span>Last Name</span>
-          <input type="text" name="lastName" placeholder="Doe" ref={register}/>
+          <input type="text" name="lastName" placeholder="Doe" ref={register} />
           {errors.lastName && <span>{errors.lastName}</span>}
         </Label>
         <Button type="submit" disabled={isSubmitting}>
@@ -68,4 +73,4 @@ export default function Register() {
       </form>
     </Layout>
   );
-};
+}

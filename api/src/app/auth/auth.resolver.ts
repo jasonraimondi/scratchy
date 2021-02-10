@@ -11,15 +11,12 @@ import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly userRepository: UserRepo,
-  ) {}
+  constructor(private readonly authService: AuthService, private readonly userRepository: UserRepo) {}
 
   @Mutation(() => LoginResponse!)
   async login(
     @Args("data") { email, password, rememberMe }: LoginInput,
-    @Context() { res }: MyContext
+    @Context() { res }: MyContext,
   ): Promise<LoginResponse> {
     const result = await this.authService.login(email, password);
     await this.authService.sendRefreshToken(res, rememberMe, result.user);
@@ -27,14 +24,12 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginResponse!)
-  async refreshToken(
-    @Context() { req, res }: MyContext
-  ): Promise<LoginResponse> {
+  async refreshToken(@Context() { req, res }: MyContext): Promise<LoginResponse> {
     const rememberMe = req.cookies?.rememberMe ?? false;
     const refreshToken = new RefreshTokenDTO(req.cookies?.jid);
 
     if (refreshToken.isExpired) {
-      throw new Error("invalid token")
+      throw new Error("invalid token");
     }
 
     const result = await this.authService.updateAccessToken(refreshToken.token);

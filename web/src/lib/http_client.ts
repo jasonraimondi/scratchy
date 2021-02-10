@@ -6,7 +6,7 @@ interface Config extends RequestInit {
   body?: any;
 }
 
-export const httpClient = async<T = any> (url: string, { body, ...customConfig }: Config = {}): Promise<T> => {
+export const httpClient = async <T = any>(url: string, { body, ...customConfig }: Config = {}): Promise<T> => {
   const config: RequestInit = {
     credentials: "include",
     method: body ? "POST" : "GET",

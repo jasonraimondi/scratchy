@@ -8,8 +8,9 @@ export default function Logout() {
 
   useEffect(() => void handleLogout(), []);
 
-  return <Layout title="Logout">
-    <h1>Logging Out...</h1>
-  </Layout>;
-};
-
+  return (
+    <Layout title="Logout">
+      <h1>Logging Out...</h1>
+    </Layout>
+  );
+}

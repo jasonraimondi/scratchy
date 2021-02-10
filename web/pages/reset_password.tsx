@@ -9,7 +9,6 @@ import { ResetPasswordFormData } from "@/app/components/forms/reset_password_for
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, Label } from "@/app/components/forms/elements";
 
-
 export default function ResetPassword() {
   const { handleLoginRedirect } = useAuth();
   const router = useRouter();
@@ -39,7 +38,12 @@ export default function ResetPassword() {
       <form onSubmit={handleSubmit(onSubmit)} data-test="reset-password-form">
         <Label data-test="reset-password-form--password">
           <span>Password</span>
-          <input type="password" name="password" placeholder="enter a secure password" ref={register({ required: true, minLength: 8 })}/>
+          <input
+            type="password"
+            name="password"
+            placeholder="enter a secure password"
+            ref={register({ required: true, minLength: 8 })}
+          />
           {errors.password}
         </Label>
         <Button type="submit" disabled={isSubmitting}>
@@ -48,4 +52,4 @@ export default function ResetPassword() {
       </form>
     </Layout>
   );
-};
+}

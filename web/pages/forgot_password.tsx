@@ -8,7 +8,6 @@ import { Button, Label } from "@/app/components/forms/elements";
 import { useForm } from "react-hook-form";
 import { validEmail } from "./register";
 
-
 export default function ForgotPassword() {
   const router = useRouter();
 
@@ -28,7 +27,12 @@ export default function ForgotPassword() {
       <form onSubmit={handleSubmit(onSubmit)} data-test="forgot-password-form">
         <Label data-test="forgot-password-form--email">
           <span>Email</span>
-          <input type="email" name="email" placeholder="john.doe@example.com" ref={register({ required: true, pattern: validEmail })} />
+          <input
+            type="email"
+            name="email"
+            placeholder="john.doe@example.com"
+            ref={register({ required: true, pattern: validEmail })}
+          />
           {errors.email}
         </Label>
         <Button type="submit" disabled={isSubmitting}>
@@ -37,4 +41,4 @@ export default function ForgotPassword() {
       </form>
     </Layout>
   );
-};
+}

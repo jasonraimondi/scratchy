@@ -10,4 +10,4 @@ const graphQLClient = new GraphQLClient(`${process.env.NEXT_PUBLIC_API_URL}graph
 
 const graphQLSdk = getSdk(graphQLClient);
 
-export { graphQLClient, graphQLSdk }
+export { graphQLClient, graphQLSdk };

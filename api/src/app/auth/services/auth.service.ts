@@ -1,5 +1,5 @@
 import ms from "ms";
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async updateAccessToken(refreshToken: string): Promise<LoginResponse> {
-    let payload: { sub: string; iat: string; tokenVersion: number; };
+    let payload: { sub: string; iat: string; tokenVersion: number };
     try {
       payload = await this.jwtService.verify(refreshToken);
     } catch (_) {
@@ -63,7 +63,7 @@ export class AuthService {
       expires = ms(rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout);
     }
 
-    console.log("refresh", { expires: new Date(Date.now() + expires), expiresETA: expires })
+    console.log("refresh", { expires: new Date(Date.now() + expires), expiresETA: expires });
 
     const options = this.cookieOptions({ expires: new Date(Date.now() + expires) });
 

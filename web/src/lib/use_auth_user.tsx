@@ -4,13 +4,12 @@ import { createContext, useContext } from "react";
 const AuthUserContext = createContext<UseAuth>();
 
 function AuthUserProvider(props: any) {
-  return <AuthUserContext.Provider value={{
-  }} {...props} />;
+  return <AuthUserContext.Provider value={{}} {...props} />;
 }
 
 type UseAuth = {
   bearer?: string;
-}
+};
 
 const useAuthUser = () => useContext<UseAuth>(AuthUserContext);
 
