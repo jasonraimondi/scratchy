@@ -31,10 +31,12 @@ const ENV = {
     google: {
       clientId: process.env.OAUTH_GOOGLE_ID,
       clientSecret: process.env.OAUTH_GOOGLE_SECRET,
+      callbackURL: "http://api.scratchy.localdomain:8080/oauth2/google/callback",
     },
     github: {
       clientId: process.env.OAUTH_GITHUB_ID,
       clientSecret: process.env.OAUTH_GITHUB_SECRET,
+      callbackURL: "http://api.scratchy.localdomain:8080/oauth2/github/callback",
     },
   },
   // aws: {

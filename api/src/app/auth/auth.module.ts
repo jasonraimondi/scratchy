@@ -8,14 +8,14 @@ import { GithubStrategy } from "~/app/auth/strategies/github.strategy";
 import { GoogleStrategy } from "~/app/auth/strategies/google.strategy";
 import { JwtStrategy } from "~/app/auth/strategies/jwt.strategy";
 import { LoggerModule } from "~/lib/logger/logger.module";
-import { GithubController } from "./controllers/github.controller";
-import { GoogleController } from "./controllers/google.controller";
+import { GithubAuthGuard, GithubController } from "~/app/auth/controllers/github.controller";
+import { GoogleAuthGuard, GoogleController } from "~/app/auth/controllers/google.controller";
 
 const strategies = [GithubStrategy, GoogleStrategy, JwtStrategy];
 
 @Module({
   imports: [DatabaseModule, JwtModule, LoggerModule],
-  providers: [AuthService, AuthResolver, ...strategies],
+  providers: [AuthService, AuthResolver, ...strategies, GithubAuthGuard, GoogleAuthGuard],
   controllers: [GithubController, GoogleController],
 })
 export class AuthModule {}

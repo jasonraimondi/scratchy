@@ -13,6 +13,16 @@ export default function LoginPage() {
 
   return (
     <Layout title="Login">
+
+      <ul>
+        <li>
+          <a href="http://api.scratchy.localdomain:8080/oauth2/github">Github Login</a>
+        </li>
+        <li>
+          <a href="http://api.scratchy.localdomain:8080/oauth2/google">Google Login</a>
+        </li>
+      </ul>
+
       <form
         onSubmit={handleSubmit(handleLogin)}
         data-test="reset-password-form"

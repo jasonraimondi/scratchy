@@ -30,6 +30,10 @@ export class AuthService {
     return { accessToken, user };
   }
 
+  loginOauth(user: User): Promise<string> {
+    return this.createAccessToken(user)
+  }
+
   async updateAccessToken(refreshToken: string): Promise<LoginResponse> {
     let payload: { sub: string; iat: string; tokenVersion: number };
     try {

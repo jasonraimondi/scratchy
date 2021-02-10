@@ -16,7 +16,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       passReqToCallback: true,
       clientID: ENV.oauth.google.clientId,
       clientSecret: ENV.oauth.google.clientSecret,
-      callbackURL: "http://localhost:3001/oauth2/google/callback",
+      callbackURL: ENV.oauth.google.callbackURL,
       scope: ["email", "profile"],
     });
     this.logger = new Logger(this.constructor.name);

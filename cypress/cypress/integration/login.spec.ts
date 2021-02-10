@@ -1,4 +1,10 @@
 it("responds with access token and refresh token cookie", () => {
+  cy.intercept('POST', '/graphql', (req) => {
+    if (req.body.query?.includes('Login')) {
+      req.alias = 'mutateLogin';
+    }
+  });
+
   cy.viewport("iphone-x");
   cy.visit("/login");
   cy.getCookie("jid").should("not.exist");
@@ -9,6 +15,7 @@ it("responds with access token and refresh token cookie", () => {
     cy.dataTest("remember-me").click();
     cy.dataTest("submit").click();
   });
+  cy.wait("@mutateLogin")
   cy.getCookies();
   cy.getCookie("jid").should("exist")
     .then(cookie => {

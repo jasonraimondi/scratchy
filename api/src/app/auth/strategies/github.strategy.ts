@@ -17,7 +17,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
       passReqToCallback: true,
       clientID: ENV.oauth.github.clientId,
       clientSecret: ENV.oauth.github.clientSecret,
-      callbackURL: "http://localhost:3001/oauth2/github/callback",
+      callbackURL: ENV.oauth.github.callbackURL,
       scope: ["email", "profile"],
     });
     this.logger = new Logger(this.constructor.name);

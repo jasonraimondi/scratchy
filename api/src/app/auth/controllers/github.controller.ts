@@ -1,4 +1,3 @@
-import { base64decode } from "@jmondi/oauth2-server";
 import { Controller, Get, Injectable, Ip, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import type { Request, Response } from "express";
@@ -24,7 +23,8 @@ export class GithubController {
   @UseGuards(GithubAuthGuard)
   async githubAuthRedirect(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
     let user: User | any = req.user;
-
+    console.log("JASONRAIMONDI")
+    console.log({ user });
     if (!user || !user.email) {
       throw UnauthorizedException.invalidUser();
     }
@@ -33,12 +33,8 @@ export class GithubController {
       user = await this.userRepository.findByEmail(user.email);
     }
 
-    // if (!req.cookies[COOKIES.redirectHelper]) {
-    //   throw new InvalidRequestError("missing redirect_query_string");
-    // }
-    //
-    // const redirectQueryString = base64decode(req.cookies[COOKIES.redirectHelper]);
+    const accessToken = await this.loginService.loginOauth(user);
 
-    // await this.loginService.loginAndRedirect(user, ipAddr, res);
+    res.redirect(`http://scratchy.localdomain:8080/callback?token=${accessToken}`);
   }
 }
