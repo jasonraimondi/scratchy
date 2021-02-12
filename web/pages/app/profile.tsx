@@ -30,6 +30,10 @@ export default function Profile() {
 
   return (
     <Layout title="profile" isPrivate={true}>
+      <ul>
+        <li><a href="#">Revoke Refresh Token</a></li>
+        <li><a href="#">Send Email Verification</a></li>
+      </ul>
       {body}
     </Layout>
   );

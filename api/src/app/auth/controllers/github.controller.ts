@@ -1,6 +1,7 @@
 import { Controller, Get, Injectable, Ip, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import type { Request, Response } from "express";
+import querystring from "querystring";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
@@ -33,8 +34,10 @@ export class GithubController {
       user = await this.userRepository.findByEmail(user.email);
     }
 
-    const accessToken = await this.loginService.loginOauth(user);
+    const token = await this.loginService.loginOauth(user);
+    const rememberMe = true;
+    await this.loginService.sendRefreshToken(res, rememberMe, user);
 
-    res.redirect(`http://scratchy.localdomain:8080/callback?token=${accessToken}`);
+    res.redirect(`http://scratchy.localdomain:8080/callback?${querystring.stringify({ token })}`);
   }
 }

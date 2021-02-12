@@ -13,6 +13,7 @@ mutation RefreshToken {
     refreshToken {
         accessToken
         user {
+            id
             email
         }
     }

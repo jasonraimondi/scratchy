@@ -1,8 +1,6 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
-
-import { User } from "@/generated/graphql";
 import { graphQLSdk } from "@/app/lib/api_sdk";
 
 // @ts-ignore
@@ -25,12 +23,12 @@ export interface LoginParams {
 
 function AuthProvider(props: any) {
   const router = useRouter();
-  const [state, setState] = useState<{ user?: Partial<User>; accessToken?: string }>({});
+  const [state, setState] = useState<{ userId?: string; accessToken?: string }>({});
   const decodedToken = useMemo(() => (state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined), [
     state.accessToken,
   ]);
 
-  const handleLogin = async (loginParams: LoginParams) => {
+  async function handleLogin(loginParams: LoginParams) {
     const { data, errors } = await graphQLSdk.Login({ data: loginParams });
 
     if (errors || !data?.login) {
@@ -39,11 +37,11 @@ function AuthProvider(props: any) {
     }
 
     const { accessToken, user } = data.login;
-    setState({ ...state, user, accessToken });
+    setState({ ...state, userId: user.id, accessToken });
     await router.push("/app/dashboard");
-  };
+  }
 
-  const handleRefreshToken = async () => {
+  async function handleRefreshToken() {
     const { data, errors } = await graphQLSdk.RefreshToken();
 
     if (errors || !data?.refreshToken) {
@@ -52,31 +50,35 @@ function AuthProvider(props: any) {
     }
 
     const { accessToken, user } = data.refreshToken;
-    setState({ ...state, user, accessToken });
-  };
+    setState({ ...state, userId: user.id, accessToken });
+  }
 
-  const handleLogout = async () => {
+  async function handleLogout() {
     const { data, errors } = await graphQLSdk.Logout();
     console.log(data, errors);
     setState({});
     await router.replace("/login");
-  };
+  }
 
-  const handleRevokeToken = async () => {
-    if (state.user?.id) {
-      const { data, errors } = await graphQLSdk.RevokeRefreshTokensForUser({ userId: state.user.id });
+  async function handleRevokeToken() {
+    if (state.userId) {
+      const { data, errors } = await graphQLSdk.RevokeRefreshTokensForUser({ userId: state.userId });
       console.log(data, errors);
     }
-  };
+  }
 
-  const isAuthenticated = () => {
+  function isAuthenticated() {
     if (!decodedToken) return false;
     const expiresAt = new Date(decodedToken.exp * 1000);
     return new Date() < expiresAt;
-  };
+  }
+
+  async function setAccessToken(accessToken: string) {
+    const payload = jwtDecode<DecodedJWT>(accessToken);
+    setState({ ...state, accessToken, userId: payload.sub });
+  }
 
   console.log({ isAuthenticated: isAuthenticated() });
-  console.log(state, decodedToken);
 
   return (
     <AuthContext.Provider
@@ -86,6 +88,7 @@ function AuthProvider(props: any) {
         handleLogout,
         handleRefreshToken,
         handleRevokeToken,
+        setAccessToken,
       }}
       {...props}
     />
@@ -98,6 +101,7 @@ type UseAuth = {
   handleLogout(): Promise<void>;
   handleRefreshToken(): Promise<void>;
   handleRevokeToken(): Promise<void>;
+  setAccessToken(token: string): void;
 };
 
 const useAuth = () => useContext<UseAuth>(AuthContext);
