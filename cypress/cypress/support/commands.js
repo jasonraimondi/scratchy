@@ -2,36 +2,12 @@ import { simpleParser } from "mailparser";
 
 Cypress.Commands.add("dataTest", tag => cy.get(`[data-test=${tag}]`));
 
-Cypress.Commands.add("logout", () => {
-  cy.visit("/logout");
-
-  cy.location().should(loc => {
-    expect(loc.pathname).to.eq("/login");
-  });
-  cy.getCookie("jid").should("not.exist");
-});
-
-Cypress.Commands.add("login", ({ email, password }) => {
-  cy.visit(`/login`);
-  cy.dataTest("login-form--email")
-    .click()
-    .type(email);
-  cy.dataTest("login-form--password")
-    .click()
-    .type(password);
-  cy.dataTest("login-form--remember-me").click();
-  cy.dataTest("login-form").submit();
-
-  // cy.getCookie("jid").should("exist");
-  // cy.getCookie("rememberMe").should("have.property", "value", "true");
-});
-
 Cypress.Commands.add("verifyUser", email => {
   cy.getLastEmail(email).then(res => {
     const parsedEmail = res.parsedBody.textAsHtml;
     const link = parsedEmail.match(/href="([^"]*)/)[1];
     cy.visit(link);
-    cy.location('pathname').should("equal", "/login");
+    cy.location("pathname").should("equal", "/login");
   });
 });
 

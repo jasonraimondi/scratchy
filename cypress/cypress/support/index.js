@@ -1,7 +1,9 @@
-import faker from 'faker';
+import faker from "faker";
 
 Cypress.Cookies.debug(true);
 
 cy.faker = faker;
 
-import './commands'
+import "./routes";
+import "./auth";
+import "./commands";

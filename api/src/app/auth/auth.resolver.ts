@@ -46,10 +46,11 @@ export class AuthResolver {
 
   @UseGuards(JwtAuthGqlGuard)
   @Mutation(() => Boolean)
-  async revokeRefreshToken(@Args("userId") userId: string): Promise<boolean> {
+  async revokeRefreshToken(@Context() { res }: MyContext, @Args("userId") userId: string): Promise<boolean> {
     try {
       await this.userRepository.findById(userId);
       await this.userRepository.incrementToken(userId);
+      await this.authService.sendRefreshToken(res, false, undefined);
       return true;
     } catch {
       return false;

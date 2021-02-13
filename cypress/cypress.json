@@ -1,3 +1,4 @@
 {
-  "baseUrl": "http://scratchy.localdomain:8080"
+  "baseUrl": "http://scratchy.localdomain:8080",
+  "experimentalStudio": true
 }

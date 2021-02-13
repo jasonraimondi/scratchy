@@ -9,7 +9,7 @@ type ParsedEmail = {
 type LoginData = {
   email: string;
   password: string;
-  redirectTo?: string;
+  rememberMe?: boolean;
 }
 
 declare namespace Cypress {
