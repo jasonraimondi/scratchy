@@ -22,6 +22,7 @@ import { HealthcheckController } from "~/app/system/controllers/healthcheck.cont
 import { Role } from "~/app/user/entities/role.entity";
 import { AuthModule } from "./auth/auth.module";
 import { corsSettings } from "~/lib/middlewares/attach_middlewares";
+import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 @Module({
   imports: [
@@ -47,6 +48,12 @@ import { corsSettings } from "~/lib/middlewares/attach_middlewares";
       playground: ENV.enablePlayground,
       autoSchemaFile: "schema.graphql",
       cors: corsSettings,
+      formatError: (error: GraphQLError) => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          message: error.extensions?.exception?.response?.message || error.message,
+        };
+        return graphQLFormattedError;
+      },
       context: ({ res, req }: { res: Response; req: Request }): Partial<MyContext | any> => ({
         ipAddr: req.ip,
         user: req.user,

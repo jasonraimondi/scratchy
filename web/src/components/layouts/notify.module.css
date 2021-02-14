@@ -1,0 +1,15 @@
+#notifications {
+  /*background-color: gray;*/
+}
+
+.success {
+  background-color: lightgreen;
+}
+
+.info {
+  background-color: teal;
+}
+
+.error {
+  background-color: tomato;
+}

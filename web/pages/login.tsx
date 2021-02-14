@@ -25,7 +25,7 @@ export default function LoginPage() {
 
       <form
         onSubmit={handleSubmit(handleLogin)}
-        data-test="reset-password-form"
+        data-test="login-form"
         className="bg-gray-200 p-2 m-2 rounded"
       >
         <Label data-test="email">

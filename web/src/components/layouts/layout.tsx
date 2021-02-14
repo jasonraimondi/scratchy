@@ -1,9 +1,12 @@
-import { Header } from "@/app/components/layouts/partials/header";
-import { useAuth } from "@/app/lib/use_auth";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import * as React from "react";
+import { useNotify } from "use-notify-rxjs";
+
+import { Notify } from "@/app/components/layouts/notify";
+import { Header } from "@/app/components/layouts/partials/header";
+import { useAuth } from "@/app/lib/use_auth";
 
 export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
   children,
@@ -16,6 +19,8 @@ export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
   useEffect(() => {
     if (isPrivate && !isAuthenticated()) router.push("/register");
   }, []);
+
+  const { info } = useNotify();
 
   let body;
 
@@ -38,6 +43,8 @@ export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
       </Head>
       <main>
         <Header />
+        <Notify />
+        <div><button onClick={() => info("HELLO JASON")}>Click Notify</button></div>
         <div>{body}</div>
       </main>
     </React.StrictMode>

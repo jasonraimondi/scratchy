@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
 import { graphQLSdk } from "@/app/lib/api_sdk";
+import { useNotify } from "use-notify-rxjs";
 
 // @ts-ignore
 const AuthContext = createContext<UseAuth>();
@@ -21,23 +22,36 @@ export interface LoginParams {
   rememberMe: boolean;
 }
 
+function catchGraphError(err: any) {
+  let errors = "";
+
+  if ((err.response?.errors?.length ?? 0) > 0) {
+    errors = err.response.errors.map((e: any) => e.message);
+  }
+
+  return { data: undefined, errors };
+}
+
 function AuthProvider(props: any) {
   const router = useRouter();
+  const notify = useNotify();
+
   const [state, setState] = useState<{ userId?: string; accessToken?: string }>({});
   const decodedToken = useMemo(() => (state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined), [
     state.accessToken,
   ]);
 
   async function handleLogin(loginParams: LoginParams) {
-    const { data, errors } = await graphQLSdk.Login({ data: loginParams });
+    const { data, errors } = await graphQLSdk.Login({ data: loginParams }).catch(catchGraphError);
 
     if (errors || !data?.login) {
-      console.log(errors);
-      throw new Error("invalid login request");
+      if (Array.isArray(errors)) {
+        ((errors as unknown) as string[]).forEach((err) => notify.error(err))
+      }
     }
 
-    const { accessToken, user } = data.login;
-    setState({ ...state, userId: user.id, accessToken });
+    const { accessToken, user } = data?.login ?? {};
+    setState({ ...state, userId: user?.id, accessToken });
     await router.push("/app/dashboard");
   }
 

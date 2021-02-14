@@ -2,7 +2,7 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }) => {
   cy.visit("/login");
   cy.getCookie("jid").should("not.exist");
   cy.getCookie("rememberMe").should("not.exist");
-  cy.dataTest("reset-password-form").within(() => {
+  cy.dataTest("login-form").within(() => {
     cy.dataTest("email").type(email);
     cy.dataTest("password").type(password);
     if (rememberMe) cy.dataTest("remember-me").click();

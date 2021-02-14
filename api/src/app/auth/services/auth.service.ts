@@ -7,7 +7,6 @@ import { User } from "~/app/user/entities/user.entity";
 import { CookieOptions, Response } from "express";
 import { ENV } from "~/config/configuration";
 import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
-import { TokenPayload } from "~/app/auth/strategies/jwt.strategy";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
 
 export function roundToSeconds(ms: Date | number) {
@@ -34,16 +33,19 @@ export class AuthService {
     return this.createAccessToken(user)
   }
 
-  async updateAccessToken(refreshToken: string): Promise<LoginResponse> {
-    let payload: { sub: string; iat: string; tokenVersion: number };
+  async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
+    let payload: Partial<RefreshTokenJWTPayload>;
     try {
       payload = await this.jwtService.verify(refreshToken);
     } catch (_) {
       throw new Error("invalid refresh token");
     }
 
-    const id = payload.sub ?? "NOT_FOUND";
-    const user = await this.userRepository.findById(id);
+    if (typeof payload.sub !== "string") {
+      throw new Error("refresh token payload missing sub (userid)")
+    }
+
+    const user = await this.userRepository.findById(payload.sub);
 
     if (user.tokenVersion !== payload.tokenVersion) {
       throw new Error("invalid refresh token");
@@ -53,6 +55,26 @@ export class AuthService {
 
     return { accessToken, user };
   }
+
+  // async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
+  //   let payload: { sub: string; iat: string; tokenVersion: number };
+  //   try {
+  //     payload = await this.jwtService.verify(refreshToken);
+  //   } catch (_) {
+  //     throw new Error("invalid refresh token");
+  //   }
+  //
+  //   const id = payload.sub ?? "NOT_FOUND";
+  //   const user = await this.userRepository.findById(id);
+  //
+  //   if (user.tokenVersion !== payload.tokenVersion) {
+  //     throw new Error("invalid refresh token");
+  //   }
+  //
+  //   const accessToken = await this.createAccessToken(user);
+  //
+  //   return { accessToken, user };
+  // }
 
   async sendRefreshToken(res: Response, rememberMe: boolean, user?: User) {
     let token = "";
@@ -67,15 +89,13 @@ export class AuthService {
       expires = ms(rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout);
     }
 
-    console.log("refresh", { expires: new Date(Date.now() + expires), expiresETA: expires });
-
-    const options = this.cookieOptions({ expires: new Date(Date.now() + expires) });
+    const options = cookieOptions({ expires: new Date(Date.now() + expires) });
 
     res.cookie("rememberMe", rememberMe, options);
     res.cookie("jid", token, options);
   }
 
-  private async createRefreshToken(user: User, rememberMe = false) {
+  private createRefreshToken(user: User, rememberMe = false) {
     const now = Date.now();
     const payload: RefreshTokenJWTPayload = {
       // non standard claims
@@ -109,13 +129,11 @@ export class AuthService {
     };
     return this.jwtService.sign(payload);
   }
-
-  private cookieOptions(opts: CookieOptions = {}): CookieOptions {
-    return {
-      domain: ENV.url!.hostname,
-      sameSite: "strict",
-      httpOnly: true,
-      ...opts,
-    };
-  }
 }
+
+const cookieOptions = (opts: CookieOptions = {}): CookieOptions => ({
+  domain: ENV.url!.hostname,
+  sameSite: "strict",
+  httpOnly: true,
+  ...opts,
+});

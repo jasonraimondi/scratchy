@@ -32,7 +32,7 @@ export class AuthResolver {
       throw new Error("invalid token");
     }
 
-    const result = await this.authService.updateAccessToken(refreshToken.token);
+    const result = await this.authService.refreshAccessToken(refreshToken.token);
     await this.authService.sendRefreshToken(res, rememberMe, result.user);
 
     return result;

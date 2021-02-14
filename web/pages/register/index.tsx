@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 export default function Register() {
   const router = useRouter();
 
+
   const { register, handleSubmit, errors } = useForm();
 
   const [status, setStatus] = useState<string>();

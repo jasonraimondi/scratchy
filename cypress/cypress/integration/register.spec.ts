@@ -38,25 +38,15 @@ describe("user registration flow", () => {
   function register({ email, password, first, last }: RegisterData) {
     cy.visit("/register");
 
-    cy.dataTest("register-form--email")
-      .click()
-      .type(email);
+    cy.dataTest("register-form").within(() => {
+      cy.dataTest("register-form--email").click().type(email);
 
-    if (password) {
-      cy.dataTest("register-form--password")
-        .click()
-        .type(password);
-    }
-    if (first) {
-      cy.dataTest("register-form--first")
-        .click()
-        .type(first);
-    }
-    if (last) {
-      cy.dataTest("register-form--last")
-        .click()
-        .type(last);
-    }
+      if (password) cy.dataTest("register-form--password").click().type(password);
+      if (first) cy.dataTest("register-form--first").click().type(first);
+      if (last) cy.dataTest("register-form--last").click().type(last);
+    });
+
+
 
     cy.dataTest("register-form").submit();
 
@@ -65,14 +55,15 @@ describe("user registration flow", () => {
 
   function assertUserIsNotVerified({ email, password }: { email: string; password: string }) {
     cy.visit("/login?redirectTo=/dashboard");
-    cy.dataTest("login-form--email")
-      .click()
-      .type(email);
-    cy.dataTest("login-form--password")
-      .click()
-      .type(password);
-    cy.dataTest("login-form").submit();
-
+    cy.dataTest("login-form").within(() => {
+      cy.dataTest("email").type(email);
+      cy.dataTest("password").type(password);
+      cy.dataTest("submit").click();
+    });
+    cy.wait("@mutateLogin").then(({ request }) => {
+      expect(request.body.variables.data.email).to.equal(email);
+      expect(request.body.variables.data.password).to.equal(password);
+    });
     cy.contains("user is not active");
   }
 });
