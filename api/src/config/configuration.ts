@@ -20,7 +20,7 @@ const ENV = {
   isDevelopment,
   isTesting,
   url: new URL(process.env.URL!),
-  apiUrl: new URL(process.env.API_URL!),
+  apiUrl: new URL(process.env.API_URL ?? process.env.URL!),
   secret: process.env.JWT_SECRET,
   enableDebugging: !!(process.env.ENABLE_DEBUGGING ?? isDevelopment),
   enablePlayground: !!(process.env.ENABLE_PLAYGROUND ?? isDevelopment),
