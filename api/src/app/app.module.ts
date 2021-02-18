@@ -1,8 +1,9 @@
-import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import type { Request, Response } from "express";
+import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 import { AppController } from "~/app/app.controller";
 import { AccountModule } from "~/app/account/account.module";
@@ -10,7 +11,6 @@ import { UserModule } from "~/app/user/user.module";
 import { ENV } from "~/config/configuration";
 import { MyContext } from "~/lib/graphql/my_context";
 import { User } from "~/app/user/entities/user.entity";
-import { AuthMiddleware } from "~/lib/middlewares/auth.middleware";
 import { registerTypes } from "~/app/database/register_types";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { GraphqlLogger } from "~/lib/graphql/graphql_logger.service";
@@ -22,7 +22,6 @@ import { HealthcheckController } from "~/app/system/controllers/healthcheck.cont
 import { Role } from "~/app/user/entities/role.entity";
 import { AuthModule } from "./auth/auth.module";
 import { corsSettings } from "~/lib/middlewares/attach_middlewares";
-import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 @Module({
   imports: [
@@ -71,7 +70,7 @@ export class AppModule {
     registerTypes();
   }
 
-  configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(AuthMiddleware).forRoutes("*");
-  }
+  // configure(consumer: MiddlewareConsumer): void {
+  //   consumer.apply(AuthMiddleware).forRoutes("*");
+  // }
 }

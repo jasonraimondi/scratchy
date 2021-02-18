@@ -28,7 +28,7 @@ export const attachMiddlewares = (app: INestApplication) => {
     );
   }
 
-  if (ENV.isTesting) {
+  if (!ENV.isTesting) {
     app.use("/admin/queues", bullUI);
   }
 };
