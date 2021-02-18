@@ -1,15 +1,40 @@
 #notifications {
-  /*background-color: gray;*/
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 100%;
+  max-width: 350px;
+  font-size: var(--text-md);
+  font-weight: bold;
+}
+
+#notifications li {
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin: 0.25rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.close {
+  display: block;
+  cursor: pointer;
+  position: absolute;
+  font-size: var(--text-md);
+  top: 0.25rem;
+  right: 0.75rem;
 }
 
 .success {
-  background-color: lightgreen;
+  background-color: var(--colors-green-500);
+  color: var(--colors-white)
 }
 
 .info {
-  background-color: teal;
+  background-color: var(--colors-blue-500);
+  color: var(--colors-white)
 }
 
 .error {
-  background-color: tomato;
+  background-color: var(--colors-red-500);
+  color: var(--colors-white)
 }

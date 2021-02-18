@@ -12,7 +12,10 @@ export function Notify() {
   return <ul id={style.notifications}>
     {notifications.map(notify => (
       <li className={style[notify.type]}>
-        {notify.message} <span onClick={() => clear(notify.id)}>&times;</span>
+        <span>{notify.message}</span>
+        <span className={style.close}
+              onClick={() => clear(notify.id)}
+        >&times;</span>
       </li>
     ))}
   </ul>
