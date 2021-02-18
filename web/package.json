@@ -27,9 +27,9 @@
     "isomorphic-unfetch": "^3.1.0",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.1.2",
-    "next": "^10.0.6",
+    "next": "^10.0.7",
     "nookies": "^2.5.2",
-    "postcss": "^8.2.5",
+    "postcss": "^8.2.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.15.1",
@@ -37,21 +37,21 @@
     "sanitize.css": "^12.0.1",
     "swr": "^0.4.2",
     "tailwindcss": "^2.0.3",
-    "use-notify-rxjs": "^0.2.0",
-    "yup": "^0.32.8"
+    "use-notify-rxjs": "^1.0.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.20.1",
     "@graphql-codegen/introspection": "^1.18.1",
-    "@graphql-codegen/typescript": "^1.20.2",
-    "@graphql-codegen/typescript-graphql-request": "^3.0.1",
+    "@graphql-codegen/typescript": "^1.21.0",
+    "@graphql-codegen/typescript-graphql-request": "^3.0.2",
     "@graphql-codegen/typescript-operations": "^1.17.14",
     "@types/js-cookie": "^2.2.6",
     "@types/jwt-decode": "^3.1.0",
-    "@types/node": "^14.14.25",
-    "@types/react": "^17.0.1",
-    "@types/react-dom": "^17.0.0",
+    "@types/node": "^14.14.28",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
-    "typescript": "^4.1.4"
+    "typescript": "^4.1.5"
   }
 }
