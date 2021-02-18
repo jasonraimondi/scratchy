@@ -1,6 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import { urlencoded } from "body-parser";
-import { router as bullUI } from "bull-board";
+// import { router as bullUI } from "bull-board";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -28,7 +28,7 @@ export const attachMiddlewares = (app: INestApplication) => {
     );
   }
 
-  if (!ENV.isTesting) {
-    app.use("/admin/queues", bullUI);
-  }
+  // if (!ENV.isTesting) {
+  //   app.use("/admin/queues", bullUI);
+  // }
 };

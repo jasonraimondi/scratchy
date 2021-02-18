@@ -1,7 +1,7 @@
 import { BullModule } from "@nestjs/bull";
 import { Module } from "@nestjs/common";
 
-import { QueueUIProvider } from "~/app/queues/queue_ui.provider";
+// import { QueueUIProvider } from "~/app/queues/queue_ui.provider";
 import { ENV } from "~/config/configuration";
 import { QUEUE } from "~/config/queues";
 
@@ -13,7 +13,7 @@ const queues = [
 ];
 
 @Module({
-  providers: [QueueUIProvider],
+  // providers: [QueueUIProvider],
   imports: [...queues],
   exports: [...queues],
 })
