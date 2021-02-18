@@ -6,8 +6,13 @@ const isTesting = process.env.NODE_ENV === "test";
 
 const required = ["URL", "DATABASE_URL", "JWT_SECRET"].filter((key) => !process.env.hasOwnProperty(key));
 
-if (!isTesting && required.length > 0) {
-  throw new Error(`missing required envs: (${required.join(", ")})`);
+if (required.length > 0) {
+  const message = `missing required envs: (${required.join(", ")})`;
+  if (isTesting) {
+    console.log(message)
+  } else {
+    throw new Error(message);
+  }
 }
 
 const ENV = {
