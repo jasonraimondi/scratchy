@@ -1,10 +1,11 @@
 import ms from "ms";
+import type { FastifyReply } from "fastify";
+import type { CookieSerializeOptions } from "fastify-cookie";
 import { Injectable } from "@nestjs/common";
 
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
 import { User } from "~/app/user/entities/user.entity";
-import { CookieOptions, Response } from "express";
 import { ENV } from "~/config/configuration";
 import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
@@ -56,27 +57,7 @@ export class AuthService {
     return { accessToken, user };
   }
 
-  // async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
-  //   let payload: { sub: string; iat: string; tokenVersion: number };
-  //   try {
-  //     payload = await this.jwtService.verify(refreshToken);
-  //   } catch (_) {
-  //     throw new Error("invalid refresh token");
-  //   }
-  //
-  //   const id = payload.sub ?? "NOT_FOUND";
-  //   const user = await this.userRepository.findById(id);
-  //
-  //   if (user.tokenVersion !== payload.tokenVersion) {
-  //     throw new Error("invalid refresh token");
-  //   }
-  //
-  //   const accessToken = await this.createAccessToken(user);
-  //
-  //   return { accessToken, user };
-  // }
-
-  async sendRefreshToken(res: Response, rememberMe: boolean, user?: User) {
+  async sendRefreshToken(res: FastifyReply, rememberMe: boolean, user?: User) {
     let token = "";
 
     if (user) {
@@ -91,8 +72,8 @@ export class AuthService {
 
     const options = cookieOptions({ expires: new Date(Date.now() + expires) });
 
-    res.cookie("rememberMe", rememberMe, options);
-    res.cookie("jid", token, options);
+    res.setCookie("rememberMe", rememberMe.toString(), options);
+    res.setCookie("jid", token, options);
   }
 
   private createRefreshToken(user: User, rememberMe = false) {
@@ -129,9 +110,29 @@ export class AuthService {
     };
     return this.jwtService.sign(payload);
   }
+
+  // async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
+  //   let payload: { sub: string; iat: string; tokenVersion: number };
+  //   try {
+  //     payload = await this.jwtService.verify(refreshToken);
+  //   } catch (_) {
+  //     throw new Error("invalid refresh token");
+  //   }
+  //
+  //   const id = payload.sub ?? "NOT_FOUND";
+  //   const user = await this.userRepository.findById(id);
+  //
+  //   if (user.tokenVersion !== payload.tokenVersion) {
+  //     throw new Error("invalid refresh token");
+  //   }
+  //
+  //   const accessToken = await this.createAccessToken(user);
+  //
+  //   return { accessToken, user };
+  // }
 }
 
-const cookieOptions = (opts: CookieOptions = {}): CookieOptions => ({
+const cookieOptions = (opts: CookieSerializeOptions = {}): CookieSerializeOptions => ({
   domain: ENV.url!.hostname,
   sameSite: "strict",
   httpOnly: true,

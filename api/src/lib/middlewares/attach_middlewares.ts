@@ -1,9 +1,8 @@
-import { INestApplication } from "@nestjs/common";
-import { urlencoded } from "body-parser";
-// import { router as bullUI } from "bull-board";
-import cookieParser from "cookie-parser";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
+import { NestFastifyApplication } from "@nestjs/platform-fastify";
+import cookieParser from "fastify-cookie";
+import rateLimit from "fastify-rate-limit";
+import helmet from "fastify-helmet";
+import nunjucks from "nunjucks";
 
 import { ENV } from "~/config/configuration";
 
@@ -12,23 +11,29 @@ export const corsSettings = {
   credentials: true,
 };
 
-export const attachMiddlewares = (app: INestApplication) => {
-  app.use(urlencoded({ extended: false }));
-  app.use(cookieParser());
+export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
+  await fastify.register(cookieParser);
 
-  app.enableCors(corsSettings);
+  fastify.enableCors(corsSettings);
+
+  await fastify.setViewEngine({
+    engine: {
+      nunjucks
+    },
+    templates: ENV.templatesDir,
+    includeViewExtension: true,
+    viewExt: "njk",
+  });
 
   if (ENV.isProduction) {
-    app.use(helmet());
-    app.use(
-      rateLimit({
-        windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100, // limit each IP to 100 requests per windowMs
-      }),
-    );
+    await fastify.register(helmet);
+    await fastify.register(rateLimit, {
+      max: 100,
+      timeWindow: '1 minute'
+    });
   }
 
   // if (!ENV.isTesting) {
-  //   app.use("/admin/queues", bullUI);
+  //   fastify.use("/admin/queues", bullUI);
   // }
 };

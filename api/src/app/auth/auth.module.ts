@@ -12,10 +12,11 @@ import { GithubAuthGuard, GithubController } from "~/app/auth/controllers/github
 import { GoogleAuthGuard, GoogleController } from "~/app/auth/controllers/google.controller";
 
 const strategies = [GithubStrategy, GoogleStrategy, JwtStrategy];
+const guards = [GithubAuthGuard, GoogleAuthGuard];
 
 @Module({
   imports: [DatabaseModule, JwtModule, LoggerModule],
-  providers: [AuthService, AuthResolver, ...strategies, GithubAuthGuard, GoogleAuthGuard],
+  providers: [AuthService, AuthResolver, ...strategies, ...guards],
   controllers: [GithubController, GoogleController],
 })
 export class AuthModule {}

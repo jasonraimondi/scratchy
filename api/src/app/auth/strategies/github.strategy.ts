@@ -1,6 +1,6 @@
 import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import type { Request } from "express";
+import type { FastifyRequest } from "fastify";
 import { Profile, Strategy } from "passport-github";
 import { VerifyCallback } from "passport-google-oauth20";
 
@@ -24,7 +24,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
   }
 
   async validate(
-    req: Request,
+    req: FastifyRequest,
     accessToken: string,
     refreshToken: string,
     profile: Profile,
