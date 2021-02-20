@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { JwtInterface } from "@jmondi/oauth2-server";
 import { JwtService } from "@nestjs/jwt";
 import { JwtSignOptions } from "@nestjs/jwt/dist/interfaces/jwt-module-options.interface";
 
 @Injectable()
-export class MyJwtService implements JwtInterface {
+export class MyJwtService {
   constructor(private readonly jwt: JwtService) {}
 
   decode(encryptedData: string): { [p: string]: any } | string | null {

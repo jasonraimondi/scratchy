@@ -1,6 +1,6 @@
 import { Controller, Get, Injectable, Ip, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import type { Request, Response } from "express";
+import type { FastifyRequest, FastifyReply } from "fastify";
 import querystring from "querystring";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
@@ -22,10 +22,8 @@ export class GithubController {
 
   @Get("callback")
   @UseGuards(GithubAuthGuard)
-  async githubAuthRedirect(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
+  async githubAuthRedirect(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Ip() ipAddr: string) {
     let user: User | any = req.user;
-    console.log("JASONRAIMONDI")
-    console.log({ user });
     if (!user || !user.email) {
       throw UnauthorizedException.invalidUser();
     }
@@ -38,6 +36,6 @@ export class GithubController {
     const rememberMe = true;
     await this.loginService.sendRefreshToken(res, rememberMe, user);
 
-    res.redirect(`http://scratchy.localdomain:8080/callback?${querystring.stringify({ token })}`);
+    res.status(302).redirect(`http://scratchy.localdomain:8080/callback?${querystring.stringify({ token })}`);
   }
 }

@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import type { Request, Response } from "express";
+import type { FastifyRequest, FastifyReply } from "fastify";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 import { AppController } from "~/app/app.controller";
@@ -20,8 +20,8 @@ import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 import { Role } from "~/app/user/entities/role.entity";
-import { AuthModule } from "./auth/auth.module";
 import { corsSettings } from "~/lib/middlewares/attach_middlewares";
+import { AuthModule } from "~/app/auth/auth.module";
 
 @Module({
   imports: [
@@ -53,12 +53,15 @@ import { corsSettings } from "~/lib/middlewares/attach_middlewares";
         };
         return graphQLFormattedError;
       },
-      context: ({ res, req }: { res: Response; req: Request }): Partial<MyContext | any> => ({
-        ipAddr: req.ip,
-        user: req.user,
-        res,
-        req,
-      }),
+      context: ({ request, reply }): Partial<MyContext> => {
+        console.log("IP ADDR", request.ip);
+        return {
+          ipAddr: request.ip,
+          user: request.user,
+          req: request,
+          res: reply,
+        }
+      },
     }),
     AuthModule,
   ],

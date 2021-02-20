@@ -1,7 +1,6 @@
-import { base64decode } from "@jmondi/oauth2-server";
 import { Controller, Get, Injectable, Ip, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import type { Request, Response } from "express";
+import type { FastifyRequest, FastifyReply } from "fastify";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
@@ -21,7 +20,7 @@ export class GoogleController {
 
   @Get("callback")
   @UseGuards(GoogleAuthGuard)
-  async googleAuthRedirect(@Req() req: Request, @Res() res: Response, @Ip() ipAddr: string) {
+  async googleAuthRedirect(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Ip() ipAddr: string) {
     let user: any = req.user;
 
     if (!user || !user.email) {

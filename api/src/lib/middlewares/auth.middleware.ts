@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
-import { Request, Response } from "express";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 import { User } from "~/app/user/entities/user.entity";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
@@ -9,7 +9,7 @@ import { MyJwtService } from "~/lib/jwt/jwt.service";
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly userRepository: UserRepo, private readonly jwt: MyJwtService) {}
 
-  async use(req: Request, res: Response, next: any) {
+  async use(req: FastifyRequest, res: FastifyReply, next: any) {
     if (!!req.cookies.jwt) {
       req.user = await this.getUserFromToken(req.cookies.jwt);
     }

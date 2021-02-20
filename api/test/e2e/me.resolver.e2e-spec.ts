@@ -44,7 +44,6 @@ describe.skip(MeResolver, () => {
     registerTypes();
 
     app = moduleRef.createNestApplication();
-    attachMiddlewares(app);
     await app.init();
   });
 

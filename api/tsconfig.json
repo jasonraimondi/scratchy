@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
@@ -25,7 +28,11 @@
     "removeComments": true,
     "sourceMap": true,
     "strictFunctionTypes": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "typeRoots": [
+      "./src/global.d.ts",
+      "./node_modules/@types"
+    ]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
