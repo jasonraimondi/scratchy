@@ -25,7 +25,7 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }) => {
 
 Cypress.Commands.add("logout", () => {
   cy.visit("/logout");
-  cy.wait("@mutateLogin");
+  cy.wait("@mutateLogout");
   cy.location("pathname").should("equal", "/login");
   cy.getCookie("jid").should("not.exist");
   cy.getCookie("rememberMe").should("not.exist");
