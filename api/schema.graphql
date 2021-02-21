@@ -58,12 +58,31 @@ enum Order {
 }
 
 type Mutation {
+  validateForgotPasswordToken(email: String!, token: String!): Boolean!
+  sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
+  updatePasswordFromToken(data: UpdatePasswordInput!): Boolean!
+  verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
   resentConfirmEmail(email: String!): Boolean!
   register(data: RegisterInput!): User!
   login(data: LoginInput!): LoginResponse!
   refreshToken: LoginResponse!
   logout: Boolean!
   revokeRefreshToken(userId: String!): Boolean!
+}
+
+input SendForgotPasswordInput {
+  email: String!
+}
+
+input UpdatePasswordInput {
+  password: String!
+  token: String!
+  email: String!
+}
+
+input VerifyEmailInput {
+  email: String!
+  uuid: String!
 }
 
 input RegisterInput {

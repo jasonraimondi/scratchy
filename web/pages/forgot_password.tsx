@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-
-import { Layout } from "@/app/components/layouts/layout";
-import { ForgotPasswordFormData } from "@/app/components/forms/forgot_password_form";
-import { graphQLSdk } from "@/app/lib/api_sdk";
-import { Button, Label } from "@/app/components/forms/elements";
 import { useForm } from "react-hook-form";
+
+import { Button, Label } from "@/app/components/forms/elements";
+import { graphQLSdk } from "@/app/lib/api_sdk";
+import { Layout } from "@/app/components/layouts/layout";
 import { validEmail } from "./register";
 
 export default function ForgotPassword() {
@@ -15,7 +14,7 @@ export default function ForgotPassword() {
 
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmit = async (data: ForgotPasswordFormData) => {
+  const onSubmit = async (data: any) => {
     await graphQLSdk.SendForgotPasswordEmail({ email: data.email });
     await router.push("/");
     setSubmitting(false);

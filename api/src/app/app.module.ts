@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import type { FastifyRequest, FastifyReply } from "fastify";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 import { AppController } from "~/app/app.controller";
@@ -54,7 +53,6 @@ import { AuthModule } from "~/app/auth/auth.module";
         return graphQLFormattedError;
       },
       context: ({ request, reply }): Partial<MyContext> => {
-        console.log("IP ADDR", request.ip);
         return {
           ipAddr: request.ip,
           user: request.user,

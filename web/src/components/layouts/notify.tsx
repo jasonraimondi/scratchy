@@ -11,7 +11,7 @@ export function Notify() {
 
   return <ul id={style.notifications}>
     {notifications.map(notify => (
-      <li className={style[notify.type]}>
+      <li key={notify.type} className={style[notify.type]}>
         <span>{notify.message}</span>
         <span className={style.close}
               onClick={() => clear(notify.id)}

@@ -13,14 +13,7 @@ describe("user registration flow", () => {
 
   it.only("user can register, verify email, and successfully login", () => {
     register({ email, first, last, password });
-    assertUserIsNotVerified({ email, password });
     cy.verifyUser(email);
-    cy.login({ email, password });
-    cy.contains("Profile");
-    cy.contains("Logout");
-    cy.logout();
-    cy.contains("Login");
-    cy.contains("Register");
   });
 
   it("user can register with only email and password", () => {
@@ -45,8 +38,6 @@ describe("user registration flow", () => {
       if (first) cy.dataTest("register-form--first").click().type(first);
       if (last) cy.dataTest("register-form--last").click().type(last);
     });
-
-
 
     cy.dataTest("register-form").submit();
 
