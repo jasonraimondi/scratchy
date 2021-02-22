@@ -1,6 +1,6 @@
 # Scratchy
 
-[![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)](https://github.com/jasonraimondi/scratchy/actions?query=workflow%3A%22Node.js+CI%22)
+[![CI](https://github.com/jasonraimondi/scratchy/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/jasonraimondi/scratchy/actions/workflows/unit_tests.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability)
 <a href="https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage"><img src="https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage" /></a>
 
