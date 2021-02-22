@@ -52,6 +52,7 @@ jobs:
         working-directory: api
       - name: report coverage to code climate
         working-directory: api
+        if: matrix.os == 'ubuntu-latest'
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
