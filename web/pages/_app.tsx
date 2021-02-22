@@ -9,7 +9,7 @@ import "@/styles/style.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <NotifyProvider>
+    <NotifyProvider ttl={6500}>
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>

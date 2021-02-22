@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { EmailService } from "~/app/emails/services/email.service";
-import { API_ROUTES } from "~/config/routes";
+import { WEB_ROUTES } from "~/config/routes";
 
 interface IEmailService {
   send(context: any): Promise<void>;
@@ -21,7 +21,7 @@ export class RegisterEmail implements IEmailService {
       template: "auth/register",
       context: {
         user,
-        url: API_ROUTES.verify_email.create({
+        url: WEB_ROUTES.verify_email.create({
           email: user.email,
           id: userConfirmation.id,
         }),

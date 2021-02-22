@@ -5,6 +5,6 @@ mutation Register($data: RegisterInput!) {
     email
   }
 }
-# mutation VerifyEmailConfirmation($data: VerifyEmailInput!) {
-#   verifyEmailConfirmation(data: $data)
-# }
+mutation VerifyEmailConfirmation($data: VerifyEmailInput!) {
+  verifyEmailConfirmation(data: $data)
+}

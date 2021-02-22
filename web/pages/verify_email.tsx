@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import { graphQLSdk } from "@/app/lib/api_sdk";
+import { useNotify } from "use-notify-rxjs";
 
 export default function VerifyEmail() {
   const router = useRouter();
@@ -12,21 +13,22 @@ export default function VerifyEmail() {
 
   const verifyEmailData: any = { email, id };
   const [status, setStatus] = useState("Verifying Email...");
+  const notify = useNotify();
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleVerifyUser = async () => {
     if (!email || !id) {
-      await router.push("/?message=something went wrong");
+      notify.error("missing email or id");
       return;
     }
     await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e) => {
       setStatus(e.message);
-      router.push(`/login?message=${encodeURI(e.message)}`);
+      notify.error(e.message);
     });
     setStatus("Success! Redirecting to login...");
     await sleep(750);
-    await router.push("/login");
+    // await router.push("/login");
   };
 
   useEffect(() => {
