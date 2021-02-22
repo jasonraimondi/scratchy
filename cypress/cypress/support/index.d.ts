@@ -19,7 +19,7 @@ declare namespace Cypress {
     dataTest(value: string): Chainable<Element>;
 
     logout(): Chainable<void>;
-    login(data: LoginData): Chainable<void>;
+    login(data: LoginData, method?: "api"|"gui"): Chainable<void>;
     register(data: RegisterData): Chainable<void>;
     verifyUser(email: string): Chainable<void>;
 

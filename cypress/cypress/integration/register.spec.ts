@@ -14,12 +14,14 @@ describe("user registration flow", () => {
   it.only("user can register, verify email, and successfully login", () => {
     register({ email, first, last, password });
     cy.verifyUser(email);
+    // cy.login({ email, password });
   });
 
   it("user can register with only email and password", () => {
     const email = cy.faker.internet.email();
     register({ email, password });
     cy.verifyUser(email);
+
   });
 
   it("user can register with only email", () => {

@@ -1,5 +1,5 @@
 import { ENV } from "~/config/configuration";
-import { API_ROUTES } from "~/config/routes";
+import { WEB_ROUTES } from "~/config/routes";
 
 type RouteParams = Record<string, number | string>;
 
@@ -16,4 +16,4 @@ export const route = (path: string) => {
   return { template, create };
 };
 
-export type RouteType = typeof API_ROUTES;
+export type RouteType = typeof WEB_ROUTES;

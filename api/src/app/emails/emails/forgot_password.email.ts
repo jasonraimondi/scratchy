@@ -3,7 +3,7 @@ import { Injectable, Logger } from "@nestjs/common";
 
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { EmailService } from "~/app/emails/services/email.service";
-import { API_ROUTES } from "~/config/routes";
+import { WEB_ROUTES } from "~/config/routes";
 
 @Injectable()
 export class ForgotPasswordEmail {
@@ -18,7 +18,7 @@ export class ForgotPasswordEmail {
       subject: "Forgot your password?",
       template: "auth/forgot_password",
       context: {
-        url: API_ROUTES.forgot_password.create({ email: user.email, id }),
+        url: WEB_ROUTES.forgot_password.create({ email: user.email, id }),
       },
     };
     await this.emailService.send(data);

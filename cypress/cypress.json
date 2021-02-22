@@ -2,6 +2,7 @@
   "baseUrl": "http://scratchy.localdomain:8080",
   "experimentalStudio": true,
   "env": {
+    "API_URL": "http://api.scratchy.localdomain:8080",
     "MAILER_HTTP_URL": "http://localhost:8025"
   }
 }
