@@ -22,7 +22,7 @@ export default function VerifyEmail() {
       notify.error("missing email or id");
       return;
     }
-    await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e) => {
+    await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e: any) => {
       setStatus(e.message);
       notify.error(e.message);
     });
