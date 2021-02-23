@@ -1,16 +1,12 @@
-import { useAuth } from "@/app/lib/use_auth";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Layout } from "@/app/components/layouts/layout";
-import { ResetPasswordFormData } from "@/app/components/forms/reset_password_form";
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, Label } from "@/app/components/forms/elements";
 
 export default function ResetPassword() {
-  const { handleLoginRedirect } = useAuth();
   const router = useRouter();
   const { e, u } = router.query;
   const [email] = useState(Array.isArray(e) ? e[0] : e);
@@ -24,11 +20,10 @@ export default function ResetPassword() {
 
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmit = async (data: ResetPasswordFormData) => {
+  const onSubmit = async (data: any) => {
     await graphQLSdk.ValidateForgotPasswordToken({ token, email });
     await graphQLSdk.UpdatePasswordFromToken({ data });
     setSubmitting(false);
-    await handleLoginRedirect();
   };
 
   return (
