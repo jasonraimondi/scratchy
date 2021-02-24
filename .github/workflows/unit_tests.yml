@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build and test on Node ${{ matrix.node }} and ${{ matrix.os }}
+    name: "${{ matrix.os }} | Node ${{ matrix.node }}"
 
     runs-on: ${{ matrix.os }}
 
