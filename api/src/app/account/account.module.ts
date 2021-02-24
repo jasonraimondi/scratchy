@@ -12,6 +12,12 @@ import { EmailConfirmationResolver } from "~/app/account/resolvers/email_confirm
 
 @Module({
   imports: [EmailModule, PassportModule, LoggerModule, DatabaseModule],
-  providers: [ForgotPasswordService, EmailConfirmationService, ForgotPasswordResolver, EmailConfirmationResolver, RegisterResolver],
+  providers: [
+    ForgotPasswordService,
+    EmailConfirmationService,
+    ForgotPasswordResolver,
+    EmailConfirmationResolver,
+    RegisterResolver,
+  ],
 })
 export class AccountModule {}

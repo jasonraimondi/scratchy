@@ -1,4 +1,3 @@
-
 process.env.TZ = "UTC";
 
 import "reflect-metadata";
@@ -18,11 +17,7 @@ import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 const logger = new LoggerService("__main__");
 
 (async () => {
-  const fastify = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter()
-  );
-
+  const fastify = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   await attachMiddlewares(fastify);
   fastify.useGlobalPipes(new ValidationPipe({ transform: true }));
@@ -32,7 +27,7 @@ const logger = new LoggerService("__main__");
     logger.debug(ENV);
   }
 
-  await fastify.listen(3001, '0.0.0.0');
+  await fastify.listen(3001, "0.0.0.0");
 
   logger.log(`Listening on ${await fastify.getUrl()}`);
 })();
