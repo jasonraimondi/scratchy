@@ -4,10 +4,13 @@
   "description": "[![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)](https://github.com/jasonraimondi/scratchy/actions?query=workflow%3A%22Node.js+CI%22) [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability) <a href=\"https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage\"><img src=\"https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage\" /></a>",
   "main": "index.js",
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "run-p format:web format:api",
+    "format:web": "npm run --prefix web format",
+    "format:api": "npm run --prefix api format"
   },
   "repository": {
     "type": "git",

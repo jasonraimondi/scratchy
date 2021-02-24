@@ -44,7 +44,9 @@ export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
       <main>
         <Header />
         <Notify />
-        <div><button onClick={() => info("HELLO JASON")}>Click Notify</button></div>
+        <div>
+          <button onClick={() => info("HELLO JASON")}>Click Notify</button>
+        </div>
         <div>{body}</div>
       </main>
     </React.StrictMode>

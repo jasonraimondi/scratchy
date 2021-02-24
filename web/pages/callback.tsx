@@ -10,15 +10,17 @@ export default function Callback() {
 
   useEffect(() => {
     if (token && typeof token === "string") {
-      setAccessToken(token)
-      router.push("/app/dashboard")
+      setAccessToken(token);
+      router.push("/app/dashboard");
     }
-  }, [token])
+  }, [token]);
 
-  return <Layout>
-    <p>Redirecting...</p>
-    <p>{token}</p>
-  </Layout>;
+  return (
+    <Layout>
+      <p>Redirecting...</p>
+      <p>{token}</p>
+    </Layout>
+  );
 }
 
 // export async function getServerSideProps(context: NextPageContext) {

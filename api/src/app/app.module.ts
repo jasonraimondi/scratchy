@@ -58,7 +58,7 @@ import { AuthModule } from "~/app/auth/auth.module";
           user: request.user,
           req: request,
           res: reply,
-        }
+        };
       },
     }),
     AuthModule,

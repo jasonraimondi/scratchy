@@ -18,7 +18,7 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
 
   await fastify.setViewEngine({
     engine: {
-      nunjucks
+      nunjucks,
     },
     templates: ENV.templatesDir,
     includeViewExtension: true,
@@ -29,7 +29,7 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
     await fastify.register(helmet);
     await fastify.register(rateLimit, {
       max: 100,
-      timeWindow: '1 minute'
+      timeWindow: "1 minute",
     });
   }
 

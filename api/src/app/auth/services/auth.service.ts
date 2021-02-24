@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   loginOauth(user: User): Promise<string> {
-    return this.createAccessToken(user)
+    return this.createAccessToken(user);
   }
 
   async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
@@ -43,7 +43,7 @@ export class AuthService {
     }
 
     if (typeof payload.sub !== "string") {
-      throw new Error("refresh token payload missing sub (userid)")
+      throw new Error("refresh token payload missing sub (userid)");
     }
 
     const user = await this.userRepository.findById(payload.sub);

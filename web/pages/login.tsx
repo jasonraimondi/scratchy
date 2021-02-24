@@ -13,7 +13,6 @@ export default function LoginPage() {
 
   return (
     <Layout title="Login">
-
       <ul>
         <li>
           <a href="http://api.scratchy.localdomain:8080/oauth2/github">Github Login</a>
@@ -23,11 +22,7 @@ export default function LoginPage() {
         </li>
       </ul>
 
-      <form
-        onSubmit={handleSubmit(handleLogin)}
-        data-test="login-form"
-        className="bg-gray-200 p-2 m-2 rounded"
-      >
+      <form onSubmit={handleSubmit(handleLogin)} data-test="login-form" className="bg-gray-200 p-2 m-2 rounded">
         <Label data-test="email">
           <span>Email</span>
           <input type="email" name="email" placeholder="john.doe@example.com" ref={register} />

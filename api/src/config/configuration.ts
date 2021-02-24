@@ -9,7 +9,7 @@ const required = ["URL", "DATABASE_URL", "JWT_SECRET"].filter((key) => !process.
 if (required.length > 0) {
   const message = `missing required envs: (${required.join(", ")})`;
   if (isTesting) {
-    console.log(message)
+    console.log(message);
   } else {
     throw new Error(message);
   }
