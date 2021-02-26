@@ -8,9 +8,10 @@
     "prettier": "^2.2.1"
   },
   "scripts": {
-    "format": "run-p format:web format:api",
+    "format": "run-p format:web format:api format:cypress",
     "format:web": "npm run --prefix web format",
-    "format:api": "npm run --prefix api format"
+    "format:api": "npm run --prefix api format",
+    "format:cypress": "npm run --prefix cypress format"
   },
   "repository": {
     "type": "git",

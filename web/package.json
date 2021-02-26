@@ -4,7 +4,7 @@
     "build": "next build",
     "pack": "run-s clean build",
     "gen": "graphql-codegen --config codegen.yml",
-    "format": "prettier --write \"{src,pages,styles}/**/*.(t|j)s*\"",
+    "format": "prettier --write \"{pages,src,styles,graphql}/**/*.(ts|tsx|js|css|scss|graphql)\"",
     "prestart": "npm run gen",
     "start:prod": "next start -p 3000",
     "start:dev": "next -p 3000"

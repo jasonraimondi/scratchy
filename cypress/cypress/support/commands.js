@@ -6,7 +6,7 @@ Cypress.Commands.add("verifyUser", email => {
   cy.getLastEmail(email).then(res => {
     const parsedEmail = res.parsedBody.textAsHtml;
     const link = parsedEmail.match(/href="([^"]*)/)[1];
-    console.log({link})
+    console.log({ link });
     cy.visit(link);
     // cy.location("pathname").should("equal", "/login");
   });
@@ -27,7 +27,7 @@ Cypress.Commands.add("getLastEmail", email => {
       consoleProps: () => ({
         url,
         email,
-      })
+      }),
     });
     authLog.snapshot("after");
     authLog.end();

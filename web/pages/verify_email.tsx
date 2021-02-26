@@ -15,7 +15,7 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState("Verifying Email...");
   const notify = useNotify();
 
-  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleVerifyUser = async () => {
     if (!email || !id) {
@@ -32,7 +32,7 @@ export default function VerifyEmail() {
   };
 
   useEffect(() => {
-    handleVerifyUser().catch((e) => console.error(e));
+    handleVerifyUser().catch(e => console.error(e));
   }, []);
 
   return (

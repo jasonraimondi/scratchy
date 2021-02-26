@@ -3,7 +3,7 @@ describe("Profile Spec", () => {
 
   beforeEach(() => {
     cy.viewport("iphone-x");
-    cy.login(user)
+    cy.login(user);
   });
 
   it("can revoke the refresh token", () => {

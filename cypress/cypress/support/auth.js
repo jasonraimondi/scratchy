@@ -15,7 +15,7 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }, method = 
     name: "login",
     displayName: "LOGIN",
     message: [`🔐 ${method.toUpperCase()} ${email} ${password}`],
-    consoleProps: () => ({ email, password, rememberMe, method })
+    consoleProps: () => ({ email, password, rememberMe, method }),
   });
 
   cy.visit("/login");
@@ -37,18 +37,19 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }, method = 
   } else if (method === "api") {
     cy.request({
       method: "POST",
-      url: `${Cypress.env("API_URL")}/graphql`,  // graphql endpoint
+      url: `${Cypress.env("API_URL")}/graphql`, // graphql endpoint
       body: {
         query,
         variables: { email, password, rememberMe },
       },
-      failOnStatusCode: false,  // not a must but in case the fail code is not 200 / 400
-    }).then((res) => {
+      failOnStatusCode: false, // not a must but in case the fail code is not 200 / 400
+    }).then(res => {
       cy.log(res);
     });
   }
 
-  cy.getCookie("jid").should("exist")
+  cy.getCookie("jid")
+    .should("exist")
     .then(cookie => {
       const jwt = cookie.value;
       const jwtParts = jwt.split(".");

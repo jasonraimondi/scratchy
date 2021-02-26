@@ -26,15 +26,15 @@
 
 .success {
   background-color: var(--colors-green-500);
-  color: var(--colors-white)
+  color: var(--colors-white);
 }
 
 .info {
   background-color: var(--colors-blue-500);
-  color: var(--colors-white)
+  color: var(--colors-white);
 }
 
 .error {
   background-color: var(--colors-red-500);
-  color: var(--colors-white)
+  color: var(--colors-white);
 }

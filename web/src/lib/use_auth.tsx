@@ -46,7 +46,7 @@ function AuthProvider(props: any) {
 
     if (errors || !data?.login) {
       if (Array.isArray(errors)) {
-        ((errors as unknown) as string[]).forEach((err) => notify.error(err));
+        ((errors as unknown) as string[]).forEach(err => notify.error(err));
       }
     }
 

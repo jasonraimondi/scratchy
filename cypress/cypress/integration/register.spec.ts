@@ -3,7 +3,7 @@ type RegisterData = {
   password?: string;
   first?: string;
   last?: string;
-}
+};
 
 describe("user registration flow", () => {
   const first = cy.faker.name.firstName();
@@ -11,24 +11,24 @@ describe("user registration flow", () => {
   const email = cy.faker.internet.email(first, last, "example.com");
   const password = "Password123!";
 
-  it.only("user can register, verify email, and successfully login", () => {
+  it("user can register, verify email, and successfully login", () => {
     register({ email, first, last, password });
     cy.verifyUser(email);
     // cy.login({ email, password });
   });
 
-  it("user can register with only email and password", () => {
-    const email = cy.faker.internet.email();
-    register({ email, password });
-    cy.verifyUser(email);
-
-  });
-
-  it("user can register with only email", () => {
-    const email = cy.faker.internet.email();
-    register({ email });
-    cy.verifyUser(email);
-  });
+  // it("user can register with only email and password", () => {
+  //   const email = cy.faker.internet.email();
+  //   register({ email, password });
+  //   cy.verifyUser(email);
+  //
+  // });
+  //
+  // it("user can register with only email", () => {
+  //   const email = cy.faker.internet.email();
+  //   register({ email });
+  //   cy.verifyUser(email);
+  // });
 
   function register({ email, password, first, last }: RegisterData) {
     cy.visit("/register");
@@ -43,7 +43,7 @@ describe("user registration flow", () => {
 
     cy.dataTest("register-form").submit();
 
-    cy.location('pathname').should("equal", "/register/success");
+    cy.location("pathname").should("equal", "/register/success");
   }
 
   function assertUserIsNotVerified({ email, password }: { email: string; password: string }) {

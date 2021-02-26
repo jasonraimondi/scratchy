@@ -111,9 +111,7 @@ describe("register.resolver", () => {
       expect(result.isEmailConfirmed).toBeFalsy();
       expect(emails.length).toBe(1);
       expect(emails[0].to).toBe(input.email.toLowerCase());
-      expect(emails[0].context!.url).toBe(
-        `http://localhost/verify_email?e=${result.email}&u=${emailConfirmation.id}`,
-      );
+      expect(emails[0].context!.url).toBe(`http://localhost/verify_email?e=${result.email}&u=${emailConfirmation.id}`);
     });
   });
 
