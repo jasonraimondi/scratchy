@@ -35,8 +35,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 }
 
-const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string|unknown => {
-  const auth = request.headers['authorization'];
-  const token = auth?.split(' ')[1];
+const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string | unknown => {
+  const auth = request.headers["authorization"];
+  const token = auth?.split(" ")[1];
   return token;
-}
+};
