@@ -1,16 +1,11 @@
 import { Layout } from "@/app/components/layouts/layout";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { useNotify } from "use-notify-rxjs";
+import type { GetServerSideProps } from "next";
 
-export default function VerifyEmail() {
-  const router = useRouter();
-  const { e, u } = router.query;
-  const email = Array.isArray(e) ? e[0] : e;
-  const id = Array.isArray(u) ? u[0] : u;
-
+export default function VerifyEmail({ email, id }: Record<string, unknown>) {
   const verifyEmailData: any = { email, id };
   const [status, setStatus] = useState("Verifying Email...");
   const notify = useNotify();
@@ -19,6 +14,7 @@ export default function VerifyEmail() {
 
   const handleVerifyUser = async () => {
     if (!email || !id) {
+      console.log({ email, id })
       notify.error("missing email or id");
       return;
     }
@@ -40,4 +36,13 @@ export default function VerifyEmail() {
       <h1 className="h5">{status}</h1>
     </Layout>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      email: ctx.query.e ?? null,
+      id: ctx.query.u ?? null,
+    }
+  }
 }

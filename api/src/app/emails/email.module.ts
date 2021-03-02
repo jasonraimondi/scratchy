@@ -2,7 +2,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 
 import { QueueModule } from "~/app/queues/queue.module";
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { emailProviders } from "~/app/emails/email.providers";
 import { DatabaseModule } from "~/app/database/database.module";
 

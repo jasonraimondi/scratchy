@@ -17,8 +17,9 @@
     "format:cypress": "npm run --prefix cypress format",
     "proxy": "caddy start --watch",
     "prestart": "npm run build",
-    "start": "run-p start:web start:api proxy",
+    "start": "run-p start:web start:api start:worker proxy",
     "start:web": "npm run --prefix web start:prod",
+    "start:worker": "npm run --prefix api start:queue:dev",
     "start:api": "npm run --prefix api start:prod",
     "test": "start-server-and-test start http://scratchy.localdomain:8080 test:integrations",
     "test:integrations": "cd cypress && ./node_modules/.bin/cypress run"

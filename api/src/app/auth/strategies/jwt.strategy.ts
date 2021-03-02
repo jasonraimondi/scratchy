@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
 
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import type { FastifyRequest } from "fastify";

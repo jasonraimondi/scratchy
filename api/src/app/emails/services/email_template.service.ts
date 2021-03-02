@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import mjml2html from "mjml";
 import nunjucks from "nunjucks";
 
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 
 @Injectable()
 export class EmailTemplateService {

@@ -6,7 +6,7 @@ import { Injectable } from "@nestjs/common";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
 import { User } from "~/app/user/entities/user.entity";
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
 

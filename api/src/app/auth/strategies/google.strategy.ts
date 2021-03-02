@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import type { FastifyRequest } from "fastify";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
 
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { User } from "~/app/user/entities/user.entity";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 

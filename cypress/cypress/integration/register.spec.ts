@@ -14,7 +14,7 @@ describe("user registration flow", () => {
   it("user can register, verify email, and successfully login", () => {
     register({ email, first, last, password });
     cy.verifyUser(email);
-    // cy.login({ email, password });
+    // cy.login({ email, password }, "gui");
   });
 
   // it("user can register with only email and password", () => {

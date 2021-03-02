@@ -10,7 +10,7 @@ import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
 
 import { AppModule } from "~/app/app.module";
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 

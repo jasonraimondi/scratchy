@@ -39,7 +39,6 @@ Cypress.Commands.add("getLastEmail", email => {
       const lastEmail = items[0];
 
       expect(lastEmail).not.to.be.undefined;
-      console.log({ lastEmail });
       const [to] = lastEmail.Content.Headers.To;
       const [from] = lastEmail.Content.Headers.From;
       const [subject] = lastEmail.Content.Headers.Subject;

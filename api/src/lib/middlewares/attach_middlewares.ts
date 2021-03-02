@@ -4,9 +4,9 @@ import rateLimit from "fastify-rate-limit";
 import helmet from "fastify-helmet";
 import nunjucks from "nunjucks";
 
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 
-export const corsSettings = {
+export const corsConfig = {
   origin: true,
   credentials: true,
 };
@@ -14,7 +14,7 @@ export const corsSettings = {
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   await fastify.register(cookieParser);
 
-  fastify.enableCors(corsSettings);
+  fastify.enableCors(corsConfig);
 
   await fastify.setViewEngine({
     engine: {

@@ -6,7 +6,7 @@ import "dotenv/config";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { ENV } from "~/config/configuration";
+import { ENV } from "~/config/environments";
 import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 
 (async () => {
