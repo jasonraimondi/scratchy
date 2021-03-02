@@ -13,7 +13,6 @@
     "outDir": "dist",
     "paths": {
       "~/*": ["src/*"],
-      "~db/*": ["db/*"],
       "~test/*": ["test/*"]
     },
     "allowSyntheticDefaultImports": true,

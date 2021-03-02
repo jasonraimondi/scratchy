@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
-import { SystemResolver } from "~/app/system/system.resolver";
+
+import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 
 @Module({
-  providers: [SystemResolver],
+  controllers: [HealthcheckController],
 })
 export class SystemModule {}

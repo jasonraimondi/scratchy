@@ -17,10 +17,10 @@ import { CustomNamingStrategy } from "~/app/database/naming";
 import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
 import { JwtModule } from "~/lib/jwt/jwt.module";
-import { HealthcheckController } from "~/app/system/controllers/healthcheck.controller";
 import { Role } from "~/app/user/entities/role.entity";
 import { corsSettings } from "~/lib/middlewares/attach_middlewares";
 import { AuthModule } from "~/app/auth/auth.module";
+import { SystemModule } from "~/app/system/system.module";
 
 @Module({
   imports: [
@@ -29,6 +29,7 @@ import { AuthModule } from "~/app/auth/auth.module";
     UserModule,
     LoggerModule,
     JwtModule,
+    SystemModule,
     ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([User, Role]),
     TypeOrmModule.forRoot({
@@ -63,7 +64,7 @@ import { AuthModule } from "~/app/auth/auth.module";
     }),
     AuthModule,
   ],
-  controllers: [AppController, HealthcheckController],
+  controllers: [AppController],
   providers: [UserRepo],
 })
 export class AppModule {
