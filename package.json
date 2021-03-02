@@ -3,19 +3,30 @@
   "version": "1.0.0",
   "description": "[![Node.js CI](https://github.com/jasonraimondi/scratchy/workflows/Node.js%20CI/badge.svg)](https://github.com/jasonraimondi/scratchy/actions?query=workflow%3A%22Node.js+CI%22) [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability) <a href=\"https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage\"><img src=\"https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage\" /></a>",
   "main": "index.js",
-  "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.1"
-  },
-  "scripts": {
-    "format": "run-p format:web format:api format:cypress",
-    "format:web": "npm run --prefix web format",
-    "format:api": "npm run --prefix api format",
-    "format:cypress": "npm run --prefix cypress format"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jasonraimondi/scratchy.git"
+  },
+  "scripts": {
+    "build": "run-p build:web build:api",
+    "build:web": "npm run --prefix web build",
+    "build:api": "npm run --prefix api build",
+    "format": "run-p format:web format:api format:cypress",
+    "format:web": "npm run --prefix web format",
+    "format:api": "npm run --prefix api format",
+    "format:cypress": "npm run --prefix cypress format",
+    "proxy": "caddy start --watch",
+    "prestart": "npm run build",
+    "start": "run-p start:web start:api proxy",
+    "start:web": "npm run --prefix web start:prod",
+    "start:api": "npm run --prefix api start:prod",
+    "test": "start-server-and-test start http://scratchy.localdomain:8080 test:integrations",
+    "test:integrations": "cd cypress && ./node_modules/.bin/cypress run"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "start-server-and-test": "^1.12.0"
   },
   "keywords": [],
   "author": "Jason Raimondi",
