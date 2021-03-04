@@ -23,6 +23,6 @@ RUN npm set progress=false && \
     npm config set depth 0 && \
     npm ci --production
 COPY --from=builder --chown=node:node /app/tsconfig.json /app/tsconfig.json
-COPY --from=builder --chown=node:node /app/dist/src /app/dist
+COPY --from=builder --chown=node:node /app/dist /app/dist
 COPY --chown=node:node templates /app/templates
 CMD ["node", "/app/dist/main.js"]
