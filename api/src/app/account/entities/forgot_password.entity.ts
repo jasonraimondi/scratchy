@@ -1,37 +1,34 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { IsUUID } from "class-validator";
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { IsDate, IsUUID, validate } from "class-validator";
 import { v4 } from "uuid";
 
 import { User } from "~/app/user/entities/user.entity";
+import ms from "ms";
+
+const tokenTTL = ms("1d");
 
 @ObjectType()
-@Entity("forgot_password_tokens")
 export class ForgotPasswordToken {
-  private readonly oneDay = 60 * 60 * 24 * 1 * 1000; // 1 day
-
-  constructor(user?: User, id = v4()) {
-    this.id = id;
-    if (user) this.user = user;
-    this.expiresAt = new Date(Date.now() + this.oneDay);
-  }
-
   @Field(() => ID)
-  @PrimaryColumn("uuid")
   id: string;
 
   @Field(() => User)
-  @OneToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "userId" })
   user: User;
 
   @Field()
-  @Index()
-  @Column("uuid")
   @IsUUID()
   userId: string;
 
   @Field()
-  @Column()
   expiresAt: Date;
+}
+
+export async function createForgotPassword({ user, id }: { user: User; id?: string }) {
+  const e = new ForgotPasswordToken();
+  e.id = id ?? v4();
+  e.user = user;
+  e.userId = user.id;
+  e.expiresAt = new Date(Date.now() + tokenTTL);
+  await validate(e);
+  return e;
 }

@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
 
 import { ENV } from "~/config/environments";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import type { FastifyRequest } from "fastify";
 

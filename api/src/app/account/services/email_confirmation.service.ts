@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 
 import { LoggerService } from "~/lib/logger/logger.service";
-import { EmailConfirmationRepo } from "~/app/user/repositories/repositories/email_confirmation.repository";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { EmailConfirmationRepo } from "~/lib/database/repositories/email_confirmation.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class EmailConfirmationService {
@@ -23,7 +23,7 @@ export class EmailConfirmationService {
     try {
       const { user } = userConfirmation;
       user.isEmailConfirmed = true;
-      await this.userRepository.save(user);
+      await this.userRepository.create(user);
       await this.userConfirmationRepository.delete(userConfirmation.id);
       return true;
     } catch (e) {

@@ -5,7 +5,7 @@ import querystring from "querystring";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { AuthService } from "~/app/auth/services/auth.service";
 
 @Injectable()

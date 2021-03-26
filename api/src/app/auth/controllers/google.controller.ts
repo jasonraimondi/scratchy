@@ -4,7 +4,7 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class GoogleAuthGuard extends AuthGuard("google") {}

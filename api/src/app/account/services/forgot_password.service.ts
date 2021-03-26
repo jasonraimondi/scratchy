@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 
-import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
+import { createForgotPassword, ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
 import { ForgotPasswordEmail } from "~/app/emails/emails/forgot_password.email";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { ForgotPasswordRepo } from "~/app/user/repositories/repositories/forgot_password.repository";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { ForgotPasswordRepo } from "~/lib/database/repositories/forgot_password.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class ForgotPasswordService {
@@ -47,7 +47,7 @@ export class ForgotPasswordService {
     }
     await user.setPassword(password);
     try {
-      await this.userRepository.save(user);
+      await this.userRepository.create(user);
       await this.forgotPasswordRepository.delete(forgotPassword.id);
       return true;
     } catch (e) {
@@ -60,8 +60,7 @@ export class ForgotPasswordService {
     try {
       return await this.forgotPasswordRepository.findForUser(user.id);
     } catch (e) {}
-    const forgotPassword = new ForgotPasswordToken();
-    forgotPassword.user = user;
+    const forgotPassword = await createForgotPassword({ user });
     await this.forgotPasswordRepository.save(forgotPassword);
     return forgotPassword;
   }

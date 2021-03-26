@@ -4,7 +4,7 @@ import { Module } from "@nestjs/common";
 import { QueueModule } from "~/app/queues/queue.module";
 import { ENV } from "~/config/environments";
 import { emailProviders } from "~/app/emails/email.providers";
-import { DatabaseModule } from "~/app/database/database.module";
+import { DatabaseModule } from "~/lib/database/database.module";
 
 @Module({
   imports: [

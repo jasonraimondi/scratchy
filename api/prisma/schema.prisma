@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String                  @id @default(uuid()) @db.Uuid
+  email                  String                  @unique @db.VarChar(255)
+  isEmailConfirmed       Boolean                 @default(false)
+  passwordHash           String?                 @db.VarChar(255)
+  firstName              String?                 @db.VarChar(255)
+  lastName               String?                 @db.VarChar(255)
+  lastLoginAt            DateTime?               @db.Timestamp(6)
+  lastLoginIP            String?                 @db.Inet
+  createdIP              String?                 @db.Inet
+  createdAt              DateTime                @default(now()) @db.Timestamp(6)
+  updatedAt              DateTime?               @db.Timestamp(6)
+  tokenVersion           Int                     @default(0)
+  oauthGoogleIdentifier  String?                 @unique @db.VarChar(255)
+  oauthGithubIdentifier  String?                 @unique @db.VarChar(255)
+  emailConfirmationToken EmailConfirmationToken?
+  forgotPasswordToken    ForgotPasswordToken?
+  permissions            UserPermission[]
+  roles                  UserRole[]
+
+  @@index([email], name: "idx_user_email")
+}
+
+model EmailConfirmationToken {
+  id        String   @id @db.Uuid
+  expiresAt DateTime @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  userId    String   @unique @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "idx_emailconfirmationtoken_userid")
+}
+
+model ForgotPasswordToken {
+  id        String   @id @db.Uuid
+  expiresAt DateTime @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  userId    String   @unique @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "idx_forgotpasswordtoken_userid")
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique @db.VarChar
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+  userRole        UserRole[]
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique @db.VarChar
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+}
+
+model RolePermission {
+  permissionId Int
+  roleId       Int
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model UserPermission {
+  permissionId Int
+  userId       String     @db.Uuid
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  roleId       Int?
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role?      @relation(fields: [roleId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@id([userId, permissionId])
+}
+
+model UserRole {
+  roleId    Int
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  role      Role     @relation(fields: [roleId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, roleId])
+}

@@ -1,5 +1,5 @@
 import { ISendMailOptions } from "@nestjs-modules/mailer";
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { EmailService } from "~/app/emails/services/email.service";
@@ -7,8 +7,6 @@ import { WEB_ROUTES } from "~/config/routes";
 
 @Injectable()
 export class ForgotPasswordEmail {
-  private readonly logger = new Logger(ForgotPasswordEmail.name);
-
   constructor(private readonly emailService: EmailService) {}
 
   async send(forgotPassword: ForgotPasswordToken): Promise<void> {

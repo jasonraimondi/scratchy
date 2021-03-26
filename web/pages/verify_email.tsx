@@ -14,7 +14,7 @@ export default function VerifyEmail({ email, id }: Record<string, unknown>) {
 
   const handleVerifyUser = async () => {
     if (!email || !id) {
-      console.log({ email, id })
+      console.log({ email, id });
       notify.error("missing email or id");
       return;
     }
@@ -38,11 +38,11 @@ export default function VerifyEmail({ email, id }: Record<string, unknown>) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
   return {
     props: {
       email: ctx.query.e ?? null,
       id: ctx.query.u ?? null,
-    }
-  }
-}
+    },
+  };
+};

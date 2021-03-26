@@ -6,7 +6,7 @@ import { Job } from "bull";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/app/emails/services/email_template.service";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {

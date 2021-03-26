@@ -4,8 +4,8 @@ import type { FastifyRequest } from "fastify";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
-import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { createUser, User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
@@ -42,10 +42,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       user = await this.userRepository.findByEmail(email);
       if (!user.oauthGoogleIdentifier) {
         user.oauthGoogleIdentifier = profile.id;
-        await this.userRepository.save(user);
+        await this.userRepository.create(user);
       }
     } catch (e) {
-      user = await User.create({
+      user = await createUser({
         email,
         firstName: name?.givenName,
         lastName: name?.familyName,
@@ -53,10 +53,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       });
       user.isEmailConfirmed = !!profile._json.email_verified; // @this value is... sketchy to say the least
       user.oauthGoogleIdentifier = profile.id;
-      user = await this.userRepository.save(user);
+      user = await this.userRepository.create(user);
     }
 
-    await this.userRepository.incrementLastLogin(user, req.ip);
+    await this.userRepository.incrementLastLogin(user.email, req.ip);
 
     done(undefined, user);
   }

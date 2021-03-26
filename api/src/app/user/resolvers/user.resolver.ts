@@ -1,21 +1,21 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
 
-import { UserPaginatorResponse } from "~/app/user/dtos/user_paginator.response";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
-import { PaginatorInputs } from "~/app/database/dtos/paginator.inputs";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserPaginatorInputs } from "~/lib/database/dtos/inputs/paginator.inputs";
+import { UserPaginatorResponse } from "~/lib/database/dtos/responses/user_paginator.response";
 
 @Resolver()
 export class UserResolver {
   constructor(private userRepository: UserRepo) {}
 
-  @Query(() => User)
-  async user(@Args("email") email: string) {
-    return await this.userRepository.findByEmail(email);
+  @Query(() => User!)
+  user(@Args("email") email: string): Promise<User> {
+    return this.userRepository.findByEmail(email);
   }
 
-  @Query(() => UserPaginatorResponse)
-  users(@Args("query", { nullable: true }) query?: PaginatorInputs) {
+  @Query(() => UserPaginatorResponse!)
+  users(@Args("query", { nullable: true }) query?: UserPaginatorInputs): Promise<UserPaginatorResponse> {
     return this.userRepository.list(query);
   }
 }

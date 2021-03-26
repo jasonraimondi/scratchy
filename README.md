@@ -40,7 +40,6 @@ open http://localhost:8025 # emails
 ## Tooling:
 
 * [NestJS](https://www.npmjs.com/package/@nestjs/cli) application with authentication via JWfT
-* [TypeORM](https://www.npmjs.com/package/typeorm) using Repository Pattern
 * [bull](https://www.npmjs.com/package/bull) for handling queue / jobs
 * [bull-board](https://www.npmjs.com/package/bull-board) for queue runner gui
 * [nodemailer](https://www.npmjs.com/package/nodemailer) for sending emails over SMTP

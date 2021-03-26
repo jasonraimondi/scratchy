@@ -1,11 +1,11 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { RegisterInput } from "~/app/account/resolvers/register.input";
-import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
-import { User } from "~/app/user/entities/user.entity";
+import { createEmailConfirmation } from "~/app/account/entities/email_confirmation.entity";
+import { createUser, User } from "~/app/user/entities/user.entity";
 import { RegisterEmail } from "~/app/emails/emails/register.email";
-import { EmailConfirmationRepo } from "~/app/user/repositories/repositories/email_confirmation.repository";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { EmailConfirmationRepo } from "~/lib/database/repositories/email_confirmation.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { MyContext } from "~/lib/graphql/my_context";
 import { LoggerService } from "~/lib/logger/logger.service";
 
@@ -17,11 +17,16 @@ export class RegisterResolver {
     private readonly registerEmail: RegisterEmail,
     private readonly logger: LoggerService,
   ) {
-    this.logger.setContext(RegisterResolver.name);
+    this.logger.setContext(this.constructor.name);
+  }
+
+  @Mutation(() => User)
+  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
+    return await this.registerUser(registerInput, ipAddr);
   }
 
   @Mutation(() => Boolean!)
-  async resentConfirmEmail(@Args("email") email: string): Promise<boolean> {
+  async resendConfirmEmail(@Args("email") email: string): Promise<boolean> {
     const emailConfirmation = await this.emailConfirmationRepository.findByEmail(email);
 
     try {
@@ -33,24 +38,21 @@ export class RegisterResolver {
     return false;
   }
 
-  @Mutation(() => User!)
-  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
-    const { email, id, password } = registerInput;
+  private async registerUser(registerInput: RegisterInput, ipAddr: string) {
+    await this.guardAgainstDuplicateUser(registerInput.email, registerInput.id);
 
-    await this.guardAgainstDuplicateUser(email, id);
-
-    const user = await User.create({
+    const user = await createUser({
       ...registerInput,
       createdIP: ipAddr,
     });
 
-    if (password) await user.setPassword(password);
+    if (registerInput.password) await user.setPassword(registerInput.password);
 
-    await this.userRepository.save(user);
+    const emailConfirmation = await createEmailConfirmation({ user });
 
-    const emailConfirmation = new EmailConfirmationToken(user);
+    await this.userRepository.create(user);
 
-    await this.emailConfirmationRepository.save(emailConfirmation);
+    await this.emailConfirmationRepository.create(emailConfirmation);
 
     await this.registerEmail.send(emailConfirmation);
 

@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 
 import { AuthService } from "~/app/auth/services/auth.service";
-import { DatabaseModule } from "~/app/database/database.module";
+import { DatabaseModule } from "~/lib/database/database.module";
 import { AuthResolver } from "~/app/auth/auth.resolver";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { GithubStrategy } from "~/app/auth/strategies/github.strategy";

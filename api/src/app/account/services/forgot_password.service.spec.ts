@@ -7,8 +7,8 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { ForgotPasswordRepo } from "~/app/user/repositories/repositories/forgot_password.repository";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { ForgotPasswordRepo } from "~/lib/database/repositories/forgot_password.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -41,7 +41,7 @@ describe(ForgotPasswordService.name, () => {
       // arrange
       const user = await userGenerator({ email: "jason1@raimondi.us" });
       user.isEmailConfirmed = true;
-      await userRepository.save(user);
+      await userRepository.create(user);
 
       // act
       await service.sendForgotPasswordEmail(user.email);
@@ -57,7 +57,7 @@ describe(ForgotPasswordService.name, () => {
       // arrange
       const user = await userGenerator();
       user.isEmailConfirmed = true;
-      await userRepository.save(user);
+      await userRepository.create(user);
       const forgotPassword = new ForgotPasswordToken(user);
       await forgotPasswordRepository.save(forgotPassword);
 

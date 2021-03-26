@@ -5,7 +5,7 @@ import { Process, Processor } from "@nestjs/bull";
 import { SendEmailProcessor } from "~/app/queue-workers/processors/email/send_email.processor";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/app/emails/services/email_template.service";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
 
 @Processor(QUEUE.image)

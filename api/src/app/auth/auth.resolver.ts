@@ -6,7 +6,7 @@ import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
 import { MyContext } from "~/lib/graphql/my_context";
 import { LoginInput } from "~/app/account/resolvers/auth/login_input";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
 import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 
 @Resolver()
@@ -49,7 +49,7 @@ export class AuthResolver {
   async revokeRefreshToken(@Context() { res }: MyContext, @Args("userId") userId: string): Promise<boolean> {
     try {
       await this.userRepository.findById(userId);
-      await this.userRepository.incrementToken(userId);
+      await this.userRepository.incrementRefreshToken(userId);
       await this.authService.sendRefreshToken(res, false, undefined);
       return true;
     } catch {

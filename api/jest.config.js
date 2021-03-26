@@ -1,5 +1,6 @@
 const { pathsToModuleNameMapper } = require("ts-jest/utils");
 const { compilerOptions } = require("./tsconfig");
+const path = require('path');
 
 module.exports = {
   moduleFileExtensions: [
@@ -19,7 +20,7 @@ module.exports = {
   // coverageDirectory: "<rootDir>/coverage",
   // collectCoverage: true,
   // coverageReporters: ["lcov"],
-  testEnvironment: "node",
+  testEnvironment: path.join(__dirname, 'prisma', 'prisma-test-environment.js'),
   setupFiles: [
     "<rootDir>/test/jest_setup.ts",
   ],

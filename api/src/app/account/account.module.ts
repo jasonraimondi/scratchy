@@ -6,7 +6,7 @@ import { ForgotPasswordService } from "~/app/account/services/forgot_password.se
 import { RegisterResolver } from "~/app/account/resolvers/register.resolver";
 import { EmailModule } from "~/app/emails/email.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
-import { DatabaseModule } from "~/app/database/database.module";
+import { DatabaseModule } from "~/lib/database/database.module";
 import { ForgotPasswordResolver } from "~/app/account/resolvers/forgot_password.resolver";
 import { EmailConfirmationResolver } from "~/app/account/resolvers/email_confirmation.resolver";
 

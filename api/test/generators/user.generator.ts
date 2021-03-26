@@ -1,14 +1,14 @@
 import faker from "faker";
 
-import { ICreateUser, User } from "~/app/user/entities/user.entity";
+import { ICreateUser, User, createUser } from "~/app/user/entities/user.entity";
 
-export const userGenerator = async (createUser?: Partial<ICreateUser>, isEmailConfirmed = true): Promise<User> => {
-  const user = await User.create({
+export const userGenerator = async (u?: Partial<ICreateUser>, isEmailConfirmed = true): Promise<User> => {
+  const user = await createUser({
     email: faker.internet.exampleEmail(),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     password: "testing123",
-    ...createUser,
+    ...u,
   });
   user.isEmailConfirmed = isEmailConfirmed;
   return user;

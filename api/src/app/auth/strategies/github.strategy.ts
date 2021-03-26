@@ -5,8 +5,9 @@ import { Profile, Strategy } from "passport-github";
 import { VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
-import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/app/user/repositories/repositories/user.repository";
+import { createUser, User } from "~/app/user/entities/user.entity";
+import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
@@ -34,25 +35,25 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
     const email = emails?.[0].value;
     let user: User;
 
-    if (!email) throw new HttpException("Unauthorized no email", 401);
+    if (!email) throw new UnauthorizedException("no email was found from github");
 
     try {
       user = await this.userRepository.findByEmail(email);
       if (!user.oauthGithubIdentifier) {
         user.oauthGithubIdentifier = profile.id;
-        await this.userRepository.save(user);
+        await this.userRepository.create(user);
       }
     } catch (e) {
-      user = await User.create({
+      user = await createUser({
         email,
         createdIP: req.ip,
       });
       user.isEmailConfirmed = true;
       user.oauthGithubIdentifier = profile.id;
-      user = await this.userRepository.save(user);
+      user = await this.userRepository.create(user);
     }
 
-    await this.userRepository.incrementLastLogin(user, req.ip);
+    await this.userRepository.incrementLastLogin(user.email, req.ip);
 
     done(undefined, user);
   }
