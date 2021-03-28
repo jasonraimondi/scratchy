@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -6,14 +6,13 @@ import { Layout } from "@/app/components/layouts/layout";
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, Label } from "@/app/components/forms/elements";
 
-export default function ResetPassword() {
-  const router = useRouter();
-  const { e, u } = router.query;
-  const [email] = useState(Array.isArray(e) ? e[0] : e);
-  const [token] = useState(Array.isArray(u) ? u[0] : u);
-
+export default function ForgotPassword({ email, token }: Record<string, string | null>) {
   if (!email || !token) {
-    return <p>Missing Token</p>;
+    return (
+      <p>
+        Missing Token {email} {token} 1 2 3 4
+      </p>
+    );
   }
 
   const { register, handleSubmit, errors } = useForm();
@@ -41,10 +40,19 @@ export default function ResetPassword() {
           />
           {errors.password}
         </Label>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button data-test="reset-password-form--submit" type="submit" disabled={isSubmitting}>
           <span>Submit</span>
         </Button>
       </form>
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  return {
+    props: {
+      email: ctx.query.e ?? null,
+      token: ctx.query.u ?? null,
+    },
+  };
+};

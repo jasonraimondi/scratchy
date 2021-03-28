@@ -7,7 +7,7 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -15,7 +15,7 @@ describe("register resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
 
   let moduleRef: TestingModule;
-  let userRepository: UserRepo;
+  let userRepository: UserRepository;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule(
@@ -24,7 +24,7 @@ describe("register resolver", () => {
       },
       entities,
     );
-    userRepository = moduleRef.get<UserRepo>(UserRepo);
+    userRepository = moduleRef.get<UserRepository>(UserRepository);
   });
 
   describe("user", () => {

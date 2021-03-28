@@ -4,16 +4,16 @@ import { RegisterInput } from "~/app/account/resolvers/register.input";
 import { createEmailConfirmation } from "~/app/account/entities/email_confirmation.entity";
 import { createUser, User } from "~/app/user/entities/user.entity";
 import { RegisterEmail } from "~/app/emails/emails/register.email";
-import { EmailConfirmationRepo } from "~/lib/database/repositories/email_confirmation.repository";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { MyContext } from "~/lib/graphql/my_context";
 import { LoggerService } from "~/lib/logger/logger.service";
 
 @Resolver()
 export class RegisterResolver {
   constructor(
-    private readonly userRepository: UserRepo,
-    private readonly emailConfirmationRepository: EmailConfirmationRepo,
+    private readonly userRepository: UserRepository,
+    private readonly emailConfirmationRepository: EmailConfirmationRepository,
     private readonly registerEmail: RegisterEmail,
     private readonly logger: LoggerService,
   ) {

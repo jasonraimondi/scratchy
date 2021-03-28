@@ -5,7 +5,7 @@ import querystring from "querystring";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { AuthService } from "~/app/auth/services/auth.service";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class GithubAuthGuard extends AuthGuard("github") {}
 
 @Controller("oauth2/github")
 export class GithubController {
-  constructor(private readonly userRepository: UserRepo, private readonly loginService: AuthService) {}
+  constructor(private readonly userRepository: UserRepository, private readonly loginService: AuthService) {}
 
   @Get()
   @UseGuards(GithubAuthGuard)

@@ -120,7 +120,7 @@ export async function verifyPassword(user: User, password: string) {
     throw UnauthorizedException.invalidUser("user is not active");
   }
 
-  if (!(await compare(password, user.passwordHash + ENV.salt))) {
+  if (!(await compare(password + ENV.salt, user.passwordHash))) {
     throw UnauthorizedException.invalidUser("invalid password");
   }
 }

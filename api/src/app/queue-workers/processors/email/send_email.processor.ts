@@ -6,17 +6,17 @@ import { Job } from "bull";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/app/emails/services/email_template.service";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {
   constructor(
-    private readonly userRepository: UserRepo,
+    private readonly userRepository: UserRepository,
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
     private readonly logger: LoggerService,
   ) {
-    logger.setContext(SendEmailProcessor.name);
+    this.logger.setContext(this.constructor.name);
   }
 
   @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })

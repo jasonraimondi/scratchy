@@ -1,0 +1,40 @@
+.label {
+  display: inline-block;
+  background-color: var(--colors-green-500);
+  color: var(--colors-white);
+  font-size: 0.7em;
+  padding: 2px 4px;
+  border-radius: 0.25em;
+
+  @media (--dark) {
+    color: var(--colors-white);
+    background-color: var(--colors-purple-500);
+  }
+
+  a {
+    color: var(--colors-white);
+    text-decoration: none;
+  }
+
+  &.inline {
+    display: inline-block;
+  }
+
+  &:active,
+  &:focus,
+  &:hover,
+  &:visited,
+  a[href]:active,
+  a[href]:focus,
+  a[href]:hover,
+  a[href]:visited {
+    text-decoration: none;
+    color: var(--colors-white);
+    background-color: var(--colors-green-700);
+
+    @media (--dark) {
+      color: var(--colors-gray-800);
+      background-color: var(--colors-purple-200);
+    }
+  }
+}

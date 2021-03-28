@@ -1,7 +1,10 @@
+import { Injectable } from "@nestjs/common";
+
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { PrismaService } from "~/lib/database/prisma.service";
 
-export class EmailConfirmationRepo {
+@Injectable()
+export class EmailConfirmationRepository {
   constructor(private prisma: PrismaService) {}
 
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
@@ -32,9 +35,8 @@ export class EmailConfirmationRepo {
     await this.prisma.emailConfirmationToken.delete({ where: { id } });
   }
 
-  async create(emailConfirmation: EmailConfirmationToken) {
+  create(emailConfirmation: EmailConfirmationToken) {
     const { user, ...data } = emailConfirmation;
-    const u = await this.prisma.emailConfirmationToken.create({ data });
-    return Object.assign(u, new EmailConfirmationToken());
+    return this.prisma.emailConfirmationToken.create({ data });
   }
 }

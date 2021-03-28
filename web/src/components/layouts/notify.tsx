@@ -10,7 +10,7 @@ export function Notify() {
   }
 
   return (
-    <ul id={style.notifications}>
+    <ul className={style.notifications}>
       {notifications.map(notify => (
         <li key={notify.type} className={style[notify.type]}>
           <span>{notify.message}</span>

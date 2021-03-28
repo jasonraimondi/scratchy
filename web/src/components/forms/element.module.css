@@ -1,28 +1,27 @@
 .label {
   display: block;
-  width: 100%;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.5em;
 }
 
 .label input {
-  width: 100%;
 }
 
 .label span {
   display: block;
   color: black;
-  padding-bottom: 0.1rem;
+  padding-bottom: 0.1em;
 }
 
 .label span.inline {
   display: inline;
-  padding: 0 0.5rem;
+  padding: 0 0.5em;
 }
 
 .button {
-  font-size: 1em;
-  background-color: lightslategrey;
-  color: black;
-  margin: 0;
+  font-weight: var(--font-semibold);
+  background-color: var(--colors-gray-300);
+  color: var(--colors-black);
+  padding: 0.125em 0.5em;
+  border-radius: 0.2em;
   border: none;
 }

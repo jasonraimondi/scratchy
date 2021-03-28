@@ -22,21 +22,14 @@ export default function ForgotPassword() {
 
   return (
     <Layout title="Login Page">
-      <h1 className="h5">Forgot Password Page</h1>
+      <h1>Forgot Password Page</h1>
       <form onSubmit={handleSubmit(onSubmit)} data-test="forgot-password-form">
         <Label data-test="forgot-password-form--email">
           <span>Email</span>
-          <input
-            type="email"
-            name="email"
-            placeholder="john.doe@example.com"
-            ref={register({ required: true, pattern: validEmail })}
-          />
+          <input type="email" name="email" placeholder="john.doe@example.com" ref={register({ required: true, pattern: validEmail })} />
           {errors.email}
         </Label>
-        <Button type="submit" disabled={isSubmitting}>
-          <span>Submit</span>
-        </Button>
+        <Button data-test="forgot-password-form--submit" type="submit" disabled={isSubmitting}>Submit</Button>
       </form>
     </Layout>
   );

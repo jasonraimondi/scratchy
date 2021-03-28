@@ -1,21 +1,21 @@
 import { Injectable } from "@nestjs/common";
 
-import { createForgotPassword, ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
+import { createForgotPassword } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
 import { ForgotPasswordEmail } from "~/app/emails/emails/forgot_password.email";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { ForgotPasswordRepo } from "~/lib/database/repositories/forgot_password.repository";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(
-    private userRepository: UserRepo,
-    private forgotPasswordRepository: ForgotPasswordRepo,
+    private userRepository: UserRepository,
+    private forgotPasswordRepository: ForgotPasswordRepository,
     private forgotPasswordEmail: ForgotPasswordEmail,
     private logger: LoggerService,
   ) {
-    logger.setContext(ForgotPasswordService.name);
+    this.logger.setContext(this.constructor.name);
   }
 
   async validateForgotPasswordToken(token: string, email: string) {
@@ -30,7 +30,6 @@ export class ForgotPasswordService {
     const user = await this.userRepository.findByEmail(email);
     const forgotPassword = await this.getForgotPasswordForUser(user);
     try {
-      await this.forgotPasswordRepository.save(forgotPassword);
       await this.forgotPasswordEmail.send(forgotPassword);
       return true;
     } catch (e) {
@@ -61,7 +60,6 @@ export class ForgotPasswordService {
       return await this.forgotPasswordRepository.findForUser(user.id);
     } catch (e) {}
     const forgotPassword = await createForgotPassword({ user });
-    await this.forgotPasswordRepository.save(forgotPassword);
-    return forgotPassword;
+    return await this.forgotPasswordRepository.create(forgotPassword);
   }
 }

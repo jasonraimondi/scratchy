@@ -4,14 +4,14 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import { User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class GoogleAuthGuard extends AuthGuard("google") {}
 
 @Controller("oauth2/google")
 export class GoogleController {
-  constructor(private readonly userRepository: UserRepo) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   @Get()
   @UseGuards(GoogleAuthGuard)

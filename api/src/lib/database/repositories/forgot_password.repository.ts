@@ -4,13 +4,13 @@ import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.enti
 import { PrismaService } from "~/lib/database/prisma.service";
 
 @Injectable()
-export class ForgotPasswordRepo {
+export class ForgotPasswordRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async save(forgotPasswordToken: ForgotPasswordToken): Promise<ForgotPasswordToken> {
+  async create(forgotPasswordToken: ForgotPasswordToken): Promise<ForgotPasswordToken> {
     const { user, ...data } = forgotPasswordToken;
     const e = await this.prisma.forgotPasswordToken.create({ data });
-    return Object.assign(e, new ForgotPasswordToken());
+    return Object.assign(e, new ForgotPasswordToken);
   }
 
   async findById(id: string): Promise<ForgotPasswordToken> {
@@ -18,7 +18,7 @@ export class ForgotPasswordRepo {
       where: { id },
       include: { user: true },
     });
-    return Object.assign(e, new ForgotPasswordToken());
+    return Object.assign(e, new ForgotPasswordToken);
   }
 
   async findForUser(userId: string): Promise<ForgotPasswordToken> {
@@ -26,7 +26,7 @@ export class ForgotPasswordRepo {
       where: { userId },
       include: { user: true },
     });
-    return Object.assign(e, new ForgotPasswordToken());
+    return Object.assign(e, new ForgotPasswordToken);
   }
 
   async delete(id: string): Promise<void> {

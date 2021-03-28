@@ -6,14 +6,14 @@ import { VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
 import { createUser, User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
   private readonly logger: Logger;
 
-  constructor(private readonly userRepository: UserRepo) {
+  constructor(private readonly userRepository: UserRepository) {
     super({
       passReqToCallback: true,
       clientID: ENV.oauth.github.clientId,
@@ -41,7 +41,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
       user = await this.userRepository.findByEmail(email);
       if (!user.oauthGithubIdentifier) {
         user.oauthGithubIdentifier = profile.id;
-        await this.userRepository.create(user);
+        await this.userRepository.update(user);
       }
     } catch (e) {
       user = await createUser({

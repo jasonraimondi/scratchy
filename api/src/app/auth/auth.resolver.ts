@@ -6,12 +6,12 @@ import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
 import { MyContext } from "~/lib/graphql/my_context";
 import { LoginInput } from "~/app/account/resolvers/auth/login_input";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService, private readonly userRepository: UserRepo) {}
+  constructor(private readonly authService: AuthService, private readonly userRepository: UserRepository) {}
 
   @Mutation(() => LoginResponse!)
   async login(

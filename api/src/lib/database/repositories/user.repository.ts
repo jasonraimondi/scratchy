@@ -6,7 +6,7 @@ import { UserPaginatorResponse } from "~/lib/database/dtos/responses/user_pagina
 import { UserPaginatorInputs } from "~/lib/database/dtos/inputs/paginator.inputs";
 
 @Injectable()
-export class UserRepo {
+export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
   async list(params: UserPaginatorInputs = {}): Promise<UserPaginatorResponse> {
@@ -20,6 +20,14 @@ export class UserRepo {
       },
       data,
     };
+  }
+
+  async update(user: User) {
+    const { permissions, roles, ...userData } = user;
+    return this.prisma.user.update({
+      where: { id: user.id },
+      data: userData,
+    });
   }
 
   async create(user: User): Promise<User> {

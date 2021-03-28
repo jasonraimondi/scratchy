@@ -3,50 +3,66 @@ import React from "react";
 import { Link } from "@/app/components/links/link";
 import { useAuth } from "@/app/lib/use_auth";
 
-import style from "./header.module.css";
-
 export function Header() {
   const { isAuthenticated } = useAuth();
+  const menuLinks = [
+    {
+      name: "Home",
+      href: "/",
+      dataTest: "link--home",
+    },
+  ];
+
+  if (isAuthenticated()) {
+    menuLinks.push(
+      {
+        name: "Dashboard",
+        href: "/app/dashboard",
+        dataTest: "link--dashboard",
+      },
+      {
+        name: "Profile",
+        href: "/app/profile",
+        dataTest: "link--profile",
+      },
+      {
+        name: "Logout",
+        href: "/logout",
+        dataTest: "link--logout",
+      },
+    );
+  } else {
+    menuLinks.push(
+      {
+        name: "Restricted",
+        href: "/app/profile",
+        dataTest: "link--restricted",
+      },
+      {
+        name: "Register",
+        href: "/register",
+        dataTest: "link--register",
+      },
+      {
+        name: "Login",
+        href: "/login",
+        dataTest: "link--login",
+      },
+    );
+  }
 
   return (
     <header>
       <nav>
-        <Link href="/">
-          <a className={style.a}>Home</a>
-        </Link>
-        {isAuthenticated() ? (
-          <>
-            <Link href="/app/dashboard">
-              <a className={style.a}>Dashboard</a>
-            </Link>
-            <Link href="/app/profile">
-              <a className={style.a}>Profile</a>
-            </Link>
-            <Link href="/logout">
-              <a className={style.a} data-test="logout-link">
-                Logout
-              </a>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link href="/app/profile">
-              <a className={style.a} data-test="register-link">
-                RESTRICTED
-              </a>
-            </Link>
-            <Link href="/register">
-              <a className={style.a} data-test="register-link">
-                Register
-              </a>
-            </Link>
-            <Link href="/login">
-              <a className={style.a} data-test="login-link">
-                Login
-              </a>
-            </Link>
-          </>
-        )}
+        <ul>
+          {menuLinks.map(l => (
+            <li>
+              <Link href={l.href} data-test={l.dataTest}>
+                {l.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
   );

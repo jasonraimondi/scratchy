@@ -5,21 +5,15 @@ import helmet from "fastify-helmet";
 import nunjucks from "nunjucks";
 
 import { ENV } from "~/config/environments";
-
-export const corsConfig = {
-  origin: true,
-  credentials: true,
-};
+import { CORS } from "~/config/cors";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   await fastify.register(cookieParser);
 
-  fastify.enableCors(corsConfig);
+  fastify.enableCors(CORS);
 
   await fastify.setViewEngine({
-    engine: {
-      nunjucks,
-    },
+    engine: { nunjucks },
     templates: ENV.templatesDir,
     includeViewExtension: true,
     viewExt: "njk",

@@ -9,7 +9,7 @@ import { Permission } from "../../src/app/user/entities/permission.entity";
 import { Role } from "../../src/app/user/entities/role.entity";
 import { User } from "../../src/app/user/entities/user.entity";
 import { registerTypes } from "../../src/lib/database/register_types";
-import { UserRepo } from "../../src/lib/database/repositories/user.repository";
+import { UserRepository } from "../../src/lib/database/repositories/user.repository";
 import { createTestingModule } from "../app_testing.module";
 import { userGenerator } from "../generators/user.generator";
 import { attachMiddlewares } from "../../src/lib/middlewares/attach_middlewares";
@@ -53,7 +53,7 @@ describe.skip(MeResolver, () => {
   });
 
   test("successfully returns user response", async () => {
-    const userRepository = moduleRef.get<UserRepo>(UserRepo);
+    const userRepository = moduleRef.get<UserRepository>(UserRepository);
     user = await userGenerator();
     await userRepository.save(user);
 

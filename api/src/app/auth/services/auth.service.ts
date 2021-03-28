@@ -3,12 +3,12 @@ import type { FastifyReply } from "fastify";
 import type { CookieSerializeOptions } from "fastify-cookie";
 import { Injectable } from "@nestjs/common";
 
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
 import { User, verifyPassword } from "~/app/user/entities/user.entity";
 import { ENV } from "~/config/environments";
-import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
+import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 
 function roundToSeconds(ms: Date | number) {
   if (ms instanceof Date) ms = ms.getTime();
@@ -21,7 +21,7 @@ export class AuthService {
   private readonly refreshTokenTimeout = "2h";
   private readonly refreshTokenTimeoutRemember = "7d";
 
-  constructor(private userRepository: UserRepo, private jwtService: MyJwtService) {}
+  constructor(private userRepository: UserRepository, private jwtService: MyJwtService) {}
 
   async login(email: string, pass: string): Promise<LoginResponse> {
     const user = await this.userRepository.findByEmail(email);

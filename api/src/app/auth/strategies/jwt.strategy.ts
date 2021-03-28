@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
 
 import { ENV } from "~/config/environments";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import type { FastifyRequest } from "fastify";
 
@@ -16,7 +16,7 @@ export type TokenPayload = {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userRepository: UserRepo) {
+  constructor(private readonly userRepository: UserRepository) {
     super({
       jwtFromRequest: fromFastifyAuthHeaderAsBearerToken,
       ignoreExpiration: false,

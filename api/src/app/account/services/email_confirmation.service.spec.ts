@@ -7,8 +7,8 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { EmailConfirmationRepo } from "~/lib/database/repositories/email_confirmation.repository";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -17,8 +17,8 @@ describe(EmailConfirmationService.name, () => {
 
   let moduleRef: TestingModule;
   let resolver: EmailConfirmationService;
-  let userRepository: UserRepo;
-  let emailConfirmationRepository: EmailConfirmationRepo;
+  let userRepository: UserRepository;
+  let emailConfirmationRepository: EmailConfirmationRepository;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule(
@@ -27,8 +27,8 @@ describe(EmailConfirmationService.name, () => {
       },
       entities,
     );
-    userRepository = moduleRef.get(UserRepo);
-    emailConfirmationRepository = moduleRef.get(EmailConfirmationRepo);
+    userRepository = moduleRef.get(UserRepository);
+    emailConfirmationRepository = moduleRef.get(EmailConfirmationRepository);
     resolver = moduleRef.get(EmailConfirmationService);
   });
 

@@ -1,16 +1,16 @@
-query Users($query: PaginatorInputs) {
-  users(query: $query) {
-    data {
-      id
-      email
-      name
-    }
-    cursor {
-      beforeCursor
-      afterCursor
-    }
-  }
-}
+#query Users($query: PaginatorInputs) {
+#  users(query: $query) {
+#    data {
+#      id
+#      email
+#      name
+#    }
+#    cursor {
+#      beforeCursor
+#      afterCursor
+#    }
+#  }
+#}
 
 query User($email: String!) {
   user(email: $email) {

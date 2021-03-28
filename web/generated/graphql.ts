@@ -1,6 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
-import { print } from 'graphql';
 import { GraphQLError } from 'graphql-request/dist/types';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
@@ -18,12 +17,6 @@ export type Scalars = {
   DateTime: Date;
 };
 
-export type Role = {
-  __typename?: 'Role';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -32,28 +25,27 @@ export type User = {
   lastName?: Maybe<Scalars['String']>;
   isEmailConfirmed: Scalars['Boolean'];
   lastLoginAt?: Maybe<Scalars['DateTime']>;
-  roles?: Maybe<Array<Maybe<Role>>>;
   isActive: Scalars['Boolean'];
   name?: Maybe<Scalars['String']>;
 };
 
 
-export type Cursor = {
-  __typename?: 'Cursor';
-  beforeCursor?: Maybe<Scalars['String']>;
-  afterCursor?: Maybe<Scalars['String']>;
-};
-
-export type UserPaginatorResponse = {
-  __typename?: 'UserPaginatorResponse';
-  cursor: Cursor;
-  data: Array<User>;
-};
-
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
+};
+
+export type PaginatorMeta = {
+  __typename?: 'PaginatorMeta';
+  previousLink?: Maybe<Scalars['String']>;
+  nextLink?: Maybe<Scalars['String']>;
+};
+
+export type UserPaginatorResponse = {
+  __typename?: 'UserPaginatorResponse';
+  meta: PaginatorMeta;
+  data: Array<User>;
 };
 
 export type Query = {
@@ -70,20 +62,13 @@ export type QueryUserArgs = {
 
 
 export type QueryUsersArgs = {
-  query?: Maybe<PaginatorInputs>;
+  query?: Maybe<UserPaginatorInputs>;
 };
 
-export type PaginatorInputs = {
-  afterCursor?: Maybe<Scalars['String']>;
-  beforeCursor?: Maybe<Scalars['String']>;
-  limit?: Maybe<Scalars['Int']>;
-  order?: Maybe<Order>;
+export type UserPaginatorInputs = {
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
 };
-
-export enum Order {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -91,8 +76,8 @@ export type Mutation = {
   sendForgotPasswordEmail: Scalars['Boolean'];
   updatePasswordFromToken: Scalars['Boolean'];
   verifyEmailConfirmation: Scalars['Boolean'];
-  resentConfirmEmail: Scalars['Boolean'];
   register: User;
+  resendConfirmEmail: Scalars['Boolean'];
   login: LoginResponse;
   refreshToken: LoginResponse;
   logout: Scalars['Boolean'];
@@ -121,13 +106,13 @@ export type MutationVerifyEmailConfirmationArgs = {
 };
 
 
-export type MutationResentConfirmEmailArgs = {
-  email: Scalars['String'];
+export type MutationRegisterArgs = {
+  data: RegisterInput;
 };
 
 
-export type MutationRegisterArgs = {
-  data: RegisterInput;
+export type MutationResendConfirmEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -284,25 +269,6 @@ export type VerifyEmailConfirmationMutation = (
   & Pick<Mutation, 'verifyEmailConfirmation'>
 );
 
-export type UsersQueryVariables = Exact<{
-  query?: Maybe<PaginatorInputs>;
-}>;
-
-
-export type UsersQuery = (
-  { __typename?: 'Query' }
-  & { users: (
-    { __typename?: 'UserPaginatorResponse' }
-    & { data: Array<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'email' | 'name'>
-    )>, cursor: (
-      { __typename?: 'Cursor' }
-      & Pick<Cursor, 'beforeCursor' | 'afterCursor'>
-    ) }
-  ) }
-);
-
 export type UserQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -391,21 +357,6 @@ export const VerifyEmailConfirmationDocument = gql`
   verifyEmailConfirmation(data: $data)
 }
     `;
-export const UsersDocument = gql`
-    query Users($query: PaginatorInputs) {
-  users(query: $query) {
-    data {
-      id
-      email
-      name
-    }
-    cursor {
-      beforeCursor
-      afterCursor
-    }
-  }
-}
-    `;
 export const UserDocument = gql`
     query User($email: String!) {
   user(email: $email) {
@@ -422,40 +373,37 @@ const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
     SendForgotPasswordEmail(variables: SendForgotPasswordEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: SendForgotPasswordEmailMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<SendForgotPasswordEmailMutation>(print(SendForgotPasswordEmailDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<SendForgotPasswordEmailMutation>(SendForgotPasswordEmailDocument, variables, requestHeaders));
     },
     UpdatePasswordFromToken(variables: UpdatePasswordFromTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: UpdatePasswordFromTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UpdatePasswordFromTokenMutation>(print(UpdatePasswordFromTokenDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<UpdatePasswordFromTokenMutation>(UpdatePasswordFromTokenDocument, variables, requestHeaders));
     },
     ValidateForgotPasswordToken(variables: ValidateForgotPasswordTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: ValidateForgotPasswordTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<ValidateForgotPasswordTokenMutation>(print(ValidateForgotPasswordTokenDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<ValidateForgotPasswordTokenMutation>(ValidateForgotPasswordTokenDocument, variables, requestHeaders));
     },
     Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: LoginMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<LoginMutation>(print(LoginDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<LoginMutation>(LoginDocument, variables, requestHeaders));
     },
     RefreshToken(variables?: RefreshTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RefreshTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RefreshTokenMutation>(print(RefreshTokenDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<RefreshTokenMutation>(RefreshTokenDocument, variables, requestHeaders));
     },
     Logout(variables?: LogoutMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: LogoutMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<LogoutMutation>(print(LogoutDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<LogoutMutation>(LogoutDocument, variables, requestHeaders));
     },
     RevokeRefreshTokensForUser(variables: RevokeRefreshTokensForUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RevokeRefreshTokensForUserMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RevokeRefreshTokensForUserMutation>(print(RevokeRefreshTokensForUserDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<RevokeRefreshTokensForUserMutation>(RevokeRefreshTokensForUserDocument, variables, requestHeaders));
     },
     Me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: MeQuery | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<MeQuery>(print(MeDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<MeQuery>(MeDocument, variables, requestHeaders));
     },
     Register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RegisterMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RegisterMutation>(print(RegisterDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<RegisterMutation>(RegisterDocument, variables, requestHeaders));
     },
     VerifyEmailConfirmation(variables: VerifyEmailConfirmationMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: VerifyEmailConfirmationMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<VerifyEmailConfirmationMutation>(print(VerifyEmailConfirmationDocument), variables, requestHeaders));
-    },
-    Users(variables?: UsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: UsersQuery | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UsersQuery>(print(UsersDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<VerifyEmailConfirmationMutation>(VerifyEmailConfirmationDocument, variables, requestHeaders));
     },
     User(variables: UserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: UserQuery | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UserQuery>(print(UserDocument), variables, requestHeaders));
+        return withWrapper(() => client.rawRequest<UserQuery>(UserDocument, variables, requestHeaders));
     }
   };
 }

@@ -5,13 +5,13 @@ import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
 import { createUser, User } from "~/app/user/entities/user.entity";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   private readonly logger: Logger;
 
-  constructor(private readonly userRepository: UserRepo) {
+  constructor(private readonly userRepository: UserRepository) {
     super({
       passReqToCallback: true,
       clientID: ENV.oauth.google.clientId,
@@ -30,9 +30,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     done: VerifyCallback,
   ): Promise<any> {
     const { name, emails } = profile;
-    this.logger.log(profile);
-    this.logger.log(req.query);
-    this.logger.log(req.body);
+    this.logger.debug(profile);
+    this.logger.debug(req.query);
+    this.logger.debug(req.body);
     const email = emails?.[0].value;
     let user: User;
 
@@ -42,7 +42,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       user = await this.userRepository.findByEmail(email);
       if (!user.oauthGoogleIdentifier) {
         user.oauthGoogleIdentifier = profile.id;
-        await this.userRepository.create(user);
+        await this.userRepository.update(user);
       }
     } catch (e) {
       user = await createUser({

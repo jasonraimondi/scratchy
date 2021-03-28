@@ -2,18 +2,18 @@ import { TestingModule } from "@nestjs/testing";
 
 import { User } from "~/app/user/entities/user.entity";
 import { Order } from "~/lib/database/dtos/inputs/paginator.inputs";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
 describe("user repositories", () => {
   let container: TestingModule;
-  let userRepository: UserRepo;
+  let userRepository: UserRepository;
   let users: User[];
 
   beforeAll(async () => {
     container = await createTestingModule();
-    userRepository = container.get<UserRepo>(UserRepo);
+    userRepository = container.get<UserRepository>(UserRepository);
     users = [
       await userGenerator({ id: "c3c5df06-b4e7-498b-bdbf-3f3138404b31" }),
       await userGenerator({ id: "b4e46399-5401-4a58-b7d7-3a8b37bda8a0" }),

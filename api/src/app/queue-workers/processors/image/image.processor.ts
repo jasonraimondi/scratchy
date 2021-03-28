@@ -5,18 +5,18 @@ import { Process, Processor } from "@nestjs/bull";
 import { SendEmailProcessor } from "~/app/queue-workers/processors/email/send_email.processor";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/app/emails/services/email_template.service";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
 
 @Processor(QUEUE.image)
 export class ImageProcessor {
   constructor(
-    private readonly userRepository: UserRepo,
+    private readonly userRepository: UserRepository,
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
     private readonly logger: LoggerService,
   ) {
-    logger.setContext(SendEmailProcessor.name);
+    this.logger.setContext(this.constructor.name);
   }
 
   @Process({ name: QUEUE_JOBS.image.send, concurrency: 2 })

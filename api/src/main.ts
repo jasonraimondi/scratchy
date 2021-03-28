@@ -14,20 +14,22 @@ import { ENV } from "~/config/environments";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
 
-const logger = new LoggerService("__main__");
-
 (async () => {
-  const fastify = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
-  await attachMiddlewares(fastify);
-  fastify.useGlobalPipes(new ValidationPipe({ transform: true }));
+  const logger = await app.resolve(LoggerService);
+  logger.setContext("main.ts");
+
+  await attachMiddlewares(app);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.enableShutdownHooks();
 
   if (ENV.enableDebugging) {
     logger.debug("DEBUGGING ENABLED");
     logger.debug(ENV);
   }
 
-  await fastify.listen(3001, "0.0.0.0");
+  await app.listen(3001, "0.0.0.0");
 
-  logger.log(`Listening on ${await fastify.getUrl()}`);
+  logger.log(`Listening on ${await app.getUrl()}`);
 })();

@@ -26,8 +26,4 @@ import { UserModule } from "~/app/user/user.module";
   ],
   controllers: [AppController],
 })
-export class AppModule {
-  // configure(consumer: MiddlewareConsumer): void {
-  //   consumer.apply(AuthMiddleware).forRoutes("*");
-  // }
-}
+export class AppModule {}

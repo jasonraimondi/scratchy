@@ -7,8 +7,8 @@ import { Role } from "~/app/user/entities/role.entity";
 import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
-import { ForgotPasswordRepo } from "~/lib/database/repositories/forgot_password.repository";
-import { UserRepo } from "~/lib/database/repositories/user.repository";
+import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { userGenerator } from "~test/generators/user.generator";
 
@@ -17,8 +17,8 @@ describe(ForgotPasswordService.name, () => {
 
   let moduleRef: TestingModule;
   let service: ForgotPasswordService;
-  let userRepository: UserRepo;
-  let forgotPasswordRepository: ForgotPasswordRepo;
+  let userRepository: UserRepository;
+  let forgotPasswordRepository: ForgotPasswordRepository;
 
   beforeAll(async () => {
     moduleRef = await createTestingModule(
@@ -27,8 +27,8 @@ describe(ForgotPasswordService.name, () => {
       },
       entities,
     );
-    userRepository = moduleRef.get<UserRepo>(UserRepo);
-    forgotPasswordRepository = moduleRef.get<ForgotPasswordRepo>(ForgotPasswordRepo);
+    userRepository = moduleRef.get<UserRepository>(UserRepository);
+    forgotPasswordRepository = moduleRef.get<ForgotPasswordRepository>(ForgotPasswordRepository);
     service = moduleRef.get(ForgotPasswordService);
   });
 
@@ -59,7 +59,7 @@ describe(ForgotPasswordService.name, () => {
       user.isEmailConfirmed = true;
       await userRepository.create(user);
       const forgotPassword = new ForgotPasswordToken(user);
-      await forgotPasswordRepository.save(forgotPassword);
+      await forgotPasswordRepository.create(forgotPassword);
 
       // act
       await service.updatePasswordFromToken(user.email, forgotPassword.id, "my-new-password");

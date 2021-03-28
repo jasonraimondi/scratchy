@@ -1,0 +1,39 @@
+a {
+  font-weight: var(--font-medium);
+  color: var(--colors-green-500);
+  transition: color 0.2s ease;
+  text-decoration: none;
+
+  &[href]:focus,
+  &[href]:hover,
+  &[href]:active {
+    color: var(--colors-green-800);
+    text-decoration: none;
+  }
+
+  @media (--dark) {
+    color: var(--colors-purple-500);
+
+    &[href]:focus,
+    &[href]:hover,
+    &[href]:active {
+      color: var(--colors-purple-200);
+    }
+  }
+
+  &.unstyled {
+    color: var(--colors-gray-800);
+
+    &:hover {
+      color: var(--colors-gray-800);
+    }
+
+    @media (--dark) {
+      color: var(--colors-white);
+
+      &:hover {
+        color: var(--colors-white);
+      }
+    }
+  }
+}
