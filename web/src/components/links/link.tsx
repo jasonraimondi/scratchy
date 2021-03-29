@@ -5,6 +5,7 @@ type Props = {
   href: string;
   replace?: boolean;
   className?: string;
+  style?: any;
 };
 
 export const Link: React.FunctionComponent<Props> = props => {

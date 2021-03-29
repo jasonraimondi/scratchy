@@ -15,12 +15,12 @@
   --text-xs: 0.64rem;
   --text-xxs: 0.512rem;
 
-  --h1: var(--text-xl);
-  --h2: var(--text-lg);
-  --h3: var(--text-md);
-  --h4: var(--text-sm);
-  --h5: var(--text-xs);
-  --h6: var(--text-xs);
+  --h1: var(--text-2xl);
+  --h2: var(--text-xl);
+  --h3: var(--text-xl);
+  --h4: var(--text-lg);
+  --h5: var(--text-md);
+  --h6: var(--text-md);
 
   --font-thin: 100;
   --font-extralight: 200;

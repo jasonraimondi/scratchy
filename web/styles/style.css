@@ -1,7 +1,9 @@
-@import "_mixin.css";
-@import "_base.css";
-@import "_colors.css";
-@import "_typography.css";
+@import "config/_mixin.css";
+@import "config/_base.css";
+@import "config/_colors.css";
+@import "config/_typography.css";
+
+@import "_theme.css";
 
 @import "base/_html.css";
 @import "base/_headings.css";

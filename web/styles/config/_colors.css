@@ -1,7 +1,6 @@
 :root {
   --colors-transparent: transparent;
 
-
   --colors-rose-50: #fff1f2;
   --colors-rose-100: #ffe4e6;
   --colors-rose-200: #fecdd3;
@@ -246,4 +245,13 @@
 
   --colors-white: var(--colors-gray-50);
   --colors-black: var(--colors-gray-800);
+
+  --colors-notify-error: var(--colors-rose-500);
+  --colors-notify-error-hover: var(--colors-rose-700);
+
+  --colors-notify-info: var(--colors-cyan-500);
+  --colors-notify-info-hover: var(--colors-cyan-700);
+
+  --colors-notify-success: var(--colors-emerald-500);
+  --colors-notify-success-hover: var(--colors-emerald-700);
 }

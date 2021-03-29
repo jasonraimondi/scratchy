@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 import { Layout } from "@/app/components/layouts/layout";
@@ -15,14 +15,6 @@ export default function LoginPage() {
 
   return (
     <Layout title="Login">
-      <ul>
-        <li>
-          <a href="http://api.scratchy.localdomain:8080/oauth2/github">Github Login</a>
-        </li>
-        <li>
-          <a href="http://api.scratchy.localdomain:8080/oauth2/google">Google Login</a>
-        </li>
-      </ul>
       <form onSubmit={handleSubmit(handleLogin)} data-test="login-form" className="bg-gray-200 p-2 m-2 rounded">
         <Label data-test="email">
           <span>Email</span>
@@ -33,7 +25,9 @@ export default function LoginPage() {
           <span>Password</span>
           <input type="password" name="password" placeholder="******" ref={register} />
           <br />
-          <Link href="/forgot_password" data-test="forgot-password-link"><small>Forgot Password?</small></Link>
+          <Link href="/forgot_password" data-test="forgot-password-link">
+            <small>Forgot Password?</small>
+          </Link>
           {errors.passwordError && <span>ERROR</span>}
         </Label>
         <Label data-test="remember-me">

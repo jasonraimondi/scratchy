@@ -1,0 +1,14 @@
+@media (--medium) {
+  .registerForm {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -10em;
+  }
+
+  .registerForm form {
+    width: 350px;
+  }
+}

@@ -26,10 +26,17 @@ export default function ForgotPassword() {
       <form onSubmit={handleSubmit(onSubmit)} data-test="forgot-password-form">
         <Label data-test="forgot-password-form--email">
           <span>Email</span>
-          <input type="email" name="email" placeholder="john.doe@example.com" ref={register({ required: true, pattern: validEmail })} />
+          <input
+            type="email"
+            name="email"
+            placeholder="john.doe@example.com"
+            ref={register({ required: true, pattern: validEmail })}
+          />
           {errors.email}
         </Label>
-        <Button data-test="forgot-password-form--submit" type="submit" disabled={isSubmitting}>Submit</Button>
+        <Button data-test="forgot-password-form--submit" type="submit" disabled={isSubmitting}>
+          Submit
+        </Button>
       </form>
     </Layout>
   );

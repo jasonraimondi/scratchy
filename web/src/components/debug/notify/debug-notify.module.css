@@ -1,0 +1,34 @@
+.notifyList {
+  display: flex;
+}
+
+.notify {
+  color: var(--colors-white);
+  margin-right: 1em;
+  transition: background-color 0.2s ease;
+  border: 2px solid var(--colors-black);
+}
+
+.notifyInfo {
+  background-color: var(--colors-notify-info);
+  border-color: var(--colors-notify-info-hover);
+  &:hover {
+    background-color: var(--colors-notify-info-hover);
+  }
+}
+
+.notifySuccess {
+  background-color: var(--colors-notify-success);
+  border-color: var(--colors-notify-success-hover);
+  &:hover {
+    background-color: var(--colors-notify-success-hover);
+  }
+}
+
+.notifyError {
+  background-color: var(--colors-notify-error);
+  border-color: var(--colors-notify-error-hover);
+  &:hover {
+    background-color: var(--colors-notify-error-hover);
+  }
+}

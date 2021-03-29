@@ -10,7 +10,7 @@ export class ForgotPasswordRepository {
   async create(forgotPasswordToken: ForgotPasswordToken): Promise<ForgotPasswordToken> {
     const { user, ...data } = forgotPasswordToken;
     const e = await this.prisma.forgotPasswordToken.create({ data });
-    return Object.assign(e, new ForgotPasswordToken);
+    return Object.assign(e, new ForgotPasswordToken());
   }
 
   async findById(id: string): Promise<ForgotPasswordToken> {
@@ -18,7 +18,7 @@ export class ForgotPasswordRepository {
       where: { id },
       include: { user: true },
     });
-    return Object.assign(e, new ForgotPasswordToken);
+    return Object.assign(e, new ForgotPasswordToken());
   }
 
   async findForUser(userId: string): Promise<ForgotPasswordToken> {
@@ -26,7 +26,7 @@ export class ForgotPasswordRepository {
       where: { userId },
       include: { user: true },
     });
-    return Object.assign(e, new ForgotPasswordToken);
+    return Object.assign(e, new ForgotPasswordToken());
   }
 
   async delete(id: string): Promise<void> {

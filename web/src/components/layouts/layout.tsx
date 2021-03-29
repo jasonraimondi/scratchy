@@ -1,32 +1,37 @@
+import classnames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import * as React from "react";
 import { useNotify } from "use-notify-rxjs";
 
-import { Notify } from "@/app/components/layouts/notify";
+import { Notify } from "@/app/components/layouts/partials/notify";
 import { Header } from "@/app/components/layouts/partials/header";
 import { useAuth } from "@/app/lib/use_auth";
-import { Button } from "@/app/components/forms/elements";
+import { DebugBar } from "@/app/components/debug/debug";
+
+import el from "./layout.module.css";
 
 export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
   children,
   title = "Scratchy Title",
   isPrivate = false,
 }) => {
-  const { isAuthenticated } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
+  const notify = useNotify();
 
   useEffect(() => {
-    if (isPrivate && !isAuthenticated()) router.push("/register");
+    if (isPrivate && !auth.isAuthenticated()) {
+      notify.error({ title: "Access Forbidden", message: "Log in to access that page." });
+      router.push("/login");
+    }
   }, []);
-
-  const { info, error, success } = useNotify();
 
   let body;
 
   if (isPrivate && typeof window === "undefined") {
-    body = <p>JASON Template is loading...</p>;
+    body = <p>Template is loading...</p>;
   } else {
     body = children;
   }
@@ -42,16 +47,12 @@ export const Layout: React.FC<{ title?: string; isPrivate?: boolean }> = ({
         {/*<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>*/}
         {/*<link rel="manifest" href="/site.webmanifest"/>*/}
       </Head>
-      <main className="container padded center">
+      <main className={classnames("container padded center", el.main)}>
         <Header />
         <Notify />
-        <div>{body}</div>
+        {body}
       </main>
-      <div>
-        <Button onClick={() => info("hi ya slugger!")} style={{ backgroundColor: "var(--colors-teal-500)"}}>Notify Info</Button>
-        <Button onClick={() => error("heads up slugger!")} style={{ backgroundColor: "var(--colors-red-500)"}}>Notify Error</Button>
-        <Button onClick={() => success("great job slugger!")} style={{ backgroundColor: "var(--colors-green-500)"}}>Notify Success</Button>
-      </div>
+      {process.env.NODE_ENV === "development" && <DebugBar />}
     </React.StrictMode>
   );
 };

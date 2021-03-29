@@ -1,0 +1,21 @@
+.nav {
+  display: flex;
+  padding: 0 0 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid var(--colors-gray-400);
+}
+
+.left {
+  flex: 1;
+}
+
+.left,
+.right {
+  display: flex;
+  li {
+    margin-right: 1em;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

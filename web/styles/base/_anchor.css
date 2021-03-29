@@ -1,38 +1,38 @@
 a {
   font-weight: var(--font-medium);
-  color: var(--colors-green-500);
+  color: var(--colors-primary);
   transition: color 0.2s ease;
   text-decoration: none;
 
   &[href]:focus,
   &[href]:hover,
   &[href]:active {
-    color: var(--colors-green-800);
+    color: var(--colors-primary-hover);
     text-decoration: none;
   }
 
   @media (--dark) {
-    color: var(--colors-purple-500);
+    color: var(--colors-darkmode-primary);
 
     &[href]:focus,
     &[href]:hover,
     &[href]:active {
-      color: var(--colors-purple-200);
+      color: var(--colors-darkmode-primary-hover);
     }
   }
 
   &.unstyled {
-    color: var(--colors-gray-800);
+    color: var(--colors-text);
 
     &:hover {
-      color: var(--colors-gray-800);
+      color: var(--colors-text);
     }
 
     @media (--dark) {
-      color: var(--colors-white);
+      color: var(--colors-darkmode-text);
 
       &:hover {
-        color: var(--colors-white);
+        color: var(--colors-darkmode-text);
       }
     }
   }

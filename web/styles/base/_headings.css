@@ -16,6 +16,7 @@ h5,
 .h5,
 h6,
 .h6 {
+  margin: 0;
   font-family: inherit;
   color: inherit;
 

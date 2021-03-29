@@ -1,20 +1,23 @@
 .label {
+  width: 100%;
   display: block;
   padding-bottom: 0.5em;
 }
 
-.label input {
-}
-
 .label span {
   display: block;
-  color: black;
+  color: var(--colors-black);
   padding-bottom: 0.1em;
 }
 
 .label span.inline {
   display: inline;
   padding: 0 0.5em;
+}
+
+.label input {
+  width: 100%;
+  background-color: var(--colors-amber-200);
 }
 
 .button {
@@ -24,4 +27,5 @@
   padding: 0.125em 0.5em;
   border-radius: 0.2em;
   border: none;
+  cursor: pointer;
 }

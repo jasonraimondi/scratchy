@@ -1,0 +1,12 @@
+@define-mixin scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@define-mixin no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
