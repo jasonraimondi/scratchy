@@ -1,7 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
 import { GraphQLError } from 'graphql-request/dist/types';
-import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -74,7 +73,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   validateForgotPasswordToken: Scalars['Boolean'];
   sendForgotPasswordEmail: Scalars['Boolean'];
-  updatePasswordFromToken: Scalars['Boolean'];
+  updatePasswordFromToken: LoginResponse;
   verifyEmailConfirmation: Scalars['Boolean'];
   register: User;
   resendConfirmEmail: Scalars['Boolean'];
@@ -86,8 +85,7 @@ export type Mutation = {
 
 
 export type MutationValidateForgotPasswordTokenArgs = {
-  email: Scalars['String'];
-  token: Scalars['String'];
+  data: ValidateForgotPasswordTokenInput;
 };
 
 
@@ -123,6 +121,11 @@ export type MutationLoginArgs = {
 
 export type MutationRevokeRefreshTokenArgs = {
   userId: Scalars['String'];
+};
+
+export type ValidateForgotPasswordTokenInput = {
+  email: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type SendForgotPasswordInput = {
@@ -171,12 +174,18 @@ export type UpdatePasswordFromTokenMutationVariables = Exact<{
 
 export type UpdatePasswordFromTokenMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'updatePasswordFromToken'>
+  & { updatePasswordFromToken: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'accessToken'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'email' | 'firstName' | 'lastName' | 'name'>
+    ) }
+  ) }
 );
 
 export type ValidateForgotPasswordTokenMutationVariables = Exact<{
-  email: Scalars['String'];
-  token: Scalars['String'];
+  data: ValidateForgotPasswordTokenInput;
 }>;
 
 
@@ -283,22 +292,30 @@ export type UserQuery = (
 );
 
 
-export const SendForgotPasswordEmailDocument = gql`
+export const SendForgotPasswordEmailDocument = `
     mutation SendForgotPasswordEmail($email: String!) {
   sendForgotPasswordEmail(data: {email: $email})
 }
     `;
-export const UpdatePasswordFromTokenDocument = gql`
+export const UpdatePasswordFromTokenDocument = `
     mutation UpdatePasswordFromToken($data: UpdatePasswordInput!) {
-  updatePasswordFromToken(data: $data)
+  updatePasswordFromToken(data: $data) {
+    accessToken
+    user {
+      email
+      firstName
+      lastName
+      name
+    }
+  }
 }
     `;
-export const ValidateForgotPasswordTokenDocument = gql`
-    mutation ValidateForgotPasswordToken($email: String!, $token: String!) {
-  validateForgotPasswordToken(email: $email, token: $token)
+export const ValidateForgotPasswordTokenDocument = `
+    mutation ValidateForgotPasswordToken($data: ValidateForgotPasswordTokenInput!) {
+  validateForgotPasswordToken(data: $data)
 }
     `;
-export const LoginDocument = gql`
+export const LoginDocument = `
     mutation Login($data: LoginInput!) {
   login(data: $data) {
     accessToken
@@ -310,7 +327,7 @@ export const LoginDocument = gql`
   }
 }
     `;
-export const RefreshTokenDocument = gql`
+export const RefreshTokenDocument = `
     mutation RefreshToken {
   refreshToken {
     accessToken
@@ -321,17 +338,17 @@ export const RefreshTokenDocument = gql`
   }
 }
     `;
-export const LogoutDocument = gql`
+export const LogoutDocument = `
     mutation Logout {
   logout
 }
     `;
-export const RevokeRefreshTokensForUserDocument = gql`
+export const RevokeRefreshTokensForUserDocument = `
     mutation RevokeRefreshTokensForUser($userId: String!) {
   revokeRefreshToken(userId: $userId)
 }
     `;
-export const MeDocument = gql`
+export const MeDocument = `
     query Me {
   me {
     id
@@ -343,7 +360,7 @@ export const MeDocument = gql`
   }
 }
     `;
-export const RegisterDocument = gql`
+export const RegisterDocument = `
     mutation Register($data: RegisterInput!) {
   register(data: $data) {
     id
@@ -352,12 +369,12 @@ export const RegisterDocument = gql`
   }
 }
     `;
-export const VerifyEmailConfirmationDocument = gql`
+export const VerifyEmailConfirmationDocument = `
     mutation VerifyEmailConfirmation($data: VerifyEmailInput!) {
   verifyEmailConfirmation(data: $data)
 }
     `;
-export const UserDocument = gql`
+export const UserDocument = `
     query User($email: String!) {
   user(email: $email) {
     id

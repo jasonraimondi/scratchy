@@ -1,66 +1,54 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { compare, hash } from "bcryptjs";
 import { IsEmail, IsIP, validate } from "class-validator";
+import { User as UserModel } from "@prisma/client";
 import { v4 } from "uuid";
 
-// import { Permission } from "~/app/user/entities/permission.entity";
-// import { Role } from "~/app/user/entities/role.entity";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
-import { ENV } from "~/config/environments";
 import { Role } from "~/app/user/entities/role.entity";
 import { Permission } from "~/app/user/entities/permission.entity";
+import { checkPassword, setPassword } from "~/lib/utils/password";
 
-export interface ICreateUser {
-  email: string;
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  password?: string;
-  createdIP?: string;
-}
+export { UserModel };
+
+export type ICreateUser = { email: string; password?: string } & Partial<UserModel>;
+
+type Relations = {
+  roles: [];
+  permissions: [];
+};
 
 @ObjectType()
-export class User {
-  @Field(() => ID)
-  id: string;
+export class User implements UserModel {
+  constructor({ roles, permissions, ...entity }: UserModel & Partial<Relations>) {
+    Object.assign(this, entity);
+    this.roles = roles?.map((r) => new Role(r)) ?? [];
+    this.permissions = permissions?.map((p) => new Permission(p)) ?? [];
+  }
 
+  @Field(() => ID)
+  readonly id: string;
   @Field()
   @IsEmail()
-  email: string;
-
-  passwordHash?: string | null;
-
+  readonly email: string;
+  passwordHash: string | null;
   @Field(() => String, { nullable: true })
-  firstName?: string | null;
-
+  firstName: string | null;
   @Field(() => String, { nullable: true })
-  lastName?: string | null;
-
+  lastName: string | null;
   @Field()
   isEmailConfirmed: boolean;
-
   @Field(() => Date, { nullable: true })
-  lastLoginAt?: Date | null;
-
+  lastLoginAt: Date | null;
   @IsIP()
-  lastLoginIP?: string | null;
-
+  lastLoginIP: string | null;
   @IsIP()
-  createdIP?: string | null;
-
-  createdAt: Date;
-
-  updatedAt?: Date | null;
-
+  readonly createdIP: string;
+  readonly createdAt: Date;
+  updatedAt: Date | null;
   tokenVersion: number;
-
-  oauthGoogleIdentifier?: string | null;
-
-  oauthGithubIdentifier?: string | null;
-
-  // @Field(() => [Role], { nullable: "itemsAndList", defaultValue: [] })
+  oauthGoogleIdentifier: string | null;
+  oauthGithubIdentifier: string | null;
   roles?: Role[] | null;
-
   permissions?: Permission[] | null;
 
   @Field(() => Boolean)
@@ -77,50 +65,47 @@ export class User {
   }
 
   async setPassword(password: string) {
-    this.passwordHash = await hash(password, 12);
+    this.passwordHash = await setPassword(password);
   }
 
-  get jwtPayload() {
-    return {
-      id: this.id,
-      email: this.email,
-      isActive: this.isActive,
-    };
-  }
-}
+  async verify(password: string) {
+    if (!this.passwordHash && this.oauthGoogleIdentifier) {
+      throw UnauthorizedException.invalidUser("user must login with google or reset password");
+    }
 
-export async function createUser({ id, email, firstName, lastName, password, createdIP }: ICreateUser): Promise<User> {
-  const user = new User();
-  user.id = id ?? v4();
-  user.email = email?.toLowerCase();
-  user.firstName = firstName;
-  user.lastName = lastName;
-  user.createdIP = createdIP;
-  if (password) user.passwordHash = await setPassword(password);
-  await validate(user);
-  return user;
-}
+    if (!this.passwordHash) {
+      throw UnauthorizedException.invalidUser("user must create password");
+    }
 
-export function setPassword(password: string) {
-  return hash(password + ENV.salt, 12);
-}
+    if (!this.isActive) {
+      throw UnauthorizedException.invalidUser("user is not active");
+    }
 
-export async function verifyPassword(user: User, password: string) {
-  if (!user.passwordHash && user.oauthGoogleIdentifier) {
-    throw UnauthorizedException.invalidUser("user must login with google or reset password");
+    if (!(await checkPassword(password, this.passwordHash))) {
+      throw UnauthorizedException.invalidUser("invalid password");
+    }
   }
 
-  if (!user.passwordHash) {
-    throw UnauthorizedException.invalidUser("user must create password");
-  }
-
-  const isActive = user.isEmailConfirmed;
-
-  if (!isActive) {
-    throw UnauthorizedException.invalidUser("user is not active");
-  }
-
-  if (!(await compare(password + ENV.salt, user.passwordHash))) {
-    throw UnauthorizedException.invalidUser("invalid password");
+  static async create({ password, ...args }: ICreateUser): Promise<User> {
+    const user = new User({
+      id: v4(),
+      createdAt: new Date(),
+      isEmailConfirmed: false,
+      createdIP: "127.0.1.1",
+      tokenVersion: 1,
+      firstName: null,
+      lastName: null,
+      lastLoginAt: null,
+      lastLoginIP: null,
+      updatedAt: null,
+      oauthGoogleIdentifier: null,
+      oauthGithubIdentifier: null,
+      passwordHash: null,
+      ...args,
+    });
+    if (password) await user.setPassword(password);
+    await validate(user);
+    return user;
   }
 }
+

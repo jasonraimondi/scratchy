@@ -4,7 +4,7 @@ import "tsconfig-paths/register";
 import "dotenv/config";
 
 import { PrismaClient } from "@prisma/client";
-import { setPassword } from "~/app/user/entities/user.entity";
+import { setPassword } from "~/lib/utils/password";
 
 const prisma = new PrismaClient();
 

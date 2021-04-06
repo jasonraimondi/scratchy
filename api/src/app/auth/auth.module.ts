@@ -8,7 +8,7 @@ import { LoggerModule } from "~/lib/logger/logger.module";
 
 // import { GithubStrategy } from "~/app/auth/strategies/github.strategy";
 // import { GoogleStrategy } from "~/app/auth/strategies/google.strategy";
-// import { JwtStrategy } from "~/app/auth/strategies/jwt.strategy";
+import { JwtStrategy } from "~/app/auth/strategies/jwt.strategy";
 // import { GithubAuthGuard, GithubController } from "~/app/auth/controllers/github.controller";
 // import { GoogleAuthGuard, GoogleController } from "~/app/auth/controllers/google.controller";
 
@@ -20,6 +20,7 @@ import { LoggerModule } from "~/lib/logger/logger.module";
   providers: [
     AuthService,
     AuthResolver,
+    JwtStrategy,
     // ...strategies,
     // ...guards,
   ],

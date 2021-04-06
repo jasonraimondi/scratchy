@@ -7,26 +7,38 @@ import { PrismaService } from "~/lib/database/prisma.service";
 export class ForgotPasswordRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  get qb() {
+    return this.prisma.forgotPasswordToken;
+  }
+
   async create(forgotPasswordToken: ForgotPasswordToken): Promise<ForgotPasswordToken> {
     const { user, ...data } = forgotPasswordToken;
-    const e = await this.prisma.forgotPasswordToken.create({ data });
-    return Object.assign(e, new ForgotPasswordToken());
+    return new ForgotPasswordToken(
+      await this.prisma.forgotPasswordToken.create({
+        data,
+        include: { user: true },
+      }),
+    );
   }
 
   async findById(id: string): Promise<ForgotPasswordToken> {
-    const e = await this.prisma.forgotPasswordToken.findUnique({
-      where: { id },
-      include: { user: true },
-    });
-    return Object.assign(e, new ForgotPasswordToken());
+    return new ForgotPasswordToken(
+      await this.prisma.forgotPasswordToken.findUnique({
+        rejectOnNotFound: true,
+        where: { id },
+        include: { user: true },
+      }),
+    );
   }
 
   async findForUser(userId: string): Promise<ForgotPasswordToken> {
-    const e = await this.prisma.forgotPasswordToken.findUnique({
-      where: { userId },
-      include: { user: true },
-    });
-    return Object.assign(e, new ForgotPasswordToken());
+    return new ForgotPasswordToken(
+      await this.prisma.forgotPasswordToken.findUnique({
+        rejectOnNotFound: true,
+        where: { userId },
+        include: { user: true },
+      }),
+    );
   }
 
   async delete(id: string): Promise<void> {

@@ -1,38 +1,38 @@
 a {
   font-weight: var(--font-medium);
-  color: var(--colors-primary);
+  color: var(--theme-primary);
   transition: color 0.2s ease;
   text-decoration: none;
 
   &[href]:focus,
   &[href]:hover,
   &[href]:active {
-    color: var(--colors-primary-hover);
+    color: var(--theme-primary-hover);
     text-decoration: none;
   }
 
   @media (--dark) {
-    color: var(--colors-darkmode-primary);
+    color: var(--theme-primary-darkmode);
 
     &[href]:focus,
     &[href]:hover,
     &[href]:active {
-      color: var(--colors-darkmode-primary-hover);
+      color: var(--theme-primary-darkmode-hover);
     }
   }
 
   &.unstyled {
-    color: var(--colors-text);
+    color: var(--theme-color);
 
     &:hover {
-      color: var(--colors-text);
+      color: var(--theme-color);
     }
 
     @media (--dark) {
-      color: var(--colors-darkmode-text);
+      color: var(--theme-color-darkmode);
 
       &:hover {
-        color: var(--colors-darkmode-text);
+        color: var(--theme-color-darkmode);
       }
     }
   }

@@ -16,9 +16,9 @@ model User {
   lastName               String?                 @db.VarChar(255)
   lastLoginAt            DateTime?               @db.Timestamp(6)
   lastLoginIP            String?                 @db.Inet
-  createdIP              String?                 @db.Inet
+  createdIP              String                  @db.Inet
   createdAt              DateTime                @default(now()) @db.Timestamp(6)
-  updatedAt              DateTime?               @db.Timestamp(6)
+  updatedAt              DateTime?               @updatedAt
   tokenVersion           Int                     @default(0)
   oauthGoogleIdentifier  String?                 @unique @db.VarChar(255)
   oauthGithubIdentifier  String?                 @unique @db.VarChar(255)

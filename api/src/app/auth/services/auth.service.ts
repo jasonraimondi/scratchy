@@ -5,7 +5,7 @@ import { Injectable } from "@nestjs/common";
 
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
-import { User, verifyPassword } from "~/app/user/entities/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { ENV } from "~/config/environments";
 import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
 import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
@@ -25,7 +25,7 @@ export class AuthService {
 
   async login(email: string, pass: string): Promise<LoginResponse> {
     const user = await this.userRepository.findByEmail(email);
-    await verifyPassword(user, pass);
+    await user.verify(pass);
     const accessToken = await this.createAccessToken(user);
     return { accessToken, user };
   }
@@ -93,7 +93,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  private createAccessToken(user: User) {
+  createAccessToken(user: User) {
     const now = Date.now();
     const payload: AccessTokenJWTPayload = {
       // non standard claims

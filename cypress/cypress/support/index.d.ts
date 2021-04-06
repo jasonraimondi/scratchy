@@ -23,6 +23,7 @@ declare namespace Cypress {
     register(data: RegisterData): Chainable<void>;
     verifyUser(email: string): Chainable<void>;
 
-    getLastEmail(value: string): Chainable<ParsedEmail>;
+    mhDeleteAll(): Chainable<void>;
+    mhGetLastEmailTo(value: string): Chainable<ParsedEmail>;
   }
 }

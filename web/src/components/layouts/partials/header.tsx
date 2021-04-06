@@ -31,7 +31,7 @@ export function Header() {
   }
 
   return (
-    <header>
+    <header className="container center padded">
       <nav className={el.nav}>
         <ul className={el.left}>
           {leftMenu.map(l => (

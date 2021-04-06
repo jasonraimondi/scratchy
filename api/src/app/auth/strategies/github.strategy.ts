@@ -1,11 +1,11 @@
-import { HttpException, Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import type { FastifyRequest } from "fastify";
 import { Profile, Strategy } from "passport-github";
 import { VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
-import { createUser, User } from "~/app/user/entities/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 
@@ -44,7 +44,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
         await this.userRepository.update(user);
       }
     } catch (e) {
-      user = await createUser({
+      user = await User.create({
         email,
         createdIP: req.ip,
       });

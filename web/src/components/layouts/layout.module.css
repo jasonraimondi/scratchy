@@ -1,5 +1,4 @@
 .main {
-  height: 100%;
+  overflow-y: auto;
   min-height: 100%;
-  background-color: var(--colors-blue-50);
 }

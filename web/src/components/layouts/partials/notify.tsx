@@ -1,7 +1,7 @@
+import classnames from "classnames";
 import { useNotify } from "use-notify-rxjs";
 
-import style from "./notify.module.css";
-import classnames from "classnames";
+import el from "./notify.module.css";
 
 export function Notify() {
   const { notifications, clear } = useNotify();
@@ -11,14 +11,14 @@ export function Notify() {
   }
 
   return (
-    <ul className={style.list}>
+    <ul className={el.list}>
       {notifications.map(notify => (
-        <li key={notify.id} className={classnames(style.item, style[notify.type])}>
-          <div className={style.messageContainer}>
-            {notify.title && <span className={style.title}>{notify.title}</span>}
-            <span className={style.message}>{notify.message}</span>
+        <li key={notify.id} className={classnames(el.item, el[notify.type])}>
+          <div className={el.messageContainer}>
+            {notify.title && <span className={el.title}>{notify.title}</span>}
+            <span className={el.message}>{notify.message}</span>
           </div>
-          <span className={classnames(style.close, style[notify.type])} onClick={() => clear(notify.id)}>
+          <span className={classnames(el.close, el[notify.type])} onClick={() => clear(notify.id)}>
             &times;
           </span>
         </li>

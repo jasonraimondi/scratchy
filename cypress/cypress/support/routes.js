@@ -1,13 +1,20 @@
+const queryMap = {
+  "Login": "mutateLogin",
+  "Logout": "mutateLogout",
+}
+
 beforeEach(() => {
-  cy.intercept("POST", "/graphql", req => {
+  cy.intercept("POST", "*/graphql", req => {
     const query = req.body.query ?? "";
 
-    if (query.includes("Login")) {
-      req.alias = "mutateLogin";
-    } else if (query.includes("Logout")) {
-      req.alias = "mutateLogout";
-    } else {
-      req.alias = "api-graphql";
+    for (const [queryName, alias] of Object.entries(queryMap)) {
+      if (query.includes(queryName)) {
+        req.alias = alias;
+      }
+    }
+
+    if (!req.alias) {
+      req.alias = "graphql";
     }
   });
 });

@@ -10,7 +10,7 @@ import { User } from "~/app/user/entities/user.entity";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { userGenerator } from "~test/generators/user.generator";
+import { generateUser } from "~test/generators/generateUser";
 
 describe(ForgotPasswordService.name, () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -39,7 +39,7 @@ describe(ForgotPasswordService.name, () => {
   describe("sendForgotPasswordEmail", () => {
     test("success", async () => {
       // arrange
-      const user = await userGenerator({ email: "jason1@raimondi.us" });
+      const user = await generateUser({ email: "jason1@raimondi.us" });
       user.isEmailConfirmed = true;
       await userRepository.create(user);
 
@@ -55,10 +55,10 @@ describe(ForgotPasswordService.name, () => {
   describe("updatePasswordFromToken", () => {
     test("success", async () => {
       // arrange
-      const user = await userGenerator();
+      const user = await generateUser();
       user.isEmailConfirmed = true;
       await userRepository.create(user);
-      const forgotPassword = new ForgotPasswordToken(user);
+      const forgotPassword = new ForgotPasswordToken();
       await forgotPasswordRepository.create(forgotPassword);
 
       // act

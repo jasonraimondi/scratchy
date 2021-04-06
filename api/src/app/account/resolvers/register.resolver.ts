@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { RegisterInput } from "~/app/account/resolvers/register.input";
 import { createEmailConfirmation } from "~/app/account/entities/email_confirmation.entity";
-import { createUser, User } from "~/app/user/entities/user.entity";
+import { User } from "~/app/user/entities/user.entity";
 import { RegisterEmail } from "~/app/emails/emails/register.email";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
@@ -21,8 +21,8 @@ export class RegisterResolver {
   }
 
   @Mutation(() => User)
-  async register(@Args("data") registerInput: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
-    return await this.registerUser(registerInput, ipAddr);
+  async register(@Args("data") data: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
+    return await this.registerUser(data, ipAddr);
   }
 
   @Mutation(() => Boolean!)
@@ -41,7 +41,7 @@ export class RegisterResolver {
   private async registerUser(registerInput: RegisterInput, ipAddr: string) {
     await this.guardAgainstDuplicateUser(registerInput.email, registerInput.id);
 
-    const user = await createUser({
+    const user = await User.create({
       ...registerInput,
       createdIP: ipAddr,
     });

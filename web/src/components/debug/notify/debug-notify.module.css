@@ -10,25 +10,25 @@
 }
 
 .notifyInfo {
-  background-color: var(--colors-notify-info);
-  border-color: var(--colors-notify-info-hover);
+  background-color: var(--theme-info);
+  border-color: var(--theme-info-hover);
   &:hover {
-    background-color: var(--colors-notify-info-hover);
+    background-color: var(--theme-info-hover);
   }
 }
 
 .notifySuccess {
-  background-color: var(--colors-notify-success);
-  border-color: var(--colors-notify-success-hover);
+  background-color: var(--theme-success);
+  border-color: var(--theme-success-hover);
   &:hover {
-    background-color: var(--colors-notify-success-hover);
+    background-color: var(--theme-success-hover);
   }
 }
 
 .notifyError {
-  background-color: var(--colors-notify-error);
-  border-color: var(--colors-notify-error-hover);
+  background-color: var(--theme-error);
+  border-color: var(--theme-error-hover);
   &:hover {
-    background-color: var(--colors-notify-error-hover);
+    background-color: var(--theme-error-hover);
   }
 }

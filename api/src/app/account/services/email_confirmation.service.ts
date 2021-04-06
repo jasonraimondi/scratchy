@@ -23,7 +23,7 @@ export class EmailConfirmationService {
     try {
       const { user } = userConfirmation;
       user.isEmailConfirmed = true;
-      await this.userRepository.create(user);
+      await this.userRepository.update(user);
       await this.emailConfirmationRepository.delete(userConfirmation.id);
       return true;
     } catch (e) {

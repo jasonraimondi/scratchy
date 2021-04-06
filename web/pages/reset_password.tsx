@@ -1,49 +1,23 @@
-import { GetServerSideProps } from "next";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import type { GetServerSideProps } from "next";
+import React from "react";
 
 import { Layout } from "@/app/components/layouts/layout";
-import { graphQLSdk } from "@/app/lib/api_sdk";
-import { Button, Label } from "@/app/components/forms/elements";
+import { ResetPasswordForm } from "@/app/components/forms/reset-password-form";
 
-export default function ForgotPassword({ email, token }: Record<string, string | null>) {
+export default function ResetPassword({ email, token }: Record<string, string | null>) {
   if (!email || !token) {
     return (
-      <p>
-        Missing Token {email} {token} 1 2 3 4
-      </p>
+      <Layout title="Oops Reset Password">
+        <p>
+          Missing Token {email} {token} 1 2 3 4
+        </p>
+      </Layout>
     );
   }
 
-  const { register, handleSubmit, errors } = useForm();
-
-  const [isSubmitting, setSubmitting] = useState(false);
-
-  const onSubmit = async (data: any) => {
-    await graphQLSdk.ValidateForgotPasswordToken({ token, email });
-    await graphQLSdk.UpdatePasswordFromToken({ data });
-    setSubmitting(false);
-  };
-
   return (
     <Layout title="Reset Password">
-      <h1 className="h5">Reset Password Page</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} data-test="reset-password-form">
-        <Label data-test="reset-password-form--password">
-          <span>Password</span>
-          <input
-            type="password"
-            name="password"
-            placeholder="enter a secure password"
-            ref={register({ required: true, minLength: 8 })}
-          />
-          {errors.password}
-        </Label>
-        <Button data-test="reset-password-form--submit" type="submit" disabled={isSubmitting}>
-          <span>Submit</span>
-        </Button>
-      </form>
+      <ResetPasswordForm email={email} token={token} />
     </Layout>
   );
 }

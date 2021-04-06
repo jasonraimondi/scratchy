@@ -10,7 +10,7 @@ import { User } from "~/app/user/entities/user.entity";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { userGenerator } from "~test/generators/user.generator";
+import { generateUser } from "~test/generators/generateUser";
 
 describe(EmailConfirmationService.name, () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

@@ -1,18 +1,24 @@
 import React from "react";
 import classnames from "classnames";
 
-import el from "./element.module.css";
-
-export const Label: React.FC<any> = ({ children, className = "", ...props }) => (
-  <label {...props} className={classnames(el.label, className)}>
+export const Label: React.FC<{ id: string; className?: string }> = ({ children, id, className = "", ...props }) => (
+  <label htmlFor={id} data-test={id} {...props} className={className}>
     {children}
   </label>
 );
 
-export const Button: React.FC<any> = ({ children, className = "", ...props }) => {
+export const Button: React.FC<any> = ({ children, disabled = false, className = "", ...props }) => {
   return (
-    <button {...props} className={classnames(el.button, className)}>
+    <button {...props} className={classnames(className, { disabled })}>
       {children}
     </button>
+  );
+};
+
+export const FormControl: React.FC<any> = ({ children, className = "", ...props }) => {
+  return (
+    <div {...props} className={classnames(className, "form-control")}>
+      {children}
+    </div>
   );
 };

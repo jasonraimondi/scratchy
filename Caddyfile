@@ -1,14 +1,22 @@
 {
-    http_port 8080
-    https_port 8090
-    auto_https off
+    local_certs
+    https_port 443
 }
 
-http://scratchy.localdomain {
-    reverse_proxy * 127.0.0.1:3000
+scratchy.localdomain/api/* {
+    uri strip_prefix /api
+    reverse_proxy 127.0.0.1:3001
 }
 
-http://api.scratchy.localdomain {
-    reverse_proxy * 127.0.0.1:3001
+scratchy.localdomain {
+    reverse_proxy 127.0.0.1:3000
 }
-w
+
+scratchy.localdomain/db {
+    reverse_proxy 127.0.0.1:35432
+}
+
+scratchy.localdomain/mail {
+    uri strip_prefix /mail
+    reverse_proxy 127.0.0.1:8026
+}

@@ -11,7 +11,7 @@ import { User } from "../../src/app/user/entities/user.entity";
 import { registerTypes } from "../../src/lib/database/register_types";
 import { UserRepository } from "../../src/lib/database/repositories/user.repository";
 import { createTestingModule } from "../app_testing.module";
-import { userGenerator } from "../generators/user.generator";
+import { generateUser } from "../generators/generateUser";
 import { attachMiddlewares } from "../../src/lib/middlewares/attach_middlewares";
 import { ForgotPasswordToken } from "../../src/app/account/entities/forgot_password.entity";
 import { EmailConfirmationToken } from "../../src/app/account/entities/email_confirmation.entity";
@@ -54,7 +54,7 @@ describe.skip(MeResolver, () => {
 
   test("successfully returns user response", async () => {
     const userRepository = moduleRef.get<UserRepository>(UserRepository);
-    user = await userGenerator();
+    user = await generateUser();
     await userRepository.save(user);
 
     const http = app.getHttpServer();

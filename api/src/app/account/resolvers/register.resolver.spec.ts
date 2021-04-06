@@ -13,7 +13,7 @@ import { User } from "~/app/user/entities/user.entity";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { userGenerator } from "~test/generators/user.generator";
+import { generateUser } from "~test/generators/generateUser";
 import { mockContext } from "~test/mock_application";
 import { emails } from "~test/mock_email_service";
 
@@ -70,7 +70,7 @@ describe("register.resolver", () => {
       const input = new RegisterInput();
       input.id = "b031765a-a950-4a0d-92dd-ecd12788f3a6n";
       input.email = faker.internet.exampleEmail();
-      await userRepository.create(await userGenerator(input));
+      await userRepository.create(await generateUser(input));
 
       // act
       const result = resolver.register(input, context);
@@ -84,7 +84,7 @@ describe("register.resolver", () => {
       const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = faker.internet.exampleEmail();
-      await userRepository.create(await userGenerator(input));
+      await userRepository.create(await generateUser(input));
 
       // act
       const result = resolver.register(input, context);

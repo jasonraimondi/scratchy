@@ -1,11 +1,15 @@
 import { Injectable } from "@nestjs/common";
 
-import { createForgotPassword } from "~/app/account/entities/forgot_password.entity";
+import { createForgotPassword, ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
 import { User } from "~/app/user/entities/user.entity";
 import { ForgotPasswordEmail } from "~/app/emails/emails/forgot_password.email";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
+import {
+  UpdatePasswordInput,
+  ValidateForgotPasswordTokenInput,
+} from "~/app/account/resolvers/auth/forgot_password_input";
 
 @Injectable()
 export class ForgotPasswordService {
@@ -18,11 +22,13 @@ export class ForgotPasswordService {
     this.logger.setContext(this.constructor.name);
   }
 
-  async validateForgotPasswordToken(token: string, email: string) {
+  async validateForgotPasswordToken({ email, token }: ValidateForgotPasswordTokenInput) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
-    if (forgotPassword.user.email !== email.toLowerCase()) {
+    this.logger.debug("validateForgotPasswordToken");
+    if (forgotPassword?.user?.email !== email.toLowerCase()) {
       throw new Error("invalid emails or token");
     }
+    this.logger.debug("validateForgotPasswordToken");
     return true;
   }
 
@@ -38,28 +44,24 @@ export class ForgotPasswordService {
     return false;
   }
 
-  async updatePasswordFromToken(email: string, token: string, password: string) {
-    const forgotPassword = await this.forgotPasswordRepository.findById(token);
-    const { user } = forgotPassword;
-    if (email !== user.email) {
-      throw new Error("invalid access");
-    }
+  async updatePasswordFromToken({ email, token, password }: UpdatePasswordInput): Promise<User> {
+    const { user, ...forgotPassword } = await this.forgotPasswordRepository.findById(token);
+    if (email !== user?.email) throw new Error("invalid access");
     await user.setPassword(password);
-    try {
-      await this.userRepository.create(user);
-      await this.forgotPasswordRepository.delete(forgotPassword.id);
-      return true;
-    } catch (e) {
-      console.error(e);
-    }
-    return false;
+    await this.userRepository.update(user);
+    await this.forgotPasswordRepository.delete(forgotPassword.id);
+    return user;
   }
 
-  private async getForgotPasswordForUser(user: User) {
-    try {
-      return await this.forgotPasswordRepository.findForUser(user.id);
-    } catch (e) {}
-    const forgotPassword = await createForgotPassword({ user });
-    return await this.forgotPasswordRepository.create(forgotPassword);
+  private async getForgotPasswordForUser(user: User): Promise<ForgotPasswordToken> {
+    const { user: _, ...forgotPassword } = await createForgotPassword({ user });
+    return new ForgotPasswordToken(
+      await this.forgotPasswordRepository.qb.upsert({
+        where: { userId: forgotPassword.userId },
+        update: { id: forgotPassword.id, expiresAt: forgotPassword.expiresAt },
+        create: forgotPassword,
+        include: { user: true },
+      }),
+    );
   }
 }

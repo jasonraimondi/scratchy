@@ -23,12 +23,10 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }, method = 
   cy.getCookie("rememberMe").should("not.exist");
 
   if (method === "gui") {
-    cy.dataTest("login-form").within(() => {
-      cy.dataTest("email").type(email);
-      cy.dataTest("password").type(password);
-      if (rememberMe) cy.dataTest("remember-me").click();
-      cy.dataTest("submit").click();
-    });
+    cy.dataTest("login-form--email").type(email);
+    cy.dataTest("login-form--password").type(password);
+    if (rememberMe) cy.dataTest("login-form--remember").click();
+    cy.dataTest("login-form--submit").click();
     cy.wait("@mutateLogin").then(({ request }) => {
       expect(request.body.variables.data.email).to.equal(email);
       expect(request.body.variables.data.password).to.equal(password);
@@ -52,7 +50,7 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }, method = 
     .should("exist")
     .then(cookie => {
       const jwt = cookie.value;
-      const jwtParts = jwt.split(".");
+      const jwtParts = jwt?.split(".");
       expect(jwt).to.be.a("string");
       expect(jwtParts).to.have.length(3);
     });

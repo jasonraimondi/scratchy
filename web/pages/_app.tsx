@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
+import { NotifyProvider } from "use-notify-rxjs";
 
 import { AuthProvider } from "@/app/lib/use_auth";
-import { NotifyProvider } from "use-notify-rxjs";
 
 import "normalize.css/normalize.css";
 import "@/styles/style.css";

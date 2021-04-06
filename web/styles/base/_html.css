@@ -8,6 +8,13 @@ body,
 html {
   font-family: var(--font-family-sans);
   font-size: 100%;
+  color: var(--theme-color);
+  background-color: var(--theme-background-color);
+
+  @media (--dark) {
+    color: var(--theme-color-darkmode);
+    background-color: var(--theme-background-color-darkmode);
+  }
 
   @media (--large) {
     font-size: 110%;

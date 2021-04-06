@@ -36,6 +36,6 @@ export class GithubController {
     const rememberMe = true;
     await this.loginService.sendRefreshToken(res, rememberMe, user);
 
-    res.status(302).redirect(`http://scratchy.localdomain:8080/callback?${querystring.stringify({ token })}`);
+    res.status(302).redirect(`https://scratchy.localdomain/callback?${querystring.stringify({ token })}`);
   }
 }

@@ -3,34 +3,35 @@ import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { useNotify } from "use-notify-rxjs";
+import { useLoginMutation } from "@/generated/graphql";
 
 // @ts-ignore
 const AuthContext = createContext<UseAuth>();
 
-export interface DecodedJWT {
+export type DecodedJWT = {
   email: string;
   exp: number;
   iat: number;
   isEmailConfirmed: boolean;
   nbf: number;
   sub: string;
-}
+};
 
-export interface LoginParams {
+export type LoginParams = {
   email: string;
   password: string;
   rememberMe: boolean;
-}
+};
 
-function catchGraphError(err: any) {
-  let errors = "";
-
-  if ((err.response?.errors?.length ?? 0) > 0) {
-    errors = err.response.errors.map((e: any) => e.message);
-  }
-
-  return { data: undefined, errors };
-}
+// function catchGraphError(err: any) {
+//   let errors = "";
+//
+//   if ((err.response?.errors?.length ?? 0) > 0) {
+//     errors = err.response.errors.map((e: any) => e.message);
+//   }
+//
+//   return { data: undefined, errors };
+// }
 
 function AuthProvider(props: any) {
   const router = useRouter();
@@ -42,7 +43,7 @@ function AuthProvider(props: any) {
   ]);
 
   async function handleLogin(loginParams: LoginParams) {
-    const { data, errors } = await graphQLSdk.Login({ data: loginParams }).catch(catchGraphError);
+    const { data, errors } = await graphQLSdk.Login({ data: loginParams });
 
     if (errors || !data?.login) {
       if (Array.isArray(errors)) {
@@ -68,8 +69,7 @@ function AuthProvider(props: any) {
   }
 
   async function handleLogout() {
-    const { data, errors } = await graphQLSdk.Logout();
-    console.log(data, errors);
+    await graphQLSdk.Logout();
     setState({});
     await router.replace("/login");
   }
@@ -84,6 +84,7 @@ function AuthProvider(props: any) {
   function isAuthenticated() {
     if (!decodedToken) return false;
     const expiresAt = new Date(decodedToken.exp * 1000);
+    console.log({ expiresAt });
     return new Date() < expiresAt;
   }
 

@@ -1,4 +1,5 @@
 .list {
+  z-index: 100;
   margin: 0;
   padding: 0;
   position: fixed;
@@ -17,10 +18,12 @@
 
 .item {
   width: 100%;
-  border-radius: 5px;
-  font-weight: var(--font-medium);
+  border-radius: var(--theme-border-radius);
+  font-weight: inherit;
   display: flex;
   margin-bottom: 0.5rem;
+
+  word-break: break-all;
 }
 
 .messageContainer {
@@ -47,35 +50,35 @@
   cursor: pointer;
   text-align: center;
   width: 1.5rem;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 var(--theme-border-radius) var(--theme-border-radius) 0;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &.info {
-    background-color: var(--colors-notify-info-hover);
+    background-color: var(--theme-info-hover);
   }
 
   &.success {
-    background-color: var(--colors-notify-success-hover);
+    background-color: var(--theme-success-hover);
   }
 
   &.error {
-    background-color: var(--colors-notify-error-hover);
+    background-color: var(--theme-error-hover);
   }
 }
 
 .info {
-  background-color: var(--colors-notify-info);
-  border-color: var(--colors-notify-info-hover);
+  background-color: var(--theme-info);
+  border-color: var(--theme-info-hover);
 }
 
 .success {
-  background-color: var(--colors-notify-success);
-  border-color: var(--colors-notify-success-hover);
+  background-color: var(--theme-success);
+  border-color: var(--theme-success-hover);
 }
 
 .error {
-  background-color: var(--colors-notify-error);
-  border-color: var(--colors-notify-error-hover);
+  background-color: var(--theme-error);
+  border-color: var(--theme-error-hover);
 }

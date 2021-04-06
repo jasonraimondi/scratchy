@@ -8,20 +8,22 @@ const meFetcher = () => graphQLSdk.Me();
 const useMe = () => {
   const res = useSWR("me-query", meFetcher);
   const { data, error } = res;
+  console.log(data, error);
   return {
     data,
+    error,
     isLoading: !error && !data,
     isError: error,
   };
 };
 
 export default function Profile() {
-  const { data, isLoading, isError } = useMe();
+  const { data, error, isLoading, isError } = useMe();
 
   let body;
 
   if (isError) {
-    body = <div>failed to load</div>;
+    body = <div>failed to load {JSON.stringify(error)}</div>;
   } else if (isLoading) {
     body = <div>loading...</div>;
   } else {
@@ -33,9 +35,6 @@ export default function Profile() {
       <ul>
         <li>
           <a href="#">Revoke Refresh Token</a>
-        </li>
-        <li>
-          <a href="#">Send Email Verification</a>
         </li>
       </ul>
       {body}

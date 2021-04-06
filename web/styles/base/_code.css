@@ -4,7 +4,7 @@ code {
 }
 
 pre {
-  border-radius: 0.5em;
+  border-radius: var(--theme-border-radius);
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -57,7 +57,7 @@ span {
     color: var(--colors-white);
     background-color: var(--colors-black);
     padding: 0.2em 0.4em;
-    border-radius: 0.5em;
+    border-radius: var(--theme-border-radius);
 
     @media (--dark) {
       background-color: var(--colors-gray-900);

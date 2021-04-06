@@ -1,6 +1,5 @@
 .container {
   width: 100%;
-  min-height: 100%;
   max-width: var(--container-xs);
 
   @media (--small) {
@@ -21,16 +20,6 @@
 
   @media print {
     max-width: 100%;
-  }
-
-  &.padded {
-    padding: 1rem 0;
-    @media (--large) {
-      padding: 2rem 0;
-    }
-    @media print {
-      padding: 0;
-    }
   }
 
   &.center {

@@ -16,6 +16,7 @@ class PrismaTestEnvironment extends NodeEnvironment {
     // Generate a unique sqlite identifier for this test context
     // this.dbName = `test_${nanoid()}.db`
     process.env.DATABASE_URL = process.env.DATABASE_URL + "_testing"
+    console.log("ENV", process.env.DATABASE_URL)
     // this.global.process.env.DATABASE_URL = `file:${this.dbName}`
     // this.dbPath = path.join(__dirname, this.dbName)
   }

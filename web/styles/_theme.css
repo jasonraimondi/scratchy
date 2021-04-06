@@ -1,20 +1,25 @@
 :root {
-  --colors-white: var(--colors-gray-50);
-  --colors-black: var(--colors-gray-800);
+  --theme-border-radius: 0.25em;
 
-  --colors-text: var(--colors-black);
-  --colors-darkmode-text: var(--colors-white);
+  --theme-primary: var(--colors-emerald-500);
+  --theme-primary-hover: var(--colors-emerald-800);
+  --theme-primary-darkmode: var(--colors-emerald-500);
+  --theme-primary-darkmode-hover: var(--colors-emerald-800);
+  --theme-error: var(--colors-rose-500);
+  --theme-error-hover: var(--colors-rose-700);
+  --theme-error-darkmode: var(--colors-rose-500);
+  --theme-error-darkmode-hover: var(--colors-rose-800);
+  --theme-info: var(--colors-cyan-500);
+  --theme-info-hover: var(--colors-cyan-700);
+  --theme-info-darkmode: var(--colors-cyan-500);
+  --theme-info-darkmode-hover: var(--colors-cyan-800);
+  --theme-success: var(--colors-emerald-500);
+  --theme-success-hover: var(--colors-emerald-700);
+  --theme-success-darkmode: var(--colors-emerald-500);
+  --theme-success-darkmode-hover: var(--colors-emerald-800);
 
-  --colors-primary: var(--colors-emerald-500);
-  --colors-primary-hover: var(--colors-emerald-800);
-  --colors-darkmode-primary: var(--colors-emerald-500);
-  --colors-darkmode-primary-hover: var(--colors-emerald-800);
-
-  /** Notifications */
-  --colors-notify-error: var(--colors-rose-500);
-  --colors-notify-error-hover: var(--colors-rose-700);
-  --colors-notify-info: var(--colors-cyan-500);
-  --colors-notify-info-hover: var(--colors-cyan-700);
-  --colors-notify-success: var(--colors-emerald-500);
-  --colors-notify-success-hover: var(--colors-emerald-700);
+  --theme-color: var(--colors-black);
+  --theme-color-darkmode: var(--colors-white);
+  --theme-background-color: var(--colors-white);
+  --theme-background-color-darkmode: var(--colors-black);
 }

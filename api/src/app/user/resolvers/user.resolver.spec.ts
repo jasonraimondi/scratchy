@@ -9,7 +9,7 @@ import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.enti
 import { User } from "~/app/user/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
-import { userGenerator } from "~test/generators/user.generator";
+import { generateUser } from "~test/generators/generateUser";
 
 describe("register resolver", () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
@@ -31,7 +31,7 @@ describe("register resolver", () => {
     test("resolve user by id", async () => {
       // arrange
       const resolver = moduleRef.get<UserResolver>(UserResolver);
-      const user = await userGenerator();
+      const user = await generateUser();
       await userRepository.create(user);
 
       // act
@@ -48,9 +48,9 @@ describe("register resolver", () => {
     test("resolve list users", async () => {
       // arrange
       const resolver = moduleRef.get<UserResolver>(UserResolver);
-      await userRepository.create(await userGenerator());
-      await userRepository.create(await userGenerator());
-      await userRepository.create(await userGenerator());
+      await userRepository.create(await generateUser());
+      await userRepository.create(await generateUser());
+      await userRepository.create(await generateUser());
 
       // act
       const result = await resolver.users({ limit: 2 });
