@@ -20,18 +20,19 @@ function Me() {
   return body;
 }
 
+// if any data requests are happening in the nextjs page, it will fail
 export default function Profile() {
   const auth = useAuth();
   return (
     <Layout title="profile" isPrivate={true}>
       <ul>
         <li>
-          <a className="button" href="#" onClick={auth.handleRevokeToken}>
+          <a className="button" onClick={auth.handleRevokeToken}>
             Revoke Refresh Token
           </a>
         </li>
         <li>
-          <a className="button" href="#">Update Password</a>
+          <a className="button">Update Password</a>
         </li>
       </ul>
       <Me />
