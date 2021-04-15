@@ -1,9 +1,11 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
-import { graphQLClient, graphQLSdk } from "@/app/lib/api_sdk";
 import { useNotify } from "use-notify-rxjs";
 import { parseCookies } from "nookies";
+
+import { graphQLClient, graphQLSdk } from "@/app/lib/api_sdk";
+import { attemptWithBackoff } from "@/app/lib/utils/attemptWithBackoff";
 
 // @ts-ignore
 const AuthContext = createContext<UseAuth>();
@@ -48,26 +50,22 @@ function AuthProvider(props: any) {
   }
 
   async function handleRefreshToken() {
-    if (cookies.canRefresh !== "y") {
-      notify.error("token cannot refresh");
-      return;
+    if (cookies.canRefresh !== "y") return false;
+
+    const attemptRefresh = async () => {
+      const { refreshAccessToken } = await graphQLSdk.RefreshAccessToken();
+      setAccessToken(refreshAccessToken.accessToken);
+      notify.success("Token Refreshed");
     }
 
-    let attempts = 4;
-
-    do {
-      try {
-        const { refreshAccessToken } = await graphQLSdk.RefreshAccessToken();
-        setAccessToken(refreshAccessToken.accessToken);
-        notify.success("Token Refreshed");
-        return true;
-      } catch (error) {
-        notify.error(error.message);
-      }
-      attempts--;
-    } while (attempts > 0);
-
-    return false;
+    try {
+      const attempts = 2;
+      await attemptWithBackoff(attemptRefresh, attempts);
+      return true;
+    } catch(err) {
+      notify.error(err.message);
+      return false;
+    }
   }
 
   async function handleLogout() {

@@ -1,11 +1,11 @@
 import { UseGuards } from "@nestjs/common";
-import { Context, Query, Resolver } from "@nestjs/graphql";
+import { Query, Resolver } from "@nestjs/graphql";
 
 import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { MyContext } from "~/lib/graphql/my_context";
+import { ContextUser } from "~/lib/graphql/context_user.decorator";
 
 @Resolver()
 export class MeResolver {
@@ -15,9 +15,7 @@ export class MeResolver {
 
   @Query(() => User)
   @UseGuards(JwtAuthGqlGuard)
-  me(@Context() ctx: MyContext) {
-    const user = ctx.req.user;
-    this.logger.debug(user.email)
+  me(@ContextUser() user: User) {
     return this.userRepository.findByEmail(user.email);
   }
 }

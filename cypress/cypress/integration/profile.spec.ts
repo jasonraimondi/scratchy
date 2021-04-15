@@ -8,6 +8,7 @@ describe("Profile Spec", () => {
 
   it("can revoke the refresh token", () => {
     cy.visit("/app/profile");
-    // cy.contains(user.email);
+    cy.wait("@queryMe")
+    cy.dataTest("revoke-refresh-token").click();
   });
 });

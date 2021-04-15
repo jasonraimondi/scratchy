@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const passwordHash = await setPassword("jasonraimondi");
+
   const jason = await prisma.user.upsert({
     where: { email: "jason@raimondi.us" },
     update: {
@@ -37,7 +38,7 @@ async function main() {
       }
     }
   });
-  console.log(jason);
+  // console.log(jason);
 }
 
 main()

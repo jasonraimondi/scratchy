@@ -1,11 +1,17 @@
 import { compare, hash } from "bcryptjs";
+import crypto from "crypto";
 
 import { ENV } from "~/config/environments";
 
+const sha256 = () => crypto.createHmac("sha256", ENV.secrets.salt);
+
 export function checkPassword(attempt: string, hashedPassword: string): Promise<boolean> {
-  return compare(attempt + ENV.secrets.salt, hashedPassword);
+  attempt = sha256().update(attempt).digest("hex");
+  return compare(attempt, hashedPassword);
 }
 
-export function setPassword(password: string): Promise<string> {
-  return hash(password + ENV.secrets.salt, 12);
+export async function setPassword(password: string): Promise<string> {
+  password = sha256().update(password).digest("hex");
+  return hash(password, 10);
 }
+

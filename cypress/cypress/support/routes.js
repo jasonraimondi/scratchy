@@ -1,10 +1,11 @@
 const queryMap = {
   Login: "mutateLogin",
   Logout: "mutateLogout",
+  Me: "queryMe",
 };
 
 beforeEach(() => {
-  cy.intercept("POST", "*/graphql", req => {
+  cy.intercept("POST", "*/graphql*", req => {
     const query = req.body.query ?? "";
 
     for (const [queryName, alias] of Object.entries(queryMap)) {

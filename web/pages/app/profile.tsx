@@ -27,12 +27,12 @@ export default function Profile() {
     <Layout title="profile" isPrivate={true}>
       <ul>
         <li>
-          <a className="button" onClick={auth.handleRevokeToken}>
+          <a className="button" data-test="revoke-refresh-token" onClick={auth.handleRevokeToken}>
             Revoke Refresh Token
           </a>
         </li>
         <li>
-          <a className="button">Update Password</a>
+          <a className="button" data-test="update-password">Update Password</a>
         </li>
       </ul>
       <Me />
