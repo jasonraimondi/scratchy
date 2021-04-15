@@ -1,9 +1,9 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
-import { graphQLSdk } from "@/app/lib/api_sdk";
+import { graphQLClient, graphQLSdk } from "@/app/lib/api_sdk";
 import { useNotify } from "use-notify-rxjs";
-import { useLoginMutation } from "@/generated/graphql";
+import { parseCookies } from "nookies";
 
 // @ts-ignore
 const AuthContext = createContext<UseAuth>();
@@ -23,81 +23,88 @@ export type LoginParams = {
   rememberMe: boolean;
 };
 
-// function catchGraphError(err: any) {
-//   let errors = "";
-//
-//   if ((err.response?.errors?.length ?? 0) > 0) {
-//     errors = err.response.errors.map((e: any) => e.message);
-//   }
-//
-//   return { data: undefined, errors };
-// }
+let count = 0;
 
 function AuthProvider(props: any) {
   const router = useRouter();
   const notify = useNotify();
 
-  const [state, setState] = useState<{ userId?: string; accessToken?: string }>({});
-  const decodedToken = useMemo(() => (state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined), [
-    state.accessToken,
-  ]);
+  const [state, setState] = useState<{ userId?: string; accessToken?: string; canRefresh?: boolean }>({});
+
+  const decode = () => (state.accessToken ? jwtDecode<DecodedJWT>(state.accessToken) : undefined);
+  const decodedToken = useMemo(decode, [state.accessToken]);
+
+  const cookies = useMemo(() => parseCookies(), [state.accessToken]);
 
   async function handleLogin(loginParams: LoginParams) {
-    const { data, errors } = await graphQLSdk.Login({ data: loginParams });
-
-    if (errors || !data?.login) {
-      if (Array.isArray(errors)) {
-        ((errors as unknown) as string[]).forEach(err => notify.error(err));
-      }
+    try {
+      const { login } = await graphQLSdk.Login({ data: loginParams });
+      setAccessToken(login.accessToken);
+      notify.success({ title: "Login Success", message: "" });
+      await router.push("/app/dashboard");
+    } catch (error) {
+      notify.success({ title: "Login Error", message: error.message });
     }
-
-    const { accessToken, user } = data?.login ?? {};
-    setState({ ...state, userId: user?.id, accessToken });
-    await router.push("/app/dashboard");
   }
 
   async function handleRefreshToken() {
-    const { data, errors } = await graphQLSdk.RefreshToken();
-
-    if (errors || !data?.refreshToken) {
-      console.log(errors);
-      throw new Error("invalid refreshToken request");
+    if (cookies.canRefresh !== "y") {
+      notify.error("token cannot refresh");
+      return;
     }
 
-    const { accessToken, user } = data.refreshToken;
-    setState({ ...state, userId: user.id, accessToken });
+    let attempts = 4;
+
+    do {
+      try {
+        const { refreshAccessToken } = await graphQLSdk.RefreshAccessToken();
+        setAccessToken(refreshAccessToken.accessToken);
+        notify.success("Token Refreshed");
+        return true;
+      } catch (error) {
+        notify.error(error.message);
+      }
+      attempts--;
+    } while (attempts > 0);
+
+    return false;
   }
 
   async function handleLogout() {
-    await graphQLSdk.Logout();
-    setState({});
-    await router.replace("/login");
-  }
-
-  async function handleRevokeToken() {
-    if (state.userId) {
-      const { data, errors } = await graphQLSdk.RevokeRefreshTokensForUser({ userId: state.userId });
-      console.log(data, errors);
+    try {
+      await graphQLSdk.Logout();
+      notify.info({ title: "Goodbye", message: "Logging out", ttl: 10000 });
+      setState({});
+      await router.replace("/login");
+    } catch (error) {
+      notify.error(error.message);
     }
   }
 
+  async function handleRevokeToken() {
+    if (state.userId) await graphQLSdk.RevokeRefreshTokensForUser({ userId: state.userId });
+    await handleLogout();
+  }
+
   function isAuthenticated() {
-    if (!decodedToken) return false;
+    if (!state.accessToken || !decodedToken) return false;
     const expiresAt = new Date(decodedToken.exp * 1000);
-    console.log({ expiresAt });
     return new Date() < expiresAt;
   }
 
-  async function setAccessToken(accessToken: string) {
+  function setAccessToken(accessToken: string) {
+    graphQLClient.setHeader("Authorization", `Bearer ${accessToken}`);
+    console.log("set graphql headers")
     const payload = jwtDecode<DecodedJWT>(accessToken);
     setState({ ...state, accessToken, userId: payload.sub });
   }
 
-  console.log({ isAuthenticated: isAuthenticated() });
+  console.log({ isAuthenticated: isAuthenticated(), count: count++ });
 
   return (
     <AuthContext.Provider
       value={{
+        accessToken: state.accessToken,
         isAuthenticated,
         handleLogin,
         handleLogout,
@@ -111,10 +118,14 @@ function AuthProvider(props: any) {
 }
 
 type UseAuth = {
+  accessToken: string;
   isAuthenticated(): () => boolean;
   handleLogin(data: LoginParams): Promise<void>;
   handleLogout(): Promise<void>;
-  handleRefreshToken(): Promise<void>;
+  /**
+   * Returns true if token refreshes, otherwise false
+   */
+  handleRefreshToken(): Promise<boolean>;
   handleRevokeToken(): Promise<void>;
   setAccessToken(token: string): void;
 };

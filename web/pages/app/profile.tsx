@@ -1,43 +1,40 @@
 import React from "react";
-import useSWR from "swr";
 
 import { Layout } from "@/app/components/layouts/layout";
-import { graphQLSdk } from "@/app/lib/api_sdk";
+import { useMe } from "@/app/api/user";
+import { useAuth } from "@/app/lib/use_auth";
 
-const meFetcher = () => graphQLSdk.Me();
-const useMe = () => {
-  const res = useSWR("me-query", meFetcher);
-  const { data, error } = res;
-  console.log(data, error);
-  return {
-    data,
-    error,
-    isLoading: !error && !data,
-    isError: error,
-  };
-};
-
-export default function Profile() {
-  const { data, error, isLoading, isError } = useMe();
+function Me() {
+  const { data, error, isLoading } = useMe();
 
   let body;
 
-  if (isError) {
-    body = <div>failed to load {JSON.stringify(error)}</div>;
-  } else if (isLoading) {
+  if (isLoading) {
     body = <div>loading...</div>;
+  } else if (error) {
+    body = <pre><code>{JSON.stringify(error, null, 2)}</code></pre>;
   } else {
-    body = <div>hello {JSON.stringify(data)}!</div>;
+    body = <pre><code>{JSON.stringify(data, null, 2)}</code></pre>;
   }
+  console.log("JASON")
+  return body;
+}
 
+export default function Profile() {
+  const auth = useAuth();
   return (
     <Layout title="profile" isPrivate={true}>
       <ul>
         <li>
-          <a href="#">Revoke Refresh Token</a>
+          <a className="button" href="#" onClick={auth.handleRevokeToken}>
+            Revoke Refresh Token
+          </a>
+        </li>
+        <li>
+          <a className="button" href="#">Update Password</a>
         </li>
       </ul>
-      {body}
+      <Me />
     </Layout>
   );
 }

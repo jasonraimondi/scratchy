@@ -1,10 +1,11 @@
 module.exports = {
-  minify: false,
   distDir: "dist",
-  publicRuntimeConfig: {
-    API_URL: "http://localhost:3001",
-  },
   future: {
     webpack5: true,
   },
+  minify: false,
+  publicRuntimeConfig: {
+    API_URL: "https://scratchy.localdomain/api",
+  },
+  reactStrictMode: true,
 };

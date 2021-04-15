@@ -8,7 +8,6 @@ generates:
       - typescript-operations
       - typescript-graphql-request
     config:
-      rawRequest: true
       documentMode: string
       scalars:
         DateTime: Date

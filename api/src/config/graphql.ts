@@ -12,6 +12,9 @@ export const graphqlConfig: GqlModuleOptions = {
   playground: ENV.enablePlayground,
   autoSchemaFile: "schema.graphql",
   cors: CORS,
+  buildSchemaOptions: {
+    numberScalarMode: "integer",
+  },
   formatError: (error: GraphQLError): GraphQLFormattedError => ({
     message: error.extensions?.exception?.response?.message ?? error.message,
   }),

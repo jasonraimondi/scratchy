@@ -2,7 +2,7 @@ import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
 
-import { EmailService } from "~/app/emails/services/email.service";
+import { EmailService } from "~/lib/email/services/email.service";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { emails, emailServiceMock } from "./mock_email_service";
 

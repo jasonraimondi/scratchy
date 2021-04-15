@@ -4,7 +4,7 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 import querystring from "querystring";
 
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
-import { User } from "~/app/user/entities/user.entity";
+import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { AuthService } from "~/app/auth/services/auth.service";
 
@@ -32,10 +32,10 @@ export class GithubController {
       user = await this.userRepository.findByEmail(user.email);
     }
 
-    const token = await this.loginService.loginOauth(user);
-    const rememberMe = true;
-    await this.loginService.sendRefreshToken(res, rememberMe, user);
+    const token = await this.loginService.login({ user, res, rememberMe: true });
 
-    res.status(302).redirect(`https://scratchy.localdomain/callback?${querystring.stringify({ token })}`);
+    res
+      .status(302)
+      .redirect(`https://scratchy.localdomain/callback?${querystring.stringify({ token: token.accessToken })}`);
   }
 }

@@ -1,140 +1,85 @@
-import ms from "ms";
 import type { FastifyReply } from "fastify";
-import type { CookieSerializeOptions } from "fastify-cookie";
 import { Injectable } from "@nestjs/common";
 
 import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { MyJwtService } from "~/lib/jwt/jwt.service";
-import { User } from "~/app/user/entities/user.entity";
-import { ENV } from "~/config/environments";
-import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
-import { AccessTokenJWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
+import { User } from "~/entities/user.entity";
+import { LoginResponse } from "~/app/user/resolvers/account/responses/login_response";
+import { cookieOptions } from "~/config/cookies";
+import { LoggerService } from "~/lib/logger/logger.service";
+import { TokenService } from "~/app/auth/services/token.service";
+import { RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 
-function roundToSeconds(ms: Date | number) {
-  if (ms instanceof Date) ms = ms.getTime();
-  return Math.ceil(ms / 1000);
-}
+type LoginInput = {
+  res: FastifyReply;
+  ipAddr: string;
+  rememberMe?: boolean;
+};
+
+type LoginWithEmail = LoginInput & {
+  email: string;
+  password: string;
+};
+
+type LoginWithUser = LoginInput & {
+  user: User;
+};
+
+type SendRefreshTokenInput = {
+  res: FastifyReply;
+  rememberMe?: boolean;
+  user?: User;
+};
 
 @Injectable()
 export class AuthService {
-  private readonly accessTokenTimeout = "15m";
-  private readonly refreshTokenTimeout = "2h";
-  private readonly refreshTokenTimeoutRemember = "7d";
-
-  constructor(private userRepository: UserRepository, private jwtService: MyJwtService) {}
-
-  async login(email: string, pass: string): Promise<LoginResponse> {
-    const user = await this.userRepository.findByEmail(email);
-    await user.verify(pass);
-    const accessToken = await this.createAccessToken(user);
-    return { accessToken, user };
+  constructor(
+    private userRepository: UserRepository,
+    private tokenService: TokenService,
+    private logger: LoggerService,
+  ) {
+    this.logger.setContext(this.constructor.name);
   }
 
-  loginOauth(user: User): Promise<string> {
-    return this.createAccessToken(user);
+  async login({ res, ipAddr, rememberMe = false, ...input }: LoginWithUser | LoginWithEmail): Promise<LoginResponse> {
+    let user: User;
+    if ("user" in input) {
+      user = input.user;
+    } else {
+      const { email, password } = input;
+      user = await this.userRepository.findByEmail(email, { include: { roles: true, permissions: true } });
+      await user.verify(password);
+    }
+    await this.userRepository.incrementLastLogin(user.id, ipAddr);
+    const accessToken = await this.tokenService.createAccessToken(user);
+    const refreshTokenExpiresAt = await this.sendRefreshToken({ res, rememberMe, user });
+    return { ...accessToken, refreshTokenExpiresAt, user };
+  }
+
+  async logout(res: FastifyReply): Promise<boolean> {
+    await this.sendRefreshToken({ res, rememberMe: false });
+    return true;
   }
 
   async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
-    let payload: Partial<RefreshTokenJWTPayload>;
-    try {
-      payload = await this.jwtService.verify(refreshToken);
-    } catch (_) {
-      throw new Error("invalid refresh token");
-    }
-
-    if (typeof payload.sub !== "string") {
-      throw new Error("refresh token payload missing sub (userid)");
-    }
-
+    const payload = await this.tokenService.verifyToken<RefreshTokenJWTPayload>(refreshToken);
     const user = await this.userRepository.findById(payload.sub);
-
-    if (user.tokenVersion !== payload.tokenVersion) {
+    const isExpired = user.tokenVersion !== payload.tokenVersion;
+    if (isExpired) {
       throw new Error("invalid refresh token");
     }
-
-    const accessToken = await this.createAccessToken(user);
-
-    return { accessToken, user };
+    const accessToken = await this.tokenService.createAccessToken(user);
+    return { ...accessToken, user };
   }
 
-  async sendRefreshToken(res: FastifyReply, rememberMe: boolean, user?: User) {
-    let token = "";
-
-    if (user) {
-      token = await this.createRefreshToken(user, rememberMe);
+  private async sendRefreshToken({ res, rememberMe = false, user }: SendRefreshTokenInput): Promise<number> {
+    if (!user) {
+      res.setCookie("jid", "", cookieOptions({ expires: new Date(0) }));
+      res.setCookie("canRefresh", "", cookieOptions({ expires: new Date(0), httpOnly: false }));
+      return 0;
     }
-
-    let expires = 0;
-
-    if (token !== "") {
-      expires = ms(rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout);
-    }
-
-    const options = cookieOptions({ expires: new Date(Date.now() + expires) });
-
-    res.setCookie("rememberMe", rememberMe.toString(), options);
-    res.setCookie("jid", token, options);
+    const { refreshToken, refreshTokenExpiresAt } = await this.tokenService.createRefreshToken(user, rememberMe);
+    res.setCookie("jid", refreshToken, cookieOptions({ expires: new Date(refreshTokenExpiresAt) }));
+    res.setCookie("canRefresh", "y", cookieOptions({ expires: new Date(refreshTokenExpiresAt), httpOnly: false }));
+    return refreshTokenExpiresAt;
   }
-
-  private createRefreshToken(user: User, rememberMe = false) {
-    const now = Date.now();
-    const payload: RefreshTokenJWTPayload = {
-      // non standard claims
-      tokenVersion: user.tokenVersion,
-
-      // standard claims
-      iss: undefined,
-      sub: user.id,
-      aud: undefined,
-      exp: roundToSeconds(now + ms(rememberMe ? this.refreshTokenTimeoutRemember : this.refreshTokenTimeout)),
-      nbf: roundToSeconds(now),
-      iat: roundToSeconds(now),
-    };
-    return this.jwtService.sign(payload);
-  }
-
-  createAccessToken(user: User) {
-    const now = Date.now();
-    const payload: AccessTokenJWTPayload = {
-      // non standard claims
-      email: user.email,
-      isEmailConfirmed: user.isEmailConfirmed,
-
-      // standard claims
-      iss: undefined,
-      sub: user.id,
-      aud: undefined,
-      exp: roundToSeconds(now + ms(this.accessTokenTimeout)),
-      nbf: roundToSeconds(now),
-      iat: roundToSeconds(now),
-    };
-    return this.jwtService.sign(payload);
-  }
-
-  // async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
-  //   let payload: { sub: string; iat: string; tokenVersion: number };
-  //   try {
-  //     payload = await this.jwtService.verify(refreshToken);
-  //   } catch (_) {
-  //     throw new Error("invalid refresh token");
-  //   }
-  //
-  //   const id = payload.sub ?? "NOT_FOUND";
-  //   const user = await this.userRepository.findById(id);
-  //
-  //   if (user.tokenVersion !== payload.tokenVersion) {
-  //     throw new Error("invalid refresh token");
-  //   }
-  //
-  //   const accessToken = await this.createAccessToken(user);
-  //
-  //   return { accessToken, user };
-  // }
 }
-
-const cookieOptions = (opts: CookieSerializeOptions = {}): CookieSerializeOptions => ({
-  domain: ENV.url!.hostname,
-  sameSite: "strict",
-  httpOnly: true,
-  ...opts,
-});

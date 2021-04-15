@@ -5,7 +5,7 @@ import { Profile, Strategy } from "passport-github";
 import { VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
-import { User } from "~/app/user/entities/user.entity";
+import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 
@@ -53,7 +53,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
       user = await this.userRepository.create(user);
     }
 
-    await this.userRepository.incrementLastLogin(user.email, req.ip);
+    await this.userRepository.incrementLastLogin(user.id, req.ip);
 
     done(undefined, user);
   }

@@ -6,6 +6,7 @@ import { ENV } from "~/config/environments";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
 import type { FastifyRequest } from "fastify";
+import { User } from "~/entities/user.entity";
 
 export type TokenPayload = {
   userId: string;
@@ -20,23 +21,25 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: fromFastifyAuthHeaderAsBearerToken,
       ignoreExpiration: false,
-      secretOrKey: ENV.secret,
+      secretOrKey: ENV.secrets.jwt,
     });
   }
 
-  async validate({ userId, tokenVersion }: TokenPayload): Promise<any> {
-    const user = await this.userRepository.findById(userId);
+  async validate(payload: TokenPayload): Promise<User> {
+    console.log(payload);
+    const { userId, tokenVersion } = payload;
 
-    if (Number(tokenVersion) !== user.tokenVersion) {
+    const user = await this.userRepository.findById(userId);
+    console.log(user)
+    if (Number(tokenVersion) !== Number(user.tokenVersion)) {
       throw new UnauthorizedException("invalid token");
     }
-
     return user;
   }
 }
 
-const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string | unknown => {
+export const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string|undefined => {
   const auth = request.headers["authorization"];
-  const token = auth?.split(" ")[1];
-  return token;
+  console.log({ auth });
+  return auth?.split(" ")[1];
 };

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
+import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { PrismaService } from "~/lib/database/prisma.service";
 
 @Injectable()

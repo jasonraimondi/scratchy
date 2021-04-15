@@ -1,6 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { User } from "~/app/user/entities/user.entity";
+import { User } from "~/entities/user.entity";
 import { Order } from "~/lib/database/dtos/inputs/paginator.inputs";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";

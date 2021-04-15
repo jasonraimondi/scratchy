@@ -12,4 +12,4 @@ nunjucks.configure(ENV.templatesDir, {
   autoescape: true,
 });
 
-ENV.url = new URL("http://localhost");
+ENV.urls.web = new URL("http://localhost");

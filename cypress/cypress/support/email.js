@@ -1,27 +1,12 @@
-import { simpleParser } from "mailparser";
-
-function mhApiUrl(path) {
+function emailApiUrl(path) {
   const envValue = Cypress.env("MAILER_HTTP_URL");
   const basePath = envValue ? envValue : Cypress.config("mailHogUrl");
   return `${basePath}/api${path}`;
 }
 
-/**
- * @param response Cypress.Response
- * @returns {Promise<any>}
- */
-async function formatEmailResponse(lastEmail) {
-  const [to] = lastEmail.Content.Headers.To;
-  const [from] = lastEmail.Content.Headers.From;
-  const [subject] = lastEmail.Content.Headers.Subject;
-  const body = lastEmail.Content.Body;
-  const parsedBody = await simpleParser(body, {});
-  return { subject, body, to, from, parsedBody };
-}
-
-Cypress.Commands.add("mhDeleteAll", () => {
+Cypress.Commands.add("emailDeleteAll", () => {
   const authLog = Cypress.log({
-    name: "mhDeleteAll",
+    name: "emailDeleteAll",
     displayName: "DELETE EMAIL",
     message: [`🗑 Deleting all emails`],
     autoEnd: false,
@@ -31,16 +16,24 @@ Cypress.Commands.add("mhDeleteAll", () => {
     authLog.snapshot("after");
     authLog.end();
   }
-  return cy.request("DELETE", mhApiUrl("/v1/messages")).then(() => {
+  return cy.request("DELETE", emailApiUrl("/v1/messages")).then(() => {
     log();
   });
 });
 
-Cypress.Commands.add("mhGetLastEmailTo", email => {
-  const url = mhApiUrl(`/v2/search?kind=to&query=${decodeURIComponent(email)}`);
+Cypress.Commands.add("emailGetLinksTo", email => {
+  return cy.emailGetLastTo(email).then(res => {
+    const parsedEmail = res.parsedBody.textAsHtml;
+    const link = parsedEmail.match(/href="([^"]*)/)[1];
+    return link.replace(/&amp;/g, "&");
+  });
+});
+
+Cypress.Commands.add("emailGetLastTo", email => {
+  const url = emailApiUrl(`/v2/search?kind=to&query=${decodeURIComponent(email)}`);
 
   const authLog = Cypress.log({
-    name: "mhGetLastEmailTo",
+    name: "emailGetLastTo",
     displayName: "FETCH EMAIL",
     message: [`🔐 ${email}`],
     autoEnd: false,
@@ -78,7 +71,9 @@ Cypress.Commands.add("mhGetLastEmailTo", email => {
         log();
         return lastEmail;
       })
-      .then(formatEmailResponse);
+      .then(lastEmail => {
+        return cy.task("formatEmailResponse", lastEmail);
+      });
   }
 
   return makeRequest();

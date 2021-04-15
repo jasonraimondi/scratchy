@@ -2,11 +2,11 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { TestingModule } from "@nestjs/testing";
 import { Job } from "bull";
 
-import { Permission } from "~/app/user/entities/permission.entity";
-import { Role } from "~/app/user/entities/role.entity";
-import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
-import { ForgotPasswordToken } from "~/app/account/entities/forgot_password.entity";
-import { User } from "~/app/user/entities/user.entity";
+import { Permission } from "~/entities/permission.entity";
+import { Role } from "~/entities/role.entity";
+import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
+import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
+import { User } from "~/entities/user.entity";
 import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
 import { SendEmailProcessor } from "~/app/queue-workers/processors/email/send_email.processor";
 import { createTestingModule } from "~test/app_testing.module";

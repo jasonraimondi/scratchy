@@ -14,7 +14,7 @@ export default function VerifyEmail({ email, id }: Record<string, unknown>) {
   const handleVerifyUser = async () => {
     if (!email || !id) {
       console.log({ email, id });
-      notify.error("missing email or id");
+      notify.error({ message: "missing email or id" + JSON.stringify({ email, id }), ttl: 50000 });
       return;
     }
     const foo = await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e: any) => {

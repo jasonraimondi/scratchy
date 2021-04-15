@@ -1,6 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
-import { GraphQLError } from 'graphql-request/dist/types';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -32,6 +31,8 @@ export type User = {
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
+  accessTokenExpiresAt: Scalars['Int'];
+  refreshTokenExpiresAt?: Maybe<Scalars['Int']>;
   user: User;
 };
 
@@ -71,16 +72,36 @@ export type UserPaginatorInputs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  login: LoginResponse;
+  refreshAccessToken: LoginResponse;
+  logout?: Maybe<Scalars['Boolean']>;
+  revokeRefreshToken?: Maybe<Scalars['Boolean']>;
+  register: User;
+  resendConfirmEmail: Scalars['Boolean'];
   validateForgotPasswordToken: Scalars['Boolean'];
   sendForgotPasswordEmail: Scalars['Boolean'];
   updatePasswordFromToken: LoginResponse;
   verifyEmailConfirmation: Scalars['Boolean'];
-  register: User;
-  resendConfirmEmail: Scalars['Boolean'];
-  login: LoginResponse;
-  refreshToken: LoginResponse;
-  logout: Scalars['Boolean'];
-  revokeRefreshToken: Scalars['Boolean'];
+};
+
+
+export type MutationLoginArgs = {
+  data: LoginInput;
+};
+
+
+export type MutationRevokeRefreshTokenArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type MutationRegisterArgs = {
+  data: RegisterInput;
+};
+
+
+export type MutationResendConfirmEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -103,24 +124,18 @@ export type MutationVerifyEmailConfirmationArgs = {
   data: VerifyEmailInput;
 };
 
-
-export type MutationRegisterArgs = {
-  data: RegisterInput;
-};
-
-
-export type MutationResendConfirmEmailArgs = {
+export type LoginInput = {
   email: Scalars['String'];
+  password: Scalars['String'];
+  rememberMe: Scalars['Boolean'];
 };
 
-
-export type MutationLoginArgs = {
-  data: LoginInput;
-};
-
-
-export type MutationRevokeRefreshTokenArgs = {
-  userId: Scalars['String'];
+export type RegisterInput = {
+  id?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
 };
 
 export type ValidateForgotPasswordTokenInput = {
@@ -141,20 +156,6 @@ export type UpdatePasswordInput = {
 export type VerifyEmailInput = {
   email: Scalars['String'];
   uuid: Scalars['String'];
-};
-
-export type RegisterInput = {
-  id?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  password?: Maybe<Scalars['String']>;
-};
-
-export type LoginInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  rememberMe: Scalars['Boolean'];
 };
 
 export type SendForgotPasswordEmailMutationVariables = Exact<{
@@ -211,12 +212,12 @@ export type LoginMutation = (
   ) }
 );
 
-export type RefreshTokenMutationVariables = Exact<{ [key: string]: never; }>;
+export type RefreshAccessTokenMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RefreshTokenMutation = (
+export type RefreshAccessTokenMutation = (
   { __typename?: 'Mutation' }
-  & { refreshToken: (
+  & { refreshAccessToken: (
     { __typename?: 'LoginResponse' }
     & Pick<LoginResponse, 'accessToken'>
     & { user: (
@@ -327,9 +328,9 @@ export const LoginDocument = `
   }
 }
     `;
-export const RefreshTokenDocument = `
-    mutation RefreshToken {
-  refreshToken {
+export const RefreshAccessTokenDocument = `
+    mutation RefreshAccessToken {
+  refreshAccessToken {
     accessToken
     user {
       id
@@ -389,38 +390,38 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    SendForgotPasswordEmail(variables: SendForgotPasswordEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: SendForgotPasswordEmailMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<SendForgotPasswordEmailMutation>(SendForgotPasswordEmailDocument, variables, requestHeaders));
+    SendForgotPasswordEmail(variables: SendForgotPasswordEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SendForgotPasswordEmailMutation> {
+      return withWrapper(() => client.request<SendForgotPasswordEmailMutation>(SendForgotPasswordEmailDocument, variables, requestHeaders));
     },
-    UpdatePasswordFromToken(variables: UpdatePasswordFromTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: UpdatePasswordFromTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UpdatePasswordFromTokenMutation>(UpdatePasswordFromTokenDocument, variables, requestHeaders));
+    UpdatePasswordFromToken(variables: UpdatePasswordFromTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePasswordFromTokenMutation> {
+      return withWrapper(() => client.request<UpdatePasswordFromTokenMutation>(UpdatePasswordFromTokenDocument, variables, requestHeaders));
     },
-    ValidateForgotPasswordToken(variables: ValidateForgotPasswordTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: ValidateForgotPasswordTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<ValidateForgotPasswordTokenMutation>(ValidateForgotPasswordTokenDocument, variables, requestHeaders));
+    ValidateForgotPasswordToken(variables: ValidateForgotPasswordTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ValidateForgotPasswordTokenMutation> {
+      return withWrapper(() => client.request<ValidateForgotPasswordTokenMutation>(ValidateForgotPasswordTokenDocument, variables, requestHeaders));
     },
-    Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: LoginMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<LoginMutation>(LoginDocument, variables, requestHeaders));
+    Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
+      return withWrapper(() => client.request<LoginMutation>(LoginDocument, variables, requestHeaders));
     },
-    RefreshToken(variables?: RefreshTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RefreshTokenMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RefreshTokenMutation>(RefreshTokenDocument, variables, requestHeaders));
+    RefreshAccessToken(variables?: RefreshAccessTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RefreshAccessTokenMutation> {
+      return withWrapper(() => client.request<RefreshAccessTokenMutation>(RefreshAccessTokenDocument, variables, requestHeaders));
     },
-    Logout(variables?: LogoutMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: LogoutMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<LogoutMutation>(LogoutDocument, variables, requestHeaders));
+    Logout(variables?: LogoutMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LogoutMutation> {
+      return withWrapper(() => client.request<LogoutMutation>(LogoutDocument, variables, requestHeaders));
     },
-    RevokeRefreshTokensForUser(variables: RevokeRefreshTokensForUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RevokeRefreshTokensForUserMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RevokeRefreshTokensForUserMutation>(RevokeRefreshTokensForUserDocument, variables, requestHeaders));
+    RevokeRefreshTokensForUser(variables: RevokeRefreshTokensForUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RevokeRefreshTokensForUserMutation> {
+      return withWrapper(() => client.request<RevokeRefreshTokensForUserMutation>(RevokeRefreshTokensForUserDocument, variables, requestHeaders));
     },
-    Me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: MeQuery | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<MeQuery>(MeDocument, variables, requestHeaders));
+    Me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
+      return withWrapper(() => client.request<MeQuery>(MeDocument, variables, requestHeaders));
     },
-    Register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: RegisterMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<RegisterMutation>(RegisterDocument, variables, requestHeaders));
+    Register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
+      return withWrapper(() => client.request<RegisterMutation>(RegisterDocument, variables, requestHeaders));
     },
-    VerifyEmailConfirmation(variables: VerifyEmailConfirmationMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: VerifyEmailConfirmationMutation | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<VerifyEmailConfirmationMutation>(VerifyEmailConfirmationDocument, variables, requestHeaders));
+    VerifyEmailConfirmation(variables: VerifyEmailConfirmationMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyEmailConfirmationMutation> {
+      return withWrapper(() => client.request<VerifyEmailConfirmationMutation>(VerifyEmailConfirmationDocument, variables, requestHeaders));
     },
-    User(variables: UserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data?: UserQuery | undefined; extensions?: any; headers: Dom.Headers; status: number; errors?: GraphQLError[] | undefined; }> {
-        return withWrapper(() => client.rawRequest<UserQuery>(UserDocument, variables, requestHeaders));
+    User(variables: UserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserQuery> {
+      return withWrapper(() => client.request<UserQuery>(UserDocument, variables, requestHeaders));
     }
   };
 }

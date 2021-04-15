@@ -22,8 +22,10 @@ declare namespace Cypress {
     login(data: LoginData, method?: "api" | "gui"): Chainable<void>;
     register(data: RegisterData): Chainable<void>;
     verifyUser(email: string): Chainable<void>;
+    resetPassword(email: string, newPassword: string): Chainable<void>;
 
-    mhDeleteAll(): Chainable<void>;
-    mhGetLastEmailTo(value: string): Chainable<ParsedEmail>;
+    emailDeleteAll(): Chainable<void>;
+    emailGetLinksTo(email: string): Chainable<string>;
+    emailGetLastTo(email: string): Chainable<ParsedEmail>;
   }
 }

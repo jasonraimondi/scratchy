@@ -1,4 +1,4 @@
-import type { User } from "./app/user/entities/user.entity";
+import type { User } from "./entities/user.entity";
 
 declare module "fastify" {
   interface FastifyRequest {

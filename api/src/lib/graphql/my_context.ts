@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
-import type { User } from "~/app/user/entities/user.entity";
+import type { User } from "~/entities/user.entity";
 
 export interface MyContext {
   req: FastifyRequest | any;

@@ -20,6 +20,8 @@ scalar DateTime
 
 type LoginResponse {
   accessToken: String!
+  accessTokenExpiresAt: Int!
+  refreshTokenExpiresAt: Int
   user: User!
 }
 
@@ -45,16 +47,30 @@ input UserPaginatorInputs {
 }
 
 type Mutation {
+  login(data: LoginInput!): LoginResponse!
+  refreshAccessToken: LoginResponse!
+  logout: Boolean
+  revokeRefreshToken(userId: String!): Boolean
+  register(data: RegisterInput!): User!
+  resendConfirmEmail(email: String!): Boolean!
   validateForgotPasswordToken(data: ValidateForgotPasswordTokenInput!): Boolean!
   sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
   updatePasswordFromToken(data: UpdatePasswordInput!): LoginResponse!
   verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
-  register(data: RegisterInput!): User!
-  resendConfirmEmail(email: String!): Boolean!
-  login(data: LoginInput!): LoginResponse!
-  refreshToken: LoginResponse!
-  logout: Boolean!
-  revokeRefreshToken(userId: String!): Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+  rememberMe: Boolean!
+}
+
+input RegisterInput {
+  id: String
+  firstName: String
+  lastName: String
+  email: String!
+  password: String
 }
 
 input ValidateForgotPasswordTokenInput {
@@ -75,18 +91,4 @@ input UpdatePasswordInput {
 input VerifyEmailInput {
   email: String!
   uuid: String!
-}
-
-input RegisterInput {
-  id: String
-  firstName: String
-  lastName: String
-  email: String!
-  password: String
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-  rememberMe: Boolean!
 }

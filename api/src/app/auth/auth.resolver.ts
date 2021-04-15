@@ -1,11 +1,11 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/services/auth.service";
 import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
-import { LoginResponse } from "~/app/account/resolvers/auth/login_response";
+import { LoginResponse } from "~/app/user/resolvers/account/responses/login_response";
 import { MyContext } from "~/lib/graphql/my_context";
-import { LoginInput } from "~/app/account/resolvers/auth/login_input";
+import { LoginInput } from "~/app/user/resolvers/account/inputs/login_input";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 
@@ -14,46 +14,26 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService, private readonly userRepository: UserRepository) {}
 
   @Mutation(() => LoginResponse!)
-  async login(
-    @Args("data") { email, password, rememberMe }: LoginInput,
-    @Context() { res }: MyContext,
-  ): Promise<LoginResponse> {
-    const result = await this.authService.login(email, password);
-    await this.authService.sendRefreshToken(res, rememberMe, result.user);
-    return result;
+  async login(@Args("data") loginInput: LoginInput, @Context() { res, ipAddr }: MyContext): Promise<LoginResponse> {
+    return this.authService.login({ ...loginInput, ipAddr, res });
   }
 
   @Mutation(() => LoginResponse!)
-  async refreshToken(@Context() { req, res }: MyContext): Promise<LoginResponse> {
-    const rememberMe = req.cookies?.rememberMe ?? false;
+  refreshAccessToken(@Context() { req }: MyContext): Promise<LoginResponse> {
     const refreshToken = new RefreshTokenDTO(req.cookies?.jid);
-
-    if (refreshToken.isExpired) {
-      throw new Error("invalid token");
-    }
-
-    const result = await this.authService.refreshAccessToken(refreshToken.token);
-    await this.authService.sendRefreshToken(res, rememberMe, result.user);
-
-    return result;
+    if (refreshToken.isExpired) throw new Error("invalid token");
+    return this.authService.refreshAccessToken(refreshToken.token);
   }
 
-  @Mutation(() => Boolean)
-  async logout(@Context() { res }: MyContext): Promise<boolean> {
-    await this.authService.sendRefreshToken(res, false, undefined);
-    return true;
+  @Mutation(() => Boolean, { nullable: true })
+  async logout(@Context() { res }: MyContext): Promise<void> {
+    await this.authService.logout(res);
   }
 
   @UseGuards(JwtAuthGqlGuard)
-  @Mutation(() => Boolean)
-  async revokeRefreshToken(@Context() { res }: MyContext, @Args("userId") userId: string): Promise<boolean> {
-    try {
-      await this.userRepository.findById(userId);
-      await this.userRepository.incrementRefreshToken(userId);
-      await this.authService.sendRefreshToken(res, false, undefined);
-      return true;
-    } catch {
-      return false;
-    }
+  @Mutation(() => Boolean, { nullable: true })
+  async revokeRefreshToken(@Context() { res }: MyContext, @Args("userId") userId: string): Promise<void> {
+    await this.userRepository.incrementRefreshToken(userId);
+    await this.authService.logout(res);
   }
 }

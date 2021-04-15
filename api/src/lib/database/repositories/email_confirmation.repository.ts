@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { EmailConfirmationToken } from "~/app/account/entities/email_confirmation.entity";
+import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { PrismaService } from "~/lib/database/prisma.service";
 
 @Injectable()

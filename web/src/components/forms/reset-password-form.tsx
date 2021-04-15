@@ -37,7 +37,7 @@ export function ResetPasswordForm({ email, token }: { email: string; token: stri
 
       <FormControl>
         <Label id="reset-password-form--password">Password</Label>
-        {formState.errors.password}
+        {/*{formState.errors.password}*/}
         <input
           type="password"
           id="reset-password-form--password"

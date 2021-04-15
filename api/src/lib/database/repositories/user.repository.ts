@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 
 import { PrismaService } from "~/lib/database/prisma.service";
-import { User, UserModel } from "~/app/user/entities/user.entity";
+import { User, UserModel } from "~/entities/user.entity";
 import { UserPaginatorResponse } from "~/lib/database/dtos/responses/user_paginator.response";
 import { UserPaginatorInputs } from "~/lib/database/dtos/inputs/paginator.inputs";
 
@@ -36,7 +37,7 @@ export class UserRepository {
     return new User(await this.prisma.user.create({ data: userData }));
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {
     return new User(
       await this.prisma.user.findFirst({
         rejectOnNotFound: true,
@@ -46,22 +47,24 @@ export class UserRepository {
             mode: "insensitive",
           },
         },
+        ...extraQuery,
       }),
     );
   }
 
-  async findById(userId: string): Promise<User> {
+  async findById(userId: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {
     return new User(
       await this.prisma.user.findUnique({
         rejectOnNotFound: true,
         where: { id: userId },
+        ...extraQuery,
       }),
     );
   }
 
-  async incrementLastLogin(email: string, ipAddr: string): Promise<void> {
+  async incrementLastLogin(userId: string, ipAddr: string): Promise<void> {
     await this.prisma.user.update({
-      where: { email: email.toLowerCase() },
+      where: { id: userId },
       data: {
         lastLoginAt: new Date(),
         lastLoginIP: ipAddr,

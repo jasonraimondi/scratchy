@@ -12,7 +12,7 @@ import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify
 import { AppModule } from "~/app/app.module";
 import { ENV } from "~/config/environments";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { attachMiddlewares } from "~/lib/middlewares/attach_middlewares";
+import { attachMiddlewares } from "~/lib/middleware/attach_middlewares";
 
 (async () => {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());

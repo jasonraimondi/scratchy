@@ -10,5 +10,5 @@ import "./auth";
 import "./commands";
 
 beforeEach(() => {
-  cy.mhDeleteAll();
+  cy.emailDeleteAll();
 });

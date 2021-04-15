@@ -4,17 +4,29 @@ import { Layout } from "@/app/components/layouts/layout";
 import { useUser } from "@/app/api/user";
 
 export default function IndexPage() {
-  const { email } = useUser("jason@raimondi.us");
+  const { data, error, isLoading } = useUser("jason@raimondi.us");
 
-  return (
-    <Layout title="Home">
-      {[1, 2, 3].map(id => (
-        <div key={id} style={{ padding: "2em 0" }}>
-          {template(email)}
-        </div>
-      ))}
-    </Layout>
-  );
+  let body;
+
+  if (isLoading) {
+    body = <p>Loading</p>;
+  } else if (error) {
+    body = <p>{JSON.stringify(error)}</p>;
+  } else if (data) {
+    body = (
+      <div>
+        {[1, 2, 3].map(id => (
+          <div key={id} style={{ padding: "2em 0" }}>
+            {template(data.user.email)}
+          </div>
+        ))}
+      </div>
+    );
+  } else {
+    body = <p>Unknown Stuff</p>;
+  }
+
+  return <Layout title="Home">{body}</Layout>;
 }
 
 export const template = (email: string) => (

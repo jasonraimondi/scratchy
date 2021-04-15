@@ -9,8 +9,8 @@ mutation Login($data: LoginInput!) {
   }
 }
 
-mutation RefreshToken {
-  refreshToken {
+mutation RefreshAccessToken {
+  refreshAccessToken {
     accessToken
     user {
       id

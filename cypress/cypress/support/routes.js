@@ -1,7 +1,7 @@
 const queryMap = {
-  "Login": "mutateLogin",
-  "Logout": "mutateLogout",
-}
+  Login: "mutateLogin",
+  Logout: "mutateLogout",
+};
 
 beforeEach(() => {
   cy.intercept("POST", "*/graphql", req => {

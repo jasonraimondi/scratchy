@@ -8,9 +8,7 @@ export default function ResetPassword({ email, token }: Record<string, string | 
   if (!email || !token) {
     return (
       <Layout title="Oops Reset Password">
-        <p>
-          Missing Token {email} {token} 1 2 3 4
-        </p>
+        <p>Missing Token {JSON.stringify({ email, token })} 1 2 3 4</p>
       </Layout>
     );
   }

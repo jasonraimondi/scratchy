@@ -22,8 +22,8 @@
       <mj-text>
         <p>Hello hello {{ user.email }}!</p>
         <p>Please click this shiny button to verify your email!</p>
-        <p><a href="{{ url }}">Tada!</a></p>
-        <p><small>If the link above is not working, you can always try this one: {{ url }}</small></p>
+        <p><a href="{{ url | safe }}">Tada!</a></p>
+        <p><small>If the link above is not working, you can always try this one: {{ url | safe }}</small></p>
       </mj-text>
     </mj-column>
   </mj-section>

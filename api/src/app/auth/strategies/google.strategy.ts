@@ -4,7 +4,7 @@ import type { FastifyRequest } from "fastify";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
 
 import { ENV } from "~/config/environments";
-import { User } from "~/app/user/entities/user.entity";
+import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
@@ -56,7 +56,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       user = await this.userRepository.create(user);
     }
 
-    await this.userRepository.incrementLastLogin(user.email, req.ip);
+    await this.userRepository.incrementLastLogin(user.id, req.ip);
 
     done(undefined, user);
   }
