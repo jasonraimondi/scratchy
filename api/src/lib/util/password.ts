@@ -14,4 +14,3 @@ export async function setPassword(password: string): Promise<string> {
   password = sha256().update(password).digest("hex");
   return hash(password, 10);
 }
-

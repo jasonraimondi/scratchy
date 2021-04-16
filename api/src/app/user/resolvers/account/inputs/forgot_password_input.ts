@@ -3,6 +3,18 @@ import { Field, InputType } from "@nestjs/graphql";
 import { PasswordInput } from "~/app/user/resolvers/account/inputs/register.input";
 
 @InputType()
+export class UpdatePasswordInput extends PasswordInput {
+  @Field()
+  userId: string;
+
+  @Field()
+  previousPassword: string;
+
+  @Field()
+  password: string;
+}
+
+@InputType()
 export class ValidateForgotPasswordTokenInput {
   @Field()
   @IsEmail()
@@ -20,7 +32,7 @@ export class SendForgotPasswordInput {
 }
 
 @InputType()
-export class UpdatePasswordInput extends PasswordInput {
+export class UpdatePasswordFromTokenInput extends PasswordInput {
   @Field()
   password: string;
 

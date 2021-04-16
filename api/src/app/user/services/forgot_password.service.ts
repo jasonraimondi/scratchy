@@ -7,7 +7,7 @@ import { LoggerService } from "~/lib/logger/logger.service";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import {
-  UpdatePasswordInput,
+  UpdatePasswordFromTokenInput,
   ValidateForgotPasswordTokenInput,
 } from "~/app/user/resolvers/account/inputs/forgot_password_input";
 
@@ -44,7 +44,7 @@ export class ForgotPasswordService {
     return false;
   }
 
-  async updatePasswordFromToken({ email, token, password }: UpdatePasswordInput): Promise<User> {
+  async updatePasswordFromToken({ email, token, password }: UpdatePasswordFromTokenInput): Promise<User> {
     const { user, ...forgotPassword } = await this.forgotPasswordRepository.findById(token);
     if (email !== user?.email) throw new Error("invalid access");
     await user.setPassword(password);

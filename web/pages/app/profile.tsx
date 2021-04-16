@@ -12,11 +12,19 @@ function Me() {
   if (isLoading) {
     body = <div>loading...</div>;
   } else if (error) {
-    body = <pre><code>{JSON.stringify(error, null, 2)}</code></pre>;
+    body = (
+      <pre>
+        <code>{JSON.stringify(error, null, 2)}</code>
+      </pre>
+    );
   } else {
-    body = <pre><code>{JSON.stringify(data, null, 2)}</code></pre>;
+    body = (
+      <pre>
+        <code>{JSON.stringify(data, null, 2)}</code>
+      </pre>
+    );
   }
-  console.log("JASON")
+  console.log("JASON");
   return body;
 }
 
@@ -32,7 +40,9 @@ export default function Profile() {
           </a>
         </li>
         <li>
-          <a className="button" data-test="update-password">Update Password</a>
+          <a className="button" data-test="update-password">
+            Update Password
+          </a>
         </li>
       </ul>
       <Me />

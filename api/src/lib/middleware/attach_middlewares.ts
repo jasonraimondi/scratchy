@@ -9,8 +9,8 @@ import { ENV } from "~/config/environments";
 import { CORS } from "~/config/cors";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
-  await fastify.register(cookie, { secret: ENV.secrets.cookie});
-  await fastify.register(csrf, { cookieOpts: { signed: true }});
+  await fastify.register(cookie, { secret: ENV.secrets.cookie });
+  await fastify.register(csrf, { cookieOpts: { signed: true } });
 
   fastify.enableCors(CORS);
 

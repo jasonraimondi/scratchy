@@ -4,8 +4,8 @@ export function attemptWithBackoff(toTry: CallableFunction, maxAttempts = 2, del
   return new Promise(async (resolve, reject) => {
     try {
       const data = await toTry();
-      resolve(data)
-    } catch(err) {
+      resolve(data);
+    } catch (err) {
       if (maxAttempts > 0) {
         await sleep(delay);
         await attemptWithBackoff(toTry, --maxAttempts, delay * 2);
@@ -13,5 +13,5 @@ export function attemptWithBackoff(toTry: CallableFunction, maxAttempts = 2, del
         reject(err.message);
       }
     }
-  })
+  });
 }

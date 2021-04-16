@@ -21,14 +21,14 @@ export const Layout: FC<{ title?: string; isPrivate?: boolean }> = ({
 
   useEffect(() => void checkAuth(), []);
 
-  const isExpired = useMemo(() => !auth.isAuthenticated(), [auth.accessToken])
+  const isExpired = useMemo(() => !auth.isAuthenticated(), [auth.accessToken]);
 
   async function checkAuth() {
     if (isPrivate && isExpired) {
-      notifyService.info("is private and is expired, running token refresh")
+      notifyService.info("is private and is expired, running token refresh");
       // this line is racing against the useMe query line
       if (await auth.handleRefreshToken()) {
-        notifyService.info("It refreshed successfully")
+        notifyService.info("It refreshed successfully");
       } else {
         await router.push("/login");
       }
@@ -38,7 +38,7 @@ export const Layout: FC<{ title?: string; isPrivate?: boolean }> = ({
   let body;
 
   if (isPrivate && isExpired) {
-    console.log("unauthorized")
+    console.log("unauthorized");
     body = <p>Unauthorized</p>;
   } else {
     body = children;

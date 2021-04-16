@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { userId, tokenVersion } = payload;
 
     const user = await this.userRepository.findById(userId);
-    console.log(user)
+    console.log(user);
     if (Number(tokenVersion) !== Number(user.tokenVersion)) {
       throw new UnauthorizedException("invalid token");
     }
@@ -38,7 +38,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 }
 
-export const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string|undefined => {
+export const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string | undefined => {
   const auth = request.headers["authorization"];
   console.log({ auth });
   return auth?.split(" ")[1];

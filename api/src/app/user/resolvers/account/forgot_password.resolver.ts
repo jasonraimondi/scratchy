@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { ForgotPasswordService } from "~/app/user/services/forgot_password.service";
 import {
   SendForgotPasswordInput,
-  UpdatePasswordInput,
+  UpdatePasswordFromTokenInput,
   ValidateForgotPasswordTokenInput,
 } from "~/app/user/resolvers/account/inputs/forgot_password_input";
 import { LoginResponse } from "~/app/user/resolvers/account/responses/login_response";
@@ -31,7 +31,7 @@ export class ForgotPasswordResolver {
 
   @Mutation(() => LoginResponse)
   async updatePasswordFromToken(
-    @Args("data") data: UpdatePasswordInput,
+    @Args("data") data: UpdatePasswordFromTokenInput,
     @Context() { res, ipAddr }: MyContext,
   ): Promise<LoginResponse> {
     const user = await this.forgotPasswordService.updatePasswordFromToken(data);

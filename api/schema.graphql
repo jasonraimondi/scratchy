@@ -55,7 +55,7 @@ type Mutation {
   resendConfirmEmail(email: String!): Boolean!
   validateForgotPasswordToken(data: ValidateForgotPasswordTokenInput!): Boolean!
   sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
-  updatePasswordFromToken(data: UpdatePasswordInput!): LoginResponse!
+  updatePasswordFromToken(data: UpdatePasswordFromTokenInput!): LoginResponse!
   verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
 }
 
@@ -82,7 +82,7 @@ input SendForgotPasswordInput {
   email: String!
 }
 
-input UpdatePasswordInput {
+input UpdatePasswordFromTokenInput {
   password: String!
   token: String!
   email: String!

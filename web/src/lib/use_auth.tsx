@@ -45,7 +45,7 @@ function AuthProvider(props: any) {
       notify.success({ title: "Login Success", message: "" });
       await router.push("/app/dashboard");
     } catch (error) {
-      notify.success({ title: "Login Error", message: error.message });
+      notify.error({ title: "Login Error", message: error.message });
     }
   }
 
@@ -56,13 +56,13 @@ function AuthProvider(props: any) {
       const { refreshAccessToken } = await graphQLSdk.RefreshAccessToken();
       setAccessToken(refreshAccessToken.accessToken);
       notify.success("Token Refreshed");
-    }
+    };
 
     try {
       const attempts = 2;
       await attemptWithBackoff(attemptRefresh, attempts);
       return true;
-    } catch(err) {
+    } catch (err) {
       notify.error(err.message);
       return false;
     }
@@ -92,7 +92,7 @@ function AuthProvider(props: any) {
 
   function setAccessToken(accessToken: string) {
     graphQLClient.setHeader("Authorization", `Bearer ${accessToken}`);
-    console.log("set graphql headers")
+    console.log("set graphql headers");
     const payload = jwtDecode<DecodedJWT>(accessToken);
     setState({ ...state, accessToken, userId: payload.sub });
   }

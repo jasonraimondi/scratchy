@@ -20,11 +20,11 @@ export class AuthMiddleware implements NestMiddleware {
 
     try {
       const decoded: AccessTokenJWTPayload = await this.tokenService.verifyToken<AccessTokenJWTPayload>(accessToken);
-      const user = await this.userRepository.findById(decoded.userId, { include: { roles: true, permissions: false }});
+      const user = await this.userRepository.findById(decoded.userId, { include: { roles: true, permissions: false } });
       if (Number(decoded.tokenVersion) === Number(user.tokenVersion)) {
         req.user = user;
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
 
