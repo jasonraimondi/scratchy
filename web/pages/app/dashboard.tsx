@@ -7,7 +7,7 @@ export default function Dashboard() {
 
   let body;
 
-  if (!isAuthenticated()) {
+  if (!isAuthenticated) {
     body = <p>Invalid Token</p>;
   } else {
     body = (

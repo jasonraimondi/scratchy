@@ -4,11 +4,17 @@ import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, FormControl, Label } from "@/app/components/forms/elements";
 import { useRouter } from "next/router";
 import { useNotify } from "use-notify-rxjs";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type ResetPasswordFormData = { password: string };
 
+const schema = yup.object().shape({
+  password: yup.string().min(8).required(),
+});
+
 export function ResetPasswordForm({ email, token }: { email: string; token: string }) {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState } = useForm({ mode: "onSubmit", resolver: yupResolver(schema) });
   const router = useRouter();
   const notify = useNotify();
 
@@ -16,11 +22,11 @@ export function ResetPasswordForm({ email, token }: { email: string; token: stri
 
   const onSubmit = async (foo: ResetPasswordFormData) => {
     await graphQLSdk.ValidateForgotPasswordToken({ data: { token, email } });
-    const { data, errors } = await graphQLSdk.UpdatePasswordFromToken({
+    const data = await graphQLSdk.UpdatePasswordFromToken({
       data: { password: foo.password, token, email },
     });
 
-    if (!errors && data) {
+    if (data) {
       const { accessToken, user } = data.updatePasswordFromToken;
       notify.info(accessToken);
       notify.info(user.email);
@@ -37,13 +43,13 @@ export function ResetPasswordForm({ email, token }: { email: string; token: stri
 
       <FormControl>
         <Label id="reset-password-form--password">Password</Label>
-        {/*{formState.errors.password}*/}
         <input
           type="password"
           id="reset-password-form--password"
           placeholder="enter a secure password"
-          {...register("password", { required: true, minLength: 8 })}
+          {...register("password")}
         />
+        {formState.errors.password && <span>{formState.errors.password.message}</span>}
       </FormControl>
 
       <Button data-test="reset-password-form--submit" type="submit" disabled={isSubmitting}>

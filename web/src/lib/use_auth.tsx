@@ -12,6 +12,7 @@ const AuthContext = createContext<UseAuth>();
 
 export type DecodedJWT = {
   email: string;
+  userId: string;
   exp: number;
   iat: number;
   isEmailConfirmed: boolean;
@@ -25,8 +26,6 @@ export type LoginParams = {
   rememberMe: boolean;
 };
 
-let count = 0;
-
 function AuthProvider(props: any) {
   const router = useRouter();
   const notify = useNotify();
@@ -38,7 +37,7 @@ function AuthProvider(props: any) {
 
   const cookies = useMemo(() => parseCookies(), [state.accessToken]);
 
-  async function handleLogin(loginParams: LoginParams) {
+  async function login(loginParams: LoginParams) {
     try {
       const { login } = await graphQLSdk.Login({ data: loginParams });
       setAccessToken(login.accessToken);
@@ -49,7 +48,7 @@ function AuthProvider(props: any) {
     }
   }
 
-  async function handleRefreshToken() {
+  async function refreshToken() {
     if (cookies.canRefresh !== "y") return false;
 
     const attemptRefresh = async () => {
@@ -68,7 +67,7 @@ function AuthProvider(props: any) {
     }
   }
 
-  async function handleLogout() {
+  async function logout() {
     try {
       await graphQLSdk.Logout();
       notify.info({ title: "Goodbye", message: "Logging out", ttl: 10000 });
@@ -79,16 +78,11 @@ function AuthProvider(props: any) {
     }
   }
 
-  async function handleRevokeToken() {
-    if (state.userId) await graphQLSdk.RevokeRefreshTokensForUser({ userId: state.userId });
-    await handleLogout();
-  }
-
-  function isAuthenticated() {
+  const isAuthenticated = (() => {
     if (!state.accessToken || !decodedToken) return false;
     const expiresAt = new Date(decodedToken.exp * 1000);
     return new Date() < expiresAt;
-  }
+  })();
 
   function setAccessToken(accessToken: string) {
     graphQLClient.setHeader("Authorization", `Bearer ${accessToken}`);
@@ -97,18 +91,15 @@ function AuthProvider(props: any) {
     setState({ ...state, accessToken, userId: payload.sub });
   }
 
-  console.log({ isAuthenticated: isAuthenticated(), count: count++ });
-
   return (
     <AuthContext.Provider
       value={{
         accessToken: state.accessToken,
+        accessTokenDecoded: decodedToken,
         isAuthenticated,
-        handleLogin,
-        handleLogout,
-        handleRefreshToken,
-        handleRevokeToken,
-        setAccessToken,
+        login,
+        logout,
+        refreshToken,
       }}
       {...props}
     />
@@ -116,16 +107,12 @@ function AuthProvider(props: any) {
 }
 
 type UseAuth = {
-  accessToken: string;
-  isAuthenticated(): () => boolean;
-  handleLogin(data: LoginParams): Promise<void>;
-  handleLogout(): Promise<void>;
-  /**
-   * Returns true if token refreshes, otherwise false
-   */
-  handleRefreshToken(): Promise<boolean>;
-  handleRevokeToken(): Promise<void>;
-  setAccessToken(token: string): void;
+  accessToken?: string;
+  accessTokenDecoded?: DecodedJWT;
+  isAuthenticated: boolean;
+  login(data: LoginParams): Promise<void>;
+  logout(): Promise<void>;
+  refreshToken(): Promise<boolean>;
 };
 
 const useAuth = () => useContext<UseAuth>(AuthContext);

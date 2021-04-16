@@ -4,9 +4,9 @@ import { useAuth } from "@/app/lib/use_auth";
 import { Layout } from "@/app/components/layouts/layout";
 
 export default function Logout() {
-  const { handleLogout } = useAuth();
+  const { logout } = useAuth();
 
-  useEffect(() => void handleLogout(), []);
+  useEffect(() => void logout(), []);
 
   return (
     <Layout title="Logout">

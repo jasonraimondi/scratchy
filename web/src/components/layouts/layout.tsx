@@ -21,13 +21,13 @@ export const Layout: FC<{ title?: string; isPrivate?: boolean }> = ({
 
   useEffect(() => void checkAuth(), []);
 
-  const isExpired = useMemo(() => !auth.isAuthenticated(), [auth.accessToken]);
+  const isExpired = useMemo(() => !auth.isAuthenticated, [auth.accessToken]);
 
   async function checkAuth() {
     if (isPrivate && isExpired) {
       notifyService.info("is private and is expired, running token refresh");
       // this line is racing against the useMe query line
-      if (await auth.handleRefreshToken()) {
+      if (await auth.refreshToken()) {
         notifyService.info("It refreshed successfully");
       } else {
         await router.push("/login");

@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { graphQLSdk } from "@/app/lib/api_sdk";
 
 export const userFetcher = (email: string) => graphQLSdk.User({ email });
-export const useUser = (email: string) => {
+export const useApiUser = (email: string) => {
   const { data, error } = useSWR(email, userFetcher);
   return {
     data,
@@ -13,7 +13,7 @@ export const useUser = (email: string) => {
 };
 
 export const meFetcher = () => graphQLSdk.Me();
-export const useMe = () => {
+export const useApiMe = () => {
   const res = useSWR(`graphql.me`, meFetcher);
   const { data, error } = res;
   return {

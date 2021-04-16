@@ -8,10 +8,13 @@ export class UpdatePasswordInput extends PasswordInput {
   userId: string;
 
   @Field()
-  previousPassword: string;
+  currentPassword: string;
 
   @Field()
   password: string;
+
+  @Field({ nullable: true })
+  revokeToken: boolean;
 }
 
 @InputType()

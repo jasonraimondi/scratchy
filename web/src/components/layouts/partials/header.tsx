@@ -16,7 +16,7 @@ export function Header() {
   const leftMenu: MenuItem[] = [{ name: "Home", href: "/", dataTest: "link--home" }];
   const rightMenu: MenuItem[] = [];
 
-  if (isAuthenticated()) {
+  if (isAuthenticated) {
     leftMenu.push(
       { name: "Dashboard", href: "/app/dashboard", dataTest: "link--dashboard" },
       { name: "Profile", href: "/app/profile", dataTest: "link--profile" },

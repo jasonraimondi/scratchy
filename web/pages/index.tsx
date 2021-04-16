@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Layout } from "@/app/components/layouts/layout";
-import { useUser } from "@/app/api/user";
+import { useApiUser } from "@/app/api/user";
 
 export default function IndexPage() {
-  const { data, error, isLoading } = useUser("jason@raimondi.us");
+  const { data, error, isLoading } = useApiUser("jason@raimondi.us");
 
   let body;
 

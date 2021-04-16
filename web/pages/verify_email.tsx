@@ -5,32 +5,30 @@ import { graphQLSdk } from "@/app/lib/api_sdk";
 import { useNotify } from "use-notify-rxjs";
 import type { GetServerSideProps } from "next";
 import { sleep } from "@/app/lib/utils/sleep";
+import { useRouter } from "next/router";
 
-export default function VerifyEmail({ email, id }: Record<string, unknown>) {
-  const verifyEmailData: any = { email, id };
+type Props = { email: string; uuid: string };
+
+export default function VerifyEmail(data: Props) {
   const [status, setStatus] = useState("Verifying Email...");
   const notify = useNotify();
+  const router = useRouter();
 
   const handleVerifyUser = async () => {
-    if (!email || !id) {
-      console.log({ email, id });
-      notify.error({ message: "missing email or id" + JSON.stringify({ email, id }), ttl: 50000 });
-      return;
+    try {
+      const foo = await graphQLSdk.VerifyEmailConfirmation({ data });
+      notify.success("HI JASON");
+      console.log({ foo });
+      setStatus("Success! Redirecting to login...");
+      await sleep(750);
+      await router.push("/login");
+    } catch (err) {
+      setStatus(err.message);
+      notify.error(err.message);
     }
-    const foo = await graphQLSdk.VerifyEmailConfirmation({ data: verifyEmailData }).catch((e: any) => {
-      setStatus(e.message);
-      notify.error(e.message);
-    });
-    notify.success("HI JASON");
-    console.log({ foo });
-    setStatus("Success! Redirecting to login...");
-    await sleep(750);
-    // await router.push("/login");
   };
 
-  useEffect(() => {
-    handleVerifyUser().catch(e => console.error(e));
-  }, []);
+  useEffect(() => void handleVerifyUser(), []);
 
   return (
     <Layout title="Verify Email">
@@ -40,10 +38,18 @@ export default function VerifyEmail({ email, id }: Record<string, unknown>) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
+  const { query, res } = ctx;
+
+  if (typeof query.e !== "string" || typeof query.u !== "string") {
+    res.statusCode = 302;
+    res.setHeader("Location", "/login"); // Replace <link> with your url link
+    return { props: {} };
+  }
+
   return {
     props: {
-      email: ctx.query.e ?? null,
-      id: ctx.query.u ?? null,
+      email: ctx.query.e,
+      uuid: ctx.query.u,
     },
   };
 };

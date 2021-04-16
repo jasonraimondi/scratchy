@@ -4,18 +4,20 @@ import React, { useState } from "react";
 
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, FormControl, Label } from "@/app/components/forms/elements";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-export const validEmailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+  firstName: yup.string(),
+  lastName: yup.string(),
+});
 
 export function ForgotPasswordForm() {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState } = useForm({ mode: "onSubmit", resolver: yupResolver(schema) });
 
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -32,11 +34,11 @@ export function ForgotPasswordForm() {
         <Label id="forgot-password-form--email">Email</Label>
         <input
           type="email"
-          {...register("email", { required: true, pattern: validEmailRegex })}
+          {...register("email")}
           id="forgot-password-form--email"
           placeholder="john.doe@example.com"
         />
-        {errors.email}
+        {formState.errors.email && <p>{formState.errors.email.message}</p>}
       </FormControl>
       <Button data-test="forgot-password-form--submit" type="submit" disabled={isSubmitting}>
         Submit

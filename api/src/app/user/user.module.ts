@@ -13,25 +13,22 @@ import { DatabaseModule } from "~/lib/database/database.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { EmailModule } from "~/lib/email/email.module";
+import { UpdatePasswordResolver } from "~/app/user/resolvers/account/update_password.resolver";
 
 @Module({
-  imports: [
-    LoggerModule,
-    DatabaseModule,
-    JwtModule,
-    EmailModule,
-    // PassportModule
-  ],
+  imports: [LoggerModule, DatabaseModule, JwtModule, EmailModule],
   providers: [
-    MeResolver,
-    UserResolver,
-    RegisterResolver,
+    AuthService,
     ForgotPasswordService,
     EmailConfirmationService,
-    ForgotPasswordResolver,
-    EmailConfirmationResolver,
-    AuthService,
     TokenService,
+
+    EmailConfirmationResolver,
+    ForgotPasswordResolver,
+    MeResolver,
+    RegisterResolver,
+    UpdatePasswordResolver,
+    UserResolver,
   ],
 })
 export class UserModule {}

@@ -1,6 +1,6 @@
 import { sleep } from "@/app/lib/utils/sleep";
 
-export function attemptWithBackoff(toTry: CallableFunction, maxAttempts = 2, delay = 100) {
+export function attemptWithBackoff(toTry: () => Promise<void>, maxAttempts = 2, delay = 100) {
   return new Promise(async (resolve, reject) => {
     try {
       const data = await toTry();

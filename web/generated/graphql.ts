@@ -76,12 +76,13 @@ export type Mutation = {
   refreshAccessToken: LoginResponse;
   logout?: Maybe<Scalars['Boolean']>;
   revokeRefreshToken?: Maybe<Scalars['Boolean']>;
-  register: User;
-  resendConfirmEmail: Scalars['Boolean'];
+  verifyEmailConfirmation: Scalars['Boolean'];
   validateForgotPasswordToken: Scalars['Boolean'];
   sendForgotPasswordEmail: Scalars['Boolean'];
   updatePasswordFromToken: LoginResponse;
-  verifyEmailConfirmation: Scalars['Boolean'];
+  register: User;
+  resendConfirmEmail: Scalars['Boolean'];
+  updatePassword: Scalars['Boolean'];
 };
 
 
@@ -95,13 +96,8 @@ export type MutationRevokeRefreshTokenArgs = {
 };
 
 
-export type MutationRegisterArgs = {
-  data: RegisterInput;
-};
-
-
-export type MutationResendConfirmEmailArgs = {
-  email: Scalars['String'];
+export type MutationVerifyEmailConfirmationArgs = {
+  data: VerifyEmailInput;
 };
 
 
@@ -116,12 +112,22 @@ export type MutationSendForgotPasswordEmailArgs = {
 
 
 export type MutationUpdatePasswordFromTokenArgs = {
-  data: UpdatePasswordInput;
+  data: UpdatePasswordFromTokenInput;
 };
 
 
-export type MutationVerifyEmailConfirmationArgs = {
-  data: VerifyEmailInput;
+export type MutationRegisterArgs = {
+  data: RegisterInput;
+};
+
+
+export type MutationResendConfirmEmailArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationUpdatePasswordArgs = {
+  data: UpdatePasswordInput;
 };
 
 export type LoginInput = {
@@ -130,12 +136,9 @@ export type LoginInput = {
   rememberMe: Scalars['Boolean'];
 };
 
-export type RegisterInput = {
-  id?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
+export type VerifyEmailInput = {
   email: Scalars['String'];
-  password?: Maybe<Scalars['String']>;
+  uuid: Scalars['String'];
 };
 
 export type ValidateForgotPasswordTokenInput = {
@@ -147,15 +150,24 @@ export type SendForgotPasswordInput = {
   email: Scalars['String'];
 };
 
-export type UpdatePasswordInput = {
+export type UpdatePasswordFromTokenInput = {
   password: Scalars['String'];
   token: Scalars['String'];
   email: Scalars['String'];
 };
 
-export type VerifyEmailInput = {
+export type RegisterInput = {
+  id?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  uuid: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+};
+
+export type UpdatePasswordInput = {
+  userId: Scalars['String'];
+  currentPassword: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type SendForgotPasswordEmailMutationVariables = Exact<{
@@ -169,7 +181,7 @@ export type SendForgotPasswordEmailMutation = (
 );
 
 export type UpdatePasswordFromTokenMutationVariables = Exact<{
-  data: UpdatePasswordInput;
+  data: UpdatePasswordFromTokenInput;
 }>;
 
 
@@ -256,6 +268,16 @@ export type MeQuery = (
   ) }
 );
 
+export type UpdatePasswordMutationVariables = Exact<{
+  data: UpdatePasswordInput;
+}>;
+
+
+export type UpdatePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updatePassword'>
+);
+
 export type RegisterMutationVariables = Exact<{
   data: RegisterInput;
 }>;
@@ -299,7 +321,7 @@ export const SendForgotPasswordEmailDocument = `
 }
     `;
 export const UpdatePasswordFromTokenDocument = `
-    mutation UpdatePasswordFromToken($data: UpdatePasswordInput!) {
+    mutation UpdatePasswordFromToken($data: UpdatePasswordFromTokenInput!) {
   updatePasswordFromToken(data: $data) {
     accessToken
     user {
@@ -361,6 +383,11 @@ export const MeDocument = `
   }
 }
     `;
+export const UpdatePasswordDocument = `
+    mutation UpdatePassword($data: UpdatePasswordInput!) {
+  updatePassword(data: $data)
+}
+    `;
 export const RegisterDocument = `
     mutation Register($data: RegisterInput!) {
   register(data: $data) {
@@ -413,6 +440,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(MeDocument, variables, requestHeaders));
+    },
+    UpdatePassword(variables: UpdatePasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePasswordMutation> {
+      return withWrapper(() => client.request<UpdatePasswordMutation>(UpdatePasswordDocument, variables, requestHeaders));
     },
     Register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(RegisterDocument, variables, requestHeaders));

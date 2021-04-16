@@ -4,7 +4,16 @@ import React, { useState } from "react";
 
 import { graphQLSdk } from "@/app/lib/api_sdk";
 import { Button, FormControl, Label } from "@/app/components/forms/elements";
-import { validEmailRegex } from "@/app/components/forms/forgot-password-form";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+  firstName: yup.string(),
+  lastName: yup.string(),
+});
 
 export type RegisterFormData = {
   email: string;
@@ -16,7 +25,7 @@ export type RegisterFormData = {
 export function RegisterForm() {
   const router = useRouter();
 
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState } = useForm({ mode: "onSubmit", resolver: yupResolver(schema) });
 
   const [status, setStatus] = useState<string>();
   const [isSubmitting, setSubmitting] = useState(false);
@@ -39,41 +48,26 @@ export function RegisterForm() {
       {status && <span className="bg-red-500 text-white text-center px-6 py-1 my-2 rounded">{status}</span>}
       <FormControl>
         <Label id="register-form--email">Email</Label>
-        <input
-          type="email"
-          id="register-form--email"
-          placeholder="john.doe@example.com"
-          {...register("email", { required: true, pattern: validEmailRegex })}
-        />
-        {formState.errors.email && <span>{formState.errors.email}</span>}
+        <input type="email" id="register-form--email" placeholder="john.doe@example.com" {...register("email")} />
+        {formState.errors.email && <span>{formState.errors.email.message}</span>}
       </FormControl>
 
       <FormControl>
         <Label id="register-form--password">Password</Label>
-        <input
-          type="password"
-          id="register-form--password"
-          placeholder="**************"
-          {...register("password", { required: true })}
-        />
-        {formState.errors.password && <span>{formState.errors.password}</span>}
+        <input type="password" id="register-form--password" placeholder="**************" {...register("password")} />
+        {formState.errors.password && <span>{formState.errors.password.message}</span>}
       </FormControl>
 
       <FormControl>
         <Label id="register-form--first">First Name</Label>
-        <input
-          type="text"
-          id="register-form--first"
-          placeholder="John"
-          {...register("firstName", { required: true })}
-        />
-        {formState.errors.firstName && <span>{formState.errors.firstName}</span>}
+        <input type="text" id="register-form--first" placeholder="John" {...register("firstName")} />
+        {formState.errors.firstName && <span>{formState.errors.firstName.message}</span>}
       </FormControl>
 
       <FormControl>
         <Label id="register-form--last">Last Name</Label>
-        <input type="text" id="register-form--last" placeholder="Doe" {...register("lastName", { required: true })} />
-        {formState.errors.lastName && <span>{formState.errors.lastName}</span>}
+        <input type="text" id="register-form--last" placeholder="Doe" {...register("lastName")} />
+        {formState.errors.lastName && <span>{formState.errors.lastName.message}</span>}
       </FormControl>
 
       <Button type="submit" disabled={isSubmitting}>

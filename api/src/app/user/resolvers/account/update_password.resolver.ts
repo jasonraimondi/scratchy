@@ -12,8 +12,9 @@ export class UpdatePasswordResolver {
   @Mutation(() => Boolean!)
   async updatePassword(@Args("data") data: UpdatePasswordInput) {
     const user = await this.userRepository.findById(data.userId);
-    await user.verify(data.previousPassword);
+    await user.verify(data.currentPassword);
     await user.setPassword(data.password);
+    if (data.revokeToken) user.tokenVersion++;
     await this.userRepository.update(user);
     return true;
   }
