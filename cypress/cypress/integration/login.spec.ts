@@ -18,6 +18,19 @@ describe("Login Spec", () => {
     cy.logout();
   });
 
+  it("shows error fields", () => {
+    cy.visit("/login");
+
+    cy.dataTest("login-form--submit").click();
+    cy.contains("password must be at least 8 characters");
+    cy.contains("email is a required field");
+
+    cy.dataTest("login-form--password").type("jasonraimondi");
+    cy.dataTest("login-form--submit").click();
+    cy.contains("email is a required field");
+    cy.contains("password must be at least 8 characters").should("not.exist");
+  })
+
   it.skip("can trigger forgot password", function () {
     const email = "jason@raimondi.us";
     const password = "jasonraimondi";

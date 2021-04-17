@@ -31,6 +31,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/web/pages/app/profile.tsx">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/web/src/components/revokeToken.tsx">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

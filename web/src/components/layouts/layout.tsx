@@ -51,12 +51,10 @@ export const Layout: FC<{ title?: string; isPrivate?: boolean }> = ({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{title}</title>
       </Head>
-      <div>
-        <Header />
-        <Notify />
-        <main className={classnames("container padded center", el.main)}>{body}</main>
-        {process.env.NODE_ENV === "development" && <DebugBar />}
-      </div>
+      <Header />
+      <Notify />
+      <main className={classnames("container padded center", el.main)}>{body}</main>
+      {process.env.NODE_ENV === "development" && <DebugBar />}
     </>
   );
 };
