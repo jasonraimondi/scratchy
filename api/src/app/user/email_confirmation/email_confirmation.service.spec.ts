@@ -1,6 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { EmailConfirmationService } from "~/app/user/services/email_confirmation.service";
+import { EmailConfirmationService } from "~/app/user/email_confirmation/email_confirmation.service";
 import { Permission } from "~/entities/permission.entity";
 import { Role } from "~/entities/role.entity";
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";

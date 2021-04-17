@@ -1,6 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 
-import { UserResolver } from "~/app/user/resolvers/user.resolver";
+import { UserResolver } from "~/app/user/users/user.resolver";
 import { UserModule } from "~/app/user/user.module";
 import { Permission } from "~/entities/permission.entity";
 import { Role } from "~/entities/role.entity";

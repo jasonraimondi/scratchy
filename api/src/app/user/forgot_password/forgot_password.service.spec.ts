@@ -1,7 +1,7 @@
 import { TestingModule } from "@nestjs/testing";
 
 import { AccountModule } from "~/app/account/account.module";
-import { ForgotPasswordService } from "~/app/user/services/forgot_password.service";
+import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_password.service";
 import { Permission } from "~/entities/permission.entity";
 import { Role } from "~/entities/role.entity";
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";

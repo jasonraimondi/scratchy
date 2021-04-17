@@ -15,7 +15,7 @@ import { generateUser } from "../generators/generateUser";
 import { attachMiddlewares } from "../../src/lib/middleware/attach_middlewares";
 import { ForgotPasswordToken } from "../../src/entities/forgot_password.entity";
 import { EmailConfirmationToken } from "../../src/entities/email_confirmation.entity";
-import { MeResolver } from "../../src/app/user/resolvers/me.resolver";
+import { MeResolver } from "../../src/app/user/users/me.resolver";
 
 describe.skip(MeResolver, () => {
   const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];

@@ -2,7 +2,7 @@ import { Controller, Get, Injectable, Ip, Req, Res, UseGuards } from "@nestjs/co
 import { AuthGuard } from "@nestjs/passport";
 import type { FastifyRequest, FastifyReply } from "fastify";
 
-import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
+import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 

@@ -1,15 +1,14 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import { Injectable } from "@nestjs/common";
 
-import { ForgotPasswordService } from "~/app/user/services/forgot_password.service";
-import {
-  SendForgotPasswordInput,
-  UpdatePasswordFromTokenInput,
-  ValidateForgotPasswordTokenInput,
-} from "~/app/user/resolvers/account/inputs/forgot_password_input";
-import { LoginResponse } from "~/app/user/resolvers/account/responses/login_response";
+import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_password.service";
 import { MyContext } from "~/lib/graphql/my_context";
 import { AuthService } from "~/app/auth/services/auth.service";
+import { LoginResponse } from "~/app/auth/resolvers/auth.response";
+import {
+  SendForgotPasswordInput, UpdatePasswordFromTokenInput,
+  ValidateForgotPasswordTokenInput
+} from "~/app/user/forgot_password/forgot_password.input";
 
 @Injectable()
 @Resolver()
@@ -20,18 +19,18 @@ export class ForgotPasswordResolver {
   ) {}
 
   @Mutation(() => Boolean!)
-  async validateForgotPasswordToken(@Args("data") data: ValidateForgotPasswordTokenInput) {
+  async validateForgotPasswordToken(@Args("input") data: ValidateForgotPasswordTokenInput) {
     return this.forgotPasswordService.validateForgotPasswordToken(data);
   }
 
   @Mutation(() => Boolean)
-  sendForgotPasswordEmail(@Args("data") { email }: SendForgotPasswordInput) {
+  sendForgotPasswordEmail(@Args("input") { email }: SendForgotPasswordInput) {
     return this.forgotPasswordService.sendForgotPasswordEmail(email);
   }
 
   @Mutation(() => LoginResponse)
   async updatePasswordFromToken(
-    @Args("data") data: UpdatePasswordFromTokenInput,
+    @Args("input") data: UpdatePasswordFromTokenInput,
     @Context() { res, ipAddr }: MyContext,
   ): Promise<LoginResponse> {
     const user = await this.forgotPasswordService.updatePasswordFromToken(data);

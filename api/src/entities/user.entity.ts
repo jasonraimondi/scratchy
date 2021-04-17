@@ -3,7 +3,7 @@ import { IsEmail, IsIP, validate } from "class-validator";
 import { User as UserModel } from "@prisma/client";
 import { v4 } from "uuid";
 
-import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
+import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { Role } from "~/entities/role.entity";
 import { Permission } from "~/entities/permission.entity";
 import { checkPassword, setPassword } from "~/lib/util/password";

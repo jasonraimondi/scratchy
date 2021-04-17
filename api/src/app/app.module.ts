@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { AppController } from "~/app/app.controller";
-import { QueueWorkerModule } from "~/app/queue-workers/queue_worker.module";
+import { QueueWorkerModule } from "~/app/queue_workers/queue_worker.module";
 import { ENV } from "~/config/environments";
 import { graphqlConfig } from "~/config/graphql";
 import { LoggerModule } from "~/lib/logger/logger.module";

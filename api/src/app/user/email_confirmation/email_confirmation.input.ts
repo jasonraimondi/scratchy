@@ -8,6 +8,5 @@ export class VerifyEmailInput {
   email: string;
 
   @Field()
-  // @IsUUID("4")
   uuid: string;
 }

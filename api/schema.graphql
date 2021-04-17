@@ -47,17 +47,17 @@ input UserPaginatorInputs {
 }
 
 type Mutation {
-  login(data: LoginInput!): LoginResponse!
+  login(input: LoginInput!): LoginResponse!
   refreshAccessToken: LoginResponse!
   logout: Boolean
   revokeRefreshToken(userId: String!): Boolean
-  verifyEmailConfirmation(data: VerifyEmailInput!): Boolean!
-  validateForgotPasswordToken(data: ValidateForgotPasswordTokenInput!): Boolean!
-  sendForgotPasswordEmail(data: SendForgotPasswordInput!): Boolean!
-  updatePasswordFromToken(data: UpdatePasswordFromTokenInput!): LoginResponse!
-  register(data: RegisterInput!): User!
+  verifyEmailConfirmation(input: VerifyEmailInput!): Boolean!
+  validateForgotPasswordToken(input: ValidateForgotPasswordTokenInput!): Boolean!
+  sendForgotPasswordEmail(input: SendForgotPasswordInput!): Boolean!
+  updatePasswordFromToken(input: UpdatePasswordFromTokenInput!): LoginResponse!
+  register(input: RegisterInput!): User!
   resendConfirmEmail(email: String!): Boolean!
-  updatePassword(data: UpdatePasswordInput!): Boolean!
+  updatePassword(input: UpdatePasswordInput!): Boolean!
 }
 
 input LoginInput {

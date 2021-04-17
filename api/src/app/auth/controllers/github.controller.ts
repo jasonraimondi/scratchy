@@ -3,7 +3,7 @@ import { AuthGuard } from "@nestjs/passport";
 import type { FastifyRequest, FastifyReply } from "fastify";
 import querystring from "querystring";
 
-import { UnauthorizedException } from "~/app/user/exceptions/unauthorized.exception";
+import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { AuthService } from "~/app/auth/services/auth.service";

@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
-import { RegisterInput } from "~/app/user/resolvers/account/inputs/register.input";
+import { RegisterInput } from "~/app/user/register/register.input";
 import { createEmailConfirmation } from "~/entities/email_confirmation.entity";
 import { User } from "~/entities/user.entity";
 import { RegisterEmail } from "~/lib/email/emails/register.email";
@@ -20,22 +20,16 @@ export class RegisterResolver {
     this.logger.setContext(this.constructor.name);
   }
 
-  @Mutation(() => User)
-  async register(@Args("data") data: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
+  @Mutation(() => User!)
+  async register(@Args("input") data: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {
     return await this.registerUser(data, ipAddr);
   }
 
   @Mutation(() => Boolean!)
   async resendConfirmEmail(@Args("email") email: string): Promise<boolean> {
     const emailConfirmation = await this.emailConfirmationRepository.findByEmail(email);
-
-    try {
-      await this.registerEmail.send(emailConfirmation);
-      return true;
-    } catch (e) {
-      this.logger.error(e);
-    }
-    return false;
+    await this.registerEmail.send(emailConfirmation);
+    return true;
   }
 
   private async registerUser(registerInput: RegisterInput, ipAddr: string) {

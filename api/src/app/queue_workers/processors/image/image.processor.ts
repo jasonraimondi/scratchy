@@ -2,7 +2,7 @@ import { Job } from "bull";
 import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
 import { Process, Processor } from "@nestjs/bull";
 
-import { SendEmailProcessor } from "~/app/queue-workers/processors/email/send_email.processor";
+import { SendEmailProcessor } from "~/app/queue_workers/processors/email/send_email.processor";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/lib/email/services/email_template.service";
 import { UserRepository } from "~/lib/database/repositories/user.repository";

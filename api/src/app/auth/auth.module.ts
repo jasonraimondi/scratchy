@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 
 import { AuthService } from "~/app/auth/services/auth.service";
 import { DatabaseModule } from "~/lib/database/database.module";
-import { AuthResolver } from "~/app/auth/auth.resolver";
+import { AuthResolver } from "~/app/auth/resolvers/auth.resolver";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 
