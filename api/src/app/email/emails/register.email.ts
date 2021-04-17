@@ -2,7 +2,7 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
-import { EmailService } from "~/lib/email/services/email.service";
+import { EmailService } from "~/app/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
 import { LoggerService } from "~/lib/logger/logger.service";
 

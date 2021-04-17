@@ -1,4 +1,4 @@
-import { route } from "~/lib/util/route";
+import { route } from "~/lib/utils/route";
 
 test("route generation", () => {
   const myRoute = route("/photo/:photoId");

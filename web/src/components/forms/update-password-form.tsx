@@ -26,14 +26,14 @@ export function UpdatePasswordForm() {
       return;
     }
 
-    const data = {
+    const input = {
       currentPassword: formData.currentPassword,
       password: formData.password,
       userId: currentUser.userId,
     };
 
     try {
-      await graphQLSdk.UpdatePassword({ data });
+      await graphQLSdk.UpdatePassword({ input });
       reset();
       notify.success({ title: "Password Updated", message: "It worked!" });
     } catch (err) {

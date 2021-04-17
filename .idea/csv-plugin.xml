@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/api/src/lib/graphql/my_context.ts">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

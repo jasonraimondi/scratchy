@@ -37,9 +37,9 @@ function AuthProvider(props: any) {
 
   const cookies = useMemo(() => parseCookies(), [state.accessToken]);
 
-  async function login(loginParams: LoginParams) {
+  async function login(input: LoginParams) {
     try {
-      const { login } = await graphQLSdk.Login({ data: loginParams });
+      const { login } = await graphQLSdk.Login({ input });
       setAccessToken(login.accessToken);
       notify.success({ title: "Login Success", message: "" });
       await router.push("/app/dashboard");

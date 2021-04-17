@@ -17,6 +17,7 @@ FROM base as builder
 RUN npm ci --production=false
 COPY --chown=node:node next* /app/
 COPY --chown=node:node tsconfig* /app/
+COPY --chown=node:node postcss.config.js /app/
 COPY --chown=node:node public /app/public/
 COPY --chown=node:node generated /app/generated/
 COPY --chown=node:node pages /app/pages/

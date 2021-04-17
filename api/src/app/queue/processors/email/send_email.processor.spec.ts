@@ -7,8 +7,8 @@ import { Role } from "~/entities/role.entity";
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { User } from "~/entities/user.entity";
-import { QueueWorkerModule } from "~/app/queue_workers/queue_worker.module";
-import { SendEmailProcessor } from "~/app/queue_workers/processors/email/send_email.processor";
+import { QueueWorkerModule } from "~/app/queue/queue_worker.module";
+import { SendEmailProcessor } from "~/app/queue/processors/email/send_email.processor";
 import { createTestingModule } from "~test/app_testing.module";
 import { emails } from "~test/mock_email_service";
 

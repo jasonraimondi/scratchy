@@ -3,11 +3,11 @@ import { Args, Context, Int, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/services/auth.service";
 import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";
-import { MyContext } from "~/lib/graphql/my_context";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 import { LoginResponse } from "~/app/auth/resolvers/auth.response";
 import { LoginInput } from "~/app/auth/resolvers/auth.input";
+import { MyContext } from "~/config/context";
 
 @Resolver()
 export class AuthResolver {

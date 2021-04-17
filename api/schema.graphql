@@ -38,7 +38,7 @@ type UserPaginatorResponse {
 type Query {
   me: User!
   user(email: String!): User!
-  users(query: UserPaginatorInputs): UserPaginatorResponse!
+  users(input: UserPaginatorInputs): UserPaginatorResponse!
 }
 
 input UserPaginatorInputs {

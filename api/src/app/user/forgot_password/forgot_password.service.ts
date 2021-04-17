@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import { createForgotPassword, ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { User } from "~/entities/user.entity";
-import { ForgotPasswordEmail } from "~/lib/email/emails/forgot_password.email";
+import { ForgotPasswordEmail } from "~/app/email/emails/forgot_password.email";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";

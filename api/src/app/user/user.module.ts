@@ -12,7 +12,7 @@ import { TokenService } from "~/app/auth/services/token.service";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
-import { EmailModule } from "~/lib/email/email.module";
+import { EmailModule } from "~/app/email/email.module";
 import { UpdatePasswordResolver } from "~/app/user/update_password/update_password.resolver";
 
 @Module({

@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { Role } from "~/entities/role.entity";
 import { Permission } from "~/entities/permission.entity";
-import { checkPassword, setPassword } from "~/lib/util/password";
+import { checkPassword, setPassword } from "~/lib/utils/password";
 
 export { UserModel };
 

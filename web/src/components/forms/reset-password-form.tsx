@@ -20,10 +20,10 @@ export function ResetPasswordForm({ email, token }: { email: string; token: stri
 
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmit = async (foo: ResetPasswordFormData) => {
-    await graphQLSdk.ValidateForgotPasswordToken({ data: { token, email } });
+  const onSubmit = async (input: ResetPasswordFormData) => {
+    await graphQLSdk.ValidateForgotPasswordToken({ input: { token, email } });
     const data = await graphQLSdk.UpdatePasswordFromToken({
-      data: { password: foo.password, token, email },
+      input: { password: input.password, token, email },
     });
 
     if (data) {

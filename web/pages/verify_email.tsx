@@ -9,16 +9,14 @@ import { useRouter } from "next/router";
 
 type Props = { email: string; uuid: string };
 
-export default function VerifyEmail(data: Props) {
+export default function VerifyEmail(input: Props) {
   const [status, setStatus] = useState("Verifying Email...");
   const notify = useNotify();
   const router = useRouter();
 
   const handleVerifyUser = async () => {
     try {
-      const foo = await graphQLSdk.VerifyEmailConfirmation({ data });
-      notify.success("HI JASON");
-      console.log({ foo });
+      await graphQLSdk.VerifyEmailConfirmation({ input });
       setStatus("Success! Redirecting to login...");
       await sleep(750);
       await router.push("/login");

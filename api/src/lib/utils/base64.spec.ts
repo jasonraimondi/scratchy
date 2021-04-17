@@ -1,4 +1,4 @@
-import { base64decode, base64encode } from "~/lib/util/base64";
+import { base64decode, base64encode } from "~/lib/utils/base64";
 
 describe("base64 helper", () => {
   const encoded = "amFzb25yYWltb25kaQ==";

@@ -1,10 +1,10 @@
 import { GqlModuleOptions } from "@nestjs/graphql/dist/interfaces/gql-module-options.interface";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 
-import { GraphqlLogger } from "~/lib/graphql/graphql_logger.service";
-import { MyContext } from "~/lib/graphql/my_context";
 import { ENV } from "~/config/environments";
 import { CORS } from "~/config/cors";
+import { GraphqlLogger } from "~/lib/logger/graphql.logger";
+import { MyContext } from "~/config/context";
 
 export const graphqlConfig: GqlModuleOptions = {
   logger: new GraphqlLogger(),

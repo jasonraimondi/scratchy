@@ -62,7 +62,7 @@ export type QueryUserArgs = {
 
 
 export type QueryUsersArgs = {
-  query?: Maybe<UserPaginatorInputs>;
+  input?: Maybe<UserPaginatorInputs>;
 };
 
 export type UserPaginatorInputs = {
@@ -87,7 +87,7 @@ export type Mutation = {
 
 
 export type MutationLoginArgs = {
-  data: LoginInput;
+  input: LoginInput;
 };
 
 
@@ -97,27 +97,27 @@ export type MutationRevokeRefreshTokenArgs = {
 
 
 export type MutationVerifyEmailConfirmationArgs = {
-  data: VerifyEmailInput;
+  input: VerifyEmailInput;
 };
 
 
 export type MutationValidateForgotPasswordTokenArgs = {
-  data: ValidateForgotPasswordTokenInput;
+  input: ValidateForgotPasswordTokenInput;
 };
 
 
 export type MutationSendForgotPasswordEmailArgs = {
-  data: SendForgotPasswordInput;
+  input: SendForgotPasswordInput;
 };
 
 
 export type MutationUpdatePasswordFromTokenArgs = {
-  data: UpdatePasswordFromTokenInput;
+  input: UpdatePasswordFromTokenInput;
 };
 
 
 export type MutationRegisterArgs = {
-  data: RegisterInput;
+  input: RegisterInput;
 };
 
 
@@ -127,7 +127,7 @@ export type MutationResendConfirmEmailArgs = {
 
 
 export type MutationUpdatePasswordArgs = {
-  data: UpdatePasswordInput;
+  input: UpdatePasswordInput;
 };
 
 export type LoginInput = {
@@ -168,6 +168,7 @@ export type UpdatePasswordInput = {
   userId: Scalars['String'];
   currentPassword: Scalars['String'];
   password: Scalars['String'];
+  revokeToken?: Maybe<Scalars['Boolean']>;
 };
 
 export type SendForgotPasswordEmailMutationVariables = Exact<{
@@ -181,7 +182,7 @@ export type SendForgotPasswordEmailMutation = (
 );
 
 export type UpdatePasswordFromTokenMutationVariables = Exact<{
-  data: UpdatePasswordFromTokenInput;
+  input: UpdatePasswordFromTokenInput;
 }>;
 
 
@@ -198,7 +199,7 @@ export type UpdatePasswordFromTokenMutation = (
 );
 
 export type ValidateForgotPasswordTokenMutationVariables = Exact<{
-  data: ValidateForgotPasswordTokenInput;
+  input: ValidateForgotPasswordTokenInput;
 }>;
 
 
@@ -208,7 +209,7 @@ export type ValidateForgotPasswordTokenMutation = (
 );
 
 export type LoginMutationVariables = Exact<{
-  data: LoginInput;
+  input: LoginInput;
 }>;
 
 
@@ -269,7 +270,7 @@ export type MeQuery = (
 );
 
 export type UpdatePasswordMutationVariables = Exact<{
-  data: UpdatePasswordInput;
+  input: UpdatePasswordInput;
 }>;
 
 
@@ -279,7 +280,7 @@ export type UpdatePasswordMutation = (
 );
 
 export type RegisterMutationVariables = Exact<{
-  data: RegisterInput;
+  input: RegisterInput;
 }>;
 
 
@@ -292,7 +293,7 @@ export type RegisterMutation = (
 );
 
 export type VerifyEmailConfirmationMutationVariables = Exact<{
-  data: VerifyEmailInput;
+  input: VerifyEmailInput;
 }>;
 
 
@@ -317,12 +318,12 @@ export type UserQuery = (
 
 export const SendForgotPasswordEmailDocument = `
     mutation SendForgotPasswordEmail($email: String!) {
-  sendForgotPasswordEmail(data: {email: $email})
+  sendForgotPasswordEmail(input: {email: $email})
 }
     `;
 export const UpdatePasswordFromTokenDocument = `
-    mutation UpdatePasswordFromToken($data: UpdatePasswordFromTokenInput!) {
-  updatePasswordFromToken(data: $data) {
+    mutation UpdatePasswordFromToken($input: UpdatePasswordFromTokenInput!) {
+  updatePasswordFromToken(input: $input) {
     accessToken
     user {
       email
@@ -334,13 +335,13 @@ export const UpdatePasswordFromTokenDocument = `
 }
     `;
 export const ValidateForgotPasswordTokenDocument = `
-    mutation ValidateForgotPasswordToken($data: ValidateForgotPasswordTokenInput!) {
-  validateForgotPasswordToken(data: $data)
+    mutation ValidateForgotPasswordToken($input: ValidateForgotPasswordTokenInput!) {
+  validateForgotPasswordToken(input: $input)
 }
     `;
 export const LoginDocument = `
-    mutation Login($data: LoginInput!) {
-  login(data: $data) {
+    mutation Login($input: LoginInput!) {
+  login(input: $input) {
     accessToken
     user {
       id
@@ -384,13 +385,13 @@ export const MeDocument = `
 }
     `;
 export const UpdatePasswordDocument = `
-    mutation UpdatePassword($data: UpdatePasswordInput!) {
-  updatePassword(data: $data)
+    mutation UpdatePassword($input: UpdatePasswordInput!) {
+  updatePassword(input: $input)
 }
     `;
 export const RegisterDocument = `
-    mutation Register($data: RegisterInput!) {
-  register(data: $data) {
+    mutation Register($input: RegisterInput!) {
+  register(input: $input) {
     id
     name
     email
@@ -398,8 +399,8 @@ export const RegisterDocument = `
 }
     `;
 export const VerifyEmailConfirmationDocument = `
-    mutation VerifyEmailConfirmation($data: VerifyEmailInput!) {
-  verifyEmailConfirmation(data: $data)
+    mutation VerifyEmailConfirmation($input: VerifyEmailInput!) {
+  verifyEmailConfirmation(input: $input)
 }
     `;
 export const UserDocument = `

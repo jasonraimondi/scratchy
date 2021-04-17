@@ -1,4 +1,4 @@
-import { arrayDiff } from "~/lib/util/array";
+import { arrayDiff } from "~/lib/utils/array";
 
 test(arrayDiff.name, () => {
   expect(arrayDiff([1, 2, 3], [1, 3])).toStrictEqual([2]);

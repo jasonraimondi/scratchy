@@ -15,7 +15,7 @@ export class UserResolver {
   }
 
   @Query(() => UserPaginatorResponse!)
-  users(@Args("query", { nullable: true }) query?: UserPaginatorInputs): Promise<UserPaginatorResponse> {
+  users(@Args("input", { nullable: true }) query?: UserPaginatorInputs): Promise<UserPaginatorResponse> {
     return this.userRepository.list(query);
   }
 }

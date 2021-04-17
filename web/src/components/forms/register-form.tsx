@@ -30,10 +30,10 @@ export function RegisterForm() {
   const [status, setStatus] = useState<string>();
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (input: RegisterFormData) => {
     setSubmitting(true);
     try {
-      await graphQLSdk.Register({ data });
+      await graphQLSdk.Register({ input });
       setSubmitting(false);
       await router.push("/register/success");
     } catch (e) {

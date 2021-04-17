@@ -28,9 +28,9 @@ Cypress.Commands.add("login", ({ email, password, rememberMe = true }, method = 
   if (rememberMe) cy.dataTest("login-form--remember").click();
   cy.dataTest("login-form--submit").click();
   cy.wait("@mutateLogin").then(({ request }) => {
-    expect(request.body.variables.data.email).to.equal(email);
-    expect(request.body.variables.data.password).to.equal(password);
-    expect(request.body.variables.data.rememberMe).to.be.equal(rememberMe);
+    expect(request.body.variables.input.email).to.equal(email);
+    expect(request.body.variables.input.password).to.equal(password);
+    expect(request.body.variables.input.rememberMe).to.be.equal(rememberMe);
   });
   // } else if (method === "api") {
   //   cy.request({

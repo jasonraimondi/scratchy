@@ -1,4 +1,4 @@
-import { route } from "~/lib/util/route";
+import { route } from "~/lib/utils/route";
 
 export const WEB_ROUTES = {
   verify_email: route("/verify_email?e=:email&u=:id"),

@@ -5,7 +5,7 @@ import { JwtAuthGqlGuard } from "~/app/auth/guards/jwt_auth.guard";
 import { User } from "~/entities/user.entity";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { ContextUser } from "~/lib/graphql/context_user.decorator";
+import { ContextUser } from "~/lib/decorators/context_user.decorator";
 
 @Resolver()
 export class MeResolver {
