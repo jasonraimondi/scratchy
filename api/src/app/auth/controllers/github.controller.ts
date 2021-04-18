@@ -32,10 +32,10 @@ export class GithubController {
       user = await this.userRepository.findByEmail(user.email);
     }
 
-    const token = await this.loginService.login({ user, res, rememberMe: true });
+    // const token = await this.loginService.login({ user, res, rememberMe: true });
 
-    res
-      .status(302)
-      .redirect(`https://scratchy.localdomain/callback?${querystring.stringify({ token: token.accessToken })}`);
+    // res
+    //   .status(302)
+    //   .redirect(`https://scratchy.localdomain/callback?${querystring.stringify({ token: token.accessToken })}`);
   }
 }

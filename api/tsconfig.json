@@ -33,6 +33,6 @@
       "./node_modules/@types"
     ]
   },
-  "include": ["src/**/*", "prisma/**/*.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

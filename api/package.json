@@ -17,6 +17,7 @@
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "db:seed": "prisma db seed --preview-feature",
     "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
