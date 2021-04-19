@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scratchy-mailbox
+  namespace: scratchy-ns
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+    - hosts:
+        - scratchy.localdomain
+      secretName: scratchy-tls
+  rules:
+    - host: scratchy.localdomain
+      http:
+        paths:
+          - path: /mail/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: scratchy-mailbox
+                port:
+                  number: 8025

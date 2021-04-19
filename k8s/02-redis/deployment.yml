@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scratchy-redis
+  namespace: scratchy-ns
+  labels:
+
+spec:
+  replicas: 1
+  minReadySeconds: 15
+  selector:
+    matchLabels:
+      app: scratchy-redis-label
+  template:
+    metadata:
+      labels:
+        app: scratchy-redis-label
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: scratchy-redis
+          image: "redis:latest"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi

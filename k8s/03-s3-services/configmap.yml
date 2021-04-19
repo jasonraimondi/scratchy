@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scratchy-s3-services-create-bucket-configmap
+  namespace: scratchy-ns
+data:
+  initialize: |-
+    #!/bin/ash
+    set -euo pipefail
+    
+    MC_BIN=${MC_BIN:-/usr/bin/mc}
+    
+    BUCKET=${1:-scratchy}
+    POLICY=${2:-public}
+    PURGE=${3:-false}
+    
+    ATTEMPTS=${ATTEMPTS:-0}
+    LIMIT=${LIMIT:-29}
+    
+    SCHEME=${SCHEME:-http}
+    HOST=${HOST:-scratchy-s3-services}
+    PORT=${PORT:-9000}
+    
+    MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-miniominiominio}
+    MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-miniominiominio}
+    
+    echo "Connecting to Minio server: $SCHEME://$HOST:$PORT"
+    MC_COMMAND="mc config host add myminio $SCHEME://$HOST:$PORT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY"
+    
+    set +e
+    $MC_COMMAND
+    STATUS=$?
+    
+    until [ $STATUS = 0 ]; do
+      ATTEMPTS=`expr $ATTEMPTS + 1`
+      echo \"Failed attempts: "$ATTEMPTS"\"
+      [ $ATTEMPTS -gt $LIMIT ] && exit 1
+      sleep 2
+      $MC_COMMAND
+      STATUS=$?
+    done
+    set -e
+    
+    if $($MC_BIN ls myminio/$BUCKET > /dev/null 2>&1); then
+      if [ "$PURGE" = true ]; then
+        echo "Purging bucket '$BUCKET'."
+        set +e
+        $MC_BIN rm -r --force myminio/"$BUCKET"
+        set -e
+      fi
+    else
+      echo "Creating bucket '$BUCKET'"
+      $MC_BIN mb myminio/"$BUCKET"
+    fi
+    
+    echo "Setting policy of bucket '$BUCKET' to '$POLICY'."
+    set -x
+    $MC_BIN policy set "$POLICY" myminio/"$BUCKET"

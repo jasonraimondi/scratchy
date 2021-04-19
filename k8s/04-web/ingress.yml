@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scratchy-web
+  namespace: scratchy-ns
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+        - scratchy.localdomain
+      secretName: scratchy-tls
+  rules:
+    - host: scratchy.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scratchy-web
+                port:
+                  number: 3000

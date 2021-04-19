@@ -1,44 +1,55 @@
 version: "3.7"
 
 services:
-  traefik:
-    image: "traefik:v2.3"
-    command:
-      - "--log.level=INFO"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+  caddy:
+    image: caddy:2-alpine
     ports:
       - "80:80"
-      - "3000:3000"
+      - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
 
-  app:
-    build: .
-    image: jasonraimondi/scratchy:dev
+  web:
+    build: web/
+    image: jasonraimondi/scratchy-web:dev
     ports:
-      - 3001:3001
-    env_file:
-      - .env.docker
+      - 3000:3000
     depends_on:
       - pg
       - mailhog
       - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`scratchy.localdomain`)"
-      - "traefik.http.routers.app.entrypoints=web"
-      - "traefik.http.services.app.loadbalancer.server.port=3001"
+
+  api:
+    build: api/
+    image: jasonraimondi/scratchy-api:dev
+    ports:
+      - 3001:3001
+    environment:
+      NODE_ENV: "production"
+      JWT_SECRET: "jUcizxqjvqPh2d3$bQp#Sy!3ScBiuNO2LC1"
+      SALT: "qw^f6bq@iu%ga4kdjbewwen2@fsd"
+      ENABLE_DEBUGGING: "true"
+      URL: "https://scratchy.localdomain"
+      API_URL: "https://scratchy.localdomain/api"
+      DATABASE_URL: "postgres://scratchy:secret@pg:5432/scratchy"
+      MAILER_URL: "smtp://mailhog:1025"
+      QUEUE_URL: "redis://redis:6379/0"
+      OAUTH_GOOGLE_ID: ""
+      OAUTH_GOOGLE_SECRET: ""
+      OAUTH_GITHUB_ID: ""
+      OAUTH_GITHUB_SECRET: ""
+    depends_on:
+      - pg
+      - mailhog
+      - redis
 
   worker:
     image: jasonraimondi/scratchy:dev
     command:
       - node
       - /app/dist/worker.js
-    env_file:
-      - .env.docker
     depends_on:
       - pg
       - mailhog
@@ -50,9 +61,11 @@ services:
       - npm
       - run
       - seed
-    env_file:
-      - .env.docker
     depends_on:
       - pg
       - mailhog
       - redis
+
+volumes:
+  caddy-data:
+  caddy-config:

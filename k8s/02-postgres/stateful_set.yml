@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: scratchy-postgres
+  namespace: scratchy-ns
+spec:
+  serviceName: scratchy-postgres
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scratchy-postgres-label # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: scratchy-postgres-label
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: scratchy-postgres
+          image: "postgres:12.2-alpine"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 128Mi
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB
+                  name: pg-config
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: pg-config
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: pg-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: scratchy-postgres-volume
+              subPath: data
+  volumeClaimTemplates:
+    - metadata:
+        name: scratchy-postgres-volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: scratchy-default-storage-class

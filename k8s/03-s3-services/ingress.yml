@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scratchy-s3-services
+  namespace: scratchy-ns
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: "media.scratchy.localdomain"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scratchy-s3-services
+                port:
+                  number: 9000
+
+    - host: "*.media.scratchy.localdomain"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scratchy-s3-services
+                port:
+                  number: 9000

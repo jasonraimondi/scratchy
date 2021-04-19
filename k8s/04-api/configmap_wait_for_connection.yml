@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wait-for-connection
+  namespace: scratchy-ns
+data:
+  wait-for-connection.sh: |
+    until pg_isready -h $POSTGRES_HOST -U scratchy -d $POSTGRES_DB; do
+      echo "Waiting for database - $POSTGRES_HOST"
+      sleep 2
+    done

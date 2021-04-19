@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scratchy-web
+  namespace: scratchy-ns
+spec:
+  minReadySeconds: 5
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: scratchy-web-label
+  template:
+    metadata:
+      labels:
+        app: scratchy-web-label
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: scratchy-web
+          image: "jasonraimondi/scratchy-web:latest"
+          imagePullPolicy: Always
+          startupProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 0
+            periodSeconds: 1
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 12
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_ENV
+                  name: web-config
+            - name: NEXT_PUBLIC_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: NEXT_PUBLIC_API_URL
+                  name: web-config

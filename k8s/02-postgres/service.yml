@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scratchy-postgres
+  namespace: scratchy-ns
+spec:
+  selector:
+    app: scratchy-postgres-label
+  ports:
+    - port: 5432
+      targetPort: 5432

@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: scratchy-worker
+  namespace: scratchy-ns
+  labels:
+
+spec:
+  serviceName: scratchy-worker
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scratchy-worker-label # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: scratchy-worker-label # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 90
+      restartPolicy: Always
+      tolerations:
+        - key: "NodeWithImpairedVolumes"
+          operator: "Equal"
+          effect: "NoSchedule"
+      containers:
+        - name: scratchy-worker
+          image: "jasonraimondi/scratchy-api:latest"
+          command:
+            - node
+            - /app/dist/worker.js
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          env:
+
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_ENV
+                  name: api-config
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_SECRET
+                  name: api-config
+            - name: SALT
+              valueFrom:
+                configMapKeyRef:
+                  key: SALT
+                  name: api-config
+            - name: ENABLE_DEBUGGING
+              valueFrom:
+                configMapKeyRef:
+                  key: ENABLE_DEBUGGING
+                  name: api-config
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: api-config
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: API_URL
+                  name: api-config
+            - name: MAILER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: MAILER_URL
+                  name: api-config
+            - name: QUEUE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: QUEUE_URL
+                  name: api-config
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: api-config
+            - name: OAUTH_GOOGLE_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GOOGLE_ID
+                  name: api-config
+            - name: OAUTH_GOOGLE_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GOOGLE_SECRET
+                  name: api-config
+            - name: OAUTH_GITHUB_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GITHUB_ID
+                  name: api-config
+            - name: OAUTH_GITHUB_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GITHUB_SECRET
+                  name: api-config
+
+          volumeMounts:
+            - mountPath: /app/public/system/zips
+              name: scratchy-worker-volume
+              subPath: zips
+  volumeClaimTemplates:
+    - metadata:
+        name: scratchy-worker-volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: scratchy-default-storage-class

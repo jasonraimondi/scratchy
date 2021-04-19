@@ -1,0 +1,16 @@
+---
+# Source: scratchy/templates/04-worker/pod_disruption_budget.yml
+# disabled on preproduction environment
+
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: scratchy-worker
+  namespace: scratchy-ns
+  labels:
+
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: scratchy-worker-label

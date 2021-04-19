@@ -1,0 +1,25 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: scratchy-web
+  namespace: scratchy-ns
+spec:
+  maxReplicas: 1
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: scratchy-web
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Value
+          averageUtilization: 85
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Value
+          averageUtilization: 85

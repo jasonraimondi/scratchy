@@ -14,6 +14,7 @@ COPY --chown=node:node package.json package-lock.json /app/
 USER node
 
 FROM base as builder
+ENV NEXT_PUBLIC_API_URL="/api/"
 RUN npm ci --production=false
 COPY --chown=node:node next* /app/
 COPY --chown=node:node tsconfig* /app/

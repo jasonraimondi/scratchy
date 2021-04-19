@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scratchy-mailbox
+  namespace: scratchy-ns
+spec:
+  ports:
+    - name: smtp
+      port: 1025
+      targetPort: 1025
+    - name: web
+      port: 8025
+      targetPort: 8025
+  selector:
+    app: scratchy-mailbox-label

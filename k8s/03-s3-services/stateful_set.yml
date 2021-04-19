@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: scratchy-s3-services
+  namespace: scratchy-ns
+spec:
+  serviceName: scratchy-s3-services
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scratchy-s3-services-label # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: scratchy-s3-services-label
+    spec:
+      terminationGracePeriodSeconds: 10
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#            - matchExpressions:
+#              - key: failure-domain.beta.kubernetes.io/zone
+#                operator: In
+#                values:
+#                  - us-east-1a
+      restartPolicy: Always
+      tolerations:
+        - key: "NodeWithImpairedVolumes"
+          operator: "Equal"
+          effect: "NoSchedule"
+      containers:
+        - name: scratchy-s3-services
+          image: "minio/minio:RELEASE.2020-06-03T22-13-49Z"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          command: ["minio","server","/data"]
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: miniominiominio
+            - name: MINIO_SECRET_KEY
+              value: miniominiominio
+            - name: MINIO_HTTP_TRACE
+              value: "/dev/stdout"
+          volumeMounts:
+            - mountPath: /data
+              name: scratchy-s3-services-volume
+              subPath: data
+  volumeClaimTemplates:
+    - metadata:
+        name: scratchy-s3-services-volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: scratchy-default-storage-class

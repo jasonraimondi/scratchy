@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+  namespace: scratchy-ns
+data:
+  NODE_ENV: "production"
+  JWT_SECRET: "jUcizxqjvqPh2d3$bQp#Sy!3ScBiuNO2LC1"
+  SALT: "qw^f6bq@iu%ga4kdjbewwen2@fsd"
+  ENABLE_DEBUGGING: "true"
+  URL: "https://scratchy.localdomain"
+  API_URL: "https://scratchy.localdomain/api"
+  DATABASE_URL: "postgres://scratchy:secret@scratchy-postgres:5432/scratchy"
+  MAILER_URL: "smtp://scratchy-mailbox:1025"
+  QUEUE_URL: "redis://scratchy-redis:6379/0"
+  OAUTH_GOOGLE_ID: ""
+  OAUTH_GOOGLE_SECRET: ""
+  OAUTH_GITHUB_ID: ""
+  OAUTH_GITHUB_SECRET: ""

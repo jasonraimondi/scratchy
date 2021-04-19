@@ -1,6 +1,8 @@
 {
+    debug
     local_certs
     https_port 443
+    # email youremail@domain.com
 }
 
 scratchy.localdomain/api/* {
@@ -8,15 +10,12 @@ scratchy.localdomain/api/* {
     reverse_proxy 127.0.0.1:3001
 }
 
+scratchy.localdomain/mail/* {
+    uri strip_prefix /mail
+    reverse_proxy 127.0.0.1:8026
+}
+
 scratchy.localdomain {
     reverse_proxy 127.0.0.1:3000
 }
 
-scratchy.localdomain/db {
-    reverse_proxy 127.0.0.1:35432
-}
-
-scratchy.localdomain/mail {
-    uri strip_prefix /mail
-    reverse_proxy 127.0.0.1:8026
-}

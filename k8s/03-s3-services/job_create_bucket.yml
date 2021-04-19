@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scratchy-s3-services-create-bucket
+  namespace: scratchy-ns
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-2"
+    "helm.sh/hook-delete-policy": "hook-succeeded, before-hook-creation"
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: scratchy-s3-services-create-bucket
+          image: "minio/mc:RELEASE.2020-05-28T23-43-36Z"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/ash"
+            - "/config/initialize"
+            - "scratchy"
+            - "public"
+            - "true"
+          env:
+            - name: HOST
+              value: "scratchy-s3-services"
+            - name: PORT
+              value: "9000"
+            - name: MINIO_ACCESS_KEY
+              value: "miniominiominio"
+            - name: MINIO_SECRET_KEY
+              value: "miniominiominio"
+          volumeMounts:
+            - name: minio-configuration
+              mountPath: /config
+      volumes:
+        - name: minio-configuration
+          configMap:
+            name: scratchy-s3-services-create-bucket-configmap

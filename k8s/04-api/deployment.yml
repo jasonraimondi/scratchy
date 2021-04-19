@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scratchy-api
+  namespace: scratchy-ns
+spec:
+  minReadySeconds: 5
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: scratchy-api-label
+  template:
+    metadata:
+      labels:
+        app: scratchy-api-label
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: scratchy-api
+          image: "jasonraimondi/scratchy-api:latest"
+          imagePullPolicy: IfNotPresent
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: 3001
+            initialDelaySeconds: 0
+            periodSeconds: 1
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 3001
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 12
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_ENV
+                  name: api-config
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_SECRET
+                  name: api-config
+            - name: SALT
+              valueFrom:
+                configMapKeyRef:
+                  key: SALT
+                  name: api-config
+            - name: ENABLE_DEBUGGING
+              valueFrom:
+                configMapKeyRef:
+                  key: ENABLE_DEBUGGING
+                  name: api-config
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: api-config
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: API_URL
+                  name: api-config
+            - name: MAILER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: MAILER_URL
+                  name: api-config
+            - name: QUEUE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: QUEUE_URL
+                  name: api-config
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: api-config
+            - name: OAUTH_GOOGLE_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GOOGLE_ID
+                  name: api-config
+            - name: OAUTH_GOOGLE_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GOOGLE_SECRET
+                  name: api-config
+            - name: OAUTH_GITHUB_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GITHUB_ID
+                  name: api-config
+            - name: OAUTH_GITHUB_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: OAUTH_GITHUB_SECRET
+                  name: api-config
