@@ -16,10 +16,7 @@ export function RevokeToken() {
   }
 
   return (
-    <Button
-       data-test="revoke-refresh-token"
-       onClick={handleRevokeToken}
-    >
+    <Button data-test="revoke-refresh-token" onClick={handleRevokeToken}>
       Revoke Refresh Token
     </Button>
   );

@@ -43,9 +43,7 @@ export function LoginForm() {
         {formState.errors.rememberMe && <span>{formState.errors.rememberMe.message}</span>}
       </FormControl>
 
-      <Button data-test="login-form--submit">
-        Submit
-      </Button>
+      <Button data-test="login-form--submit">Submit</Button>
     </form>
   );
 }

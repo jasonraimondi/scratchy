@@ -62,8 +62,8 @@ const ENV = {
   //   secretKey: process.env.AWS_S3_SECRET_KEY!,
   // },
   mailer: {
-    from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`
-  }
+    from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
+  },
 };
 
 export { ENV };

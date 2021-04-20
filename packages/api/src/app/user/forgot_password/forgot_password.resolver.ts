@@ -5,8 +5,9 @@ import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_passwor
 import { AuthService } from "~/app/auth/services/auth.service";
 import { LoginResponse } from "~/app/auth/resolvers/auth.response";
 import {
-  SendForgotPasswordInput, UpdatePasswordFromTokenInput,
-  ValidateForgotPasswordTokenInput
+  SendForgotPasswordInput,
+  UpdatePasswordFromTokenInput,
+  ValidateForgotPasswordTokenInput,
 } from "~/app/user/forgot_password/forgot_password.input";
 import { MyContext } from "~/config/context";
 

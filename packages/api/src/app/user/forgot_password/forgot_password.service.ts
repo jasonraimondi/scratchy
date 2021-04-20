@@ -8,7 +8,7 @@ import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_pas
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import {
   UpdatePasswordFromTokenInput,
-  ValidateForgotPasswordTokenInput
+  ValidateForgotPasswordTokenInput,
 } from "~/app/user/forgot_password/forgot_password.input";
 
 @Injectable()

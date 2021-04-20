@@ -7,9 +7,9 @@ export default function Dashboard() {
 
   return (
     <Layout title="I am the dashboard" isPrivate={true}>
-      <pre><code>
-        {JSON.stringify(currentUser, null, 2)}
-      </code></pre>
+      <pre>
+        <code>{JSON.stringify(currentUser, null, 2)}</code>
+      </pre>
     </Layout>
   );
 }

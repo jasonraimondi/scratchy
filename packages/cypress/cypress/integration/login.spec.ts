@@ -29,7 +29,7 @@ describe("Login Spec", () => {
     cy.dataTest("login-form--submit").click();
     cy.contains("email is a required field");
     cy.contains("password must be at least 8 characters").should("not.exist");
-  })
+  });
 
   it.skip("can trigger forgot password", function () {
     const email = "jason@raimondi.us";

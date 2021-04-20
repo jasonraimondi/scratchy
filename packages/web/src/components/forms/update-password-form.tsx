@@ -61,9 +61,7 @@ export function UpdatePasswordForm() {
         {formState.errors.password && <span>{formState.errors.password.message}</span>}
       </FormControl>
 
-      <Button data-test="update-password-form--submit">
-        Submit
-      </Button>
+      <Button data-test="update-password-form--submit">Submit</Button>
     </form>
   );
 }

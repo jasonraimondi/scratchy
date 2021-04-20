@@ -11,9 +11,7 @@ export default function Profile() {
     <Layout title="profile" isPrivate>
       <RevokeToken />
       <Button onClick={() => setShow(!show)}>Update Password</Button>
-      <div>
-        {show && <UpdatePasswordForm />}
-      </div>
+      <div>{show && <UpdatePasswordForm />}</div>
     </Layout>
   );
 }
