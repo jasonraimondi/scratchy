@@ -3,14 +3,13 @@ import { PrismaClient } from "@prisma/client";
 
 import { LoggerService } from "~/lib/logger/logger.service";
 import { ENV } from "~/config/environments";
-// import { ENV } from "~/config/environments";
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly logger: LoggerService) {
     super({
       rejectOnNotFound: true,
-      log: ENV.enableDebugging ? ["query", "info", "warn", "error"] : [],
+      log: ENV.enableDebugging && !ENV.isTesting ? ["query", "info", "warn", "error"] : [],
     });
     this.logger.setContext(this.constructor.name);
   }

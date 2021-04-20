@@ -1,7 +1,6 @@
 import { TestingModule } from "@nestjs/testing";
 
 import { User } from "~/entities/user.entity";
-import { Order } from "~/lib/database/dtos/inputs/paginator.inputs";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { createTestingModule } from "~test/app_testing.module";
 import { generateUser } from "~test/generators/generateUser";
@@ -27,11 +26,11 @@ describe("user repositories", () => {
   });
 
   test.only("limits and order desc", async () => {
-    const data = await userRepository.list({ take: 3, order: "desc" });
+    const data = await userRepository.list();
     console.log(data);
     // const [user1, user2, user3] = users;
 
-    expect(data.length).toBe(3);
+    expect(data.data.length).toBe(3);
     // expect(data[0].id).toBe(user1.id);
     // expect(data[1].id).toBe(user2.id);
     // expect(data[2].id).toBe(user3.id);

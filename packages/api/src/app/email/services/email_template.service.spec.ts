@@ -8,18 +8,18 @@ describe(EmailTemplateService.name, () => {
   });
 
   it("txt email templates render", async () => {
-    const foo = emailTemplateService.txt("test/hello-world", { name: "World" });
-    expect(foo).toBe("Hello World");
+    const template = emailTemplateService.txt("test/hello-world", { name: "World" });
+    expect(template).toBe("Hello World");
   });
 
   it("html email templates render", async () => {
-    const foo = emailTemplateService.html("test/hello-world", { name: "World" });
-    expect(foo).toBe("<p>Hello World</p>");
+    const template = emailTemplateService.html("test/hello-world", { name: "World" });
+    expect(template).toBe("<p>Hello World</p>");
   });
 
   it("mjml email templates render", async () => {
-    const foo = emailTemplateService.html("test/hello-mjml", { name: "World" });
-    expect(foo.includes("<!doctype html>")).toBeTruthy();
-    expect(foo.trim().endsWith("</html>")).toBeTruthy();
+    const template = emailTemplateService.html("test/hello-mjml", { name: "World" });
+    expect(template.includes("<!doctype html>")).toBeTruthy();
+    expect(template.trim().endsWith("</html>")).toBeTruthy();
   });
 });

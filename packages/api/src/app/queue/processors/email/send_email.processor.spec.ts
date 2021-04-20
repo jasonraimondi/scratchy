@@ -2,19 +2,12 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { TestingModule } from "@nestjs/testing";
 import { Job } from "bull";
 
-import { Permission } from "~/entities/permission.entity";
-import { Role } from "~/entities/role.entity";
-import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
-import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
-import { User } from "~/entities/user.entity";
 import { QueueWorkerModule } from "~/app/queue/queue_worker.module";
 import { SendEmailProcessor } from "~/app/queue/processors/email/send_email.processor";
 import { createTestingModule } from "~test/app_testing.module";
 import { emails } from "~test/mock_email_service";
 
 describe("send_email processor", () => {
-  const entities = [User, Role, Permission, ForgotPasswordToken, EmailConfirmationToken];
-
   let moduleRef: TestingModule;
   let resolver: SendEmailProcessor;
 
@@ -31,8 +24,7 @@ describe("send_email processor", () => {
   };
 
   beforeAll(async () => {
-    // moduleRef = await createTestingModule({ providers: [SendEmailProcessor, EmailTemplateService] }, entities);
-    moduleRef = await createTestingModule({ imports: [QueueWorkerModule] }, entities);
+    moduleRef = await createTestingModule({ imports: [QueueWorkerModule] });
     resolver = moduleRef.get(SendEmailProcessor);
   });
 

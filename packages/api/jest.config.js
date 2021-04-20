@@ -20,8 +20,8 @@ module.exports = {
   // coverageDirectory: "<rootDir>/coverage",
   // collectCoverage: true,
   // coverageReporters: ["lcov"],
-  testEnvironment: path.join(__dirname, 'prisma', 'prisma-test-environment.js'),
   setupFiles: [
     "<rootDir>/test/jest_setup.ts",
   ],
+  testEnvironment: "<rootDir>/prisma/prisma-test-environment.js",
 };

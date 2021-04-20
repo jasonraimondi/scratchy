@@ -10,6 +10,8 @@ type Relations = {
   user: UserModel;
 };
 
+export { ForgotPasswordTokenModel };
+
 @ObjectType()
 export class ForgotPasswordToken implements ForgotPasswordTokenModel {
   constructor({ user, ...entity }: ForgotPasswordTokenModel & Relations) {
