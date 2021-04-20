@@ -35,10 +35,10 @@ jobs:
       - name: install deps and build (with cache)
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: api
+          working-directory: packages/api
       - name: run api unit tests
         run: npm run test:cov --ci --maxWorkers=2
-        working-directory: api
+        working-directory: packages/api
         env:
           CI: true
           URL: http://localhost
@@ -49,9 +49,9 @@ jobs:
           OAUTH_GITHUB_SECRET: abcdefg
       - name: run api build
         run: npm run build --if-present
-        working-directory: api
+        working-directory: packages/api
       - name: report coverage to code climate
-        working-directory: api
+        working-directory: packages/api
         if: matrix.os == 'ubuntu-latest'
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
