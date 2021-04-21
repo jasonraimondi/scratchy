@@ -14,6 +14,10 @@ export class RegisterInput extends PasswordInput {
   id?: string;
 
   @Field({ nullable: true })
+  @IsOptional()
+  declare password?: string;
+
+  @Field({ nullable: true })
   firstName?: string;
 
   @Field({ nullable: true })
@@ -22,8 +26,4 @@ export class RegisterInput extends PasswordInput {
   @Field()
   @IsEmail()
   email: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  password?: string;
 }

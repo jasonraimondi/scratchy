@@ -9,18 +9,15 @@ import { createEmailConfirmation, EmailConfirmationToken } from "~/entities/emai
 import { generateUser } from "~test/generators/generateUser";
 
 describe(EmailConfirmationService.name, () => {
-
   let moduleRef: TestingModule;
   let resolver: EmailConfirmationService;
   let userRepository: UserRepository;
   let emailConfirmationRepository: EmailConfirmationRepository;
 
   beforeAll(async () => {
-    moduleRef = await createTestingModule(
-      {
-        imports: [UserModule],
-      },
-    );
+    moduleRef = await createTestingModule({
+      imports: [UserModule],
+    });
     userRepository = moduleRef.get(UserRepository);
     emailConfirmationRepository = moduleRef.get(EmailConfirmationRepository);
     resolver = moduleRef.get(EmailConfirmationService);
@@ -43,8 +40,7 @@ describe(EmailConfirmationService.name, () => {
       const result = emailConfirmationRepository.findByEmail(user.email);
 
       // assert
-      await expect(result).rejects.toThrowError('No EmailConfirmationToken found');
+      await expect(result).rejects.toThrowError("No EmailConfirmationToken found");
     });
   });
 });
-

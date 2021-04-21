@@ -15,11 +15,9 @@ describe(ForgotPasswordService.name, () => {
   let forgotPasswordRepository: ForgotPasswordRepository;
 
   beforeAll(async () => {
-    moduleRef = await createTestingModule(
-      {
-        imports: [UserModule],
-      },
-    );
+    moduleRef = await createTestingModule({
+      imports: [UserModule],
+    });
     userRepository = moduleRef.get<UserRepository>(UserRepository);
     forgotPasswordRepository = moduleRef.get<ForgotPasswordRepository>(ForgotPasswordRepository);
     service = moduleRef.get(ForgotPasswordService);
@@ -65,7 +63,7 @@ describe(ForgotPasswordService.name, () => {
       const updatedUser = await userRepository.findById(user.id);
       await expect(updatedUser.verify("my-new-password")).resolves.toBeUndefined();
       await expect(forgotPasswordRepository.findForUser(forgotPassword.id)).rejects.toThrowError(
-        'No ForgotPasswordToken found',
+        "No ForgotPasswordToken found",
       );
     });
   });

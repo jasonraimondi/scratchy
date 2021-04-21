@@ -22,7 +22,7 @@ export class SendForgotPasswordInput {
 @InputType()
 export class UpdatePasswordFromTokenInput extends PasswordInput {
   @Field()
-  password: string;
+  declare password: string;
 
   @Field()
   token: string;

@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Int, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { AuthService } from "~/app/auth/services/auth.service";
 import { RefreshTokenDTO } from "~/app/auth/dto/refresh_token.dto";

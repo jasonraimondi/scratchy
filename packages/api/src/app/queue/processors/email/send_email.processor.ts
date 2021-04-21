@@ -6,12 +6,10 @@ import { Job } from "bull";
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/app/email/services/email_template.service";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
     private readonly logger: LoggerService,

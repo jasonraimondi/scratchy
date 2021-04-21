@@ -11,11 +11,7 @@ describe("register resolver", () => {
   let userRepository: UserRepository;
 
   beforeAll(async () => {
-    moduleRef = await createTestingModule(
-      {
-        imports: [UserModule],
-      },
-    );
+    moduleRef = await createTestingModule({ imports: [UserModule] });
     userRepository = moduleRef.get<UserRepository>(UserRepository);
   });
 

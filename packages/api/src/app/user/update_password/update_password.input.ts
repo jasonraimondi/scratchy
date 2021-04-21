@@ -10,7 +10,7 @@ export class UpdatePasswordInput extends PasswordInput {
   currentPassword: string;
 
   @Field()
-  password: string;
+  declare password: string;
 
   @Field({ nullable: true })
   revokeToken: boolean;

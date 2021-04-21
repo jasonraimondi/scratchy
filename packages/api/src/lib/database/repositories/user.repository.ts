@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 
 import { PrismaService } from "~/lib/database/prisma.service";
-import { User, UserModel } from "~/entities/user.entity";
+import { User } from "~/entities/user.entity";
 import { UserPaginatorResponse } from "~/lib/database/dtos/responses/user_paginator.response";
 import { UserPaginatorInputs } from "~/lib/database/dtos/inputs/paginator.inputs";
 

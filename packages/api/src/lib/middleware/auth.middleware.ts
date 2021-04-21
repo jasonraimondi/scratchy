@@ -10,7 +10,7 @@ import { TokenService } from "~/app/auth/services/token.service";
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly userRepository: UserRepository, private readonly tokenService: TokenService) {}
 
-  async use(req: FastifyRequest, res: FastifyReply, next: any) {
+  async use(req: FastifyRequest, _res: FastifyReply, next: any) {
     const accessToken = fromFastifyAuthHeaderAsBearerToken(req);
 
     if (typeof accessToken !== "string") {

@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsUUID, validate } from "class-validator";
 import { v4 } from "uuid";
-import ms from "ms";
 
 import { User } from "~/entities/user.entity";
 import { ENV } from "~/config/environments";

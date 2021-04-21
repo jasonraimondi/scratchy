@@ -17,7 +17,7 @@ describe("register.resolver", () => {
   let userRepository: UserRepository;
   let context: any;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     moduleRef = await createTestingModule({ imports: [UserModule] });
     context = mockContext();
     userRepository = moduleRef.get<UserRepository>(UserRepository);

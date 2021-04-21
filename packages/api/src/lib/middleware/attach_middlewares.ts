@@ -1,16 +1,12 @@
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
-import cookie from "fastify-cookie";
-import csrf from "fastify-csrf";
-import rateLimit from "fastify-rate-limit";
-import helmet from "fastify-helmet";
 import nunjucks from "nunjucks";
 
 import { ENV } from "~/config/environments";
 import { CORS } from "~/config/cors";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
-  await fastify.register(cookie, { secret: ENV.secrets.cookie });
-  await fastify.register(csrf, { cookieOpts: { signed: true } });
+  await fastify.register(require("fastify-cookie"), { secret: ENV.secrets.cookie });
+  await fastify.register(require("fastify-csrf"), { cookieOpts: { signed: true } });
 
   fastify.enableCors(CORS);
 
@@ -22,8 +18,8 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   });
 
   if (ENV.isProduction) {
-    await fastify.register(helmet);
-    await fastify.register(rateLimit, {
+    await fastify.register(require("fastify-helmet"));
+    await fastify.register(require("fastify-rate-limit"), {
       max: 100,
       timeWindow: "1 minute",
     });

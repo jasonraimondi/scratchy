@@ -40,7 +40,7 @@ export class AuthService {
     this.logger.setContext(this.constructor.name);
   }
 
-  async login({ res, ipAddr, rememberMe = false, ...input }: LoginWithUser | LoginWithEmail): Promise<LoginResponse> {
+  async login({ res, ipAddr = "127.0.0.2", rememberMe = false, ...input }: LoginWithUser | LoginWithEmail): Promise<LoginResponse> {
     let user: User;
     if ("user" in input) {
       user = input.user;
