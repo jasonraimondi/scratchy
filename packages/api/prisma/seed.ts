@@ -4,7 +4,7 @@ import "tsconfig-paths/register";
 import "dotenv/config";
 
 import { PrismaClient } from "@prisma/client";
-import { setPassword } from "~/lib/utils/password";
+import { setPassword } from "../src/lib/utils/password";
 
 const prisma = new PrismaClient();
 
@@ -44,7 +44,7 @@ async function main() {
       }
     }
   });
-  // console.log(jason);
+  console.log(jason);
 }
 
 main()
