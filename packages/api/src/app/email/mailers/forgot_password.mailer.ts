@@ -4,10 +4,10 @@ import { Injectable } from "@nestjs/common";
 import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { EmailService } from "~/app/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
-import { IEmailService } from "~/app/email/emails/register.email";
+import { IMailer } from "~/app/email/mailers/mailer";
 
 @Injectable()
-export class ForgotPasswordEmail implements IEmailService {
+export class ForgotPasswordMailer implements IMailer {
   constructor(private readonly emailService: EmailService) {}
 
   async send(forgotPassword: ForgotPasswordToken): Promise<void> {

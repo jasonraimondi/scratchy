@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import { RegisterInput } from "~/app/user/register/register.input";
 import { createEmailConfirmation } from "~/entities/email_confirmation.entity";
 import { User } from "~/entities/user.entity";
-import { RegisterEmail } from "~/app/email/emails/register.email";
+import { RegisterMailer } from "~/app/email/mailers/register.mailer";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
@@ -14,7 +14,7 @@ export class RegisterResolver {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly emailConfirmationRepository: EmailConfirmationRepository,
-    private readonly registerEmail: RegisterEmail,
+    private readonly registerEmail: RegisterMailer,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(this.constructor.name);

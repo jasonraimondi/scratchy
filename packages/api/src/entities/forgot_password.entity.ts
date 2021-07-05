@@ -14,19 +14,19 @@ export { ForgotPasswordTokenModel };
 
 @ObjectType()
 export class ForgotPasswordToken implements ForgotPasswordTokenModel {
-  constructor({ user, ...entity }: ForgotPasswordTokenModel & Partial<Relations>) {
+  constructor({ user, ...entity }: ForgotPasswordTokenModel & Relations) {
     this.id = entity.id;
     this.expiresAt = entity.expiresAt;
     this.createdAt = entity.createdAt;
     this.userId = entity.userId;
-    if (user) this.user = new User(user);
+    this.user = new User(user);
   }
 
   @Field(() => ID)
   id: string;
 
-  @Field(() => User)
-  user?: User;
+  @Field(() => User!)
+  user: User;
 
   @Field(() => String!)
   @IsUUID()

@@ -7,10 +7,10 @@ import { DatabaseModule } from "~/lib/database/database.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { EmailService } from "~/app/email/services/email.service";
 import { EmailTemplateService } from "~/app/email/services/email_template.service";
-import { RegisterEmail } from "~/app/email/emails/register.email";
-import { ForgotPasswordEmail } from "~/app/email/emails/forgot_password.email";
+import { RegisterMailer } from "~/app/email/mailers/register.mailer";
+import { ForgotPasswordMailer } from "~/app/email/mailers/forgot_password.mailer";
 
-const emailProviders = [EmailService, EmailTemplateService, RegisterEmail, ForgotPasswordEmail];
+const emailProviders = [EmailService, EmailTemplateService, RegisterMailer, ForgotPasswordMailer];
 
 @Module({
   imports: [

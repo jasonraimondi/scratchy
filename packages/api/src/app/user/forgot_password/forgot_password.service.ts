@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import { createForgotPassword, ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { User } from "~/entities/user.entity";
-import { ForgotPasswordEmail } from "~/app/email/emails/forgot_password.email";
+import { ForgotPasswordMailer } from "~/app/email/mailers/forgot_password.mailer";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
@@ -16,7 +16,7 @@ export class ForgotPasswordService {
   constructor(
     private userRepository: UserRepository,
     private forgotPasswordRepository: ForgotPasswordRepository,
-    private forgotPasswordEmail: ForgotPasswordEmail,
+    private forgotPasswordEmail: ForgotPasswordMailer,
     private logger: LoggerService,
   ) {
     this.logger.setContext(this.constructor.name);

@@ -5,13 +5,10 @@ import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { EmailService } from "~/app/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
 import { LoggerService } from "~/lib/logger/logger.service";
-
-export interface IEmailService {
-  send(context: any): Promise<void>;
-}
+import { IMailer } from "~/app/email/mailers/mailer";
 
 @Injectable()
-export class RegisterEmail implements IEmailService {
+export class RegisterMailer implements IMailer {
   constructor(private readonly emailService: EmailService, private logger: LoggerService) {
     this.logger.setContext(this.constructor.name);
   }
