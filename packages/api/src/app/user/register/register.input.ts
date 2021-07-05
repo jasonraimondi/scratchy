@@ -25,5 +25,5 @@ export class RegisterInput extends PasswordInput {
 
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 }

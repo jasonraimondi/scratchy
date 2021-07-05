@@ -6,7 +6,8 @@ export { PermissionModel };
 @ObjectType()
 export class Permission implements PermissionModel {
   constructor(entity: PermissionModel) {
-    Object.assign(this, entity);
+    this.id = entity.id;
+    this.name = entity.name;
   }
 
   @Field(() => ID)

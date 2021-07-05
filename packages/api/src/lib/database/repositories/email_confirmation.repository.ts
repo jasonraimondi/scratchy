@@ -19,7 +19,7 @@ export class EmailConfirmationRepository {
         user: true,
       },
     });
-    return Object.assign(token, new EmailConfirmationToken());
+    return new EmailConfirmationToken(token);
   }
 
   async findById(id: string): Promise<EmailConfirmationToken> {
@@ -28,15 +28,16 @@ export class EmailConfirmationRepository {
       where: { id },
       include: { user: true },
     });
-    return Object.assign(token, new EmailConfirmationToken());
+    return new EmailConfirmationToken(token);
   }
 
   async delete(id: string) {
     await this.prisma.emailConfirmationToken.delete({ where: { id } });
   }
 
-  create(emailConfirmation: EmailConfirmationToken) {
+  async create(emailConfirmation: EmailConfirmationToken): Promise<EmailConfirmationToken> {
     const { user, ...data } = emailConfirmation;
-    return this.prisma.emailConfirmationToken.create({ data });
+    const token = await this.prisma.emailConfirmationToken.create({ data });
+    return new EmailConfirmationToken(token);
   }
 }

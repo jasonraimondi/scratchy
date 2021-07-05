@@ -1,18 +1,19 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Role as RoleModel } from "@prisma/client";
 
-import { Permission } from "~/entities/permission.entity";
+import { Permission, PermissionModel } from "~/entities/permission.entity";
 
 export { RoleModel };
 
 type Relations = {
-  permissions: [];
+  permissions: PermissionModel[];
 };
 
 @ObjectType()
 export class Role implements RoleModel {
   constructor({ permissions, ...entity }: RoleModel & Partial<Relations>) {
-    Object.assign(this, entity);
+    this.id = entity.id;
+    this.name = entity.name;
     this.permissions = permissions?.map((p) => new Permission(p)) ?? [];
   }
 

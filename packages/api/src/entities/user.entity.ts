@@ -4,8 +4,8 @@ import { User as UserModel } from "@prisma/client";
 import { v4 } from "uuid";
 
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
-import { Role } from "~/entities/role.entity";
-import { Permission } from "~/entities/permission.entity";
+import { Role, RoleModel } from "~/entities/role.entity";
+import { Permission, PermissionModel } from "~/entities/permission.entity";
 import { checkPassword, setPassword } from "~/lib/utils/password";
 
 export { UserModel };
@@ -13,14 +13,28 @@ export { UserModel };
 export type ICreateUser = { email: string; password?: string } & Partial<UserModel>;
 
 type Relations = {
-  roles: [];
-  permissions: [];
+  roles: RoleModel[];
+  permissions: PermissionModel[];
 };
 
 @ObjectType()
 export class User implements UserModel {
   constructor({ roles, permissions, ...entity }: UserModel & Partial<Relations>) {
-    Object.assign(this, entity);
+    console.log("ENTITY ID: ", entity.id);
+    this.id = entity.id;
+    this.email = entity.email;
+    this.passwordHash = entity.passwordHash;
+    this.firstName = entity.firstName;
+    this.lastName = entity.lastName;
+    this.isEmailConfirmed = entity.isEmailConfirmed;
+    this.lastLoginAt = entity.lastLoginAt;
+    this.lastLoginIP = entity.lastLoginIP;
+    this.createdIP = entity.createdIP;
+    this.createdAt = entity.createdAt;
+    this.updatedAt = entity.updatedAt;
+    this.tokenVersion = entity.tokenVersion;
+    this.oauthGoogleIdentifier = entity.oauthGoogleIdentifier;
+    this.oauthGithubIdentifier = entity.oauthGithubIdentifier;
     this.roles = roles?.map((r) => new Role(r)) ?? [];
     this.permissions = permissions?.map((p) => new Permission(p)) ?? [];
   }
@@ -86,9 +100,10 @@ export class User implements UserModel {
     }
   }
 
-  static async create({ password, ...args }: ICreateUser): Promise<User> {
+  static async create({ password, ...createUser }: ICreateUser): Promise<User> {
     const user = new User({
-      id: v4(),
+      id: createUser.id ?? v4(),
+      email: createUser.email,
       createdAt: new Date(),
       isEmailConfirmed: false,
       createdIP: "127.0.1.1",
@@ -101,7 +116,6 @@ export class User implements UserModel {
       oauthGoogleIdentifier: null,
       oauthGithubIdentifier: null,
       passwordHash: null,
-      ...args,
     });
     if (password) await user.setPassword(password);
     await validate(user);
