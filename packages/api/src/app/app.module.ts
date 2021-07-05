@@ -10,18 +10,12 @@ import { JwtModule } from "~/lib/jwt/jwt.module";
 import { AuthModule } from "~/app/auth/auth.module";
 import { UserModule } from "~/app/user/user.module";
 
+const imports = [AuthModule, UserModule, JwtModule, LoggerModule, GraphQLModule.forRoot(graphqlConfig)];
+
+if (!ENV.isProduction) imports.push(QueueWorkerModule);
+
 @Module({
-  imports: [
-    ...(ENV.isProduction ? [] : [QueueWorkerModule]),
-
-    AuthModule,
-    UserModule,
-
-    JwtModule,
-    LoggerModule,
-
-    GraphQLModule.forRoot(graphqlConfig),
-  ],
+  imports: imports,
   controllers: [AppController],
 })
 export class AppModule {}

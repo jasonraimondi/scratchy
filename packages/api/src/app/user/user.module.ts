@@ -16,7 +16,12 @@ import { EmailModule } from "~/app/email/email.module";
 import { UpdatePasswordResolver } from "~/app/user/update_password/update_password.resolver";
 
 @Module({
-  imports: [LoggerModule, DatabaseModule, JwtModule, EmailModule],
+  imports: [
+    LoggerModule,
+    DatabaseModule,
+    JwtModule,
+    EmailModule,
+  ],
   providers: [
     AuthService,
     ForgotPasswordService,
