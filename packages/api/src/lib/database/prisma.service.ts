@@ -18,7 +18,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     this.logger.debug("prisma connecting...");
     const now = Date.now();
     await this.$connect();
-    this.logger.debug(`prisma connected ${Date.now() - now}ms`);
+    this.logger.debug(`prisma connected in ${Date.now() - now}ms`);
   }
 
   async onModuleDestroy() {
@@ -26,6 +26,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     this.logger.debug(`prisma disconnecting...`);
     const now = Date.now();
     await this.$disconnect();
-    this.logger.debug(`prisma disconnected ${Date.now() - now}ms`);
+    this.logger.debug(`prisma disconnected in ${Date.now() - now}ms`);
   }
 }

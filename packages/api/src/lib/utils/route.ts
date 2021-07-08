@@ -5,7 +5,8 @@ type RouteParams = Record<string, number | string>;
 
 export const route = (path: string) => {
   if (path[0] === "/") path = path.substr(1, path.length);
-  const template = ENV.urls.web.toString() + path;
+  let template = path;
+  if (ENV.urls.web) template = ENV.urls.web.toString() + template;
   const create = (obj: RouteParams = {}) => {
     let result = template;
     Object.entries(obj).forEach(([key, value]) => {

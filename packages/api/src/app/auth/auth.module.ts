@@ -28,6 +28,7 @@ import { AuthMiddleware } from "~/lib/middleware/auth.middleware";
     // ...strategies,
     // ...guards,
   ],
+  exports: [AuthService],
   // controllers: [GithubController, GoogleController],
 })
 export class AuthModule implements NestModule {

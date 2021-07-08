@@ -2,9 +2,9 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 
 import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
-import { EmailService } from "~/app/email/services/email.service";
+import { EmailService } from "~/lib/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
-import { IMailer } from "~/app/email/mailers/mailer";
+import { IMailer } from "~/lib/email/mailers/mailer";
 
 @Injectable()
 export class ForgotPasswordMailer implements IMailer {

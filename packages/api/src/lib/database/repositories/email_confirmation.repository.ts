@@ -12,7 +12,10 @@ export class EmailConfirmationRepository {
       rejectOnNotFound: true,
       where: {
         user: {
-          email,
+          email: {
+            equals: email,
+            mode: "insensitive",
+          },
         },
       },
       include: {
@@ -35,9 +38,8 @@ export class EmailConfirmationRepository {
     await this.prisma.emailConfirmationToken.delete({ where: { id } });
   }
 
-  async create(emailConfirmation: EmailConfirmationToken): Promise<EmailConfirmationToken> {
+  async create(emailConfirmation: EmailConfirmationToken): Promise<void> {
     const { user, ...data } = emailConfirmation;
-    const token = await this.prisma.emailConfirmationToken.create({ data });
-    return new EmailConfirmationToken(token);
+    await this.prisma.emailConfirmationToken.create({ data });
   }
 }

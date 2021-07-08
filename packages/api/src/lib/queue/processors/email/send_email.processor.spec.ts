@@ -1,14 +1,13 @@
 import { ISendMailOptions } from "@nestjs-modules/mailer";
-import { TestingModule } from "@nestjs/testing";
 import { Job } from "bull";
 
-import { QueueWorkerModule } from "~/app/queue/queue_worker.module";
-import { SendEmailProcessor } from "~/app/queue/processors/email/send_email.processor";
-import { createTestingModule } from "~test/app_testing.module";
+import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
+import { SendEmailProcessor } from "~/lib/queue/processors/email/send_email.processor";
+import { createTestingModule, TestingModule } from "~test/app_testing.module";
 import { emails } from "~test/mock_email_service";
 
 describe("send_email processor", () => {
-  let moduleRef: TestingModule;
+  let testingModule: TestingModule;
   let resolver: SendEmailProcessor;
 
   const job: Job<ISendMailOptions> | any = {
@@ -24,12 +23,12 @@ describe("send_email processor", () => {
   };
 
   beforeAll(async () => {
-    moduleRef = await createTestingModule({ imports: [QueueWorkerModule] });
-    resolver = moduleRef.get(SendEmailProcessor);
+    testingModule = await createTestingModule({ imports: [QueueWorkerModule] });
+    resolver = testingModule.container.get(SendEmailProcessor);
   });
 
   afterAll(async () => {
-    await moduleRef.close();
+    await testingModule.container.close();
   });
 
   it("sends email for valid job data", async () => {

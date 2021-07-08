@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import nunjucks from "nunjucks";
+import * as nunjucks from "nunjucks";
 
 import { ENV } from "../src/config/environments";
 

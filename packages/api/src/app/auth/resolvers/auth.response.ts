@@ -4,11 +4,14 @@ import { User } from "~/entities/user.entity";
 @ObjectType()
 export class LoginResponse {
   @Field()
-  accessToken: string;
+  accessToken!: string;
+
+  @Field(() => User!)
+  user!: User;
+
   @Field()
-  accessTokenExpiresAt: number;
+  accessTokenExpiresAt!: number;
+
   @Field({ nullable: true })
   refreshTokenExpiresAt?: number;
-  @Field(() => User)
-  user: User;
 }

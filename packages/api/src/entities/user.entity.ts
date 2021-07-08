@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { Role, RoleModel } from "~/entities/role.entity";
 import { Permission, PermissionModel } from "~/entities/permission.entity";
-import { checkPassword, setPassword } from "~/lib/utils/password";
+import { verifyPassword, hashPassword } from "~/lib/utils/password";
 
 export { UserModel };
 
@@ -19,8 +19,7 @@ type Relations = {
 
 @ObjectType()
 export class User implements UserModel {
-  constructor({ roles, permissions, ...entity }: UserModel & Partial<Relations>) {
-    console.log("ENTITY ID: ", entity.id);
+  constructor({ roles = [], permissions = [], ...entity }: UserModel & Partial<Relations>) {
     this.id = entity.id;
     this.email = entity.email;
     this.passwordHash = entity.passwordHash;
@@ -35,8 +34,8 @@ export class User implements UserModel {
     this.tokenVersion = entity.tokenVersion;
     this.oauthGoogleIdentifier = entity.oauthGoogleIdentifier;
     this.oauthGithubIdentifier = entity.oauthGithubIdentifier;
-    this.roles = roles?.map((r) => new Role(r)) ?? [];
-    this.permissions = permissions?.map((p) => new Permission(p)) ?? [];
+    this.roles = roles.map((r) => new Role(r));
+    this.permissions = permissions.map((p) => new Permission(p));
   }
 
   @Field(() => ID)
@@ -79,7 +78,7 @@ export class User implements UserModel {
   }
 
   async setPassword(password: string) {
-    this.passwordHash = await setPassword(password);
+    this.passwordHash = await hashPassword(password);
   }
 
   async verify(password: string) {
@@ -95,7 +94,7 @@ export class User implements UserModel {
       throw UnauthorizedException.invalidUser("user is not active");
     }
 
-    if (!(await checkPassword(password, this.passwordHash))) {
+    if (!(await verifyPassword(password, this.passwordHash))) {
       throw UnauthorizedException.invalidUser("invalid password");
     }
   }
@@ -104,18 +103,18 @@ export class User implements UserModel {
     const user = new User({
       id: createUser.id ?? v4(),
       email: createUser.email,
-      createdAt: new Date(),
-      isEmailConfirmed: false,
-      createdIP: "127.0.1.1",
-      tokenVersion: 1,
-      firstName: null,
-      lastName: null,
-      lastLoginAt: null,
-      lastLoginIP: null,
-      updatedAt: null,
-      oauthGoogleIdentifier: null,
-      oauthGithubIdentifier: null,
-      passwordHash: null,
+      createdAt: createUser.createdAt ?? new Date(),
+      isEmailConfirmed: createUser.isEmailConfirmed ?? false,
+      createdIP: createUser.createdIP ?? "127.0.0.2",
+      tokenVersion: createUser.tokenVersion ?? 1,
+      firstName: createUser.firstName ?? null,
+      lastName: createUser.lastName ?? null,
+      lastLoginAt: createUser.lastLoginAt ?? null,
+      lastLoginIP: createUser.lastLoginIP ?? null,
+      updatedAt: createUser.updatedAt ?? null,
+      oauthGoogleIdentifier: createUser.oauthGoogleIdentifier ?? null,
+      oauthGithubIdentifier: createUser.oauthGithubIdentifier ?? null,
+      passwordHash: createUser.passwordHash ?? null,
     });
     if (password) await user.setPassword(password);
     await validate(user);

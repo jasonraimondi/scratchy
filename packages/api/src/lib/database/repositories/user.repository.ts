@@ -12,7 +12,7 @@ export class UserRepository {
 
   async list(params: UserPaginatorInputs = {}): Promise<UserPaginatorResponse> {
     const { skip, take, cursor, where, orderBy } = params;
-    const users = await this.prisma.user.findMany({ skip, take, cursor, where, orderBy });
+    const users = (await this.prisma.user.findMany({ skip, take, cursor, where, orderBy })) ?? [];
     return {
       meta: {
         nextLink: "@TODO",
@@ -32,24 +32,23 @@ export class UserRepository {
     );
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: User): Promise<void> {
     const { permissions, roles, ...userData } = user;
-    return new User(await this.prisma.user.create({ data: userData }));
+    await this.prisma.user.create({ data: userData });
   }
 
   async findByEmail(email: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {
-    return new User(
-      await this.prisma.user.findFirst({
-        rejectOnNotFound: true,
-        where: {
-          email: {
-            equals: email,
-            mode: "insensitive",
-          },
+    const fart = await this.prisma.user.findFirst({
+      rejectOnNotFound: true,
+      where: {
+        email: {
+          equals: email,
+          mode: "insensitive",
         },
-        ...extraQuery,
-      }),
-    );
+      },
+      ...extraQuery,
+    });
+    return new User(fart);
   }
 
   async findById(userId: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {

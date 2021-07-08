@@ -9,7 +9,6 @@ export class JwtAuthGuard extends AuthGuard("jwt") {}
 @Injectable()
 export class JwtAuthGqlGuard extends JwtAuthGuard {
   getRequest(context: ExecutionContext): FastifyRequest {
-    console.log("getting context");
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
   }

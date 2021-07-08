@@ -2,10 +2,10 @@ import { ISendMailOptions } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
-import { EmailService } from "~/app/email/services/email.service";
+import { EmailService } from "~/lib/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
 import { LoggerService } from "~/lib/logger/logger.service";
-import { IMailer } from "~/app/email/mailers/mailer";
+import { IMailer } from "~/lib/email/mailers/mailer";
 
 @Injectable()
 export class RegisterMailer implements IMailer {
@@ -27,7 +27,6 @@ export class RegisterMailer implements IMailer {
         }),
       },
     };
-    this.logger.debug(data.context?.url);
     await this.emailService.send(data);
   }
 }

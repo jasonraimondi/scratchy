@@ -5,10 +5,17 @@ import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { fromFastifyAuthHeaderAsBearerToken } from "~/app/auth/strategies/jwt.strategy";
 import { AccessTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { TokenService } from "~/app/auth/services/token.service";
+import { LoggerService } from "~/lib/logger/logger.service";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly userRepository: UserRepository, private readonly tokenService: TokenService) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly tokenService: TokenService,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(this.constructor.name);
+  }
 
   async use(req: FastifyRequest, _res: FastifyReply, next: any) {
     const accessToken = fromFastifyAuthHeaderAsBearerToken(req);
@@ -25,7 +32,7 @@ export class AuthMiddleware implements NestMiddleware {
         req.user = user;
       }
     } catch (e) {
-      console.log(e);
+      this.logger.log(e);
     }
 
     next();

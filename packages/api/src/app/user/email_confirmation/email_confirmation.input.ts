@@ -5,8 +5,8 @@ import { Field, InputType } from "@nestjs/graphql";
 export class VerifyEmailInput {
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @Field()
-  uuid: string;
+  uuid!: string;
 }

@@ -19,7 +19,7 @@ export const graphqlConfig: GqlModuleOptions = {
     message: error.extensions?.exception?.response?.message ?? error.message,
   }),
   context: ({ request, reply }): Partial<MyContext> => ({
-    ipAddr: request?.ip ?? "127.0.0.2",
+    ipAddr: request?.ip ?? "127.0.0.3",
     user: request?.user,
     req: request,
     res: reply,

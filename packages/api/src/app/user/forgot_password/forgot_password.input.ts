@@ -6,17 +6,17 @@ import { PasswordInput } from "~/app/user/register/register.input";
 export class ValidateForgotPasswordTokenInput {
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @Field()
-  token: string;
+  token!: string;
 }
 
 @InputType()
 export class SendForgotPasswordInput {
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 }
 
 @InputType()
@@ -25,9 +25,9 @@ export class UpdatePasswordFromTokenInput extends PasswordInput {
   declare password: string;
 
   @Field()
-  token: string;
+  token!: string;
 
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 }

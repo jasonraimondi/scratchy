@@ -4,14 +4,14 @@ import { PasswordInput } from "~/app/user/register/register.input";
 @InputType()
 export class UpdatePasswordInput extends PasswordInput {
   @Field()
-  userId: string;
+  userId!: string;
 
   @Field()
-  currentPassword: string;
+  currentPassword!: string;
 
   @Field()
   declare password: string;
 
   @Field({ nullable: true })
-  revokeToken: boolean;
+  revokeToken!: boolean;
 }

@@ -5,9 +5,9 @@ import { PaginatorMeta } from "~/lib/database/dtos/responses/paginator.response"
 
 @ObjectType()
 export class UserPaginatorResponse {
-  @Field(() => PaginatorMeta)
-  meta: PaginatorMeta;
+  @Field(() => PaginatorMeta!)
+  meta!: PaginatorMeta;
 
-  @Field(() => [User])
-  data: User[];
+  @Field(() => [User]!)
+  data!: User[];
 }

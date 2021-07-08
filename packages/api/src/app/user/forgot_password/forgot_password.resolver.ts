@@ -24,12 +24,12 @@ export class ForgotPasswordResolver {
     return this.forgotPasswordService.validateForgotPasswordToken(data);
   }
 
-  @Mutation(() => Boolean)
-  sendForgotPasswordEmail(@Args("input") { email }: SendForgotPasswordInput) {
-    return this.forgotPasswordService.sendForgotPasswordEmail(email);
+  @Mutation(() => Boolean!)
+  sendForgotPasswordEmail(@Args("input") data: SendForgotPasswordInput) {
+    return this.forgotPasswordService.sendForgotPasswordEmail(data.email);
   }
 
-  @Mutation(() => LoginResponse)
+  @Mutation(() => LoginResponse!)
   async updatePasswordFromToken(
     @Args("input") data: UpdatePasswordFromTokenInput,
     @Context() { res, ipAddr }: MyContext,

@@ -1,34 +1,35 @@
-import { TestingModule } from "@nestjs/testing";
 import { validate } from "class-validator";
 import faker from "faker";
 
-import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { createTestingModule } from "~test/app_testing.module";
+import { createTestingModule, TestingModule } from "~test/app_testing.module";
 import { generateUser } from "~test/generators/generateUser";
 import { mockContext } from "~test/mock_application";
 import { emails } from "~test/mock_email_service";
+
+import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { UserModule } from "~/app/user/user.module";
 import { RegisterInput } from "~/app/user/register/register.input";
 import { RegisterResolver } from "~/app/user/register/register.resolver";
+import { MyContext } from "~/config/context";
 
 describe("register.resolver", () => {
-  let moduleRef: TestingModule;
+  let testingModule: TestingModule;
   let userRepository: UserRepository;
-  let context: any;
+  let context: MyContext;
 
   beforeEach(async () => {
-    moduleRef = await createTestingModule({ imports: [UserModule] });
+    testingModule = await createTestingModule({ imports: [UserModule] });
     context = mockContext();
-    userRepository = moduleRef.get<UserRepository>(UserRepository);
+    userRepository = testingModule.container.get<UserRepository>(UserRepository);
   });
 
   afterAll(async () => {
-    await moduleRef.close();
+    await testingModule.container.close();
   });
 
   describe("register function", () => {
-    test("valid register input is validated correctly", async () => {
+    it("valid register input is validated correctly", async () => {
       // arrange
       const validInput = new RegisterInput();
       validInput.email = faker.internet.exampleEmail();
@@ -40,7 +41,7 @@ describe("register.resolver", () => {
       expect(validationErrors.length).toBe(0);
     });
 
-    test("invalid register input has errors thrown", async () => {
+    it("invalid register input has errors thrown", async () => {
       // arrange
       const validInput = new RegisterInput();
       validInput.email = "invalid@email";
@@ -54,7 +55,7 @@ describe("register.resolver", () => {
 
     test.only("duplicate user id is denied", async () => {
       // arrange
-      const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
+      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.id = "b031765a-a950-4a0d-92dd-ecd12788f3a6n";
       input.email = faker.internet.exampleEmail();
@@ -67,9 +68,9 @@ describe("register.resolver", () => {
       await expect(result).rejects.toThrowError("duplicate id for user");
     });
 
-    test("duplicate user emails is denied", async () => {
+    it("duplicate user emails is denied", async () => {
       // arrange
-      const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
+      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = faker.internet.exampleEmail();
       await userRepository.create(await generateUser(input));
@@ -81,9 +82,9 @@ describe("register.resolver", () => {
       await expect(result).rejects.toThrowError("duplicate emails for user");
     });
 
-    test("user is registered with emails confirmation", async () => {
+    it("user is registered with emails confirmation", async () => {
       // arrange
-      const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
+      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = faker.internet.exampleEmail();
 
@@ -91,7 +92,8 @@ describe("register.resolver", () => {
       const result = await resolver.register(input, context);
 
       // assert
-      const emailConfirmationRepository = moduleRef.get<EmailConfirmationRepository>(EmailConfirmationRepository);
+      const emailConfirmationRepository =
+        testingModule.container.get<EmailConfirmationRepository>(EmailConfirmationRepository);
       const emailConfirmation = await emailConfirmationRepository.findByEmail(input.email);
       expect(result).toBeTruthy();
       expect(result.id).toBe(emailConfirmation.user.id);
@@ -104,9 +106,9 @@ describe("register.resolver", () => {
   });
 
   describe("resentConfirmEmail", () => {
-    test("resend emails function works", async () => {
+    it("resend emails function works", async () => {
       // arrange
-      const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
+      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = faker.internet.exampleEmail();
       await resolver.register(input, context);
@@ -121,9 +123,9 @@ describe("register.resolver", () => {
       expect(emails[1].template).toBe("auth/register");
     });
 
-    test("resend emails throws for invalid user", async () => {
+    it("resend emails throws for invalid user", async () => {
       // arrange
-      const resolver = moduleRef.get<RegisterResolver>(RegisterResolver);
+      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
 
       // act
       const result = resolver.resendConfirmEmail("user-does-not-exist@example.com");

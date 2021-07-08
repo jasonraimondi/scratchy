@@ -1,15 +1,16 @@
-import { MailerService } from "@nestjs-modules/mailer";
-import type { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
-import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
+import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
+import { Process, Processor } from "@nestjs/bull";
 
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
-import { EmailTemplateService } from "~/app/email/services/email_template.service";
+import { EmailTemplateService } from "~/lib/email/services/email_template.service";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { LoggerService } from "~/lib/logger/logger.service";
 
-@Processor(QUEUE.email)
-export class SendEmailProcessor {
+@Processor(QUEUE.image)
+export class ImageProcessor {
   constructor(
+    private readonly userRepository: UserRepository,
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
     private readonly logger: LoggerService,
@@ -17,7 +18,7 @@ export class SendEmailProcessor {
     this.logger.setContext(this.constructor.name);
   }
 
-  @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })
+  @Process({ name: QUEUE_JOBS.image.send, concurrency: 2 })
   async handleSend(job: Job<ISendMailOptions>) {
     const { template, context, ...config } = job.data;
     if (!template) throw new Error(`Template not found ${template}`);

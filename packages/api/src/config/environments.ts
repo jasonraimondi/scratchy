@@ -9,11 +9,7 @@ const required = ["URL", "DATABASE_URL", "JWT_SECRET"].filter((key) => !process.
 
 if (required.length > 0) {
   const message = `missing required envs: (${required.join(", ")})`;
-  if (isTesting) {
-    console.log(message);
-  } else {
-    throw new Error(message);
-  }
+  if (!isTesting) throw new Error(message);
 }
 
 const ENV = {
@@ -22,8 +18,8 @@ const ENV = {
   isDevelopment,
   isTesting,
   urls: {
-    web: new URL(process.env.URL!),
-    api: new URL(process.env.API_URL ?? process.env.URL!),
+    web: process.env.URL ? new URL(process.env.URL) : undefined,
+    api: process.env.URL ? new URL(process.env.API_URL ?? process.env.URL) : undefined,
   },
   secrets: {
     salt: process.env.SALT!,

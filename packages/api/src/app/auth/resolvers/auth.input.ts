@@ -5,11 +5,11 @@ import { Field, InputType } from "@nestjs/graphql";
 export class LoginInput {
   @Field()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field()
-  rememberMe: boolean;
+  rememberMe!: boolean;
 }

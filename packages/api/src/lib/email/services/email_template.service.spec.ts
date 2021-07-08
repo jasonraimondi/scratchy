@@ -1,4 +1,4 @@
-import { EmailTemplateService } from "~/app/email/services/email_template.service";
+import { EmailTemplateService } from "~/lib/email/services/email_template.service";
 
 describe(EmailTemplateService.name, () => {
   let emailTemplateService: EmailTemplateService;

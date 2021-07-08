@@ -4,12 +4,12 @@ import "tsconfig-paths/register";
 import "dotenv/config";
 
 import { PrismaClient } from "@prisma/client";
-import { setPassword } from "../src/lib/utils/password";
+import { hashPassword } from "../src/lib/utils/password";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const passwordHash = await setPassword("jasonraimondi");
+  const passwordHash = await hashPassword("jasonraimondi");
 
   await prisma.role.upsert({
     where: { name: "overlord" },
