@@ -44,7 +44,8 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": [
       "@types",
-      "node_modules/@types"
+      "node_modules/@types",
+      "node_modules/fastify-csrf"
     ],
 
     /* Output Options */

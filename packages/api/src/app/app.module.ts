@@ -9,13 +9,22 @@ import { graphqlConfig } from "~/config/graphql";
 import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
+import { OAuthModule } from "~/app/oauth/oauth.module";
 
-const imports = [AuthModule, UserModule, JwtModule, LoggerModule, GraphQLModule.forRoot(graphqlConfig)];
+const imports = [];
 
 if (!ENV.isProduction) imports.push(QueueWorkerModule);
 
 @Module({
-  imports: imports,
+  imports: [
+    ...imports,
+    AuthModule,
+    UserModule,
+    OAuthModule,
+    JwtModule,
+    LoggerModule,
+    GraphQLModule.forRoot(graphqlConfig)
+  ],
   controllers: [AppController],
 })
 export class AppModule {}
