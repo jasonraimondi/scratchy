@@ -27,7 +27,7 @@
   "dependencies": {
     "@jmondi/oauth2-server": "^1.3.0-rc.1",
     "@nestjs-modules/mailer": "^1.6.0",
-    "@nestjs/bull": "^0.3.1",
+    "@nestjs/bull": "^0.4.0",
     "@nestjs/common": "^8.0.5",
     "@nestjs/core": "^8.0.5",
     "@nestjs/graphql": "^8.0.2",
@@ -53,6 +53,7 @@
     "ms": "^2.1.3",
     "nodemailer": "^6.6.3",
     "nunjucks": "^3.2.3",
+    "otplib": "^12.0.1",
     "passport": "^0.4.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth20": "^2.0.0",
@@ -66,8 +67,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.6.0",
-    "@nestjs/testing": "^7.6.18",
+    "@nestjs/cli": "^8.1.0",
+    "@nestjs/testing": "^8.0.5",
     "@types/bcryptjs": "^2.4.2",
     "@types/bull": "^3.15.3",
     "@types/faker": "^5.5.7",

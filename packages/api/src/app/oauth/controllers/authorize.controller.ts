@@ -11,10 +11,7 @@ import { API_ROUTES } from "~/config/routes";
 
 @Controller("oauth2/authorize")
 export class AuthorizeController {
-  constructor(
-    private readonly oauth: AuthorizationServer,
-    private readonly jwt: MyJwtService,
-  ) {}
+  constructor(private readonly oauth: AuthorizationServer, private readonly jwt: MyJwtService) {}
 
   @Get()
   async get(@Req() req: FastifyRequest, @Res() res: FastifyReply) {

@@ -22,9 +22,9 @@ const ENV = {
     api: process.env.URL ? new URL(process.env.API_URL ?? process.env.URL) : undefined,
   },
   secrets: {
-    salt: process.env.SALT!,
     jwt: process.env.JWT_SECRET!,
     cookie: process.env.COOKIE_SECRET!,
+    otp: process.env.OTP_SECRET!,
   },
   enableDebugging: !!(process.env.ENABLE_DEBUGGING ?? isDevelopment),
   enablePlayground: !!(process.env.ENABLE_PLAYGROUND ?? isDevelopment),

@@ -31,10 +31,7 @@ type SendRefreshTokenInput = {
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userRepository: UserRepository,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private userRepository: UserRepository, private tokenService: TokenService) {}
 
   async login({
     res,

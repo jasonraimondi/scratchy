@@ -1,12 +1,8 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { ConsoleLogger, Injectable } from "@nestjs/common";
 
 @Injectable()
-export class GraphqlLogger extends Logger {
-  constructor() {
-    super();
-    this.debug(this.constructor.name);
-  }
-  info(message: any, context?: string) {
-    return this.log(message, context);
+export class GraphqlLogger extends ConsoleLogger {
+  info(message: any) {
+    return this.log(message, this.constructor.name);
   }
 }
