@@ -28,6 +28,7 @@ export class User implements UserModel {
     this.isEmailConfirmed = entity.isEmailConfirmed;
     this.lastLoginAt = entity.lastLoginAt;
     this.lastLoginIP = entity.lastLoginIP;
+    this.lastHeartbeatAt = entity.lastHeartbeatAt;
     this.createdIP = entity.createdIP;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
@@ -50,6 +51,8 @@ export class User implements UserModel {
   lastName: string | null;
   @Field()
   isEmailConfirmed: boolean;
+  @Field(() => Date, { nullable: true })
+  lastHeartbeatAt: Date | null;
   @Field(() => Date, { nullable: true })
   lastLoginAt: Date | null;
   @IsIP()
@@ -109,6 +112,7 @@ export class User implements UserModel {
       tokenVersion: createUser.tokenVersion ?? 1,
       firstName: createUser.firstName ?? null,
       lastName: createUser.lastName ?? null,
+      lastHeartbeatAt: createUser.lastLoginAt ?? null,
       lastLoginAt: createUser.lastLoginAt ?? null,
       lastLoginIP: createUser.lastLoginIP ?? null,
       updatedAt: createUser.updatedAt ?? null,

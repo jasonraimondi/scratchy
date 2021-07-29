@@ -8,6 +8,7 @@ type User {
   firstName: String
   lastName: String
   isEmailConfirmed: Boolean!
+  lastHeartbeatAt: DateTime
   lastLoginAt: DateTime
   isActive: Boolean!
   name: String

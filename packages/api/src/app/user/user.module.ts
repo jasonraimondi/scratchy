@@ -7,9 +7,10 @@ import { ForgotPasswordModule } from "~/app/user/forgot_password/forgot_password
 import { UpdatePasswordModule } from "~/app/user/update_password/update_password.module";
 import { RegisterModule } from "~/app/user/register/register.module";
 import { DatabaseModule } from "~/lib/database/database.module";
+import { HeartbeatChannel } from "~/app/user/heartbeat.channel";
 
 @Module({
   imports: [DatabaseModule, EmailConfirmationModule, ForgotPasswordModule, RegisterModule, UpdatePasswordModule],
-  providers: [MeResolver, UserResolver],
+  providers: [MeResolver, UserResolver, HeartbeatChannel],
 })
 export class UserModule {}

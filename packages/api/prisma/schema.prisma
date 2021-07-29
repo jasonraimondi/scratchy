@@ -14,6 +14,7 @@ model User {
   passwordHash           String?                 @db.VarChar(255)
   firstName              String?                 @db.VarChar(255)
   lastName               String?                 @db.VarChar(255)
+  lastHeartbeatAt            DateTime?               @db.Timestamp(6)
   lastLoginAt            DateTime?               @db.Timestamp(6)
   lastLoginIP            String?                 @db.Inet
   createdIP              String                  @db.Inet
