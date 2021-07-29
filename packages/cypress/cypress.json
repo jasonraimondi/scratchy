@@ -3,6 +3,6 @@
   "experimentalStudio": true,
   "env": {
     "API_URL": "https://scratchy.localdomain/api",
-    "MAILER_HTTP_URL": "http://localhost:8026"
+    "MAILER_HTTP_URL": "http://localhost:8025"
   }
 }

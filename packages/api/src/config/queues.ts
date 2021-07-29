@@ -8,7 +8,4 @@ export const QUEUE_JOBS: QueueJobs = {
   email: {
     send: "send",
   },
-  image: {
-    sync: "sync",
-  },
 };

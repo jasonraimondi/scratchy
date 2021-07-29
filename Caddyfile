@@ -12,7 +12,7 @@ scratchy.localdomain/api/* {
 
 scratchy.localdomain/mail/* {
     uri strip_prefix /mail
-    reverse_proxy 127.0.0.1:8026
+    reverse_proxy 127.0.0.1:8025
 }
 
 scratchy.localdomain {
