@@ -5,17 +5,13 @@ import { Job } from "bull";
 
 import { QUEUE, QUEUE_JOBS } from "~/config/queues";
 import { EmailTemplateService } from "~/lib/email/services/email_template.service";
-import { LoggerService } from "~/lib/logger/logger.service";
 
 @Processor(QUEUE.email)
 export class SendEmailProcessor {
   constructor(
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
-    private readonly logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })
   async handleSend(job: Job<ISendMailOptions>) {

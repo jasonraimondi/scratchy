@@ -13,9 +13,7 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly userRepository: UserRepository,
     private readonly tokenService: TokenService,
     private readonly logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   async use(req: FastifyRequest, _res: FastifyReply, next: any) {
     const accessToken = fromFastifyAuthHeaderAsBearerToken(req);

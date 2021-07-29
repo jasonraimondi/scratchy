@@ -6,7 +6,6 @@ import { User } from "~/entities/user.entity";
 import { RegisterMailer } from "~/lib/email/mailers/register.mailer";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { LoggerService } from "~/lib/logger/logger.service";
 import { MyContext } from "~/config/context";
 
 @Resolver()
@@ -15,10 +14,7 @@ export class RegisterResolver {
     private readonly userRepository: UserRepository,
     private readonly emailConfirmationRepository: EmailConfirmationRepository,
     private readonly mailer: RegisterMailer,
-    private readonly logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   @Mutation(() => User!)
   async register(@Args("input") data: RegisterInput, @Context() { ipAddr }: MyContext): Promise<User> {

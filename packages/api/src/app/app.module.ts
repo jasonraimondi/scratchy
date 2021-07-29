@@ -13,7 +13,7 @@ import { OAuthModule } from "~/app/oauth/oauth.module";
 
 const imports = [];
 
-if (!ENV.isProduction) imports.push(QueueWorkerModule);
+if (!ENV.isProduction && Date.now() < 0) imports.push(QueueWorkerModule);
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ if (!ENV.isProduction) imports.push(QueueWorkerModule);
     OAuthModule,
     JwtModule,
     LoggerModule,
-    GraphQLModule.forRoot(graphqlConfig)
+    GraphQLModule.forRoot(graphqlConfig),
   ],
   controllers: [AppController],
 })

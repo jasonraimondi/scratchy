@@ -6,7 +6,6 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import { AuthorizationCookie } from "~/app/oauth/controllers/scopes.controller";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
-import { LoggerService } from "~/lib/logger/logger.service";
 import { COOKIES } from "~/config/cookies";
 import { API_ROUTES } from "~/config/routes";
 
@@ -15,10 +14,7 @@ export class AuthorizeController {
   constructor(
     private readonly oauth: AuthorizationServer,
     private readonly jwt: MyJwtService,
-    private readonly logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   @Get()
   async get(@Req() req: FastifyRequest, @Res() res: FastifyReply) {

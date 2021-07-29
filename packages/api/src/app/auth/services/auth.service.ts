@@ -4,7 +4,6 @@ import { Injectable } from "@nestjs/common";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { User } from "~/entities/user.entity";
 import { cookieOptions } from "~/config/cookies";
-import { LoggerService } from "~/lib/logger/logger.service";
 import { TokenService } from "~/app/auth/services/token.service";
 import { RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { LoginResponse } from "~/app/auth/resolvers/auth.response";
@@ -35,10 +34,7 @@ export class AuthService {
   constructor(
     private userRepository: UserRepository,
     private tokenService: TokenService,
-    private logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   async login({
     res,

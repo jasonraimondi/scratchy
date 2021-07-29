@@ -9,7 +9,7 @@ import { MyContext } from "~/config/context";
 export const graphqlConfig: GqlModuleOptions = {
   logger: new GraphqlLogger(),
   debug: ENV.enableDebugging,
-  playground: ENV.enablePlayground,
+  // playground: ENV.enablePlayground,
   autoSchemaFile: "schema.graphql",
   cors: CORS,
   buildSchemaOptions: {

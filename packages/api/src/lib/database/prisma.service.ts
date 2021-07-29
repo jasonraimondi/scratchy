@@ -11,7 +11,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       rejectOnNotFound: true,
       log: ENV.enableDebugging && !ENV.isTesting ? ["query", "info", "warn", "error"] : [],
     });
-    this.logger.setContext(this.constructor.name);
   }
 
   async onModuleInit() {

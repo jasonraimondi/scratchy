@@ -18,9 +18,7 @@ export class ForgotPasswordService {
     private forgotPasswordRepository: ForgotPasswordRepository,
     private forgotPasswordEmail: ForgotPasswordMailer,
     private logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   async validateForgotPasswordToken({ email, token }: ValidateForgotPasswordTokenInput) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);

@@ -4,14 +4,11 @@ import { Injectable } from "@nestjs/common";
 import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { EmailService } from "~/lib/email/services/email.service";
 import { WEB_ROUTES } from "~/config/routes";
-import { LoggerService } from "~/lib/logger/logger.service";
 import { IMailer } from "~/lib/email/mailers/mailer";
 
 @Injectable()
 export class RegisterMailer implements IMailer {
-  constructor(private readonly emailService: EmailService, private logger: LoggerService) {
-    this.logger.setContext(this.constructor.name);
-  }
+  constructor(private readonly emailService: EmailService) {}
 
   async send(userConfirmation: EmailConfirmationToken): Promise<void> {
     const user = userConfirmation.user;

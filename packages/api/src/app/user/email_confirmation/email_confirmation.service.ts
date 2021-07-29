@@ -10,9 +10,7 @@ export class EmailConfirmationService {
     private userRepository: UserRepository,
     private emailConfirmationRepository: EmailConfirmationRepository,
     private readonly logger: LoggerService,
-  ) {
-    this.logger.setContext(this.constructor.name);
-  }
+  ) {}
 
   async verifyEmailConfirmation(email: string, id: string): Promise<boolean> {
     const userConfirmation = await this.emailConfirmationRepository.findById(id);

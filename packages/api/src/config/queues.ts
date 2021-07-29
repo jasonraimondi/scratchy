@@ -1,6 +1,5 @@
 export const QUEUE = {
   email: "email",
-  image: "image",
 };
 
 type QueueJobs = Record<string, Record<string, string>>;

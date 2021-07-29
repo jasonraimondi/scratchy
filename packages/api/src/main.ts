@@ -18,7 +18,7 @@ import { attachMiddlewares } from "~/lib/middleware/attach_middlewares";
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   const logger = await app.resolve(LoggerService);
-  logger.setContext("main.ts");
+  logger.debug("main.ts");
 
   await attachMiddlewares(app);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
