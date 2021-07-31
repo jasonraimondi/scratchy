@@ -25,6 +25,7 @@ if (!ENV.isProduction) imports.push(QueueWorkerModule);
     GraphQLModule.forRoot(graphqlConfig),
 
     AuthModule,
+    OAuthModule,
     UserModule,
     OAuthModule,
   ],

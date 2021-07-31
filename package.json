@@ -7,6 +7,7 @@
     "url": "git+https://github.com/jasonraimondi/scratchy.git"
   },
   "scripts": {
+    "dev": "overmind start",
     "db": "npm run --prefix packages/api db:migrate && npm run --prefix packages/api db:seed",
     "build": "run-p build:web build:api",
     "build:web": "npm run --prefix packages/web build",

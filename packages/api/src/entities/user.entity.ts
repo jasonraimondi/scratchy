@@ -81,6 +81,7 @@ export class User implements UserModel {
   }
 
   async setPassword(password: string) {
+    // @todo should guard against things here
     this.passwordHash = await hashPassword(password);
   }
 

@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  max-width: var(--container-xs);
+
+  @media (--small) {
+    max-width: var(--container-sm);
+  }
+  @media (--medium) {
+    max-width: var(--container-md);
+  }
+  @media (--large) {
+    max-width: var(--container-lg);
+  }
+  @media (--xlarge) {
+    max-width: var(--container-xl);
+  }
+  @media (--xxlarge) {
+    max-width: var(--container-xxl);
+  }
+
+  @media print {
+    max-width: 100%;
+  }
+
+  &.center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
