@@ -3,14 +3,13 @@
 <Header />
 
 <main>
+	<h1>Current User Id: {$currentUserStore?.id}</h1>
 	<slot />
 </main>
-
-<Debug />
 
 <script lang="ts">
 	import "../app.pcss";
 	import Notifications from "$lib/notifications/Notifications.svelte";
 	import Header from "$lib/layouts/Header.svelte";
-	import Debug from "$lib/debug/Debug.svelte";
+	import { currentUserStore } from "$lib/auth/current_user";
 </script>

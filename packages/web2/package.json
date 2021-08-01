@@ -18,11 +18,15 @@
 		"@graphql-codegen/typescript-graphql-request": "^3.2.4",
 		"@graphql-codegen/typescript-operations": "^1.18.3",
 		"@sveltejs/kit": "next",
+		"@types/js-cookie": "^2.2.7",
 		"@types/yup": "^0.29.13",
 		"autoprefixer": "^10.3.1",
 		"cssnano": "^5.0.7",
 		"graphql": "^15.5.1",
 		"graphql-request": "^3.5.0",
+		"joi": "^17.4.1",
+		"js-cookie": "^3.0.0",
+		"jwt-decode": "^3.1.2",
 		"normalize.css": "^8.0.1",
 		"postcss": "^8.3.5",
 		"postcss-cli": "^8.3.1",
@@ -38,8 +42,7 @@
 		"svelte-check": "^2.0.0",
 		"svelte-preprocess": "^4.7.4",
 		"tslib": "^2.0.0",
-		"typescript": "^4.0.0",
-		"yup": "^0.32.9"
+		"typescript": "^4.0.0"
 	},
 	"type": "module"
 }

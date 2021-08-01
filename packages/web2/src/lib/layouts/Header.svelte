@@ -1,45 +1,24 @@
 <script lang="ts">
-  const isAuthenticated = Math.random() > 0.5;
-
-  type MenuItem = {
-    name: string;
-    href: string;
-    dataTest: string;
-  };
-
-  const leftMenu: MenuItem[] = [{ name: "Home", href: "/", dataTest: "link--home" }];
-  const rightMenu: MenuItem[] = [];
-
-  if (isAuthenticated) {
-    leftMenu.push(
-      { name: "Dashboard", href: "/app/dashboard", dataTest: "link--dashboard" },
-      { name: "Profile", href: "/app/profile", dataTest: "link--profile" },
-    );
-    rightMenu.push({ name: "Logout", href: "/logout", dataTest: "link--logout" });
-  } else {
-    leftMenu.push();
-    rightMenu.push(
-      { name: "Register", href: "/register", dataTest: "link--register" },
-      { name: "Login", href: "/login", dataTest: "link--login" },
-    );
-  }
+  import { currentUserStore } from "$lib/auth/current_user";
 </script>
 
 <header class="container center padded">
   <nav class="nav">
     <ul class="left">
-      {#each leftMenu as l}
-        <li>
-          <a href={l.href} data-test={l.dataTest}>{l.name}</a>
-        </li>
-      {/each}
+      <li><a href="/" data-test="link--home">Home</a></li>
+      {#if $currentUserStore}
+        <li><a href="/app/dashboard" data-test="link--dashboard">Dashboard</a></li>
+        <li><a href="/app/profile" data-test="link--profile">Profile</a></li>
+      {:else}
+      {/if}
     </ul>
     <ul class="right">
-      {#each rightMenu as r}
-        <li>
-          <a href={r.href} data-test={r.dataTest}>{r.name}</a>
-        </li>
-      {/each}
+      {#if $currentUserStore}
+        <li><a href="/logout" data-test="link--logout">Logout</a></li>
+      {:else}
+        <li><a href="/register" data-test="link--register">Register</a></li>
+        <li><a href="/login" data-test="link--login">Login</a></li>
+      {/if}
     </ul>
   </nav>
 </header>
