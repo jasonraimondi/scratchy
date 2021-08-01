@@ -1,6 +1,9 @@
 <script lang="ts">
   import { get } from "svelte/store";
   import { loginFormState, loginFormSchema } from "$lib/auth/login_form";
+  import { redirectIfAuthenticated } from "$lib/auth/redirect_if_authenticated";
+
+  redirectIfAuthenticated();
 
   async function handleSubmit() {
     const input = get(loginFormState);
@@ -15,8 +18,8 @@
 
     // there is an error, handle it
   }
-</script>
 
+</script>
 <div class="centered-form">
   <form on:submit|preventDefault="{handleSubmit}">
     <div class="form-control">
