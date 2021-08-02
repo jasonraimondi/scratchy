@@ -5,6 +5,7 @@ import "dotenv/config";
 
 import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../src/lib/utils/password";
+import { generateUser } from "../test/generators/generateUser";
 
 const prisma = new PrismaClient();
 
@@ -17,11 +18,23 @@ async function main() {
     create: { name: "overlord" },
   })
 
+  const user2 = await generateUser();
+  await prisma.user.upsert({
+    where: { email: user2.email },
+    update: {},
+    create: {
+      id: user2.id,
+      firstName: user2.firstName,
+      lastName: user2.lastName,
+      email: user2.email,
+      isEmailConfirmed: user2.isEmailConfirmed,
+      createdIP: user2.createdIP,
+    }
+  });
+
   const jason = await prisma.user.upsert({
     where: { email: "jason@raimondi.us" },
-    update: {
-      passwordHash,
-    },
+    update: { passwordHash },
     create: {
       id: "4ba51f0d-3301-484d-b702-655db0e67e62",
       firstName: "Jason",
@@ -44,6 +57,7 @@ async function main() {
       }
     }
   });
+
   console.log(jason);
 }
 

@@ -2,14 +2,13 @@
   import { currentUserStore } from "$lib/auth/current_user";
 </script>
 
-<header class="container center padded">
+<header>
   <nav class="nav">
     <ul class="left">
       <li><a href="/" data-test="link--home">Home</a></li>
       {#if $currentUserStore}
         <li><a href="/app/dashboard" data-test="link--dashboard">Dashboard</a></li>
         <li><a href="/app/profile" data-test="link--profile">Profile</a></li>
-      {:else}
       {/if}
     </ul>
     <ul class="right">
@@ -25,10 +24,10 @@
 
 <style lang="postcss">
     .nav {
-        display: flex;
-        padding: 0 0 0.5em;
-        margin-bottom: 0.5em;
         border-bottom: 1px solid var(--colors-gray-400);
+        display: flex;
+        padding: 0.4em;
+        //margin-bottom: 0.5em;
     }
 
     .left {

@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
-import { accessTokenStore } from "$lib/auth/auth";
-import { localStorageService } from "$lib/storage/local_storage.service";
 import { browser } from "$app/env";
+import { localStorageService } from "$lib/storage/local_storage.service";
+import { accessTokenStore } from "$lib/auth/access_token";
 
 type CurrentUser = { id: string };
 

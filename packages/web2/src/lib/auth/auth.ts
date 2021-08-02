@@ -1,13 +1,12 @@
-import { browser } from "$app/env";
 import { goto } from "$app/navigation";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-import { get, writable } from "svelte/store";
+import { get } from "svelte/store";
 
 import { notify } from "$lib/notifications/notification.service";
-import { graphQLClient, graphQLSdk } from "$lib/api/api_sdk";
+import { graphQLSdk } from "$lib/api/api_sdk";
 import { backoffCallback } from "$lib/utils/backoff_callback";
-import { localStorageService } from "$lib/storage/local_storage.service";
+import { AccessTokenStore, accessTokenStore } from "$lib/auth/access_token";
 
 export type DecodedJWT = {
   email: string;
@@ -24,21 +23,6 @@ export type LoginParams = {
   password: string;
   rememberMe: boolean;
 };
-
-type AccessToken = { token: string, decoded: DecodedJWT };
-
-let init;
-
-if (browser) {
-  init = localStorageService.get("accessToken") ?? undefined;
-}
-
-export const accessTokenStore = writable<AccessToken>(init);
-
-accessTokenStore.subscribe(accessToken => {
-  if (accessToken?.token) graphQLClient.setHeader("Authorization", `Bearer ${accessToken.token}`);
-  localStorageService.set("accessToken", accessToken);
-});
 
 export async function login(input: LoginParams) {
   try {
@@ -86,9 +70,9 @@ export function setAccessToken(token: string) {
   accessTokenStore.set({ token, decoded: jwtDecode<DecodedJWT>(token) });
 }
 
-export function isAuthenticated() {
-  const { token, decoded } = get(accessTokenStore);
-  if (!token || !decoded) return false;
-  const expiresAt = new Date(decoded.exp * 1000);
+export function isAuthenticated(accessToken?: AccessTokenStore) {
+  if (!accessToken) accessToken = get(accessTokenStore);
+  if (!accessToken?.token || !accessToken?.decoded) return false;
+  const expiresAt = new Date(accessToken.decoded.exp * 1000);
   return new Date() < expiresAt;
 }

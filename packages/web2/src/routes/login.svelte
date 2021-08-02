@@ -1,27 +1,25 @@
 <script lang="ts">
   import { get } from "svelte/store";
   import { loginFormState, loginFormSchema } from "$lib/auth/login_form";
-  import { redirectIfAuthenticated } from "$lib/auth/redirect_if_authenticated";
+  import { login } from "$lib/auth/auth";
+  import { redirectIfAuthenticated } from "$lib/auth/redirect";
 
   redirectIfAuthenticated();
 
-  async function handleSubmit() {
+  async function submit() {
     const input = get(loginFormState);
     const { error, value } = loginFormSchema.validate(input);
-    console.log("LoginFormData", { error, value });
 
-    if (!error) {
-      const { login } = await import("$lib/auth/auth");
-      await login(value);
+    if (error) {
       return;
     }
 
-    // there is an error, handle it
+    await login(value);
   }
-
 </script>
+
 <div class="centered-form">
-  <form on:submit|preventDefault="{handleSubmit}">
+  <form on:submit|preventDefault="{submit}">
     <div class="form-control">
       <label for="email">Email:</label>
       <input id="email"

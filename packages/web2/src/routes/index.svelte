@@ -4,15 +4,22 @@
 {#await promise}
   <p>waiting for the promise to resolve...</p>
 {:then res}
-  <p>{res.user.email}</p>
+  {#each res.users.data as user}
+    <p>{JSON.stringify(user)}</p>
+  {/each}
 {:catch error}
   <p>Something went wrong: {error.message}</p>
 {/await}
 
+<h1>Am I inside index {isAuth ? "Yes" : "no"} {JSON.stringify(isAuth)}</h1>
+
+
 <script lang="ts">
+  export let isAuth;
+
   import { graphQLSdk } from "$lib/api/api_sdk";
 
-  const promise = graphQLSdk.User({ email: "jason@raimondi.us" });
+  const promise = graphQLSdk.Users();
 </script>
 
 <style lang="postcss">

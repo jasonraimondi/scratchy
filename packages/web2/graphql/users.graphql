@@ -5,3 +5,13 @@ query User($email: String!) {
     email
   }
 }
+
+query Users {
+  users {
+    data {
+      email
+      name
+      lastHeartbeatAt
+    }
+  }
+}

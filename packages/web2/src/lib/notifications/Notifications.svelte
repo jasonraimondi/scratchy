@@ -8,17 +8,19 @@
   notify.messageList$.subscribe(n => notifications = Object.values(n));
 </script>
 
-<ul class="list">
-  {#each notifications as notification}
-    <li transition:fade="{{ duration: 200 }}" class={`item ${notification.type}`}>
-      <div class="message-container">
-        {#if notification.title}<span class="title">{notification.title}</span>{/if}
-        <span class="message">{notification.message}</span>
-      </div>
-      <span class={`close ${notification.type}`} on:click={() => notify.clear(notification.id)}>&times;</span>
-    </li>
-  {/each}
-</ul>
+{#if notifications.length}
+  <ul class="list">
+    {#each notifications as notification}
+      <li transition:fade="{{ duration: 200 }}" class={`item ${notification.type}`}>
+        <div class="message-container">
+          {#if notification.title}<span class="title">{notification.title}</span>{/if}
+          <span class="message">{notification.message}</span>
+        </div>
+        <span class={`close ${notification.type}`} on:click={() => notify.clear(notification.id)}>&times;</span>
+      </li>
+    {/each}
+  </ul>
+{/if}
 
 <style lang="postcss">
     .list {

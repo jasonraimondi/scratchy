@@ -8,9 +8,10 @@ import { UpdatePasswordModule } from "~/app/user/update_password/update_password
 import { RegisterModule } from "~/app/user/register/register.module";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { HeartbeatChannel } from "~/app/user/heartbeat.channel";
+import { LoggerModule } from "~/lib/logger/logger.module";
 
 @Module({
-  imports: [DatabaseModule, EmailConfirmationModule, ForgotPasswordModule, RegisterModule, UpdatePasswordModule],
+  imports: [DatabaseModule, LoggerModule, EmailConfirmationModule, ForgotPasswordModule, RegisterModule, UpdatePasswordModule],
   providers: [MeResolver, UserResolver, HeartbeatChannel],
 })
 export class UserModule {}

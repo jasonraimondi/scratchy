@@ -1,8 +1,11 @@
 {
-    debug
     local_certs
     https_port 443
+    # debug
     # email youremail@domain.com
+    log {
+      level ERROR
+    }
 }
 
 scratchy.localdomain/api/* {
@@ -18,4 +21,3 @@ scratchy.localdomain/mail/* {
 scratchy.localdomain {
     reverse_proxy 127.0.0.1:3000
 }
-

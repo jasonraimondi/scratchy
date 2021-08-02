@@ -12,7 +12,6 @@ textarea {
   line-height: 1.5;
   color: inherit;
   border: 2px solid var(--theme-color);
-  background: var(--theme-background-color);
   border-radius: var(--theme-border-radius);
   text-transform: none;
   letter-spacing: 0;
@@ -47,7 +46,6 @@ textarea {
   &.disabled {
     pointer-events: none;
     color: var(--colors-gray-700);
-    background: var(--colors-gray-100);
     border-color: var(--colors-gray-800);
   }
 
@@ -67,9 +65,9 @@ textarea {
   }
 
   @media (--dark) {
-    color: var(--theme-color-darkmode) !important;
-    border-color: var(--theme-color-darkmode) !important;
-    background-color: var(--theme-background-color-darkmode) !important;
+    color: var(--theme-color-darkmode);
+    border-color: var(--theme-color-darkmode);
+    background-color: transparent;
   }
 }
 
@@ -91,6 +89,7 @@ input[type="file"] {
 input[type="checkbox"],
 input[type="radio"] {
   display: inline-block;
+  padding: 0;
   margin-right: 0;
   width: auto;
   height: auto;
