@@ -2,7 +2,7 @@ class LocalStorageService {
   private readonly storagePrefix = "scratchy."
 
   get<T>(key: string): T | null {
-    const item = window.localStorage.getItem(this.storagePrefix + key);
+    const item = localStorage.getItem(this.storagePrefix + key);
 
     if (!item || item === "null") {
       return null;
@@ -25,7 +25,7 @@ class LocalStorageService {
     }
 
     try {
-      window.localStorage.setItem(this.storagePrefix + key, value);
+      localStorage.setItem(this.storagePrefix + key, value);
     } catch (e) {
       console.log(e);
     }
@@ -33,7 +33,7 @@ class LocalStorageService {
   }
 
   remove(key: string) {
-    window.localStorage.removeItem(this.storagePrefix + key);
+    localStorage.removeItem(this.storagePrefix + key);
   }
 }
 
