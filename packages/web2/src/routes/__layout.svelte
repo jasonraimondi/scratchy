@@ -22,32 +22,19 @@
   import Header from "$lib/layouts/Header.svelte";
   import DebugBar from "$lib/debug_bar/DebugBar.svelte";
 
-  // import { io } from "socket.io-client";
-  // import { onMount } from "svelte";
-  // import { currentUserStore } from "$lib/auth/current_user";
-
-  // onMount(() => {
-  //   const socket = io({
-  //     path: "/api/socket.io",
-  //     transports: ["websocket", "polling"]
-  //   });
+  // async function checkAuth() {
+  //   const { notify } = import("$lib/notifications/notification.service");
+  //   const { isAuthenticated, refreshToken } = import("$lib/auth/auth");
+  //   const isExpired = !isAuthenticated();
   //
-  //   let heartbeat;
-  //
-  //   socket.on("connect", () => {
-  //     console.log("I CONNECTED!!", socket.id);
-  //     heartbeat = setInterval(() => socket.emit("appear", { userId: $currentUserStore.id }), 2000);
-  //   });
-  //
-  //   socket.on("events", (data) => {
-  //     console.log("event", data);
-  //   });
-  //   socket.on("exception", (data) => {
-  //     console.log("event", data);
-  //   });
-  //   socket.on("disconnect", () => {
-  //     console.log("Disconnected");
-  //     if (heartbeat) clearInterval(heartbeat);
-  //   });
-  // });
+  //   if (isPrivate && isExpired) {
+  //     notify.info("is private and is expired, running token refresh");
+  //     if (await refreshToken()) {
+  //       notify.info("It refreshed successfully");
+  //     } else {
+  //       const { goto } = import("$app/navigation");
+  //       await goto("/login");
+  //     }
+  //   }
+  // }
 </script>

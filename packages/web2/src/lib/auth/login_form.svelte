@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { loginFormSchema } from "$lib/auth/forms";
+  import { loginFormSchema } from "$lib/utils/forms";
   import { login } from "$lib/auth/auth";
   import { validateForm } from "$lib/utils/form_validation";
 

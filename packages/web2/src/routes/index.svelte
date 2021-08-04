@@ -4,7 +4,7 @@
   <p>waiting for the promise to resolve...</p>
 {:then res}
   {#each res.users.data as user}
-    <p>{JSON.stringify(user)}</p>
+    <pre>{JSON.stringify(user, null, 2)}</pre>
   {/each}
 {:catch error}
   <p>Something went wrong: {error.message}</p>

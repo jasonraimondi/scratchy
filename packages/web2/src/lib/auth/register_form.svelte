@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { registerFormSchema } from "$lib/auth/forms";
+  import { registerFormSchema } from "$lib/utils/forms";
   import { validateForm } from "$lib/utils/form_validation";
   import { graphQLSdk } from "$lib/api/api_sdk";
 
+  // errors are key value, where key is the form name, and value is the error message
   let errors: Record<string, string> = {};
 
   const data = {

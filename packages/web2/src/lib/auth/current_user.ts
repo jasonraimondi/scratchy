@@ -24,5 +24,5 @@ accessTokenStore.subscribe(accessToken => {
 });
 
 currentUserStore.subscribe(currentUser => {
-  localStorageService.set("currentUser", currentUser);
+  if (browser) localStorageService.set("currentUser", currentUser);
 });
