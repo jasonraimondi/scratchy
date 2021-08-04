@@ -1,1 +1,5 @@
-<h1>Register</h1>
+<script>
+  import RegisterForm from "$lib/auth/RegisterForm.svelte";
+</script>
+
+<RegisterForm />
