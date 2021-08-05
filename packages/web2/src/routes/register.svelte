@@ -1,5 +1,5 @@
 <script>
-  import RegisterForm from "$lib/auth/register_form.svelte";
+  import RegisterForm from "$lib/auth/RegisterForm.svelte";
 </script>
 
 <RegisterForm />

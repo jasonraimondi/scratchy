@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { loginFormSchema } from "$lib/utils/forms";
+  import { loginSchema } from "$lib/utils/forms";
   import { login } from "$lib/auth/auth";
   import { validateForm } from "$lib/utils/form_validation";
 
@@ -12,15 +12,16 @@
   };
 
   async function submit() {
-    errors = await validateForm({ schema: loginFormSchema, data: loginForm });
+    errors = await validateForm({ schema: loginSchema, data: loginForm });
     if (!errors) await login(loginForm);
   }
 </script>
 
 <div class="centered-form">
-  <form on:submit|preventDefault="{submit}">
+  <form on:submit|preventDefault="{submit}" data-test="login-form">
+
     <div class="form-control">
-      <label for="email">Email:</label>
+      <label for="email">Email</label>
       {#if errors?.email}<span class="error">{errors.email}</span>{/if}
       <input id="email"
              name="email"
@@ -29,11 +30,12 @@
              required="required"
              aria-label="email"
              aria-required="true"
+             style="margin-bottom: 0;"
              bind:value={loginForm.email} />
     </div>
 
     <div class="form-control">
-      <label for="password">Password:</label>
+      <label for="password">Password</label>
       {#if errors?.password}<span class="error">{errors.password}</span>{/if}
       <input id="password"
              name="password"
@@ -43,19 +45,22 @@
              aria-label="password"
              aria-required="true"
              bind:value={loginForm.password} />
+      <a class="forgot-password" href="/forgot_password">Forgot Password?</a>
     </div>
 
-    <div class="form-control">
-      <label for="rememberMe">Remember Me:</label>
+    <div class="form-control inline">
+      <label for="rememberMe">Remember Me</label>
       <input id="rememberMe" type="checkbox" bind:checked={loginForm.rememberMe}>
     </div>
 
-    <button type="submit">Submit</button>
+    <div class="form-submit">
+      <button type="submit">Submit</button>
+    </div>
   </form>
 </div>
 
 <style>
-  .error {
-      font-size: 0.8em;
+  .forgot-password {
+    font-size: 0.8em;
   }
 </style>

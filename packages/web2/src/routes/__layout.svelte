@@ -8,10 +8,10 @@
 
 <DebugBar />
 
-<style>
-    main {
-        height: 100%;
-    }
+<style lang="postcss">
+  main {
+    height: 100%;
+  }
 </style>
 
 <script lang="ts">
