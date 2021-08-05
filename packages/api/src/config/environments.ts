@@ -18,8 +18,8 @@ const ENV = {
   isDevelopment,
   isTesting,
   urls: {
-    web: process.env.URL ? new URL(process.env.URL) : undefined,
-    api: process.env.URL ? new URL(process.env.API_URL ?? process.env.URL) : undefined,
+    web: new URL(process.env.URL!),
+    api: new URL(process.env.API_URL! ?? process.env.URL!),
   },
   secrets: {
     jwt: process.env.JWT_SECRET!,
@@ -37,7 +37,7 @@ const ENV = {
     authorizationServer: {
       loginDuration: "1h",
       authCodeDuration: "10m",
-      accessTokenDuration: "1h",
+      accessTokenDuration: "1m",
       refreshTokenDuration: "30d",
     },
     google: {

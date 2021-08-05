@@ -25,6 +25,31 @@ services:
       - 8025:8025
       - 1025:1025
 
+  minio:
+    image: minio/minio
+    command: ["server", "/data"]
+    ports:
+      - 9000:9000
+    volumes:
+      - minio-config:/root/.minio
+      - minio-data:/data
+    environment:
+      MINIO_ACCESS_KEY: miniominiominio
+      MINIO_SECRET_KEY: miniominiominio
+      MINIO_HTTP_TRACE: /dev/stdout
+
+  minio-mc:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add scratchy-connection http://minio:9000 miniominiominio miniominiominio;
+      /usr/bin/mc mb scratchy_uploads;
+      /usr/bin/mc policy set public scratchy_uploads;
+      exit 0;
+      "
+
 volumes:
   pgdata1:
   minio-config:

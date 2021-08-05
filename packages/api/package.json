@@ -25,6 +25,8 @@
   },
   "keywords": [],
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.24.0",
+    "@aws-sdk/s3-request-presigner": "^3.24.0",
     "@jmondi/oauth2-server": "^1.3.0-rc.1",
     "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/bull": "^0.4.0",

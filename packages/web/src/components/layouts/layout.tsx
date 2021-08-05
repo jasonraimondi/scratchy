@@ -23,8 +23,8 @@ export const Layout: FC<{ title?: string; isPrivate?: boolean }> = ({
 
   const isExpired = useMemo(() => !auth.isAuthenticated, [auth.accessToken]);
 
-  async function checkAuth() {
-    if (isPrivate && isExpired) {
+  async function checkAuth(isPrivatePage: boolean) {
+    if (isPrivatePage && isExpired) {
       notifyService.info("is private and is expired, running token refresh");
       // this line is racing against the useMe query line
       if (await auth.refreshToken()) {

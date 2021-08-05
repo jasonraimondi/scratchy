@@ -11,6 +11,7 @@ import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { OAuthModule } from "~/app/oauth/oauth.module";
 import { QueueModule } from "~/lib/queue/queue.module";
+import { FileModule } from "~/app/file/file.module";
 
 const imports = [];
 
@@ -27,7 +28,8 @@ if (!ENV.isProduction) imports.push(QueueWorkerModule);
     AuthModule,
     OAuthModule,
     UserModule,
-    OAuthModule,
+    // OAuthModule,
+    FileModule,
   ],
   controllers: [AppController],
 })

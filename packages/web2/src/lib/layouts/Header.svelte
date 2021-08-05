@@ -9,6 +9,7 @@
       {#if $currentUserStore}
         <li><a href="/app/dashboard" data-test="link--dashboard">Dashboard</a></li>
         <li><a href="/app/profile" data-test="link--profile">Profile</a></li>
+        <li><a href="/app/upload" data-test="link--upload">Upload</a></li>
       {/if}
     </ul>
     <ul class="right">

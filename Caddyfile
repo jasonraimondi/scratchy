@@ -13,6 +13,11 @@ scratchy.localdomain/api/* {
     reverse_proxy 127.0.0.1:3001
 }
 
+scratchy.localdomain/minio/* {
+    uri strip_prefix /minio
+    reverse_proxy 127.0.0.1:9000
+}
+
 scratchy.localdomain/mail/* {
     uri strip_prefix /mail
     reverse_proxy 127.0.0.1:8025

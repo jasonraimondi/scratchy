@@ -5,6 +5,7 @@
 		"gen": "graphql-codegen --config codegen.yml",
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
+		"start": "node dist/main.js",
 		"preview": "svelte-kit preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
