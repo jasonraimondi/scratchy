@@ -1,16 +1,45 @@
 <script lang="ts">
   import { apiHttpClient } from "$lib/api/http_client";
+  import { onMount } from "svelte";
 
   let avatar: string | ArrayBuffer;
+  let file;
   let input;
 
   function onFileSelected(e) {
-    let image = e.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(image);
+    file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
     reader.onload = e => {
       avatar = e.target.result;
     };
+  }
+
+  async function onSubmit() {
+    const { url, fields } = await apiHttpClient.post("/presigned_url")
+
+    const formData  = new FormData();
+
+    formData.append("file", file);
+
+    Object.entries(fields).forEach(([name, value]) => {
+      if (typeof value === "string" || value instanceof Blob) {
+        formData.append(name, value)
+      }
+    });
+
+    const upload = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (upload.ok) {
+      console.log('Uploaded successfully!');
+    } else {
+      console.error('Upload failed.');
+    }
+
+    console.log(upload.status)
   }
 
 </script>
@@ -23,18 +52,19 @@
   <img class="avatar" src="https://placehold.it/250" alt="" />
 {/if}
 
+<form on:submit|preventDefault={onSubmit}>
+  <!-- Copy the 'fields' key:values returned by S3Client.generate_presigned_post() -->
 
-<button on:click={()=>{input.click()}}>Upload</button>
-<div on:click={()=>{input.click()}}>Choose Image</div>
+  <div class="form-control">
+    <label for="file">File:</label>
+    <input id="file"
+           type="file"
+           name="file"
+           accept=".jpg, .jpeg, .png"
+           on:change={onFileSelected}
+           bind:this={input} />
+  </div>
 
-<input style="display:none"
-       type="file"
-       accept=".jpg, .jpeg, .png"
-       on:change={(e)=>onFileSelected(e)}
-       bind:this={input}>
-
-{#await apiHttpClient.post("/presigned_url")}
-{:then res}
-  {res.url}
-{/await}
+  <button type="submit">Upload to Amazon S3</button>
+</form>
 
