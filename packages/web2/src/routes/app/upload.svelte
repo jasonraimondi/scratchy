@@ -1,6 +1,5 @@
 <script lang="ts">
   import { apiHttpClient } from "$lib/api/http_client";
-  import { onMount } from "svelte";
 
   let avatar: string | ArrayBuffer;
   let file;
@@ -16,15 +15,16 @@
   }
 
   async function onSubmit() {
-    const { url, fields } = await apiHttpClient.post("/presigned_url")
+    const { url, fields } = await apiHttpClient.post("/presigned_url", {
+      fileName: file?.name,
+      type: "avatar"
+    });
 
     const formData  = new FormData();
-
     formData.append("file", file);
-
     Object.entries(fields).forEach(([name, value]) => {
       if (typeof value === "string" || value instanceof Blob) {
-        formData.append(name, value)
+        formData.append(name, value);
       }
     });
 
@@ -60,7 +60,6 @@
     <input id="file"
            type="file"
            name="file"
-           accept=".jpg, .jpeg, .png"
            on:change={onFileSelected}
            bind:this={input} />
   </div>

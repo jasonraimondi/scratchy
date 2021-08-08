@@ -12,6 +12,7 @@ CREATE TABLE "User" (
     "passwordHash" VARCHAR(255),
     "firstName" VARCHAR(255),
     "lastName" VARCHAR(255),
+    "lastHeartbeatAt" TIMESTAMP(6),
     "lastLoginAt" TIMESTAMP(6),
     "lastLoginIP" INET,
     "createdIP" INET NOT NULL,
@@ -20,6 +21,16 @@ CREATE TABLE "User" (
     "tokenVersion" INTEGER NOT NULL DEFAULT 0,
     "oauthGoogleIdentifier" VARCHAR(255),
     "oauthGithubIdentifier" VARCHAR(255),
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FileUpload" (
+    "id" UUID NOT NULL,
+    "originalName" VARCHAR(255) NOT NULL,
+    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" UUID NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -171,6 +182,9 @@ CREATE UNIQUE INDEX "User.oauthGithubIdentifier_unique" ON "User"("oauthGithubId
 CREATE INDEX "idx_user_email" ON "User"("email");
 
 -- CreateIndex
+CREATE INDEX "idx_fileupload_userid" ON "FileUpload"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "EmailConfirmationToken.userId_unique" ON "EmailConfirmationToken"("userId");
 
 -- CreateIndex
@@ -223,6 +237,9 @@ CREATE UNIQUE INDEX "_OAuthScopeToOAuthToken_AB_unique" ON "_OAuthScopeToOAuthTo
 
 -- CreateIndex
 CREATE INDEX "_OAuthScopeToOAuthToken_B_index" ON "_OAuthScopeToOAuthToken"("B");
+
+-- AddForeignKey
+ALTER TABLE "FileUpload" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EmailConfirmationToken" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

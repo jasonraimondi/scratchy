@@ -14,7 +14,7 @@ model User {
   passwordHash           String?                 @db.VarChar(255)
   firstName              String?                 @db.VarChar(255)
   lastName               String?                 @db.VarChar(255)
-  lastHeartbeatAt            DateTime?               @db.Timestamp(6)
+  lastHeartbeatAt        DateTime?               @db.Timestamp(6)
   lastLoginAt            DateTime?               @db.Timestamp(6)
   lastLoginIP            String?                 @db.Inet
   createdIP              String                  @db.Inet
@@ -27,10 +27,21 @@ model User {
   forgotPasswordToken    ForgotPasswordToken?
   permissions            UserPermission[]
   roles                  UserRole[]
-  OAuthAuthCode OAuthAuthCode[]
-  OAuthToken    OAuthToken[]
+  oauthAuthCodes         OAuthAuthCode[]
+  oauthTokens            OAuthToken[]
+  fileUploads            FileUpload[]
 
   @@index([email], name: "idx_user_email")
+}
+
+model FileUpload {
+  id           String   @id @db.Uuid
+  originalName String   @db.VarChar(255)
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  userId       String   @db.Uuid
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "idx_fileupload_userid")
 }
 
 model EmailConfirmationToken {

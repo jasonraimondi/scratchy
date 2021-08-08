@@ -12,10 +12,7 @@
 
 <style lang="postcss">
   .debug-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      width: 100%;
       display: flex;
       background-color: tomato;
       padding: 0.2em;
