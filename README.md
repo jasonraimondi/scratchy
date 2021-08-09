@@ -4,14 +4,9 @@
 
 ```bash
 # install dependencies
-npm ci
-npm ci --prefix api
-npm ci --prefix web
-npm ci --prefix cypress
+pnpm install
 
-# boot postgres and redis services
-docker-compose up -d
-
+# boot services
 overmind start
 ```
 
