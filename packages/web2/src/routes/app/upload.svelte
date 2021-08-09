@@ -20,28 +20,24 @@
       type: "avatar"
     });
 
-    const formData  = new FormData();
-    formData.append("file", file);
+    const body = new FormData();
+
+    body.append("file", file);
+
     Object.entries(fields).forEach(([name, value]) => {
       if (typeof value === "string" || value instanceof Blob) {
-        formData.append(name, value);
+        body.append(name, value);
       }
     });
 
-    const upload = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
+    const upload = await fetch(url, { method: "POST", body });
 
     if (upload.ok) {
-      console.log('Uploaded successfully!');
+      console.log("Uploaded successfully!");
     } else {
-      console.error('Upload failed.');
+      console.error("Upload failed.");
     }
-
-    console.log(upload.status)
   }
-
 </script>
 
 <h1>Upload Image</h1>
@@ -67,3 +63,8 @@
   <button type="submit">Upload to Amazon S3</button>
 </form>
 
+<style>
+  .avatar {
+      max-width: 100px;
+  }
+</style>

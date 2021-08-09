@@ -18,19 +18,21 @@ async function main() {
     create: { name: "overlord" },
   })
 
-  const user2 = await generateUser();
-  await prisma.user.upsert({
-    where: { email: user2.email },
-    update: {},
-    create: {
-      id: user2.id,
-      firstName: user2.firstName,
-      lastName: user2.lastName,
-      email: user2.email,
-      isEmailConfirmed: user2.isEmailConfirmed,
-      createdIP: user2.createdIP,
-    }
-  });
+  for (const _ in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]) {
+    console.log("Hi")
+    const user2 = await generateUser();
+    await prisma.user.upsert({
+      where: { email: user2.email },
+      update: {},
+      create: {
+        firstName: user2.firstName,
+        lastName: user2.lastName,
+        email: user2.email,
+        isEmailConfirmed: user2.isEmailConfirmed,
+        createdIP: user2.createdIP,
+      }
+    });
+  }
 
   const jason = await prisma.user.upsert({
     where: { email: "jason@raimondi.us" },

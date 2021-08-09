@@ -7,17 +7,17 @@
   <button class="info" on:click={() => notify.info("This is my info")}>Info</button>
   <button class="success" on:click={() => notify.success("This is my Woah")}>Success</button>
   <button class="error" on:click={() => notify.error("This is an error")}>Error</button>
-  <p>{$currentUserStore?.id}</p>
+  <p><strong>UserId:</strong> {$currentUserStore?.id.substr(0, 4)}...</p>
 </div>
 
 <style lang="postcss">
   .debug-bar {
-      width: 100%;
       display: flex;
-      background-color: tomato;
-      padding: 0.2em;
+      align-items: center;
+      background-color: var(--colors-amber-200);
   }
+
   button {
-      margin-right: 0.2em;
+      margin: 0.4em 0.2em;
   }
 </style>
