@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { validateForm } from "@jmondi/form-validator";
+
   import { loginSchema } from "$lib/utils/forms";
   import { login } from "$lib/auth/auth";
-  import { validateForm } from "$lib/utils/form_validation";
 
   let errors: Record<string, string> = {};
 

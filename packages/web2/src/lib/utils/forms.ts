@@ -1,5 +1,5 @@
 import joi from "joi";
-import { createForm } from "$lib/utils/form_validation";
+import { createForm } from "@jmondi/form-validator";
 
 const email = joi.string().email({ tlds: false });
 const password = joi.string().min(8);

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { validateForm } from "$lib/utils/form_validation";
+  import { validateForm } from "@jmondi/form-validator";
   import { graphQLSdk } from "$lib/api/api_sdk";
   import { notify } from "$lib/notifications/notification.service";
   import { updatePasswordFromTokenSchema } from "$lib/utils/forms";

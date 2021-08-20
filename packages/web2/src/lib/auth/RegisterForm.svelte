@@ -1,6 +1,6 @@
 <script lang="ts">
   import { registerSchema } from "$lib/utils/forms";
-  import { validateForm } from "$lib/utils/form_validation";
+  import { validateForm } from "@jmondi/form-validator";
   import { graphQLSdk } from "$lib/api/api_sdk";
 
   // errors are key value, where key is the form name, and value is the error message

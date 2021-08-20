@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import { graphQLSdk } from "$lib/api/api_sdk";
   import { forgotPasswordSchema } from "$lib/utils/forms";
-  import { validateForm } from "$lib/utils/form_validation";
+  import { validateForm } from "@jmondi/form-validator";
   import { notify } from "$lib/notifications/notification.service";
 
   let errors: Record<string, string> = {};
