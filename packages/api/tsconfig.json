@@ -45,7 +45,8 @@
     "typeRoots": [
       "@types",
       "node_modules/@types",
-      "node_modules/fastify-csrf"
+      "node_modules/fastify-csrf",
+      "node_modules/fastify-oauth2"
     ],
 
     /* Output Options */

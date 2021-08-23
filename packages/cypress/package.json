@@ -10,7 +10,7 @@
   "author": "Jason Raimondi",
   "devDependencies": {
     "@types/faker": "^5.5.8",
-    "cypress": "^8.2.0",
+    "cypress": "^8.3.0",
     "cypress-mailhog": "^1.4.0",
     "faker": "^5.5.3",
     "mailparser": "^3.3.0",

@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from "@nestjs/common";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { fromFastifyAuthHeaderAsBearerToken } from "~/app/auth/strategies/jwt.strategy";
+import { fromFastifyAuthHeaderAsBearerToken } from "~/app/auth/_passport/strategies/jwt.strategy";
 import { AccessTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 import { TokenService } from "~/app/auth/services/token.service";
 import { LoggerService } from "~/lib/logger/logger.service";

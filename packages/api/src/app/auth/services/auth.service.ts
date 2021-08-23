@@ -6,28 +6,7 @@ import { User } from "~/entities/user.entity";
 import { cookieOptions } from "~/config/cookies";
 import { TokenService } from "~/app/auth/services/token.service";
 import { RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
-import { LoginResponse } from "~/app/auth/resolvers/auth.response";
-
-type LoginInput = {
-  res: FastifyReply;
-  ipAddr: string;
-  rememberMe?: boolean;
-};
-
-type LoginWithEmail = LoginInput & {
-  email: string;
-  password: string;
-};
-
-type LoginWithUser = LoginInput & {
-  user: User;
-};
-
-type SendRefreshTokenInput = {
-  res: FastifyReply;
-  rememberMe?: boolean;
-  user?: User;
-};
+import { LoginResponse } from "~/app/auth/dto/auth.response";
 
 @Injectable()
 export class AuthService {
@@ -81,3 +60,24 @@ export class AuthService {
     return refreshTokenExpiresAt;
   }
 }
+
+type LoginInput = {
+  res: FastifyReply;
+  ipAddr: string;
+  rememberMe?: boolean;
+};
+
+type LoginWithEmail = LoginInput & {
+  email: string;
+  password: string;
+};
+
+type LoginWithUser = LoginInput & {
+  user: User;
+};
+
+type SendRefreshTokenInput = {
+  res: FastifyReply;
+  rememberMe?: boolean;
+  user?: User;
+};

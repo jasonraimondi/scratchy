@@ -9,7 +9,6 @@ import { graphqlConfig } from "~/config/graphql";
 import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
-import { OAuthModule } from "~/app/oauth/oauth.module";
 import { QueueModule } from "~/lib/queue/queue.module";
 import { FileModule } from "~/app/file/file.module";
 
@@ -26,7 +25,6 @@ if (!ENV.isProduction) imports.push(QueueWorkerModule);
     GraphQLModule.forRoot(graphqlConfig),
 
     AuthModule,
-    OAuthModule,
     UserModule,
     // OAuthModule,
     FileModule,

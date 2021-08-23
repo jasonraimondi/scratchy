@@ -8,13 +8,6 @@ import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import type { FastifyRequest } from "fastify";
 import { User } from "~/entities/user.entity";
 
-export type TokenPayload = {
-  userId: string;
-  email: string;
-  tokenVersion: number;
-  iat?: number;
-};
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly userRepository: UserRepository) {
@@ -35,7 +28,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 }
 
+export type TokenPayload = {
+  userId: string;
+  email: string;
+  tokenVersion: number;
+  iat?: number;
+};
+
 export const fromFastifyAuthHeaderAsBearerToken = (request: FastifyRequest): string | undefined => {
   const auth = request.headers["authorization"];
-  return auth?.split(" ")[1];
+  const [type, code] = auth?.split(" ") ?? [];
+  if (type.toLowerCase() !== "bearer") return undefined;
+  return code;
 };

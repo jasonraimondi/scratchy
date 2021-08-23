@@ -4,8 +4,6 @@ import { IsEmail, Length } from "class-validator";
 import type { FastifyRequest, FastifyReply } from "fastify";
 import querystring from "querystring";
 
-// import { ClientRepository } from "~/app/oauth/repositories/client.repository";
-// import { ScopeRepository } from "~/app/oauth/repositories/scope.repository";
 import { LoginService } from "~/app/oauth/services/login.service";
 import { API_ROUTES } from "~/config/routes";
 import { AuthorizationServer } from "~/app/oauth/services/authorization_server.service";
@@ -22,8 +20,6 @@ export class PostLoginBody {
 @Controller("oauth2/login")
 export class LoginController {
   constructor(
-    // private readonly clientRepo: ClientRepository,
-    // private readonly scopeRepo: ScopeRepository,
     private readonly userRepository: UserRepository,
     private readonly oauth: AuthorizationServer,
     private readonly loginService: LoginService,

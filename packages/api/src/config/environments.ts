@@ -34,20 +34,20 @@ const ENV = {
   templatesDir: join(__dirname, "../../templates"),
 
   oauth: {
-    authorizationServer: {
-      loginDuration: "1h",
-      authCodeDuration: "10m",
-      accessTokenDuration: "1m",
-      refreshTokenDuration: "30d",
-    },
+    // authorizationServer: {
+    //   loginDuration: "1h",
+    //   authCodeDuration: "10m",
+    //   accessTokenDuration: "1m",
+    //   refreshTokenDuration: "30d",
+    // },
     google: {
-      clientId: process.env.OAUTH_GOOGLE_ID,
-      clientSecret: process.env.OAUTH_GOOGLE_SECRET,
+      clientId: process.env.OAUTH_GOOGLE_ID!,
+      clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
       callbackURL: "https://scratchy.localdomain/api/oauth2/google/callback",
     },
     github: {
-      clientId: process.env.OAUTH_GITHUB_ID,
-      clientSecret: process.env.OAUTH_GITHUB_SECRET,
+      clientId: process.env.OAUTH_GITHUB_ID!,
+      clientSecret: process.env.OAUTH_GITHUB_SECRET!,
       callbackURL: "https://scratchy.localdomain/api/oauth2/github/callback",
     },
   },

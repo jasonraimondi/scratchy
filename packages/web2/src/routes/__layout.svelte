@@ -1,6 +1,6 @@
 <Notifications />
 
-<Header />
+<!--<Header />-->
 
 <main>
   <slot />
@@ -19,7 +19,7 @@
   import "../app.pcss";
 
   import Notifications from "$lib/notifications/Notifications.svelte";
-  import Header from "$lib/layouts/Header.svelte";
+  // import Header from "$lib/layouts/Header.svelte";
   import DebugBar from "$lib/debug_bar/DebugBar.svelte";
 
   // async function checkAuth() {
