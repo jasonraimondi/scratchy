@@ -1,20 +1,20 @@
 mutation Login($input: LoginInput!) {
-  login(input: $input) {
-    accessToken
-    user {
-      id
-      email
-      name
-    }
-  }
+	login(input: $input) {
+		accessToken
+		user {
+			id
+			email
+			name
+		}
+	}
 }
 
 mutation RefreshAccessToken {
-  refreshAccessToken {
-    accessToken
-    user {
-      id
-      email
-    }
-  }
+	refreshAccessToken {
+		accessToken
+		user {
+			id
+			email
+		}
+	}
 }

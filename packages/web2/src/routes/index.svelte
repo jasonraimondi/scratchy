@@ -1,15 +1,15 @@
+<script lang="ts">
+	import { graphQLSdk } from '$lib/api/api_sdk';
+</script>
+
 <h1>Welcome to SvelteKit</h1>
 
 {#await graphQLSdk.Users()}
-  <p>waiting for the promise to resolve...</p>
+	<p>waiting for the promise to resolve...</p>
 {:then res}
-  {#each res.users.data as user}
-    <pre>{JSON.stringify(user, null, 2)}</pre>
-  {/each}
+	{#each res.users.data as user}
+		<pre>{JSON.stringify(user, null, 2)}</pre>
+	{/each}
 {:catch error}
-  <p>Something went wrong: {error.message}</p>
+	<p>Something went wrong: {error.message}</p>
 {/await}
-
-<script lang="ts">
-  import { graphQLSdk } from "$lib/api/api_sdk";
-</script>

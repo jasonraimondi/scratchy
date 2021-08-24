@@ -1,38 +1,37 @@
 button,
 .button,
 a.button {
-  font-weight: inherit;
-  background-color: var(--theme-primary);
-  color: var(--colors-white);
-  padding: 0.25em 0.5em;
-  border-radius: var(--theme-border-radius);
-  border: none;
-  cursor: pointer;
-  display: inline-block;
+	font-weight: inherit;
+	background-color: var(--theme-primary);
+	color: var(--colors-white);
+	padding: 0.25em 0.5em;
+	border-radius: var(--theme-border-radius);
+	border: none;
+	cursor: pointer;
+	display: inline-block;
 
-  &:disabled,
-  &.disabled {
-    background-color: var(--colors-gray-400);
-    cursor: initial;
-  }
+	&:disabled,
+	&.disabled {
+		background-color: var(--colors-gray-400);
+		cursor: initial;
+	}
 
-  &:hover {
-    background-color: var(--theme-primary-hover);
-  }
+	&:hover {
+		background-color: var(--theme-primary-hover);
+	}
 
+	&.info {
+		background-color: var(--theme-info);
+		border-color: var(--theme-info-hover);
+	}
 
-  &.info {
-    background-color: var(--theme-info);
-    border-color: var(--theme-info-hover);
-  }
+	&.success {
+		background-color: var(--theme-success);
+		border-color: var(--theme-success-hover);
+	}
 
-  &.success {
-    background-color: var(--theme-success);
-    border-color: var(--theme-success-hover);
-  }
-
-  &.error {
-    background-color: var(--theme-error);
-    border-color: var(--theme-error-hover);
-  }
+	&.error {
+		background-color: var(--theme-error);
+		border-color: var(--theme-error-hover);
+	}
 }

@@ -5,6 +5,8 @@ import { AuthService } from "~/app/auth/services/auth.service";
 import { AuthResolver } from "~/app/auth/resolvers/auth.resolver";
 import { JwtStrategy } from "~/app/auth/_passport/strategies/jwt.strategy";
 import { TokenService } from "~/app/auth/services/token.service";
+import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
+import { FacebookController } from "~/app/auth/controllers/facebook.controller";
 import { GithubController } from "~/app/auth/controllers/github.controller";
 import { GoogleController } from "~/app/auth/controllers/google.controller";
 import { AuthMiddleware } from "~/lib/middleware/auth.middleware";
@@ -13,23 +15,9 @@ import { JwtModule } from "~/lib/jwt/jwt.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 
 @Module({
-  controllers: [
-    GithubController,
-    GoogleController,
-  ],
-  imports: [
-    DatabaseModule,
-    HttpModule,
-    JwtModule,
-    LoggerModule
-  ],
-  providers: [
-    AuthService,
-    TokenService,
-    AuthResolver,
-    JwtStrategy,
-    AuthMiddleware,
-  ],
+  controllers: [FacebookController, GithubController, GoogleController],
+  imports: [DatabaseModule, HttpModule, JwtModule, LoggerModule],
+  providers: [AuthService, TokenService, FastifyOAuthClientService, AuthResolver, JwtStrategy, AuthMiddleware],
   exports: [AuthService],
 })
 export class AuthModule implements NestModule {

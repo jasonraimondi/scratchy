@@ -18,14 +18,13 @@ export class PresignedUrlBody {
 
 @Controller("/presigned_url")
 export class FileController {
-
   private readonly client = new S3Client({
     credentials: {
       accessKeyId: "miniominiominio",
-      secretAccessKey: "miniominiominio"
+      secretAccessKey: "miniominiominio",
     },
     region: "us-east-1",
-    endpoint: "http://localhost:9000"
+    endpoint: "http://localhost:9000",
   });
 
   constructor(private readonly fileUploadRepository: FileUploadRepository) {}
@@ -33,26 +32,19 @@ export class FileController {
   @UseGuards(JwtAuthGuard)
   @Post("/")
   async presignedUrl(@Body() body: PresignedUrlBody, @Req() req: FastifyRequest) {
-
     const fileUpload = await FileUpload.create({
       userId: req.user!.id,
       originalName: body.fileName,
     });
     await this.fileUploadRepository.create(fileUpload);
 
-
-
     return createPresignedPost(this.client, {
       Bucket: "scratchy-bucket",
       Key: `users/${req.user!.email}/${body.fileName}`,
-      Conditions: [
-        { acl: "public-read" },
-        { bucket: "scratchy-bucket" },
-        ["starts-with", "$key", "users/"]
-      ],
+      Conditions: [{ acl: "public-read" }, { bucket: "scratchy-bucket" }, ["starts-with", "$key", "users/"]],
       Fields: {
-        acl: "public-read"
-      }
+        acl: "public-read",
+      },
     });
   }
 }

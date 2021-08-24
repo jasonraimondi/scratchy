@@ -1,17 +1,17 @@
 query User($email: String!) {
-  user(email: $email) {
-    id
-    name
-    email
-  }
+	user(email: $email) {
+		id
+		name
+		email
+	}
 }
 
 query Users {
-  users {
-    data {
-      email
-      name
-      lastHeartbeatAt
-    }
-  }
+	users {
+		data {
+			email
+			name
+			lastHeartbeatAt
+		}
+	}
 }

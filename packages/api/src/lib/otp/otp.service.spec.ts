@@ -19,7 +19,7 @@ describe("OtpService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined();
-    console.log(service.generate())
-    console.log(service.verify(service.generate()))
+    console.log(service.generate());
+    console.log(service.verify(service.generate()));
   });
 });

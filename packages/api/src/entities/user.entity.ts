@@ -10,7 +10,7 @@ import { verifyPassword, hashPassword } from "~/lib/utils/password";
 
 export { UserModel };
 
-export type ICreateUser = { id?: string, email: string; password?: string } & Partial<UserModel>;
+export type ICreateUser = { id?: string; email: string; password?: string } & Partial<UserModel>;
 
 type Relations = {
   roles: RoleModel[];

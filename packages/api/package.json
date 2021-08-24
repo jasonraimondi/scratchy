@@ -79,7 +79,7 @@
     "@nestjs/cli": "^8.1.1",
     "@nestjs/testing": "^8.0.6",
     "@types/bcryptjs": "^2.4.2",
-    "@types/bull": "^3.15.3",
+    "@types/bull": "^3.15.4",
     "@types/faker": "^5.5.8",
     "@types/jest": "^26.0.24",
     "@types/jwt-decode": "^3.1.0",

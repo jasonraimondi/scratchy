@@ -29,7 +29,7 @@ export class FileUpload implements FileUploadModel {
   @Field()
   userId: string;
 
-  @Field(() =>  User)
+  @Field(() => User)
   user: User | null = null;
 
   @Field()
@@ -45,4 +45,4 @@ export class FileUpload implements FileUploadModel {
   }
 }
 
-type CreateFileUpload = Omit<FileUploadModel,  "createdAt"|"id"> & { id?: string; };
+type CreateFileUpload = Omit<FileUploadModel, "createdAt" | "id"> & { id?: string };

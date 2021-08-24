@@ -40,15 +40,20 @@ const ENV = {
     //   accessTokenDuration: "1m",
     //   refreshTokenDuration: "30d",
     // },
-    google: {
-      clientId: process.env.OAUTH_GOOGLE_ID!,
-      clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
-      callbackURL: "https://scratchy.localdomain/api/oauth2/google/callback",
+    facebook: {
+      clientId: process.env.OAUTH_FACEBOOK_ID!,
+      clientSecret: process.env.OAUTH_FACEBOOK_SECRET!,
+      callbackURL: "https://scratchy.localdomain/api/oauth2/facebook/callback",
     },
     github: {
       clientId: process.env.OAUTH_GITHUB_ID!,
       clientSecret: process.env.OAUTH_GITHUB_SECRET!,
       callbackURL: "https://scratchy.localdomain/api/oauth2/github/callback",
+    },
+    google: {
+      clientId: process.env.OAUTH_GOOGLE_ID!,
+      clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
+      callbackURL: "https://scratchy.localdomain/api/oauth2/google/callback",
     },
   },
 

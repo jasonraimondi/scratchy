@@ -1,7 +1,7 @@
 mutation Logout {
-  logout
+	logout
 }
 
 mutation RevokeRefreshTokensForUser($userId: String!) {
-  revokeRefreshToken(userId: $userId)
+	revokeRefreshToken(userId: $userId)
 }

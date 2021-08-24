@@ -11,7 +11,14 @@ import { HeartbeatChannel } from "~/app/user/heartbeat.channel";
 import { LoggerModule } from "~/lib/logger/logger.module";
 
 @Module({
-  imports: [DatabaseModule, LoggerModule, EmailConfirmationModule, ForgotPasswordModule, RegisterModule, UpdatePasswordModule],
+  imports: [
+    DatabaseModule,
+    LoggerModule,
+    EmailConfirmationModule,
+    ForgotPasswordModule,
+    RegisterModule,
+    UpdatePasswordModule,
+  ],
   providers: [MeResolver, UserResolver, HeartbeatChannel],
 })
 export class UserModule {}

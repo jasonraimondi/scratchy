@@ -4,6 +4,19 @@ import { ENV } from "~/config/environments";
 
 export const OAuthProviders: FastifyOAuth2Options[] = [
   {
+    name: "Facebook",
+    scope: ["email"],
+    credentials: {
+      client: {
+        id: ENV.oauth.facebook.clientId,
+        secret: ENV.oauth.facebook.clientSecret,
+      },
+      auth: oauthPlugin.FACEBOOK_CONFIGURATION,
+    },
+    startRedirectPath: "/oauth2/facebook", // registers a fastify get route
+    callbackUri: ENV.oauth.facebook.callbackURL,
+  },
+  {
     name: "GitHub",
     scope: ["user:email"],
     credentials: {
@@ -11,12 +24,10 @@ export const OAuthProviders: FastifyOAuth2Options[] = [
         id: ENV.oauth.github.clientId,
         secret: ENV.oauth.github.clientSecret,
       },
-      auth: oauthPlugin.GITHUB_CONFIGURATION
+      auth: oauthPlugin.GITHUB_CONFIGURATION,
     },
-    // register a fastify url to start the redirect flow
-    startRedirectPath: "/oauth2/github",
-    // redirect here after the user login
-    callbackUri: ENV.oauth.github.callbackURL
+    startRedirectPath: "/oauth2/github", // registers a fastify get route
+    callbackUri: ENV.oauth.github.callbackURL,
   },
   {
     name: "Google",
@@ -24,13 +35,11 @@ export const OAuthProviders: FastifyOAuth2Options[] = [
     credentials: {
       client: {
         id: ENV.oauth.google.clientId,
-        secret: ENV.oauth.google.clientSecret
+        secret: ENV.oauth.google.clientSecret,
       },
-      auth: oauthPlugin.GOOGLE_CONFIGURATION
+      auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
-    // register a fastify url to start the redirect flow
-    startRedirectPath: "/oauth2/google",
-    // redirect here after the user login
-    callbackUri: ENV.oauth.google.callbackURL
+    startRedirectPath: "/oauth2/google", // registers a fastify get route
+    callbackUri: ENV.oauth.google.callbackURL,
   },
 ];

@@ -1,10 +1,10 @@
 mutation Register($input: RegisterInput!) {
-  register(input: $input) {
-    id
-    name
-    email
-  }
+	register(input: $input) {
+		id
+		name
+		email
+	}
 }
 mutation VerifyEmailConfirmation($input: VerifyEmailInput!) {
-  verifyEmailConfirmation(input: $input)
+	verifyEmailConfirmation(input: $input)
 }

@@ -1,39 +1,39 @@
 html,
 body,
 #_app {
-    height: 100%;
-    width: 100%;
+	height: 100%;
+	width: 100%;
 }
 
 #_app {
-  display: grid;
-  grid-template-areas:
-    "header"
-    "main"
-    "debug-bar";
-  grid-template-columns: auto;
-  grid-template-rows: auto 1fr auto;
+	display: grid;
+	grid-template-areas:
+		'header'
+		'main'
+		'debug-bar';
+	grid-template-columns: auto;
+	grid-template-rows: auto 1fr auto;
 
-  header {
-    grid-area: header;
-  }
+	header {
+		grid-area: header;
+	}
 
-  main {
-    grid-area: main;
-  }
+	main {
+		grid-area: main;
+	}
 
-  .debug-bar {
-    grid-area: debug-bar;
-  }
+	.debug-bar {
+		grid-area: debug-bar;
+	}
 }
 
 html {
-    font-family: var(--font-family-sans);
-    font-size: 100%;
-    color: var(--theme-color);
-    background-color: var(--theme-background-color);
+	font-family: var(--font-family-sans);
+	font-size: 100%;
+	color: var(--theme-color);
+	background-color: var(--theme-background-color);
 
-    @media (--large) {
-        font-size: 110%;
-    }
+	@media (--large) {
+		font-size: 110%;
+	}
 }
