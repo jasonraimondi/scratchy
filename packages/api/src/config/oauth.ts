@@ -4,7 +4,7 @@ import { ENV } from "~/config/environments";
 
 export const OAuthProviders: FastifyOAuth2Options[] = [
   {
-    name: "Facebook",
+    name: "facebook",
     scope: ["email"],
     credentials: {
       client: {
@@ -17,7 +17,7 @@ export const OAuthProviders: FastifyOAuth2Options[] = [
     callbackUri: ENV.oauth.facebook.callbackURL,
   },
   {
-    name: "GitHub",
+    name: "github",
     scope: ["user:email"],
     credentials: {
       client: {
@@ -30,7 +30,7 @@ export const OAuthProviders: FastifyOAuth2Options[] = [
     callbackUri: ENV.oauth.github.callbackURL,
   },
   {
-    name: "Google",
+    name: "google",
     scope: ["email", "profile"],
     credentials: {
       client: {

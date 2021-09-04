@@ -1,25 +1,28 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsEmail, IsIP, validate } from "class-validator";
-import { User as UserModel } from "@prisma/client";
+import { Provider, User as UserModel } from "@prisma/client";
 import { v4 } from "uuid";
 
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { Role, RoleModel } from "~/entities/role.entity";
 import { Permission, PermissionModel } from "~/entities/permission.entity";
-import { verifyPassword, hashPassword } from "~/lib/utils/password";
+import { hashPassword, verifyPassword } from "~/lib/utils/password";
+import { UserProvider } from "~/entities/user_provider";
 
 export { UserModel };
 
-export type ICreateUser = { id?: string; email: string; password?: string } & Partial<UserModel>;
+export type ICreateUser = Pick<UserModel, "email" | "createdIP"> &
+  Omit<Partial<UserModel>, "passwordHash"> & { password?: string };
 
 type Relations = {
   roles: RoleModel[];
   permissions: PermissionModel[];
+  providers: UserProvider[];
 };
 
 @ObjectType()
 export class User implements UserModel {
-  constructor({ roles = [], permissions = [], ...entity }: UserModel & Partial<Relations>) {
+  constructor({ roles = [], permissions = [], providers = [], ...entity }: UserModel & Partial<Relations>) {
     this.id = entity.id;
     this.email = entity.email;
     this.passwordHash = entity.passwordHash;
@@ -33,10 +36,9 @@ export class User implements UserModel {
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
     this.tokenVersion = entity.tokenVersion;
-    this.oauthGoogleIdentifier = entity.oauthGoogleIdentifier;
-    this.oauthGithubIdentifier = entity.oauthGithubIdentifier;
-    this.roles = roles.map((r) => new Role(r));
-    this.permissions = permissions.map((p) => new Permission(p));
+    this.providers = providers?.map((o) => new UserProvider(o));
+    this.roles = roles?.map((r) => new Role(r));
+    this.permissions = permissions?.map((p) => new Permission(p));
   }
 
   @Field(() => ID)
@@ -62,10 +64,14 @@ export class User implements UserModel {
   readonly createdAt: Date;
   updatedAt: Date | null;
   tokenVersion: number;
-  oauthGoogleIdentifier: string | null;
-  oauthGithubIdentifier: string | null;
   roles?: Role[] | null;
   permissions?: Permission[] | null;
+  providers?: UserProvider[] | null;
+
+  toEntity(): UserModel {
+    const { permissions, roles, providers, ...userData } = this;
+    return userData;
+  }
 
   @Field(() => Boolean)
   get isActive(): boolean {
@@ -86,7 +92,7 @@ export class User implements UserModel {
   }
 
   async verify(password: string) {
-    if (!this.passwordHash && this.oauthGoogleIdentifier) {
+    if (!this.passwordHash && (this.providers?.length ?? 0 > 0)) {
       throw UnauthorizedException.invalidUser("user must login with google or reset password");
     }
 
@@ -117,12 +123,14 @@ export class User implements UserModel {
       lastLoginAt: createUser.lastLoginAt ?? null,
       lastLoginIP: createUser.lastLoginIP ?? null,
       updatedAt: createUser.updatedAt ?? null,
-      oauthGoogleIdentifier: createUser.oauthGoogleIdentifier ?? null,
-      oauthGithubIdentifier: createUser.oauthGithubIdentifier ?? null,
-      passwordHash: createUser.passwordHash ?? null,
+      passwordHash: null,
     });
     if (password) await user.setPassword(password);
     await validate(user);
     return user;
+  }
+
+  getProvider(provider: Provider): UserProvider | undefined {
+    return this.providers?.filter((p) => p.provider === provider)?.[0];
   }
 }

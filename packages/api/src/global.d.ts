@@ -4,9 +4,9 @@ import type { User } from "./entities/user.entity";
 
 declare module "fastify" {
   interface FastifyInstance {
-    Facebook: OAuth2Namespace;
-    GitHub: OAuth2Namespace;
-    Google: OAuth2Namespace;
+    facebook: OAuth2Namespace;
+    github: OAuth2Namespace;
+    google: OAuth2Namespace;
   }
 
   interface FastifyRequest {

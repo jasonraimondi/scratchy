@@ -1,73 +1,54 @@
+import { Controller, Get, Req, Res } from "@nestjs/common";
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { Controller, Get, Ip, Req, Res } from "@nestjs/common";
-import { base64urlencode } from "@jmondi/oauth2-server";
+import { firstValueFrom } from "rxjs";
 
-import { User } from "~/entities/user.entity";
-import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
-import { WEB_ROUTES } from "~/config";
+import { ProviderController } from "~/app/auth/controllers/_base.controller";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
+import { PrismaService } from "~/lib/database/prisma.service";
 import { HttpService } from "@nestjs/axios";
 import { AuthService } from "~/app/auth/services/auth.service";
 import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
 
 @Controller("oauth2/github")
-export class GithubController {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly httpService: HttpService,
-    private readonly authService: AuthService,
-    private readonly oauthService: FastifyOAuthClientService,
-  ) {}
+export class GithubController extends ProviderController<GithubUserResponse> {
+  protected readonly provider = "github";
+  protected readonly profileUrl = "https://api.github.com/user";
 
-  @Get("callback")
-  async github(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Ip() ipAddr: string) {
-    let user: User;
-    const { access_token } = await this.oauthService.github.getAccessTokenFromAuthorizationCodeFlow(req);
-    const githubUser = await this.fetchGithubUser(access_token);
-    if (!githubUser.email) throw new UnauthorizedException("no email was found from github");
-    try {
-      user = await this.userRepository.findByEmail(githubUser.email);
-      if (!user.oauthGithubIdentifier) {
-        user.oauthGithubIdentifier = githubUser.node_id;
-        await this.userRepository.update(user);
-      }
-    } catch (e) {
-      user = await User.create({ email: githubUser.email, createdIP: req.ip });
-      user.isEmailConfirmed = true;
-      user.oauthGithubIdentifier = githubUser.node_id;
-      await this.userRepository.create(user);
-    }
-    const token = await this.authService.login({ user, res, ipAddr, rememberMe: false });
-    const encodedToken = base64urlencode(JSON.stringify(token));
-    return res.status(302).redirect(WEB_ROUTES.oauth_callback.create({ encodedToken }));
+  constructor(
+    userRepository: UserRepository,
+    prisma: PrismaService,
+    httpService: HttpService,
+    authService: AuthService,
+    oauthService: FastifyOAuthClientService
+  ) {
+    super(userRepository, prisma, httpService, authService, oauthService);
   }
 
-  private async fetchGithubUser(accessToken: string): Promise<GithubUserResponse> {
-    const headers = this.headers(accessToken);
-    const response = await this.httpService
-      .get<GithubUserResponse>("https://api.github.com/user", { headers })
-      .toPromise();
-    if (!response?.data) throw new Error("user not found");
-    const user = response.data;
-    if (!user.email) user.email = await this.fetchUserPrimaryEmail(accessToken);
-    return user;
+  @Get("callback")
+  github(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    return this.handleOAuthLogin(req, res);
+  }
+
+  protected async profile(user: GithubUserResponse, token?: string) {
+    return {
+      id: user.node_id,
+      email: user.email ?? (token && await this.fetchUserPrimaryEmail(token)),
+    };
+  }
+
+  protected headers(accessToken: string) {
+    return {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/vnd.github.v3+json"
+    };
   }
 
   private async fetchUserPrimaryEmail(accessToken: string): Promise<string> {
     const headers = this.headers(accessToken);
-    const response = await this.httpService
-      .get<GithubEmailResponse>("https://api.github.com/user/emails", { headers })
-      .toPromise();
-    const primaryEmail = response?.data.filter((e) => e.primary)[0];
-    if (!primaryEmail) throw new Error("email not provided from github");
-    return primaryEmail.email;
-  }
-
-  private headers(accessToken: string) {
-    return {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/vnd.github.v3+json",
-    };
+    const response = await firstValueFrom(
+      this.httpService.get<GithubEmailResponse>("https://api.github.com/user/emails", { headers })
+    );
+    return response?.data.filter((e) => e.primary)[0].email;
   }
 }
 
@@ -86,4 +67,5 @@ export interface GithubUserResponse {
   node_id: string;
   name: string;
   email: string;
+  avatar_url: string;
 }

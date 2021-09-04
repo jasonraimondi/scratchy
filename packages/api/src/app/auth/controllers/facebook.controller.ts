@@ -1,25 +1,41 @@
-import { Controller, Get, Ip, Req, Res } from "@nestjs/common";
-import { base64urlencode } from "@jmondi/oauth2-server";
-import { HttpService } from "@nestjs/axios";
+import { Controller, Get, Req, Res } from "@nestjs/common";
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { WEB_ROUTES } from "~/config";
+import { ProviderController } from "~/app/auth/controllers/_base.controller";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
+import { PrismaService } from "~/lib/database/prisma.service";
+import { HttpService } from "@nestjs/axios";
+import { AuthService } from "~/app/auth/services/auth.service";
 import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
 
 @Controller("oauth2/facebook")
-export class FacebookController {
-  constructor(private readonly httpService: HttpService, private readonly oauthService: FastifyOAuthClientService) {}
+export class FacebookController extends ProviderController {
+  protected readonly provider = "facebook";
+  protected readonly profileUrl = `https://graph.facebook.com/me?fields=email,name,picture`;
+
+  constructor(
+    userRepository: UserRepository,
+    prisma: PrismaService,
+    httpService: HttpService,
+    authService: AuthService,
+    oauthService: FastifyOAuthClientService
+  ) {
+    super(userRepository, prisma, httpService, authService, oauthService);
+  }
 
   @Get("callback")
-  async facebook(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Ip() ipAddr: string) {
-    const { access_token } = await this.oauthService.facebook.getAccessTokenFromAuthorizationCodeFlow(req);
-    const facebookUser = await this.httpService
-      .get(`https://graph.facebook.com/me?access_token=${access_token}`)
-      .toPromise();
-    console.log({ facebookUser });
-    const token: any = { ipAddr };
-    // const token = await this.authService.login({ user, res, ipAddr, rememberMe: false });
-    const encodedToken = base64urlencode(JSON.stringify(token));
-    return res.status(302).redirect(WEB_ROUTES.oauth_callback.create({ encodedToken }));
+  github(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    return this.handleOAuthLogin(req, res);
+  }
+
+  protected async profile(user: any) {
+    console.log("SEARCH AND FIX THIS", user);
+    return {
+      // this is unknown
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.picture.data.url
+    };
   }
 }

@@ -10,16 +10,4 @@ export class FastifyOAuthClientService {
   constructor(adapterHost: HttpAdapterHost<FastifyAdapter>) {
     this.fastify = adapterHost.httpAdapter.getInstance();
   }
-
-  get github() {
-    return this.fastify.Google;
-  }
-
-  get google() {
-    return this.fastify.GitHub;
-  }
-
-  get facebook() {
-    return this.fastify.Facebook;
-  }
 }

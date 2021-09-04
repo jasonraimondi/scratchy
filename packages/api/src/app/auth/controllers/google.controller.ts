@@ -1,39 +1,40 @@
-import { Controller, Get, Ip, Req, Res } from "@nestjs/common";
+import { Controller, Get, Req, Res } from "@nestjs/common";
 import { FastifyReply, FastifyRequest } from "fastify";
+
+import { ProviderController } from "~/app/auth/controllers/_base.controller";
+import { GithubUserResponse } from "~/app/auth/controllers/github.controller";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
+import { PrismaService } from "~/lib/database/prisma.service";
 import { HttpService } from "@nestjs/axios";
 import { AuthService } from "~/app/auth/services/auth.service";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
 
 @Controller("oauth2/google")
-export class GoogleController {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly httpService: HttpService,
-    private readonly authService: AuthService,
-    private readonly oauthService: FastifyOAuthClientService,
-  ) {}
+export class GoogleController extends ProviderController<GithubUserResponse> {
+  protected readonly provider = "google";
+  protected readonly profileUrl = "https://www.googleapis.com/oauth2/v2/userinfo";
 
-  @Get("callback")
-  async google(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Ip() ipAddr: string) {
-    const result = await this.oauthService.google.getAccessTokenFromAuthorizationCodeFlow(req);
-    const googleUser = await this.fetchGoogleUser(result.access_token);
-    // @todo this google user needs a typed response
-    const user = await this.userRepository.findByEmail(googleUser.email);
-    const token = await this.authService.login({ user, res, ipAddr, rememberMe: false });
-    return res.send(token);
+  constructor(
+    userRepository: UserRepository,
+    prisma: PrismaService,
+    httpService: HttpService,
+    authService: AuthService,
+    oauthService: FastifyOAuthClientService
+  ) {
+    super(userRepository, prisma, httpService, authService, oauthService);
   }
 
-  private async fetchGoogleUser(accessToken: string) {
-    const response = await this.httpService
-      .get("https://www.googleapis.com/oauth2/v2/userinfo", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .toPromise();
-    if (!response?.data) throw new Error("user not found");
-    return response.data;
+  @Get("callback")
+  github(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    return this.handleOAuthLogin(req, res);
+  }
+
+  protected async profile(user: any) {
+    console.log("SEARCH AND FIX THIS", user)
+    return {
+      // this is unknown
+      id: user.id,
+      email: user.email,
+    };
   }
 }

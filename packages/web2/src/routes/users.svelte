@@ -1,9 +1,7 @@
 <!--<script lang="ts">-->
 <!--	import { graphQLSdk } from '$lib/api/api_sdk';-->
 <!--</script>-->
-
-<h1>Welcome to SvelteKit</h1>
-
+<!---->
 <!--{#await graphQLSdk.Users()}-->
 <!--	<p>waiting for the promise to resolve...</p>-->
 <!--{:then res}-->

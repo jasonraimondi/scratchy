@@ -21,10 +21,9 @@ model User {
   createdAt              DateTime                @default(now()) @db.Timestamp(6)
   updatedAt              DateTime?               @updatedAt
   tokenVersion           Int                     @default(0)
-  oauthGoogleIdentifier  String?                 @unique @db.VarChar(255)
-  oauthGithubIdentifier  String?                 @unique @db.VarChar(255)
   emailConfirmationToken EmailConfirmationToken?
   forgotPasswordToken    ForgotPasswordToken?
+  providers              UserProvider[]
   permissions            UserPermission[]
   roles                  UserRole[]
   oauthAuthCodes         OAuthAuthCode[]
@@ -32,6 +31,23 @@ model User {
   fileUploads            FileUpload[]
 
   @@index([email], name: "idx_user_email")
+}
+
+enum Provider {
+  facebook
+  github
+  google
+}
+
+model UserProvider {
+  id       String   @id @db.VarChar(255)
+  provider Provider
+  userId   String   @db.Uuid
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([provider, id], name: "idx_user_provider_provider_id")
+  @@unique([userId, provider], name: "idx_user_provider_userid_provider")
+  @@index([userId], name: "idx_user_provider_oauthprovider_userid")
 }
 
 model FileUpload {

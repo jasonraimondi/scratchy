@@ -23,18 +23,16 @@ export class UserRepository {
   }
 
   async update(user: User) {
-    const { permissions, roles, ...userData } = user;
     return new User(
       await this.prisma.user.update({
         where: { id: user.id },
-        data: userData,
+        data: user.toEntity(),
       }),
     );
   }
 
   async create(user: User): Promise<void> {
-    const { permissions, roles, ...userData } = user;
-    await this.prisma.user.create({ data: userData });
+    await this.prisma.user.create({ data: user.toEntity() });
   }
 
   async findByEmail(email: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {
