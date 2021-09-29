@@ -8,10 +8,13 @@
 	async function checkAuth() {
 		if (isAuthenticated()) return;
 
-		notify.info('is expired, running token refresh');
+		notify.info({
+      title: 'Your token is expired!',
+      message: 'Attempting to refresh it... Let\'s see how this goes',
+    });
 
 		if (await refreshToken()) {
-			notify.info('It refreshed successfully');
+			notify.success('It refreshed successfully');
 		} else {
 			await goto('/login');
 		}

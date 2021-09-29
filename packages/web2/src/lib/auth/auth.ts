@@ -30,7 +30,7 @@ export async function login(input: LoginParams) {
 		const { login } = await graphQLSdk.Login({ input });
 		setAccessToken(login.accessToken);
 		notify.success('Welcome!');
-		await goto('/app/dashboard', { replaceState: true });
+		await goto('/app/dashboard');
 	} catch (error) {
 		return notify.error({ title: 'Login Error', message: error.message });
 	}

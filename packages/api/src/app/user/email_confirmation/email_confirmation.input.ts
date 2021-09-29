@@ -8,5 +8,5 @@ export class VerifyEmailInput {
   email!: string;
 
   @Field()
-  uuid!: string;
+  token!: string;
 }

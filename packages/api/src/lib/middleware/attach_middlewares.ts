@@ -1,7 +1,7 @@
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import nunjucks from "nunjucks";
 
-import { ENV, CORS, OAuthProviders } from "~/config";
+import { ENV, OAuthProviders } from "~/config";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   await fastify.register(require("fastify-cookie"), { secret: ENV.secrets.cookie });
@@ -12,7 +12,7 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
     await fastify.register(oauthPlugin, provider);
   }
 
-  fastify.enableCors(CORS);
+  // fastify.enableCors(CORS);
 
   await fastify.setViewEngine({
     engine: { nunjucks },

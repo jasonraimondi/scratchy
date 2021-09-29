@@ -53,7 +53,7 @@ type Mutation {
   refreshAccessToken: LoginResponse!
   logout: Boolean
   revokeRefreshToken(userId: String!): Boolean
-  verifyEmailConfirmation(input: VerifyEmailInput!): Boolean!
+  verifyEmailConfirmation(input: VerifyEmailInput!): LoginResponse!
   validateForgotPasswordToken(input: ValidateForgotPasswordTokenInput!): Boolean!
   sendForgotPasswordEmail(input: SendForgotPasswordInput!): Boolean!
   updatePasswordFromToken(input: UpdatePasswordFromTokenInput!): LoginResponse!
@@ -70,7 +70,7 @@ input LoginInput {
 
 input VerifyEmailInput {
   email: String!
-  uuid: String!
+  token: String!
 }
 
 input ValidateForgotPasswordTokenInput {

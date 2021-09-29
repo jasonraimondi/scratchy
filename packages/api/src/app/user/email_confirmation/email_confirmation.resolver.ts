@@ -1,16 +1,30 @@
 import { Injectable } from "@nestjs/common";
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { EmailConfirmationService } from "~/app/user/email_confirmation/email_confirmation.service";
 import { VerifyEmailInput } from "~/app/user/email_confirmation/email_confirmation.input";
+import { LoginResponse } from "~/app/auth/dto/auth.dtos";
+import { AuthService } from "~/app/auth/services/auth.service";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
+import { MyContext } from "~/config";
 
 @Injectable()
 @Resolver()
 export class EmailConfirmationResolver {
-  constructor(private readonly emailConfirmationService: EmailConfirmationService) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly emailConfirmationService: EmailConfirmationService,
+    private readonly authService: AuthService,
+  ) {}
 
-  @Mutation(() => Boolean!)
-  async verifyEmailConfirmation(@Args("input") { uuid, email }: VerifyEmailInput): Promise<boolean> {
-    return this.emailConfirmationService.verifyEmailConfirmation(email, uuid);
+  @Mutation(() => LoginResponse!)
+  async verifyEmailConfirmation(
+    @Args("input") { token, email }: VerifyEmailInput,
+    @Context() { res, ipAddr }: MyContext,
+  ): Promise<LoginResponse> {
+    const result = await this.emailConfirmationService.verifyEmailConfirmation(email, token);
+    if (!result) throw new Error("INVALID TODO FIX THIS");
+    const user = await this.userRepository.findByEmail(email);
+    return this.authService.login({ res, ipAddr, user });
   }
 }

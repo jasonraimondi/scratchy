@@ -8,23 +8,13 @@ import { AccessTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
-  constructor(
-    private readonly tokenService: TokenService,
-    private readonly logger: LoggerService,
-  ) {
-  }
+  constructor(private readonly tokenService: TokenService, private readonly logger: LoggerService) {}
 
   async use(req: FastifyRequest, _res: FastifyReply, next: () => void): Promise<void> {
-    this.logger.debug(this.constructor.name);
-    this.logger.debug(this.constructor.name);
-    this.logger.debug(this.constructor.name);
-    this.logger.debug(this.constructor.name);
-    this.logger.debug(this.constructor.name);
-
     const accessToken = JwtAuthGuard.getTokenFromBearerString(req);
     console.log({ accessToken });
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (typeof accessToken !== "string") return next();
 

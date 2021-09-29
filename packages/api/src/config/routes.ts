@@ -2,7 +2,7 @@ import { route } from "~/lib/utils/route";
 
 export const WEB_ROUTES = {
   oauth_callback: route("/login/callback?encoded_token=:encodedToken"),
-  verify_email: route("/verify_email?e=:email&u=:id"),
+  verify_email: route("/email_confirmation?e=:email&u=:id"),
   forgot_password: route("/reset_password?e=:email&u=:id"),
 };
 

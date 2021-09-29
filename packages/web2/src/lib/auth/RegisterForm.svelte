@@ -3,6 +3,8 @@
 	import { validateForm } from '@jmondi/form-validator';
 	import { graphQLSdk } from '$lib/api/api_sdk';
 	import OAuthLogins from '$lib/auth/OAuthLogins.svelte';
+	import { goto } from "$app/navigation";
+	import { notify } from "$lib/notifications/notification.service";
 
 	// errors are key value, where key is the form name, and value is the error message
 	let errors: Record<string, string> = {};
@@ -16,7 +18,15 @@
 
 	async function submit() {
 		errors = await validateForm({ schema: registerSchema, data });
-		if (!errors) await graphQLSdk.Register({ input: data });
+		if (!errors) {
+			await graphQLSdk.Register({ input: data });
+			notify.success({
+				title: 'Huzzah!!',
+				message: 'Go check your inbox for to confirm your email!',
+				ttl: 25 * 1000,
+			})
+			await goto('/');
+		}
 	}
 </script>
 

@@ -13,18 +13,9 @@ import { JwtModule } from "~/lib/jwt/jwt.module";
 import { QueueModule } from "~/lib/queue/queue.module";
 import { CurrentUserMiddleware } from "~/lib/middleware/current_user.middleware";
 
-const mainImports = [
-  QueueModule,
-  JwtModule,
-  LoggerModule,
-  GraphQLModule.forRoot(graphqlConfig),
-];
+const mainImports = [QueueModule, JwtModule, LoggerModule, GraphQLModule.forRoot(graphqlConfig)];
 
-const appImports = [
-  AuthModule,
-  UserModule,
-  FileModule,
-];
+const appImports = [AuthModule, UserModule, FileModule];
 
 if (!ENV.isProduction) mainImports.push(QueueWorkerModule);
 
@@ -34,8 +25,9 @@ if (!ENV.isProduction) mainImports.push(QueueWorkerModule);
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(CurrentUserMiddleware)
-      // .exclude("(.*ping)") // excludes /ping endpoint
+    consumer
+      .apply(CurrentUserMiddleware)
+      .exclude("(.*ping)") // excludes /ping endpoint
       .forRoutes("(.*)");
   }
 }
