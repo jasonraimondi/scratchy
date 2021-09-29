@@ -7,7 +7,7 @@ import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { PrismaService } from "~/lib/database/prisma.service";
 import { HttpService } from "@nestjs/axios";
 import { AuthService } from "~/app/auth/services/auth.service";
-import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
+import { OAuthClientService } from "~/app/auth/services/oauth_client.service";
 
 @Controller("oauth2/github")
 export class GithubController extends ProviderController<GithubUserResponse> {
@@ -19,7 +19,7 @@ export class GithubController extends ProviderController<GithubUserResponse> {
     prisma: PrismaService,
     httpService: HttpService,
     authService: AuthService,
-    oauthService: FastifyOAuthClientService
+    oauthService: OAuthClientService,
   ) {
     super(userRepository, prisma, httpService, authService, oauthService);
   }
@@ -32,23 +32,23 @@ export class GithubController extends ProviderController<GithubUserResponse> {
   protected async profile(user: GithubUserResponse, token?: string) {
     return {
       id: user.node_id,
-      email: user.email ?? (token && await this.fetchUserPrimaryEmail(token)),
+      email: user.email ?? (token && (await this.fetchUserPrimaryEmail(token))),
     };
   }
 
   protected headers(accessToken: string) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      Accept: "application/vnd.github.v3+json"
+      Accept: "application/vnd.github.v3+json",
     };
   }
 
   private async fetchUserPrimaryEmail(accessToken: string): Promise<string> {
     const headers = this.headers(accessToken);
     const response = await firstValueFrom(
-      this.httpService.get<GithubEmailResponse>("https://api.github.com/user/emails", { headers })
+      this.httpService.get<GithubEmailResponse>("https://api.github.com/user/emails", { headers }),
     );
-    return response?.data.filter((e) => e.primary)[0].email;
+    return response?.data.filter((e) => e.primary)?.[0]?.email;
   }
 }
 

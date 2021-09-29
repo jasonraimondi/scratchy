@@ -1,10 +1,11 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { IsUUID, validate } from "class-validator";
+import { IsUUID } from "class-validator";
 import { v4 } from "uuid";
 import { EmailConfirmationToken as EmailConfirmationTokenModel } from "@prisma/client";
 
 import { User, UserModel } from "~/entities/user.entity";
 import { ENV } from "~/config/environments";
+import { EntityConstructor } from "~/entities/_entity";
 
 export { EmailConfirmationTokenModel };
 
@@ -15,42 +16,25 @@ type Relations = {
 @ObjectType()
 export class EmailConfirmationToken implements EmailConfirmationTokenModel {
   @Field(() => ID!)
-  id: string;
+  readonly id: string;
 
   @Field(() => User!)
-  user: User;
+  readonly user: User;
 
   @Field()
   @IsUUID()
-  userId: string;
+  readonly userId: string;
 
   @Field()
-  expiresAt: Date;
+  readonly expiresAt: Date;
 
-  createdAt: Date;
+  readonly createdAt: Date;
 
-  constructor({ user, ...entity }: EmailConfirmationTokenModel & Relations) {
-    this.id = entity.id;
-    this.expiresAt = entity.expiresAt;
-    this.createdAt = entity.createdAt;
+  constructor(entity: EntityConstructor<EmailConfirmationTokenModel, Relations, "userId">) {
+    this.id = entity.id ?? v4();
+    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.tokenTTLs.emailConfirmationToken);
+    this.createdAt = entity.createdAt ?? new Date();
     this.userId = entity.userId;
-    this.user = new User(user);
+    this.user = new User(entity.user);
   }
-}
-
-export type ICreateEmailConfirmation = {
-  user: User;
-  id?: string;
-};
-
-export async function createEmailConfirmation({ user, id }: ICreateEmailConfirmation) {
-  const e = new EmailConfirmationToken({
-    id: id ?? v4(),
-    expiresAt: new Date(Date.now() + ENV.tokenTTLs.emailConfirmationToken),
-    createdAt: new Date(),
-    userId: user.id,
-    user,
-  });
-  await validate(e);
-  return e;
 }

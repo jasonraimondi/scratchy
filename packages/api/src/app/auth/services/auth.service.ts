@@ -6,18 +6,15 @@ import { User } from "~/entities/user.entity";
 import { cookieOptions } from "~/config/cookies";
 import { TokenService } from "~/app/auth/services/token.service";
 import { RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
-import { LoginResponse } from "~/app/auth/dto/auth.response";
+import { LoginResponse } from "~/app/auth/dto/auth.dtos";
+
+type Login = LoginWithUser | LoginWithEmail;
 
 @Injectable()
 export class AuthService {
   constructor(private userRepository: UserRepository, private tokenService: TokenService) {}
 
-  async login({
-    res,
-    ipAddr = "127.0.0.4",
-    rememberMe = false,
-    ...input
-  }: LoginWithUser | LoginWithEmail): Promise<LoginResponse> {
+  async login({ res, ipAddr = "127.0.0.2", rememberMe = false, ...input }: Login): Promise<LoginResponse> {
     let user: User;
     if ("user" in input) {
       user = input.user;
@@ -38,12 +35,7 @@ export class AuthService {
   }
 
   async refreshAccessToken(refreshToken: string): Promise<LoginResponse> {
-    const payload = await this.tokenService.verifyToken<RefreshTokenJWTPayload>(refreshToken);
-    const user = await this.userRepository.findById(payload.sub);
-    const isExpired = user.tokenVersion !== payload.tokenVersion;
-    if (isExpired) {
-      throw new Error("invalid refresh token");
-    }
+    const { user } = await this.tokenService.verifyToken<RefreshTokenJWTPayload>(refreshToken);
     const accessToken = await this.tokenService.createAccessToken(user);
     return { ...accessToken, user };
   }

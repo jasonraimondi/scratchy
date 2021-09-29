@@ -5,7 +5,7 @@
   "compilerOptions": {
     /* Basic Options */
     "incremental": true,
-    "target": "esnext",
+    "target": "es2017",
     "module": "commonjs",
     "outDir": "dist",
 
@@ -30,7 +30,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "~/*": ["src/*"],
       "~test/*": ["test/*"]
@@ -42,11 +42,9 @@
 
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "@types",
-      "node_modules/@types",
-      "node_modules/fastify-csrf",
-      "node_modules/fastify-oauth2"
+    "types": [
+      "fastify-csrf",
+      "fastify-oauth2"
     ],
 
     /* Output Options */
@@ -54,5 +52,5 @@
     "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/**/*.spec.ts"]
 }

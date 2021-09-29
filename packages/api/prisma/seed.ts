@@ -7,7 +7,9 @@ import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../src/lib/utils/password";
 import { generateUser } from "../test/generators/generateUser";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query", "info", "warn", "error"],
+});
 
 async function main() {
   const passwordHash = await hashPassword("jasonraimondi");
@@ -18,23 +20,16 @@ async function main() {
     create: { name: "overlord" },
   })
 
-  for (const _ in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]) {
-    console.log("Hi")
-    const user2 = await generateUser();
+  for (const _ of new Array(20)) {
+    const u = await generateUser();
     await prisma.user.upsert({
-      where: { email: user2.email },
+      where: { email: u.email },
       update: {},
-      create: {
-        firstName: user2.firstName,
-        lastName: user2.lastName,
-        email: user2.email,
-        isEmailConfirmed: user2.isEmailConfirmed,
-        createdIP: user2.createdIP,
-      }
+      create: u.toEntity(),
     });
   }
 
-  const jason = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: "jason@raimondi.us" },
     update: { passwordHash },
     create: {
@@ -59,15 +54,15 @@ async function main() {
       }
     }
   });
-
-  console.log(jason);
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
+void (async function () {
+  try {
+    await main();
+  } catch (e) {
+    console.log(e);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  }
+})().finally(async () => {
+  await prisma.$disconnect();
+});

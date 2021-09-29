@@ -1,10 +1,11 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { IsUUID, validate } from "class-validator";
+import { IsUUID } from "class-validator";
 import { v4 } from "uuid";
 import { ForgotPasswordToken as ForgotPasswordTokenModel } from "@prisma/client";
 
 import { User, UserModel } from "~/entities/user.entity";
 import { ENV } from "~/config/environments";
+import { EntityConstructor } from "~/entities/_entity";
 
 type Relations = {
   user: UserModel;
@@ -14,38 +15,31 @@ export { ForgotPasswordTokenModel };
 
 @ObjectType()
 export class ForgotPasswordToken implements ForgotPasswordTokenModel {
-  constructor({ user, ...entity }: ForgotPasswordTokenModel & Relations) {
-    this.id = entity.id;
-    this.expiresAt = entity.expiresAt;
-    this.createdAt = entity.createdAt;
-    this.userId = entity.userId;
-    this.user = new User(user);
-  }
-
   @Field(() => ID)
   id: string;
-
-  @Field(() => User!)
-  user: User;
 
   @Field(() => String!)
   @IsUUID()
   userId: string;
 
+  @Field(() => User, { nullable: true })
+  user?: User;
+
   @Field()
-  expiresAt: Date;
+  readonly expiresAt: Date;
 
   readonly createdAt: Date;
-}
 
-export async function createForgotPassword(forgotPasswordToken: { user: User } & Partial<ForgotPasswordTokenModel>) {
-  const e = new ForgotPasswordToken({
-    id: v4(),
-    expiresAt: new Date(Date.now() + ENV.tokenTTLs.forgotPasswordToken),
-    createdAt: new Date(),
-    userId: forgotPasswordToken.user.id,
-    ...forgotPasswordToken,
-  });
-  await validate(e);
-  return e;
+  constructor(entity: EntityConstructor<ForgotPasswordTokenModel, Relations, "userId">) {
+    this.id = entity.id ?? v4();
+    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.tokenTTLs.forgotPasswordToken);
+    this.createdAt = entity.createdAt ?? new Date();
+    this.userId = entity.userId;
+    this.user = new User(entity.user);
+  }
+
+  toEntity(): ForgotPasswordTokenModel {
+    const { user, ...entity } = this;
+    return entity;
+  }
 }

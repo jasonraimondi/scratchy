@@ -11,10 +11,10 @@ type Relations = {
 
 @ObjectType()
 export class Role implements RoleModel {
-  constructor({ permissions, ...entity }: RoleModel & Partial<Relations>) {
+  constructor(entity: RoleModel & Partial<Relations>) {
     this.id = entity.id;
     this.name = entity.name;
-    this.permissions = permissions?.map((p) => new Permission(p)) ?? [];
+    this.permissions = entity.permissions?.map((p) => new Permission(p)) ?? [];
   }
 
   @Field(() => ID)

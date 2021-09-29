@@ -1,22 +1,22 @@
 import { HttpService } from "@nestjs/axios";
 import { base64urlencode } from "@jmondi/oauth2-server";
 import { Provider } from "@prisma/client";
-import { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
 import { firstValueFrom } from "rxjs";
 
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 import { PrismaService } from "~/lib/database/prisma.service";
 import { AuthService } from "~/app/auth/services/auth.service";
-import { FastifyOAuthClientService } from "~/app/auth/services/fastify_oauth.service";
+import { OAuthClientService } from "~/app/auth/services/oauth_client.service";
 import { User } from "~/entities/user.entity";
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
-import { UserProvider } from "~/entities/user_provider";
+import { UserProvider } from "~/entities/user_provider.entity";
 import { WEB_ROUTES } from "~/config";
 
 type OAuthUser = {
   email: string;
   id: string;
-}
+};
 
 export abstract class ProviderController<T = any> {
   protected abstract readonly provider: Provider;
@@ -28,9 +28,8 @@ export abstract class ProviderController<T = any> {
     protected readonly prisma: PrismaService,
     protected readonly httpService: HttpService,
     protected readonly authService: AuthService,
-    protected readonly oauthService: FastifyOAuthClientService
-  ) {
-  }
+    protected readonly oauthService: OAuthClientService,
+  ) {}
 
   protected async handleOAuthLogin(req: FastifyRequest, res: FastifyReply) {
     let user: User;
@@ -61,7 +60,7 @@ export abstract class ProviderController<T = any> {
   protected headers(accessToken: string): Record<string, string> {
     return {
       Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
   }
 

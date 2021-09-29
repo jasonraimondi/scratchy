@@ -2,16 +2,21 @@ import { Injectable } from "@nestjs/common";
 
 import { MyJwtService } from "~/lib/jwt/jwt.service";
 import { User } from "~/entities/user.entity";
-import { AccessTokenJWTPayload, JWTPayload, RefreshTokenJWTPayload } from "~/app/auth/dto/refresh_token.dto";
+import { AccessTokenJWTPayload, RefreshTokenJWTPayload, TokenJwtPayload } from "~/app/auth/dto/refresh_token.dto";
 import { ENV } from "~/config/environments";
+import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
 export class TokenService {
-  constructor(private jwtService: MyJwtService) {}
+  constructor(private jwtService: MyJwtService, private readonly userRepository: UserRepository) {}
 
-  async verifyToken<T extends JWTPayload>(refreshToken: string): Promise<T> {
+  async verifyToken<T extends TokenJwtPayload>(refreshToken: string): Promise<{ user: User; payload: T }> {
     try {
-      return this.jwtService.verify(refreshToken);
+      const payload = await this.jwtService.verify<T>(refreshToken);
+      const { userId, tokenVersion } = payload;
+      const user = await this.userRepository.findById(userId);
+      if (Number(tokenVersion) !== Number(user.tokenVersion)) throw new Error();
+      return { user, payload };
     } catch {
       throw new Error("invalid token");
     }

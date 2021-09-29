@@ -1,5 +1,4 @@
 import type { OAuth2Namespace } from "fastify-oauth2";
-
 import type { User } from "./entities/user.entity";
 
 declare module "fastify" {

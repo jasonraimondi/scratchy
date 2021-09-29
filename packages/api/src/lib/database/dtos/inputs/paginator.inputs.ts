@@ -20,5 +20,5 @@ export abstract class PaginatorInputs {
 export class UserPaginatorInputs extends PaginatorInputs {
   cursor?: Prisma.UserWhereUniqueInput;
   where?: Prisma.UserWhereInput;
-  orderBy?: Prisma.UserOrderByInput;
+  orderBy?: Prisma.UserOrderByWithRelationInput;
 }

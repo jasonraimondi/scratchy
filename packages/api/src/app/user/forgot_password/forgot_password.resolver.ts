@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 
 import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_password.service";
 import { AuthService } from "~/app/auth/services/auth.service";
-import { LoginResponse } from "~/app/auth/dto/auth.response";
+import { LoginResponse } from "~/app/auth/dto/auth.dtos";
 import {
   SendForgotPasswordInput,
   UpdatePasswordFromTokenInput,

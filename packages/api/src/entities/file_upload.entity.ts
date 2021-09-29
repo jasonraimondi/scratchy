@@ -3,24 +3,25 @@ import { FileUpload as FileUploadModel } from "@prisma/client";
 
 import { User, UserModel } from "~/entities/user.entity";
 import { v4 } from "uuid";
+import { EntityConstructor } from "~/entities/_entity";
 
 export { FileUploadModel };
 
 type Relations = {
-  user: UserModel;
+  user?: UserModel;
 };
 
 @ObjectType()
 export class FileUpload implements FileUploadModel {
-  constructor({ user, ...entity }: FileUploadModel & Partial<Relations>) {
-    this.id = entity.id;
+  constructor(entity: EntityConstructor<FileUploadModel, Relations, "originalName" | "userId">) {
+    this.id = entity.id ?? v4();
     this.originalName = entity.originalName;
+    this.createdAt = entity.createdAt ?? new Date();
     this.userId = entity.userId;
-    this.createdAt = entity.createdAt;
-    if (user) this.user = new User(user);
+    this.user = entity.user && new User(entity.user);
   }
 
-  @Field(() => ID)
+  @Field(() => ID!)
   id: string;
 
   @Field()
@@ -29,20 +30,9 @@ export class FileUpload implements FileUploadModel {
   @Field()
   userId: string;
 
-  @Field(() => User)
-  user: User | null = null;
+  @Field(() => User, { nullable: true })
+  user?: User;
 
   @Field()
   createdAt: Date;
-
-  static async create(createFile: CreateFileUpload): Promise<FileUpload> {
-    return new FileUpload({
-      id: createFile.id ?? v4(),
-      originalName: createFile.originalName,
-      userId: createFile.userId,
-      createdAt: new Date(),
-    });
-  }
 }
-
-type CreateFileUpload = Omit<FileUploadModel, "createdAt" | "id"> & { id?: string };

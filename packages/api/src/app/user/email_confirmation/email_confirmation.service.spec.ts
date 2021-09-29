@@ -1,7 +1,7 @@
 import { EmailConfirmationService } from "~/app/user/email_confirmation/email_confirmation.service";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { createEmailConfirmation } from "~/entities/email_confirmation.entity";
+import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { EmailConfirmationModule } from "~/app/user/email_confirmation/email_confirmation.module";
 
 import { createTestingModule, TestingModule } from "~test/app_testing.module";
@@ -30,7 +30,7 @@ describe(EmailConfirmationService.name, () => {
     // arrange
     const user = await generateUser();
     await userRepository.create(user);
-    const emailConfirmation = await createEmailConfirmation({ user });
+    const emailConfirmation = new EmailConfirmationToken({ user, userId: user.id });
 
     testingModule.mockDB.emailConfirmationToken.findFirst.mockResolvedValue(emailConfirmation);
     await emailConfirmationRepository.create(emailConfirmation);

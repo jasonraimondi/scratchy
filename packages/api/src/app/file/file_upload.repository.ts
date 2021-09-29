@@ -18,7 +18,10 @@ export class FileUploadRepository {
       await this.prisma.fileUpload.findUnique({
         rejectOnNotFound: true,
         where: { id: userId },
-        ...extraQuery,
+        include: {
+          user: true,
+          ...extraQuery.include,
+        },
       }),
     );
   }

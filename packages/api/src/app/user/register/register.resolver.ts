@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
 import { RegisterInput } from "~/app/user/register/register.input";
-import { createEmailConfirmation } from "~/entities/email_confirmation.entity";
+import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { User } from "~/entities/user.entity";
 import { RegisterMailer } from "~/lib/email/mailers/register.mailer";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
@@ -38,7 +38,7 @@ export class RegisterResolver {
 
     if (registerInput.password) await user.setPassword(registerInput.password);
 
-    const emailConfirmation = await createEmailConfirmation({ user });
+    const emailConfirmation = new EmailConfirmationToken({ user, userId: user.id });
 
     await this.userRepository.create(user);
 

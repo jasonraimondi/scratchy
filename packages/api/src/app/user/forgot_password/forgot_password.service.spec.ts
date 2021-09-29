@@ -1,6 +1,6 @@
 import { UserModule } from "~/app/user/user.module";
 import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_password.service";
-import { createForgotPassword } from "~/entities/forgot_password.entity";
+import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 
@@ -47,7 +47,7 @@ describe(ForgotPasswordService.name, () => {
     const user = await generateUser();
     user.isEmailConfirmed = true;
     await userRepository.create(user);
-    const forgotPassword = await createForgotPassword({ user });
+    const forgotPassword = new ForgotPasswordToken({ user });
     await forgotPasswordRepository.create(forgotPassword);
 
     // act

@@ -30,7 +30,7 @@ model User {
   oauthTokens            OAuthToken[]
   fileUploads            FileUpload[]
 
-  @@index([email], name: "idx_user_email")
+  @@index([email])
 }
 
 enum Provider {
@@ -45,9 +45,9 @@ model UserProvider {
   userId   String   @db.Uuid
   user     User     @relation(fields: [userId], references: [id])
 
-  @@unique([provider, id], name: "idx_user_provider_provider_id")
-  @@unique([userId, provider], name: "idx_user_provider_userid_provider")
-  @@index([userId], name: "idx_user_provider_oauthprovider_userid")
+  @@unique([provider, id])
+  @@unique([userId, provider])
+  @@index([userId])
 }
 
 model FileUpload {
@@ -57,7 +57,7 @@ model FileUpload {
   userId       String   @db.Uuid
   user         User     @relation(fields: [userId], references: [id])
 
-  @@index([userId], name: "idx_fileupload_userid")
+  @@index([userId])
 }
 
 model EmailConfirmationToken {
@@ -67,7 +67,7 @@ model EmailConfirmationToken {
   userId    String   @unique @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
 
-  @@index([userId], name: "idx_emailconfirmationtoken_userid")
+  @@index([userId])
 }
 
 model ForgotPasswordToken {
@@ -77,7 +77,7 @@ model ForgotPasswordToken {
   userId    String   @unique @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
 
-  @@index([userId], name: "idx_forgotpasswordtoken_userid")
+  @@index([userId])
 }
 
 model Role {
@@ -154,8 +154,8 @@ model OAuthClientScope {
   scope    OAuthScope  @relation(fields: [scopeId], references: [id])
 
   @@id([clientId, scopeId])
-  @@index([clientId], name: "idx_oauthclient_oauthscope_clientid")
-  @@index([scopeId], name: "idx_oauthclient_oauthscope_scopeid")
+  @@index([clientId])
+  @@index([scopeId])
   @@map("oauthClient_oauthScope")
 }
 
@@ -188,8 +188,8 @@ model OAuthToken {
   userId                String?      @db.Uuid
   scopes                OAuthScope[]
 
-  @@index([accessToken], name: "idx_oauthtoken_accesstoken")
-  @@index([refreshToken], name: "idx_oauthtoken_refreshtoken")
+  @@index([accessToken])
+  @@index([refreshToken])
 }
 
 model OAuthScope {
@@ -201,5 +201,5 @@ model OAuthScope {
 
 
   OAuthClientScope OAuthClientScope[]
-  @@index([name], name: "idx_oauthscope_name")
+  @@index([name])
 }

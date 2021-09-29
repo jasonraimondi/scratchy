@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "Provider" AS ENUM ('facebook', 'github', 'google');
+
+-- CreateEnum
 CREATE TYPE "GrantTypes" AS ENUM ('client_credentials', 'authorization_code', 'refresh_token', 'implicit', 'password');
 
 -- CreateEnum
@@ -19,10 +22,17 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
     "tokenVersion" INTEGER NOT NULL DEFAULT 0,
-    "oauthGoogleIdentifier" VARCHAR(255),
-    "oauthGithubIdentifier" VARCHAR(255),
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserProvider" (
+    "id" VARCHAR(255) NOT NULL,
+    "provider" "Provider" NOT NULL,
+    "userId" UUID NOT NULL,
+
+    CONSTRAINT "UserProvider_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -32,7 +42,7 @@ CREATE TABLE "FileUpload" (
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "FileUpload_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -42,7 +52,7 @@ CREATE TABLE "EmailConfirmationToken" (
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "EmailConfirmationToken_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -52,7 +62,7 @@ CREATE TABLE "ForgotPasswordToken" (
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "ForgotPasswordToken_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -60,7 +70,7 @@ CREATE TABLE "Role" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -68,7 +78,7 @@ CREATE TABLE "Permission" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "Permission_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -77,7 +87,7 @@ CREATE TABLE "RolePermission" (
     "roleId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY ("roleId","permissionId")
+    CONSTRAINT "RolePermission_pkey" PRIMARY KEY ("roleId","permissionId")
 );
 
 -- CreateTable
@@ -87,7 +97,7 @@ CREATE TABLE "UserPermission" (
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "roleId" INTEGER,
 
-    PRIMARY KEY ("userId","permissionId")
+    CONSTRAINT "UserPermission_pkey" PRIMARY KEY ("userId","permissionId")
 );
 
 -- CreateTable
@@ -96,7 +106,7 @@ CREATE TABLE "UserRole" (
     "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY ("userId","roleId")
+    CONSTRAINT "UserRole_pkey" PRIMARY KEY ("userId","roleId")
 );
 
 -- CreateTable
@@ -107,7 +117,7 @@ CREATE TABLE "OAuthClient" (
     "redirectUris" TEXT[],
     "allowedGrants" "GrantTypes"[],
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "OAuthClient_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -115,7 +125,7 @@ CREATE TABLE "oauthClient_oauthScope" (
     "clientId" UUID NOT NULL,
     "scopeId" UUID NOT NULL,
 
-    PRIMARY KEY ("clientId","scopeId")
+    CONSTRAINT "oauthClient_oauthScope_pkey" PRIMARY KEY ("clientId","scopeId")
 );
 
 -- CreateTable
@@ -128,7 +138,7 @@ CREATE TABLE "OAuthAuthCode" (
     "userId" UUID,
     "clientId" UUID NOT NULL,
 
-    PRIMARY KEY ("code")
+    CONSTRAINT "OAuthAuthCode_pkey" PRIMARY KEY ("code")
 );
 
 -- CreateTable
@@ -140,7 +150,7 @@ CREATE TABLE "OAuthToken" (
     "clientId" UUID NOT NULL,
     "userId" UUID,
 
-    PRIMARY KEY ("accessToken")
+    CONSTRAINT "OAuthToken_pkey" PRIMARY KEY ("accessToken")
 );
 
 -- CreateTable
@@ -148,7 +158,7 @@ CREATE TABLE "OAuthScope" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "OAuthScope_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -170,55 +180,58 @@ CREATE TABLE "_OAuthScopeToOAuthToken" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User.oauthGoogleIdentifier_unique" ON "User"("oauthGoogleIdentifier");
+CREATE INDEX "User_email_idx" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User.oauthGithubIdentifier_unique" ON "User"("oauthGithubIdentifier");
+CREATE INDEX "UserProvider_userId_idx" ON "UserProvider"("userId");
 
 -- CreateIndex
-CREATE INDEX "idx_user_email" ON "User"("email");
+CREATE UNIQUE INDEX "UserProvider_provider_id_key" ON "UserProvider"("provider", "id");
 
 -- CreateIndex
-CREATE INDEX "idx_fileupload_userid" ON "FileUpload"("userId");
+CREATE UNIQUE INDEX "UserProvider_userId_provider_key" ON "UserProvider"("userId", "provider");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "EmailConfirmationToken.userId_unique" ON "EmailConfirmationToken"("userId");
+CREATE INDEX "FileUpload_userId_idx" ON "FileUpload"("userId");
 
 -- CreateIndex
-CREATE INDEX "idx_emailconfirmationtoken_userid" ON "EmailConfirmationToken"("userId");
+CREATE UNIQUE INDEX "EmailConfirmationToken_userId_key" ON "EmailConfirmationToken"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ForgotPasswordToken.userId_unique" ON "ForgotPasswordToken"("userId");
+CREATE INDEX "EmailConfirmationToken_userId_idx" ON "EmailConfirmationToken"("userId");
 
 -- CreateIndex
-CREATE INDEX "idx_forgotpasswordtoken_userid" ON "ForgotPasswordToken"("userId");
+CREATE UNIQUE INDEX "ForgotPasswordToken_userId_key" ON "ForgotPasswordToken"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Role.name_unique" ON "Role"("name");
+CREATE INDEX "ForgotPasswordToken_userId_idx" ON "ForgotPasswordToken"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Permission.name_unique" ON "Permission"("name");
+CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
 
 -- CreateIndex
-CREATE INDEX "idx_oauthclient_oauthscope_clientid" ON "oauthClient_oauthScope"("clientId");
+CREATE UNIQUE INDEX "Permission_name_key" ON "Permission"("name");
 
 -- CreateIndex
-CREATE INDEX "idx_oauthclient_oauthscope_scopeid" ON "oauthClient_oauthScope"("scopeId");
+CREATE INDEX "oauthClient_oauthScope_clientId_idx" ON "oauthClient_oauthScope"("clientId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "OAuthToken.refreshToken_unique" ON "OAuthToken"("refreshToken");
+CREATE INDEX "oauthClient_oauthScope_scopeId_idx" ON "oauthClient_oauthScope"("scopeId");
 
 -- CreateIndex
-CREATE INDEX "idx_oauthtoken_accesstoken" ON "OAuthToken"("accessToken");
+CREATE UNIQUE INDEX "OAuthToken_refreshToken_key" ON "OAuthToken"("refreshToken");
 
 -- CreateIndex
-CREATE INDEX "idx_oauthtoken_refreshtoken" ON "OAuthToken"("refreshToken");
+CREATE INDEX "OAuthToken_accessToken_idx" ON "OAuthToken"("accessToken");
 
 -- CreateIndex
-CREATE INDEX "idx_oauthscope_name" ON "OAuthScope"("name");
+CREATE INDEX "OAuthToken_refreshToken_idx" ON "OAuthToken"("refreshToken");
+
+-- CreateIndex
+CREATE INDEX "OAuthScope_name_idx" ON "OAuthScope"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_OAuthClientToOAuthScope_AB_unique" ON "_OAuthClientToOAuthScope"("A", "B");
@@ -239,52 +252,55 @@ CREATE UNIQUE INDEX "_OAuthScopeToOAuthToken_AB_unique" ON "_OAuthScopeToOAuthTo
 CREATE INDEX "_OAuthScopeToOAuthToken_B_index" ON "_OAuthScopeToOAuthToken"("B");
 
 -- AddForeignKey
-ALTER TABLE "FileUpload" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserProvider" ADD CONSTRAINT "UserProvider_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "EmailConfirmationToken" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "FileUpload" ADD CONSTRAINT "FileUpload_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ForgotPasswordToken" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "EmailConfirmationToken" ADD CONSTRAINT "EmailConfirmationToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RolePermission" ADD FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ForgotPasswordToken" ADD CONSTRAINT "ForgotPasswordToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RolePermission" ADD FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPermission" ADD FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPermission" ADD FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPermission" ADD CONSTRAINT "UserPermission_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPermission" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserPermission" ADD CONSTRAINT "UserPermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserRole" ADD FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserPermission" ADD CONSTRAINT "UserPermission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserRole" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "oauthClient_oauthScope" ADD FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "oauthClient_oauthScope" ADD FOREIGN KEY ("scopeId") REFERENCES "OAuthScope"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "oauthClient_oauthScope" ADD CONSTRAINT "oauthClient_oauthScope_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OAuthAuthCode" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "oauthClient_oauthScope" ADD CONSTRAINT "oauthClient_oauthScope_scopeId_fkey" FOREIGN KEY ("scopeId") REFERENCES "OAuthScope"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OAuthAuthCode" ADD FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OAuthAuthCode" ADD CONSTRAINT "OAuthAuthCode_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OAuthToken" ADD FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OAuthAuthCode" ADD CONSTRAINT "OAuthAuthCode_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OAuthToken" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "OAuthToken" ADD CONSTRAINT "OAuthToken_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "OAuthClient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OAuthToken" ADD CONSTRAINT "OAuthToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_OAuthClientToOAuthScope" ADD FOREIGN KEY ("A") REFERENCES "OAuthClient"("id") ON DELETE CASCADE ON UPDATE CASCADE;

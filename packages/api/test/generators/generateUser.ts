@@ -8,6 +8,7 @@ export const generateUser = async (u?: Partial<ICreateUser>, isEmailConfirmed = 
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     password: "testing123",
+    createdIP: "127.0.0.2",
     ...u,
   });
   user.isEmailConfirmed = isEmailConfirmed;

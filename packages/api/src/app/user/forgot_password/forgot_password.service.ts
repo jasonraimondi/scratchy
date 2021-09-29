@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { createForgotPassword, ForgotPasswordToken } from "~/entities/forgot_password.entity";
+import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { User } from "~/entities/user.entity";
 import { ForgotPasswordMailer } from "~/lib/email/mailers/forgot_password.mailer";
 import { LoggerService } from "~/lib/logger/logger.service";
@@ -52,12 +52,12 @@ export class ForgotPasswordService {
   }
 
   private async getForgotPasswordForUser(user: User): Promise<ForgotPasswordToken> {
-    const { user: _, ...forgotPassword } = await createForgotPassword({ user });
+    const forgotPassword = new ForgotPasswordToken({ user, userId: user.id });
     return new ForgotPasswordToken(
       await this.forgotPasswordRepository.qb.upsert({
         where: { userId: forgotPassword.userId },
         update: { id: forgotPassword.id, expiresAt: forgotPassword.expiresAt },
-        create: forgotPassword,
+        create: forgotPassword.toEntity(),
         include: { user: true },
       }),
     );

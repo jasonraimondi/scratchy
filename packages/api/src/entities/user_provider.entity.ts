@@ -1,9 +1,11 @@
+import { v4 } from "uuid";
 import { UserProvider as UserProviderModel, Provider } from "@prisma/client";
 
-import { UserModel } from "./user.entity";
+import { User, UserModel } from "./user.entity";
+import { EntityConstructor } from "~/entities/_entity";
 
 type Relations = {
-  user: UserModel;
+  user?: UserModel;
 };
 
 export class UserProvider implements UserProviderModel {
@@ -12,10 +14,11 @@ export class UserProvider implements UserProviderModel {
   readonly userId: string;
   readonly user?: UserModel;
 
-  constructor({ user, ...entity }: UserProviderModel & Partial<Relations>) {
-    this.id = entity.id;
+  constructor(entity: EntityConstructor<UserProviderModel, Relations, "provider" | "userId">) {
+    this.id = entity.id ?? v4();
     this.provider = entity.provider;
     this.userId = entity.userId;
+    this.user = entity.user && new User(entity.user);
   }
 
   toEntity(): UserProviderModel {
