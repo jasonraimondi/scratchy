@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   pg:
-    image: postgres:12-alpine
+    image: postgres:alpine
     environment:
       POSTGRES_DB: scratchy
       POSTGRES_USER: scratchy
