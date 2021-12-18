@@ -4,12 +4,25 @@ import { PrismaClient } from "@prisma/client";
 import { LoggerService } from "~/lib/logger/logger.service";
 import { ENV } from "~/config/environments";
 
+// prettier-ignore
+type LogLevel = ["query", "info", "warn", "error"] |
+                ["info", "warn", "error"] |
+                ["warn", "error"] |
+                ["error"];
+
+const logLevel: Record<typeof ENV.debugLevel, LogLevel> = {
+  debug: ["query", "info", "warn", "error"],
+  info: ["info", "warn", "error"],
+  warn: ["warn", "error"],
+  error: ["error"],
+};
+
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly logger: LoggerService) {
     super({
       rejectOnNotFound: true,
-      log: ENV.enableDebugging && !ENV.isTesting ? ["query", "info", "warn", "error"] : [],
+      log: logLevel[ENV.debugLevel],
     });
   }
 

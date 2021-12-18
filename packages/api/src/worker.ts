@@ -12,7 +12,7 @@ import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 
 (async () => {
   const applicationLogger = new Logger("__queue__");
-  if (ENV.enableDebugging) applicationLogger.debug("DEBUGGING ENABLED");
+  if (ENV.isDebug) applicationLogger.debug("DEBUGGING ENABLED");
   const app = await NestFactory.create(QueueWorkerModule, new FastifyAdapter());
   await app.init();
 })();

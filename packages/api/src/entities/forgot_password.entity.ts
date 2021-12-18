@@ -32,7 +32,7 @@ export class ForgotPasswordToken implements ForgotPasswordTokenModel {
 
   constructor(entity: EntityConstructor<ForgotPasswordTokenModel, Relations, "userId">) {
     this.id = entity.id ?? v4();
-    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.tokenTTLs.forgotPasswordToken);
+    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.ttlForgotPasswordToken);
     this.createdAt = entity.createdAt ?? new Date();
     this.userId = entity.userId;
     this.user = new User(entity.user);

@@ -8,8 +8,8 @@ import { MyContext } from "~/config/context";
 
 export const graphqlConfig: GqlModuleOptions = {
   logger: new GraphqlLogger(),
-  debug: ENV.enableDebugging,
-  // playground: ENV.enablePlayground,
+  debug: ENV.isDebug,
+  playground: ENV.isDevelopment,
   autoSchemaFile: "schema.graphql",
   cors: CORS,
   buildSchemaOptions: {

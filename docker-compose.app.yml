@@ -36,7 +36,7 @@ services:
       URL: "https://scratchy.localdomain"
       API_URL: "https://scratchy.localdomain/api"
       DATABASE_URL: "postgres://scratchy:secret@pg:5432/scratchy"
-      MAILER_URL: "smtp://mailhog:1025"
+      SMTP_HOST: "smtp://mailhog:1025"
       QUEUE_URL: "redis://redis:6379/0"
       OAUTH_GOOGLE_ID: ""
       OAUTH_GOOGLE_SECRET: ""

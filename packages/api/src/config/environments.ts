@@ -1,78 +1,74 @@
-import { join } from "path";
 import ms from "ms";
-import { IsIn, IsUrl } from "class-validator";
-
-
-const ENV = {
-  secrets: {
-    jwt: process.env.JWT_SECRET!,
-    cookie: process.env.COOKIE_SECRET!,
-    otp: process.env.OTP_SECRET!,
-  },
-  oauth: {
-    facebook: {
-      clientId: process.env.OAUTH_FACEBOOK_ID!,
-      clientSecret: process.env.OAUTH_FACEBOOK_SECRET!,
-      callbackURL: "https://scratchy.localdomain/api/oauth2/facebook/callback",
-    },
-    github: {
-      clientId: process.env.OAUTH_GITHUB_ID!,
-      clientSecret: process.env.OAUTH_GITHUB_SECRET!,
-      callbackURL: "https://scratchy.localdomain/api/oauth2/github/callback",
-    },
-    google: {
-      clientId: process.env.OAUTH_GOOGLE_ID!,
-      clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
-      callbackURL: "https://scratchy.localdomain/api/oauth2/google/callback",
-    },
-  },
-
-  tokenTTLs: {
-    accessToken: ms("10m"),
-    refreshToken: ms("1d"),
-    refreshTokenRememberMe: ms("30d"),
-    forgotPasswordToken: ms("30m"),
-    emailConfirmationToken: ms("30d"),
-  },
-
-  // aws: {
-  //   host: process.env.AWS_S3_HOST!,
-  //   bucket: process.env.AWS_S3_BUCKET!,
-  //   accessKey: process.env.AWS_S3_ACCESS_KEY!,
-  //   secretKey: process.env.AWS_S3_SECRET_KEY!,
-  // },
-};
+import { join } from "path";
+import { IsIn, IsString, IsUrl, MinLength, ValidateNested } from "class-validator";
 
 type NodeEnv = "development" | "production" | "test";
-type DebugLevel = "debug"|"info"|"warn"|"error";
+type DebugLevel = "debug" | "info" | "warn" | "error";
 
-export class Environment {
+class Environment {
   @IsIn(["development", "production", "test"])
-  public readonly env: NodeEnv = process.env.NODE_ENV as NodeEnv;
+  readonly nodeEnv: NodeEnv = process.env.NODE_ENV as NodeEnv;
 
   @IsIn(["debug", "info", "warn", "error"])
-  public readonly debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
+  readonly debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
 
-  public readonly isDevelopment: boolean = this.env === "development";
-  public readonly isProduction: boolean = this.env === "production";
-  public readonly isTesting: boolean = this.env === "test";
+  readonly isDebug = this.debugLevel === "debug";
+  readonly isDevelopment = this.nodeEnv === "development";
+  readonly isProduction = this.nodeEnv === "production";
+  readonly isTesting = this.nodeEnv === "test";
 
-  public readonly templatesDir = join(__dirname, "../../templates");
+  readonly templatesDir = join(__dirname, "../../templates");
 
-  public readonly enableDebugging = this.debugLevel === "debug";
-  public readonly enablePlayground = !!process.env.ENABLE_PLAYGROUND;
-  public readonly databaseURL = process.env.DATABASE_URL;
-  public readonly queueURL = process.env.QUEUE_URL;
+  @IsUrl() readonly urlWeb = process.env.URL;
+  @IsUrl() readonly urlApi = process.env.API_URL;
+  @IsString() readonly urlDatabase = process.env.DATABASE_URL;
+  @IsString() readonly urlQueue = process.env.QUEUE_URL;
 
-  public readonly mailedFrom = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
-  @IsUrl()
-  public readonly mailerURL = process.env.MAILER_URL;
+  readonly ttlAccessToken = ms("10m");
+  readonly ttlRefreshToken = ms("1d");
+  readonly ttlRefreshTokenRememberMe = ms("30d");
+  readonly ttlForgotPasswordToken = ms("30m");
+  readonly ttlEmailConfirmationToken = ms("30d");
 
-  @IsUrl()
-  public readonly web = process.env.URL;
+  @IsString()
+  @MinLength(32)
+  readonly jwtSecret = process.env.JWT_SECRET;
 
-  @IsUrl()
-  public readonly api = process.env.API_URL;
+  @IsString()
+  @MinLength(32)
+  readonly cookieSecret = process.env.COOKIE_SECRET;
+
+  @ValidateNested() readonly oauth = new OAuthEnvironment();
+  @ValidateNested() readonly mailer = new MailerEnvironment();
 }
 
-export { ENV };
+class MailerEnvironment {
+  readonly from = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
+  @IsString() readonly host = process.env.SMTP_HOST;
+}
+
+class OAuthEnvironment {
+  @ValidateNested() readonly facebook = new OAuthFacebookEnvironment();
+  @ValidateNested() readonly github = new OAuthGithubEnvironment();
+  @ValidateNested() readonly google = new OAuthGoogleEnvironment();
+}
+
+class OAuthFacebookEnvironment {
+  @IsString() readonly clientId = process.env.OAUTH_FACEBOOK_ID!;
+  @IsString() readonly clientSecret = process.env.OAUTH_FACEBOOK_SECRET!;
+  @IsString() readonly callbackURL = "/api/oauth2/facebook/callback";
+}
+
+class OAuthGoogleEnvironment {
+  @IsString() readonly clientId = process.env.OAUTH_GOOGLE_ID!;
+  @IsString() readonly clientSecret = process.env.OAUTH_GOOGLE_SECRET!;
+  @IsString() readonly callbackURL = "/api/oauth2/google/callback";
+}
+
+class OAuthGithubEnvironment {
+  @IsString() readonly clientId = process.env.OAUTH_GITHUB_ID!;
+  @IsString() readonly clientSecret = process.env.OAUTH_GITHUB_SECRET!;
+  @IsString() readonly callbackURL = "/api/oauth2/facebook/callback";
+}
+
+export const ENV = new Environment();

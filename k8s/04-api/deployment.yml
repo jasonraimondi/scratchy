@@ -71,10 +71,10 @@ spec:
                 configMapKeyRef:
                   key: API_URL
                   name: api-config
-            - name: MAILER_URL
+            - name: SMTP_HOST
               valueFrom:
                 configMapKeyRef:
-                  key: MAILER_URL
+                  key: SMTP_HOST
                   name: api-config
             - name: QUEUE_URL
               valueFrom:

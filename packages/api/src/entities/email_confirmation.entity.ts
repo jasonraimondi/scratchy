@@ -32,7 +32,7 @@ export class EmailConfirmationToken implements EmailConfirmationTokenModel {
 
   constructor(entity: EntityConstructor<EmailConfirmationTokenModel, Relations, "userId">) {
     this.id = entity.id ?? v4();
-    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.tokenTTLs.emailConfirmationToken);
+    this.expiresAt = entity.expiresAt ?? new Date(Date.now() + ENV.ttlEmailConfirmationToken);
     this.createdAt = entity.createdAt ?? new Date();
     this.userId = entity.userId;
     this.user = new User(entity.user);

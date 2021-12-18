@@ -23,7 +23,7 @@ export class TokenService {
   }
 
   async createRefreshToken(user: User, rememberMe = false) {
-    const ttl = rememberMe ? ENV.tokenTTLs.refreshTokenRememberMe : ENV.tokenTTLs.refreshToken;
+    const ttl = rememberMe ? ENV.ttlRefreshTokenRememberMe : ENV.ttlRefreshToken;
     const now = Date.now();
     const expiresAt = now + ttl;
     const payload: RefreshTokenJWTPayload = {
@@ -48,7 +48,7 @@ export class TokenService {
 
   async createAccessToken(user: User) {
     const now = Date.now();
-    const expiresAt = now + ENV.tokenTTLs.accessToken;
+    const expiresAt = now + ENV.ttlAccessToken;
     const payload: AccessTokenJWTPayload = {
       // non standard claims
       userId: user.id,
