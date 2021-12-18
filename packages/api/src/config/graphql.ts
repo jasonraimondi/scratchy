@@ -16,7 +16,7 @@ export const graphqlConfig: GqlModuleOptions = {
     numberScalarMode: "integer",
   },
   formatError: (error: GraphQLError): GraphQLFormattedError => ({
-    message: error.extensions?.exception?.response?.message ?? error.message,
+    message: error.message,
   }),
   context: ({ request, reply }): Partial<MyContext> => ({
     ipAddr: request?.ip ?? "127.0.0.3",

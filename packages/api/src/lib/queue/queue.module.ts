@@ -1,15 +1,15 @@
-import { BullModule } from "@nestjs/bull";
-import { Module } from "@nestjs/common";
+// import { BullModule } from "@nestjs/bull";
+import { DynamicModule, Module } from "@nestjs/common";
 
 // import { QueueUIProvider } from "~/app/queues/queue_ui.provider";
-import { ENV } from "~/config/environments";
-import { QUEUE } from "~/config/queues";
+// import { ENV } from "~/config/environments";
+// import { QUEUE } from "~/config/queues";
 
-const queues = [
-  BullModule.registerQueue({
-    name: QUEUE.email,
-    redis: ENV.queueURL,
-  }),
+const queues: DynamicModule[] = [
+  // BullModule.registerQueue({
+  //   name: QUEUE.email,
+  //   redis: ENV.queueURL,
+  // }),
 ];
 
 @Module({

@@ -23,7 +23,9 @@ const config = {
 	],
 
 	kit: {
-		adapter: node({ out: 'dist' }),
+		adapter: {
+			adapt: node({ out: 'dist' })
+		},
 		target: '#_app',
 		vite
 	}

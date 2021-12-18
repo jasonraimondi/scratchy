@@ -1,5 +1,4 @@
 import { HttpService } from "@nestjs/axios";
-import { base64urlencode } from "@jmondi/oauth2-server";
 import { Provider } from "@prisma/client";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { firstValueFrom } from "rxjs";
@@ -17,6 +16,10 @@ type OAuthUser = {
   email: string;
   id: string;
 };
+
+function base64urlencode(str: string | Buffer) {
+  return Buffer.from(str).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
 
 export abstract class ProviderController<T = any> {
   protected abstract readonly provider: Provider;
