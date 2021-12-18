@@ -1,45 +1,15 @@
 import { join } from "path";
 import ms from "ms";
+import { IsIn, IsUrl } from "class-validator";
 
-const isDevelopment = process.env.NODE_ENV === "development";
-const isProduction = process.env.NODE_ENV === "production";
-const isTesting = process.env.NODE_ENV === "test";
-
-const required = ["URL", "DATABASE_URL", "JWT_SECRET"].filter((key) => !process.env.hasOwnProperty(key));
-
-if (required.length > 0) {
-  const message = `missing required envs: (${required.join(", ")})`;
-  if (!isTesting) throw new Error(message);
-}
 
 const ENV = {
-  env: process.env.NODE_ENV,
-  isProduction,
-  isDevelopment,
-  isTesting,
-  urls: {
-    web: new URL(process.env.URL!),
-    api: new URL(process.env.API_URL! ?? process.env.URL!),
-  },
   secrets: {
     jwt: process.env.JWT_SECRET!,
     cookie: process.env.COOKIE_SECRET!,
     otp: process.env.OTP_SECRET!,
   },
-  enableDebugging: !!(process.env.ENABLE_DEBUGGING ?? isDevelopment),
-  enablePlayground: !!(process.env.ENABLE_PLAYGROUND ?? isDevelopment),
-  databaseURL: process.env.DATABASE_URL!,
-  mailerURL: process.env.MAILER_URL,
-  queueURL: process.env.QUEUE_URL,
-  templatesDir: join(__dirname, "../../templates"),
-
   oauth: {
-    // authorizationServer: {
-    //   loginDuration: "1h",
-    //   authCodeDuration: "10m",
-    //   accessTokenDuration: "1m",
-    //   refreshTokenDuration: "30d",
-    // },
     facebook: {
       clientId: process.env.OAUTH_FACEBOOK_ID!,
       clientSecret: process.env.OAUTH_FACEBOOK_SECRET!,
@@ -71,9 +41,38 @@ const ENV = {
   //   accessKey: process.env.AWS_S3_ACCESS_KEY!,
   //   secretKey: process.env.AWS_S3_SECRET_KEY!,
   // },
-  mailer: {
-    from: `"graphql-scratchy" <jason+scratchy@raimondi.us>`,
-  },
 };
+
+type NodeEnv = "development" | "production" | "test";
+type DebugLevel = "debug"|"info"|"warn"|"error";
+
+export class Environment {
+  @IsIn(["development", "production", "test"])
+  public readonly env: NodeEnv = process.env.NODE_ENV as NodeEnv;
+
+  @IsIn(["debug", "info", "warn", "error"])
+  public readonly debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
+
+  public readonly isDevelopment: boolean = this.env === "development";
+  public readonly isProduction: boolean = this.env === "production";
+  public readonly isTesting: boolean = this.env === "test";
+
+  public readonly templatesDir = join(__dirname, "../../templates");
+
+  public readonly enableDebugging = this.debugLevel === "debug";
+  public readonly enablePlayground = !!process.env.ENABLE_PLAYGROUND;
+  public readonly databaseURL = process.env.DATABASE_URL;
+  public readonly queueURL = process.env.QUEUE_URL;
+
+  public readonly mailedFrom = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
+  @IsUrl()
+  public readonly mailerURL = process.env.MAILER_URL;
+
+  @IsUrl()
+  public readonly web = process.env.URL;
+
+  @IsUrl()
+  public readonly api = process.env.API_URL;
+}
 
 export { ENV };
