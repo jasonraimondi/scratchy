@@ -24,7 +24,7 @@ export class EmailTemplateService {
   private mergeContext(context: Record<string, unknown>): Record<string, unknown> {
     return {
       ...context,
-      app_url: ENV.urls.web,
+      app_url: ENV.urlWeb,
     };
   }
 }

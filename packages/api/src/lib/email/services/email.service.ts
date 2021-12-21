@@ -1,15 +1,15 @@
 import { ISendMailOptions } from "@nestjs-modules/mailer";
-import { InjectQueue } from "@nestjs/bull";
 import { Injectable } from "@nestjs/common";
-import { Queue } from "bull";
+import { BullMqClient } from "bull-mq-transport";
+import { v4 } from "uuid";
 
-import { QUEUE, QUEUE_JOBS } from "~/config/queues";
+import { QUEUE } from "~/config";
 
 @Injectable()
 export class EmailService {
-  constructor(@InjectQueue(QUEUE.email) private readonly emailQueue: Queue) {}
+  constructor(private readonly client: BullMqClient) {}
 
-  send(data: ISendMailOptions) {
-    return this.emailQueue.add(QUEUE_JOBS.email.send, data);
+  send(payload: ISendMailOptions) {
+    return this.client.emit(QUEUE.email, { id: v4(), payload }).subscribe();
   }
 }

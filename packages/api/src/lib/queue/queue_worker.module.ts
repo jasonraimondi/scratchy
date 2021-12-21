@@ -10,7 +10,7 @@ import { ENV } from "~/config/environments";
 
 @Module({
   imports: [EmailModule, LoggerModule, QueueModule, DatabaseModule],
-  providers: [SendEmailProcessor],
+  controllers: [SendEmailProcessor],
 })
 export class QueueWorkerModule {
   constructor() {

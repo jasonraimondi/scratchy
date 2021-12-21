@@ -7,68 +7,70 @@ type DebugLevel = "debug" | "info" | "warn" | "error";
 
 class Environment {
   @IsIn(["development", "production", "test"])
-  readonly nodeEnv: NodeEnv = process.env.NODE_ENV as NodeEnv;
+  nodeEnv: NodeEnv = process.env.NODE_ENV as NodeEnv;
 
   @IsIn(["debug", "info", "warn", "error"])
-  readonly debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
+  debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
 
-  readonly isDebug = this.debugLevel === "debug";
-  readonly isDevelopment = this.nodeEnv === "development";
-  readonly isProduction = this.nodeEnv === "production";
-  readonly isTesting = this.nodeEnv === "test";
+  isDebug = this.debugLevel === "debug";
+  isDevelopment = this.nodeEnv === "development";
+  isProduction = this.nodeEnv === "production";
+  isTesting = this.nodeEnv === "test";
 
-  readonly templatesDir = join(__dirname, "../../templates");
+  templatesDir = join(__dirname, "../../templates");
 
-  @IsUrl() readonly urlWeb = process.env.URL;
-  @IsUrl() readonly urlApi = process.env.API_URL;
-  @IsString() readonly urlDatabase = process.env.DATABASE_URL;
-  @IsString() readonly urlQueue = process.env.QUEUE_URL;
+  @IsUrl() urlWeb = process.env.URL as string;
+  @IsUrl() urlApi = process.env.API_URL as string;
+  @IsString() urlDatabase = process.env.DATABASE_URL as string;
+  @IsString() urlQueue = process.env.QUEUE_URL as string;
 
-  readonly ttlAccessToken = ms("10m");
-  readonly ttlRefreshToken = ms("1d");
-  readonly ttlRefreshTokenRememberMe = ms("30d");
-  readonly ttlForgotPasswordToken = ms("30m");
-  readonly ttlEmailConfirmationToken = ms("30d");
+  redisQueue = { host: 'localhost', port: 6379 };
 
-  @IsString()
-  @MinLength(32)
-  readonly jwtSecret = process.env.JWT_SECRET;
+  ttlAccessToken = ms("10m");
+  ttlRefreshToken = ms("1d");
+  ttlRefreshTokenRememberMe = ms("30d");
+  ttlForgotPasswordToken = ms("30m");
+  ttlEmailConfirmationToken = ms("30d");
 
   @IsString()
   @MinLength(32)
-  readonly cookieSecret = process.env.COOKIE_SECRET;
+  jwtSecret = process.env.JWT_SECRET;
 
-  @ValidateNested() readonly oauth = new OAuthEnvironment();
-  @ValidateNested() readonly mailer = new MailerEnvironment();
+  @IsString()
+  @MinLength(32)
+  cookieSecret = process.env.COOKIE_SECRET;
+
+  @ValidateNested() oauth = new OAuthEnvironment();
+  @ValidateNested() mailer = new MailerEnvironment();
 }
 
 class MailerEnvironment {
-  readonly from = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
-  @IsString() readonly host = process.env.SMTP_HOST;
+  from = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
+  @IsString() host = process.env.SMTP_HOST;
 }
 
 class OAuthEnvironment {
-  @ValidateNested() readonly facebook = new OAuthFacebookEnvironment();
-  @ValidateNested() readonly github = new OAuthGithubEnvironment();
-  @ValidateNested() readonly google = new OAuthGoogleEnvironment();
+  @ValidateNested() facebook = new OAuthFacebookEnvironment();
+  @ValidateNested() github = new OAuthGithubEnvironment();
+  @ValidateNested() google = new OAuthGoogleEnvironment();
 }
 
 class OAuthFacebookEnvironment {
-  @IsString() readonly clientId = process.env.OAUTH_FACEBOOK_ID!;
-  @IsString() readonly clientSecret = process.env.OAUTH_FACEBOOK_SECRET!;
-  @IsString() readonly callbackURL = "/api/oauth2/facebook/callback";
+  @IsString() clientId = process.env.OAUTH_FACEBOOK_ID!;
+  @IsString() clientSecret = process.env.OAUTH_FACEBOOK_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/facebook/callback";
 }
 
 class OAuthGoogleEnvironment {
-  @IsString() readonly clientId = process.env.OAUTH_GOOGLE_ID!;
-  @IsString() readonly clientSecret = process.env.OAUTH_GOOGLE_SECRET!;
-  @IsString() readonly callbackURL = "/api/oauth2/google/callback";
+  @IsString() clientId = process.env.OAUTH_GOOGLE_ID!;
+  @IsString() clientSecret = process.env.OAUTH_GOOGLE_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/google/callback";
 }
 
 class OAuthGithubEnvironment {
-  @IsString() readonly clientId = process.env.OAUTH_GITHUB_ID!;
-  @IsString() readonly clientSecret = process.env.OAUTH_GITHUB_SECRET!;
-  @IsString() readonly callbackURL = "/api/oauth2/facebook/callback";
+  @IsString() clientId = process.env.OAUTH_GITHUB_ID!;
+  @IsString() clientSecret = process.env.OAUTH_GITHUB_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/facebook/callback";
 }
 
-export const ENV = new Environment();
+export const ENV: Readonly<Environment> = new Environment();

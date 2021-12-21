@@ -1,4 +1,4 @@
-import { route } from "~/lib/utils/route";
+import { route } from "@jmondi/route-strings";
 
 export const WEB_ROUTES = {
   oauth_callback: route("/login/callback?encoded_token=:encodedToken"),

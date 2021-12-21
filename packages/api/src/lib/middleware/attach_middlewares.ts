@@ -4,7 +4,7 @@ import nunjucks from "nunjucks";
 import { ENV, OAuthProviders } from "~/config";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
-  await fastify.register(require("fastify-cookie"), { secret: ENV.secrets.cookie });
+  await fastify.register(require("fastify-cookie"), { secret: ENV.cookieSecret });
   await fastify.register(require("fastify-csrf"), { cookieOpts: { signed: true } });
   const oauthPlugin = require("fastify-oauth2");
 

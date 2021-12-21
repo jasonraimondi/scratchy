@@ -2,7 +2,7 @@ overwrite: true
 schema: ../api/schema.graphql
 documents: 'graphql/**/*.graphql'
 generates:
-  generated/graphql.ts:
+  src/generated/graphql.ts:
     hooks:
       afterOneFileWrite:
         - prettier --write generated/*.ts

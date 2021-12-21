@@ -1,28 +1,30 @@
-import { MailerService } from "@nestjs-modules/mailer";
+import { Controller } from "@nestjs/common";
 import type { ISendMailOptions } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
-import { Process, Processor } from "@nestjs/bull";
-import { Job } from "bull";
+import { Ctx, EventPattern, Payload, Transport } from "@nestjs/microservices";
+import { MailerService } from "@nestjs-modules/mailer";
+import { Job } from "bullmq";
 
-import { QUEUE, QUEUE_JOBS } from "~/config/queues";
+import { QUEUE } from "~/config/queues";
 import { EmailTemplateService } from "~/lib/email/services/email_template.service";
 
-@Processor(QUEUE.email)
+@Controller()
 export class SendEmailProcessor {
   constructor(
     private readonly mailerService: MailerService,
     private readonly emailTemplateService: EmailTemplateService,
   ) {}
 
-  @Process({ name: QUEUE_JOBS.email.send, concurrency: 2 })
-  async handleSend(job: Job<ISendMailOptions>) {
-    const { template, context, ...config } = job.data;
+  @EventPattern(QUEUE.email, Transport.REDIS)
+  async handleSend(@Payload() data: ISendMailOptions, @Ctx() job: Job) {
+  // async handleSend(job: Job<ISendMailOptions>) {
+    const { template, context, ...config } = data;
     if (!template) throw new Error(`Template not found ${template}`);
-    await job.progress(5);
+    await job.updateProgress(5);
     const html = this.emailTemplateService.html(template, context);
     const text = this.emailTemplateService.txt(template, context);
-    await job.progress(25);
+    await job.updateProgress(25);
     await this.mailerService.sendMail({ ...config, html, text });
-    await job.progress(100);
+    await job.updateProgress(100);
     return;
   }
 }

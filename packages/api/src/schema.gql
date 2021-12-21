@@ -1,0 +1,104 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  isEmailConfirmed: Boolean!
+  lastHeartbeatAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime
+  isActive: Boolean!
+  name: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+  accessTokenExpiresAt: Int!
+  refreshTokenExpiresAt: Int
+}
+
+type PaginatorMeta {
+  previousLink: String
+  nextLink: String
+}
+
+type UserPaginatorResponse {
+  meta: PaginatorMeta!
+  data: [User!]!
+}
+
+type Query {
+  me: User!
+  user(email: String!): User!
+  users(input: UserPaginatorInputs): UserPaginatorResponse!
+}
+
+input UserPaginatorInputs {
+  skip: Int
+  take: Int
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse!
+  refreshAccessToken: LoginResponse!
+  logout: Boolean
+  revokeRefreshToken(userId: String!): Boolean
+  verifyEmailConfirmation(input: VerifyEmailInput!): LoginResponse!
+  validateForgotPasswordToken(input: ValidateForgotPasswordTokenInput!): Boolean!
+  sendForgotPasswordEmail(input: SendForgotPasswordInput!): Boolean!
+  updatePasswordFromToken(input: UpdatePasswordFromTokenInput!): LoginResponse!
+  register(input: RegisterInput!): User!
+  resendConfirmEmail(email: String!): Boolean!
+  updatePassword(input: UpdatePasswordInput!): Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+  rememberMe: Boolean!
+}
+
+input VerifyEmailInput {
+  email: String!
+  token: String!
+}
+
+input ValidateForgotPasswordTokenInput {
+  email: String!
+  token: String!
+}
+
+input SendForgotPasswordInput {
+  email: String!
+}
+
+input UpdatePasswordFromTokenInput {
+  password: String!
+  token: String!
+  email: String!
+}
+
+input RegisterInput {
+  id: String
+  password: String
+  firstName: String
+  lastName: String
+  email: String!
+}
+
+input UpdatePasswordInput {
+  userId: String!
+  currentPassword: String!
+  password: String!
+  revokeToken: Boolean
+}

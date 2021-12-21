@@ -1,7 +1,6 @@
 import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 
-import { QueueModule } from "~/lib/queue/queue.module";
 import { ENV } from "~/config/environments";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
@@ -10,14 +9,19 @@ import { EmailTemplateService } from "~/lib/email/services/email_template.servic
 import { RegisterMailer } from "~/lib/email/mailers/register.mailer";
 import { ForgotPasswordMailer } from "~/lib/email/mailers/forgot_password.mailer";
 
-const emailProviders = [EmailService, EmailTemplateService, RegisterMailer, ForgotPasswordMailer];
+// prettier-ignore
+const emailProviders = [
+  EmailService,
+  EmailTemplateService,
+  RegisterMailer,
+  ForgotPasswordMailer,
+];
 
 @Module({
   imports: [
-    QueueModule,
     DatabaseModule,
     MailerModule.forRoot({
-      transport: ENV.mailerURL,
+      transport: ENV.mailer.host,
       defaults: {
         from: ENV.mailer.from,
       },

@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
+import { BullMqModule } from "bull-mq-transport";
 
 import { AppController } from "~/app/app.controller";
 import { AuthModule } from "~/app/auth/auth.module";
@@ -10,14 +11,26 @@ import { graphqlConfig } from "~/config/graphql";
 import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
-import { QueueModule } from "~/lib/queue/queue.module";
 import { CurrentUserMiddleware } from "~/lib/middleware/current_user.middleware";
 
-const mainImports = [QueueModule, JwtModule, LoggerModule, GraphQLModule.forRoot(graphqlConfig)];
+// prettier-ignore
+const mainImports = [
+  BullMqModule.forRoot({
+    connection: ENV.redisQueue,
+  }),
+  JwtModule,
+  LoggerModule,
+  GraphQLModule.forRoot(graphqlConfig)
+];
 
-const appImports = [AuthModule, UserModule, FileModule];
+// prettier-ignore
+const appImports = [
+  AuthModule,
+  UserModule,
+  FileModule
+];
 
-if (!ENV.isProduction) mainImports.push(QueueWorkerModule);
+if (ENV.isDevelopment) mainImports.push(QueueWorkerModule);
 
 @Module({
   imports: [...mainImports, ...appImports],

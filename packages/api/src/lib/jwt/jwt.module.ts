@@ -7,7 +7,7 @@ import { MyJwtService } from "~/lib/jwt/jwt.service";
 @Module({
   imports: [
     NestJwtModule.register({
-      secret: ENV.secrets.jwt,
+      secret: ENV.jwtSecret,
     }),
   ],
   providers: [MyJwtService],

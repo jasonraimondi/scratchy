@@ -1,4 +1,3 @@
-// import { BullModule } from "@nestjs/bull";
 import { DynamicModule, Module } from "@nestjs/common";
 
 // import { QueueUIProvider } from "~/app/queues/queue_ui.provider";

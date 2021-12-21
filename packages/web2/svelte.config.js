@@ -6,7 +6,7 @@ import node from '@sveltejs/adapter-node';
 const vite = {
 	resolve: {
 		alias: {
-			$api: resolve('./generated'),
+			$api: resolve('./src/generated'),
 			$styles: resolve('./src/styles')
 		}
 	}
