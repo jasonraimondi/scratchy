@@ -11,6 +11,7 @@ import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify
 import { validate } from "class-validator";
 import { BullMqServer } from "bull-mq-transport";
 
+
 import { AppModule } from "~/app/app.module";
 import { ENV } from "~/config/environments";
 import { attachMiddlewares } from "~/lib/middleware/attach_middlewares";

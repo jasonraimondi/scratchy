@@ -2,6 +2,7 @@ import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import nunjucks from "nunjucks";
 
 import { ENV, OAuthProviders } from "~/config";
+import { registerBullBoard } from "~/lib/middleware/bull_board";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   await fastify.register(require("fastify-cookie"), { secret: ENV.cookieSecret });
@@ -11,8 +12,6 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   for (const provider of OAuthProviders) {
     await fastify.register(oauthPlugin, provider);
   }
-
-  // fastify.enableCors(CORS);
 
   await fastify.setViewEngine({
     engine: { nunjucks },
@@ -29,7 +28,7 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
     });
   }
 
-  // if (!ENV.isTesting) {
-  //   fastify.use("/admin/queues", bullUI);
-  // }
+  if (!ENV.isTesting) {
+    await registerBullBoard(fastify)
+  }
 };

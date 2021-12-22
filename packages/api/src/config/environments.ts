@@ -46,7 +46,7 @@ class Environment {
 
 class MailerEnvironment {
   from = '"graphql-scratchy" <jason+scratchy@raimondi.us>';
-  @IsString() host = process.env.SMTP_HOST;
+  @IsString() host = process.env.SMTP_URL;
 }
 
 class OAuthEnvironment {
