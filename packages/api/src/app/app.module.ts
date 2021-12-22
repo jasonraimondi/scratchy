@@ -16,7 +16,7 @@ import { CurrentUserMiddleware } from "~/lib/middleware/current_user.middleware"
 // prettier-ignore
 const mainImports = [
   BullMqModule.forRoot({
-    connection: ENV.redisQueue,
+    connection: ENV.urlQueue,
   }),
   JwtModule,
   LoggerModule,

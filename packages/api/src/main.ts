@@ -37,7 +37,7 @@ void (async () => {
   app.connectMicroservice({ strategy }, { inheritAppConfig: true });
   await app.startAllMicroservices();
 
-  await app.listen(4400, "0.0.0.0");
+  await app.listen(ENV.port, "0.0.0.0");
 
   console.log(`Listening on ${await app.getUrl()}`);
 })().catch((err) => {

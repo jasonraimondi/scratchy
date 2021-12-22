@@ -8,7 +8,7 @@ import { ENV, QUEUE } from "~/config";
 
 export async function registerBullBoard(fastify: NestFastifyApplication) {
   const serverAdapter = new BullFastifyAdapter();
-  const queues = Object.keys(QUEUE).map(name => new BullMQAdapter(new Queue(name, { connection: ENV.redisQueue })));
+  const queues = Object.keys(QUEUE).map(name => new BullMQAdapter(new Queue(name, { connection: ENV.urlQueue })));
   createBullBoard({ queues, serverAdapter });
   serverAdapter.setBasePath("/admin/queue");
   await fastify.register(serverAdapter.registerPlugin() as any, { prefix: "/admin/queue" });
