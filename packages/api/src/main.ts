@@ -11,15 +11,16 @@ import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify
 import { validate } from "class-validator";
 import { BullMqServer } from "bull-mq-transport";
 
-
 import { AppModule } from "~/app/app.module";
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 import { attachMiddlewares } from "~/lib/middleware/attach_middlewares";
 
 async function validateEnvironment() {
   const validationErrors = await validate(ENV);
   if (validationErrors.length === 0) return;
-  const errors = validationErrors.map(e => e.constraints ? Object.values(e.constraints) : undefined).filter(e => e !== undefined);
+  const errors = validationErrors
+    .map((e) => (e.constraints ? Object.values(e.constraints) : undefined))
+    .filter((e) => e !== undefined);
   throw new Error(`Invalid Environment \n- ${errors.join("\n- ")}\n`);
 }
 

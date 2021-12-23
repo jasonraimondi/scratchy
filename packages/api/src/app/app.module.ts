@@ -6,7 +6,7 @@ import { AppController } from "~/app/app.controller";
 import { AuthModule } from "~/app/auth/auth.module";
 import { FileModule } from "~/app/file/file.module";
 import { UserModule } from "~/app/user/user.module";
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 import { graphqlConfig } from "~/config/graphql";
 import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 import { LoggerModule } from "~/lib/logger/logger.module";

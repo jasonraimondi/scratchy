@@ -16,13 +16,10 @@ export class SendEmailProcessor {
 
   @EventPattern(QUEUE.email, Transport.REDIS)
   async handleSend(@Payload() data: ISendMailOptions, @Ctx() job: Job) {
-  // async handleSend(job: Job<ISendMailOptions>) {
     const { template, context, ...config } = data;
     if (!template) throw new Error(`Template not found ${template}`);
-    await job.updateProgress(5);
-    const html = this.emailTemplateService.html(template, context);
-    const text = this.emailTemplateService.txt(template, context);
-    await job.updateProgress(25);
+    const { html, text } = this.emailTemplateService.both(template, context);
+    await job.updateProgress(98);
     await this.mailerService.sendMail({ ...config, html, text });
     await job.updateProgress(100);
     return;

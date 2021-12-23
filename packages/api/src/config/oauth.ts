@@ -1,45 +1,27 @@
-import oauthPlugin, { FastifyOAuth2Options } from "fastify-oauth2";
+import { IsString, ValidateNested } from "class-validator";
 
-import { ENV } from "~/config/environments";
+class OAuthEnvironment {
+  @ValidateNested() facebook = new OAuthFacebookEnvironment();
+  @ValidateNested() github = new OAuthGithubEnvironment();
+  @ValidateNested() google = new OAuthGoogleEnvironment();
+}
 
-export const OAuthProviders: FastifyOAuth2Options[] = [
-  {
-    name: "facebook",
-    scope: ["email"],
-    credentials: {
-      client: {
-        id: ENV.oauth.facebook.clientId,
-        secret: ENV.oauth.facebook.clientSecret,
-      },
-      auth: oauthPlugin.FACEBOOK_CONFIGURATION,
-    },
-    startRedirectPath: "/oauth2/facebook", // registers a fastify get route
-    callbackUri: ENV.oauth.facebook.callbackURL,
-  },
-  {
-    name: "github",
-    scope: ["user:email"],
-    credentials: {
-      client: {
-        id: ENV.oauth.github.clientId,
-        secret: ENV.oauth.github.clientSecret,
-      },
-      auth: oauthPlugin.GITHUB_CONFIGURATION,
-    },
-    startRedirectPath: "/oauth2/github", // registers a fastify get route
-    callbackUri: ENV.oauth.github.callbackURL,
-  },
-  {
-    name: "google",
-    scope: ["email", "profile"],
-    credentials: {
-      client: {
-        id: ENV.oauth.google.clientId,
-        secret: ENV.oauth.google.clientSecret,
-      },
-      auth: oauthPlugin.GOOGLE_CONFIGURATION,
-    },
-    startRedirectPath: "/oauth2/google", // registers a fastify get route
-    callbackUri: ENV.oauth.google.callbackURL,
-  },
-];
+class OAuthFacebookEnvironment {
+  @IsString() clientId = process.env.OAUTH_FACEBOOK_ID!;
+  @IsString() clientSecret = process.env.OAUTH_FACEBOOK_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/facebook/callback";
+}
+
+class OAuthGoogleEnvironment {
+  @IsString() clientId = process.env.OAUTH_GOOGLE_ID!;
+  @IsString() clientSecret = process.env.OAUTH_GOOGLE_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/google/callback";
+}
+
+class OAuthGithubEnvironment {
+  @IsString() clientId = process.env.OAUTH_GITHUB_ID!;
+  @IsString() clientSecret = process.env.OAUTH_GITHUB_SECRET!;
+  @IsString() callbackURL = "/api/oauth2/facebook/callback";
+}
+
+export const OAUTH = new OAuthEnvironment();

@@ -1,3 +1,3 @@
-export const QUEUE = {
-  email: "email",
-};
+export enum QUEUE {
+  email = "email",
+}

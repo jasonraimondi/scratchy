@@ -2,7 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 
 import { LoggerService } from "~/lib/logger/logger.service";
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 
 // prettier-ignore
 type LogLevel = ["query", "info", "warn", "error"] |

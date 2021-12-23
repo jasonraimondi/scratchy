@@ -5,7 +5,7 @@ generates:
   src/generated/graphql.ts:
     hooks:
       afterOneFileWrite:
-        - prettier --write generated/*.ts
+        - prettier --write src/generated/*.ts
     plugins:
       - typescript
       - typescript-operations
@@ -15,4 +15,4 @@ generates:
       documentMode: string
       scalars:
         DateTime: Date
-        JSON: '{ [key: string]: any }'
+        JSON: '{ [key: string]: unknown }'

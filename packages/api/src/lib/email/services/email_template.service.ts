@@ -2,11 +2,18 @@ import { Injectable } from "@nestjs/common";
 import mjml2html from "mjml";
 import nunjucks from "nunjucks";
 
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 
 @Injectable()
 export class EmailTemplateService {
   private readonly nunjucks = nunjucks;
+
+  both(path: string, context: Record<string, unknown> = {}) {
+    return {
+      text: this.txt(path, context),
+      html: this.html(path, context),
+    };
+  }
 
   txt(path: string, context: Record<string, unknown> = {}): string {
     return this.nunjucks.render(`emails/${path}.txt.njk`, this.mergeContext(context));

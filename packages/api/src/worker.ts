@@ -7,7 +7,7 @@ import { FastifyAdapter } from "@nestjs/platform-fastify";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 
 (async () => {

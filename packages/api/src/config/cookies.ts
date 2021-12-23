@@ -1,6 +1,6 @@
 import type { CookieSerializeOptions } from "fastify-cookie";
 
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 
 export const cookieOptions = (opts: CookieSerializeOptions = {}): CookieSerializeOptions => ({
   domain: new URL(ENV.urlWeb).hostname,

@@ -1,7 +1,7 @@
 import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { EmailService } from "~/lib/email/services/email.service";

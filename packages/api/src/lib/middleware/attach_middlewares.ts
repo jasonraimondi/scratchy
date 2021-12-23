@@ -29,6 +29,6 @@ export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   }
 
   if (!ENV.isTesting) {
-    await registerBullBoard(fastify)
+    await registerBullBoard(fastify);
   }
 };

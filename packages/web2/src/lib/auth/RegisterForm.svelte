@@ -20,6 +20,7 @@
 		errors = await validateForm({ schema: registerSchema, data });
 		if (!errors) {
 			await graphQLSdk.Register({ input: data });
+			const user = await graphQLSdk.User({ email: "jason@raimondi.us" })
 			notify.success({
 				title: 'Huzzah!!',
 				message: 'Go check your inbox for to confirm your email!',

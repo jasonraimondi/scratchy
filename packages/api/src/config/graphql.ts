@@ -1,17 +1,16 @@
 import { GqlModuleOptions } from "@nestjs/graphql";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 
-import { ENV } from "~/config/environments";
-import { CORS } from "~/config/cors";
+import { ENV } from "~/config/environment";
 import { GraphqlLogger } from "~/lib/logger/graphql.logger";
 import { MyContext } from "~/config/context";
-import { join } from "path";
+import { CORS } from "~/config/cors";
 
 export const graphqlConfig: GqlModuleOptions = {
   logger: new GraphqlLogger(),
   debug: ENV.isDebug,
   playground: ENV.isDevelopment,
-  autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+  autoSchemaFile: "schema.graphql",
   cors: CORS,
   buildSchemaOptions: {
     numberScalarMode: "integer",

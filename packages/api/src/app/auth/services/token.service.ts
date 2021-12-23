@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { MyJwtService } from "~/lib/jwt/jwt.service";
 import { User } from "~/entities/user.entity";
 import { AccessTokenJWTPayload, RefreshTokenJWTPayload, TokenJwtPayload } from "~/app/auth/dto/refresh_token.dto";
-import { ENV } from "~/config/environments";
+import { ENV } from "~/config/environment";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
 
 @Injectable()
@@ -23,7 +23,7 @@ export class TokenService {
   }
 
   async createRefreshToken(user: User, rememberMe = false) {
-    const ttl = rememberMe ? ENV.ttlRefreshTokenRememberMe : ENV.ttlRefreshToken;
+    const ttl = rememberMe ? ENV.ttl.refreshTokenRememberMe : ENV.ttl.refreshToken;
     const now = Date.now();
     const expiresAt = now + ttl;
     const payload: RefreshTokenJWTPayload = {
@@ -48,7 +48,7 @@ export class TokenService {
 
   async createAccessToken(user: User) {
     const now = Date.now();
-    const expiresAt = now + ENV.ttlAccessToken;
+    const expiresAt = now + ENV.ttl.accessToken;
     const payload: AccessTokenJWTPayload = {
       // non standard claims
       userId: user.id,

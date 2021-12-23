@@ -1,6 +1,8 @@
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 
-export const CORS: CorsOptions = {
-  origin: true,
-  credentials: true,
-};
+class Cors implements CorsOptions {
+  origin = true;
+  credentials = true;
+}
+
+export const CORS = new Cors();
