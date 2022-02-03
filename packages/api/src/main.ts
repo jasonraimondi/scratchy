@@ -8,7 +8,7 @@ import "dotenv/config";
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
-import { validate } from "class-validator";
+import { validate, ValidationError } from "class-validator";
 import { BullMqServer } from "bull-mq-transport";
 
 import { AppModule } from "~/app/app.module";
@@ -19,9 +19,21 @@ async function validateEnvironment() {
   const validationErrors = await validate(ENV);
   if (validationErrors.length === 0) return;
   const errors = validationErrors
-    .map((e) => (e.constraints ? Object.values(e.constraints) : undefined))
+    .reduce((prev, next) => {
+      const result = [...prev];
+      if (next.children?.length) result.push(...next.children);
+      return [next, ...result];
+    }, [] as ValidationError[])
+    .map((e) => {
+      if (!e.constraints) return undefined;
+      return Object.values(e.constraints).map((v) => {
+        const [first, ...split] = v.split(" ");
+        const result = [`"${first}"`, ...split].join(" ");
+        return `** ${e.target?.constructor.name} ${result} **`;
+      });
+    })
     .filter((e) => e !== undefined);
-  throw new Error(`Invalid Environment \n- ${errors.join("\n- ")}\n`);
+  throw new Error(`Invalid Environment \n\n${errors.join("\n- ")}\n`);
 }
 
 void (async () => {

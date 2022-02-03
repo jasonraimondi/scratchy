@@ -17,8 +17,6 @@ overmind start
 [![Maintainability](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/maintainability)](https://codeclimate.com/github/jasonraimondi/scratchy/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/575ba1fd1f6d3b678f06/test_coverage)](https://codeclimate.com/github/jasonraimondi/scratchy/test_coverage)
 
-### Tooling:
-
 * [NestJS](https://www.npmjs.com/package/@nestjs/cli) application with authentication via JWfT
 * [bull](https://www.npmjs.com/package/bull) for handling queue / jobs
 

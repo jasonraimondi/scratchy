@@ -39,7 +39,7 @@ class Environment {
   @ValidateNested() mailer = MAILER;
   @ValidateNested() cors = CORS;
 
-  @IsUrl() urlWeb = process.env.URL as string;
+  @IsUrl() urlWeb = process.env.APP_URL as string;
   @IsUrl() urlApi = process.env.API_URL as string;
   @IsString() urlDatabase = process.env.DATABASE_URL as string;
   @IsString() urlQueue = process.env.QUEUE_URL as string;

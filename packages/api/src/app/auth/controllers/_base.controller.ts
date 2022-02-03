@@ -10,7 +10,7 @@ import { OAuthClientService } from "~/app/auth/services/oauth_client.service";
 import { User } from "~/entities/user.entity";
 import { UnauthorizedException } from "~/lib/exceptions/unauthorized.exception";
 import { UserProvider } from "~/entities/user_provider.entity";
-import { WEB_ROUTES } from "~/config";
+import { WEB_ROUTES } from "~/config/routes";
 
 type OAuthUser = {
   email: string;

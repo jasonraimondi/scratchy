@@ -1,8 +1,9 @@
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import nunjucks from "nunjucks";
 
-import { ENV, OAuthProviders } from "~/config";
 import { registerBullBoard } from "~/lib/middleware/bull_board";
+import { OAuthProviders } from "~/config/oauth_providers";
+import { ENV } from "~/config/environment";
 
 export const attachMiddlewares = async (fastify: NestFastifyApplication) => {
   await fastify.register(require("fastify-cookie"), { secret: ENV.cookieSecret });

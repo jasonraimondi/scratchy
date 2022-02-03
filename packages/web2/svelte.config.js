@@ -26,7 +26,6 @@ const config = {
 		adapter: {
 			adapt: node({ out: 'dist' })
 		},
-		target: '#_app',
 		vite
 	}
 };

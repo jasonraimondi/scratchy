@@ -4,7 +4,8 @@ import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
 import { createBullBoard } from "@bull-board/api";
 import { FastifyAdapter as BullFastifyAdapter } from "@bull-board/fastify";
 
-import { ENV, QUEUE } from "~/config";
+import { QUEUE } from "~/config/queues";
+import { ENV } from "~/config/environment";
 
 export async function registerBullBoard(fastify: NestFastifyApplication) {
   const serverAdapter = new BullFastifyAdapter();

@@ -6,7 +6,7 @@ import { VerifyEmailInput } from "~/app/user/email_confirmation/email_confirmati
 import { LoginResponse } from "~/app/auth/dto/auth.dtos";
 import { AuthService } from "~/app/auth/services/auth.service";
 import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { MyContext } from "~/config";
+import { MyContext } from "~/config/context";
 
 @Injectable()
 @Resolver()

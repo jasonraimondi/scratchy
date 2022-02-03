@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { BullMqClient } from "bull-mq-transport";
 import { v4 } from "uuid";
 
-import { QUEUE } from "~/config";
+import { QUEUE } from "~/config/queues";
 
 @Injectable()
 export class EmailService {
