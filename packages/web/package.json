@@ -6,7 +6,6 @@
     "gen": "graphql-codegen --config codegen.yml",
     "format": "prettier --write \"{pages,src,styles,graphql}/**/*.(ts|tsx|js|css|scss|graphql)\"",
     "prestart": "run-s gen",
-    "postinstall": "run-s gen",
     "start:prod": "next start -p 3000",
     "start:dev": "next -p 3000"
   },

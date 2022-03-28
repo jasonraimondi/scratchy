@@ -3,9 +3,6 @@ schema: ../api/schema.graphql
 documents: 'graphql/**/*.graphql'
 generates:
   src/generated/graphql.ts:
-    hooks:
-      afterOneFileWrite:
-        - prettier --write src/generated/*.ts
     plugins:
       - typescript
       - typescript-operations
