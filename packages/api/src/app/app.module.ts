@@ -12,6 +12,7 @@ import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
 import { LoggerModule } from "~/lib/logger/logger.module";
 import { JwtModule } from "~/lib/jwt/jwt.module";
 import { CurrentUserMiddleware } from "~/lib/middleware/current_user.middleware";
+import { MercuriusDriverConfig } from "@nestjs/mercurius";
 
 // prettier-ignore
 const mainImports = [
@@ -20,14 +21,14 @@ const mainImports = [
   }),
   JwtModule,
   LoggerModule,
-  GraphQLModule.forRoot(graphqlConfig)
+  GraphQLModule.forRoot<MercuriusDriverConfig>(graphqlConfig)
 ];
 
 // prettier-ignore
 const appImports = [
   AuthModule,
   UserModule,
-  FileModule
+  FileModule,
 ];
 
 if (ENV.isDevelopment) mainImports.push(QueueWorkerModule);
