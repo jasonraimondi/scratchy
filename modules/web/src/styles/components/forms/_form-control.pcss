@@ -1,0 +1,39 @@
+.form-columns {
+  display: flex;
+
+  .form-control:nth-child(odd) {
+    padding-right: 0.25em;
+  }
+
+  .form-control:nth-child(even) {
+    padding-left: 0.25em;
+  }
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+
+  &.inline {
+    flex-direction: row;
+  }
+
+  .error {
+    font-size: 0.8em;
+    color: var(--theme-error);
+
+    @media (--dark) {
+      color: var(--theme-error-darkmode);
+    }
+  }
+}
+
+.form-submit {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+
+  .back {
+    font-size: 0.8em;
+  }
+}

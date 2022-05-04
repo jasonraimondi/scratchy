@@ -1,0 +1,301 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  isEmailConfirmed: Boolean!
+  nickname: String
+  lastHeartbeatAt: Timestamp
+  lastLoginAt: Timestamp
+  lastLoginIP: String
+  createdIP: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  emailConfirmationToken: BaseEmailConfirmationToken
+  forgotPasswordToken: BaseForgotPasswordToken
+  isAdmin: Boolean!
+  isActive: Boolean!
+  name: String
+  permissionsList: [String!]!
+  rolesList: [String!]!
+  gravatar(size: Int): String!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type BaseEmailConfirmationToken {
+  id: ID!
+  expiresAt: Timestamp!
+  createdAt: Timestamp!
+  userId: String!
+  user: BaseUser
+}
+
+type BaseUser {
+  id: ID!
+  email: String!
+  isEmailConfirmed: Boolean!
+  nickname: String
+  lastHeartbeatAt: Timestamp
+  lastLoginAt: Timestamp
+  lastLoginIP: String
+  createdIP: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  emailConfirmationToken: BaseEmailConfirmationToken
+  forgotPasswordToken: BaseForgotPasswordToken
+}
+
+type BaseForgotPasswordToken {
+  id: ID!
+  expiresAt: Timestamp!
+  createdAt: Timestamp!
+  userId: String!
+  user: BaseUser
+}
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+  accessTokenExpiresAt: Timestamp!
+  refreshTokenExpiresAt: Timestamp
+}
+
+type FileUpload {
+  id: ID!
+  path: String!
+  originalName: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  status: FileUploadStatus!
+  userId: String!
+  user: BaseUser
+  url: String!
+}
+
+enum FileUploadStatus {
+  pending
+  finalized
+}
+
+type PresignedUrl {
+  url: String!
+  fields: JSON!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type UserPaginatorResponse {
+  cursorId: String
+  data: [User!]!
+}
+
+type Book {
+  id: ID!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  title: String!
+  subtitle: String
+  summary: String
+  status: BookStatus!
+  isPrivate: Boolean!
+  user: User
+  userId: String!
+  chapters: [BaseChapter!]
+}
+
+enum BookStatus {
+  draft
+  working
+  final
+}
+
+type BaseChapter {
+  id: ID!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  title: String
+  content: String!
+  status: ChapterStatus!
+  user: BaseUser
+  userId: String!
+  book: BaseBook
+  bookId: String!
+}
+
+enum ChapterStatus {
+  draft
+  working
+  final
+}
+
+type BaseBook {
+  id: ID!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  title: String!
+  subtitle: String
+  summary: String
+  status: BookStatus!
+  isPrivate: Boolean!
+  user: BaseUser
+  userId: String!
+  chapters: [BaseChapter!]
+}
+
+type Chapter {
+  id: ID!
+  createdAt: Timestamp!
+  updatedAt: Timestamp
+  title: String
+  content: String!
+  status: ChapterStatus!
+  user: BaseUser
+  userId: String!
+  book: BaseBook
+  bookId: String!
+}
+
+type BookPaginatorResponse {
+  cursorId: String
+  data: [Book!]!
+}
+
+type Query {
+  me: User!
+  userById(id: String!): User!
+  userByEmail(email: String!): User!
+  users(input: UserPaginatorInput!): UserPaginatorResponse!
+  fileUpload(id: String!): FileUpload!
+  fileUploads(input: ListFileUploadsInput!): [FileUpload!]!
+  getBook(id: String!): Book!
+  listBooks(input: BookPaginatorInput!): BookPaginatorResponse!
+  getChapter(id: String!): Chapter!
+  listChapters(bookId: String!): [Chapter!]!
+}
+
+input UserPaginatorInput {
+  skip: Int
+  take: Int = 3
+  cursorId: String
+}
+
+input ListFileUploadsInput {
+  userId: String!
+}
+
+input BookPaginatorInput {
+  skip: Int
+  take: Int = 3
+  cursorId: String
+  status: [BookStatus!]
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse!
+  refreshAccessToken: LoginResponse!
+  logout: Boolean
+  revokeRefreshToken(userId: String!): Boolean
+  verifyEmailConfirmation(input: VerifyEmailInput!): LoginResponse!
+  validateForgotPasswordToken(input: ValidateForgotPasswordTokenInput!): Boolean!
+  sendForgotPasswordEmail(input: SendForgotPasswordInput!): Boolean!
+  updatePasswordFromToken(input: UpdatePasswordFromTokenInput!): LoginResponse!
+  register(input: RegisterInput!): User!
+  resendConfirmEmail(email: String!): Boolean!
+  updatePassword(input: UpdatePasswordInput!): Boolean!
+  presignedUrl(input: PresignedUrlInput!): PresignedUrl!
+  createBook(input: BookCreateInput!): Boolean!
+  updateBook(input: BookUpdateInput!): Boolean!
+  createChapter(input: ChapterCreateInput!): Boolean!
+  updateChapter(input: ChapterUpdateInput!): Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+  rememberMe: Boolean
+}
+
+input VerifyEmailInput {
+  email: String!
+  token: String!
+}
+
+input ValidateForgotPasswordTokenInput {
+  email: String!
+  token: String!
+}
+
+input SendForgotPasswordInput {
+  email: String!
+}
+
+input UpdatePasswordFromTokenInput {
+  password: String!
+  token: String!
+  email: String!
+}
+
+input RegisterInput {
+  id: String
+  password: String
+  firstName: String
+  lastName: String
+  email: String!
+}
+
+input UpdatePasswordInput {
+  userId: String!
+  currentPassword: String!
+  password: String!
+  revokeToken: Boolean
+}
+
+input PresignedUrlInput {
+  fileName: String!
+  mimeType: String!
+  type: String!
+}
+
+input BookCreateInput {
+  id: ID
+  title: String!
+  subtitle: String
+  summary: String
+  status: BookStatus!
+  isPrivate: Boolean!
+  userId: String!
+}
+
+input BookUpdateInput {
+  id: ID!
+  title: String
+  subtitle: String
+  summary: String
+  status: BookStatus
+  isPrivate: Boolean
+}
+
+input ChapterCreateInput {
+  id: ID
+  title: String
+  content: String!
+  status: ChapterStatus!
+  userId: String!
+  bookId: String!
+}
+
+input ChapterUpdateInput {
+  id: ID!
+  title: String
+  content: String
+  status: ChapterStatus
+}

@@ -1,41 +1,14 @@
 {
   "name": "scratchy",
   "version": "1.0.0",
-  "description": "a monolith",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jasonraimondi/scratchy.git"
-  },
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
-    "dev": "overmind start",
-    "db": "npm run --prefix packages/api db:migrate && npm run --prefix packages/api db:seed",
-    "build": "run-p build:web build:api",
-    "build:web": "npm run --prefix packages/web build",
-    "build:api": "npm run --prefix packages/api build",
-    "format": "run-p format:web format:api format:cypress",
-    "format:web": "npm run --prefix packages/web format",
-    "format:api": "npm run --prefix packages/api format",
-    "format:cypress": "npm run --prefix packages/cypress format",
-    "proxy": "caddy start --watch",
-    "prestart": "npm run build",
-    "start": "run-p start:web start:web2 start:api start:worker proxy",
-    "start:web": "npm run --prefix packages/web start:prod",
-    "start:web2": "npm run --prefix packages/web2 start:prod",
-    "start:worker": "npm run --prefix packages/api start:queue:dev",
-    "start:api": "npm run --prefix packages/api start:prod",
-    "test": "start-server-and-test start https://scratchy.localdomain test:integrations",
-    "test:integrations": "cd cypress && ./node_modules/.bin/cypress run"
+    "dev": "pnpm db && overmind start -D && overmind echo",
+    "db": "pnpm --prefix modules/prisma db:migrate && pnpm --prefix modules/prisma db:seed"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.2",
     "start-server-and-test": "^1.14.0"
-  },
-  "keywords": [],
-  "author": "Jason Raimondi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jasonraimondi/scratchy/issues"
-  },
-  "homepage": "https://github.com/jasonraimondi/scratchy#readme"
+  }
 }

@@ -1,0 +1,6 @@
+mutation PresignedUrl($input: PresignedUrlInput!) {
+  presignedUrl(input: $input) {
+    url
+    fields
+  }
+}

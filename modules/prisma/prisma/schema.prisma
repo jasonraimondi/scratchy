@@ -1,0 +1,188 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator custom_generator {
+  provider   = "ts-node node_modules/@jmondi/prisma-generator-nestjs-graphql/src/generator.ts"
+  output     = "../generated/models"
+  clientPath = "../client"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+model User {
+  id               String           @id @default(uuid()) @db.Uuid
+  /// @Validate.IsEmail()
+  email            String           @unique @db.VarChar(255)
+  /// @HideField()
+  passwordHash     String?          @db.VarChar(255)
+  /// @HideField()
+  tokenVersion     Int              @default(0)
+  isEmailConfirmed Boolean          @default(false)
+  nickname         String?          @db.VarChar(255)
+  /// @Validate.IsDate() @Validate.MaxDate(new Date())
+  lastHeartbeatAt  DateTime?        @db.Timestamp(6)
+  /// @Validate.IsDate() @Validate.MaxDate(new Date())
+  lastLoginAt      DateTime?        @db.Timestamp(6)
+  /// @Validate.IsIP()
+  lastLoginIP      String?          @db.Inet
+  /// @Validate.IsIP()
+  createdIP        String           @db.Inet
+  /// @Validate.IsDate() @Validate.MaxDate(new Date())
+  createdAt        DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime?        @updatedAt
+  userTokens       UserToken[]
+  providers        UserProvider[]
+  permissions      UserPermission[]
+  roles            UserRole[]
+  fileUploads      FileUpload[]
+  chapters         Chapter[]
+  books            Book[]
+
+  @@index([email])
+}
+
+enum Provider {
+  facebook
+  github
+  google
+}
+
+model UserProvider {
+  /// @HideField()
+  provider  Provider
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+
+
+  @@id([provider, userId])
+  @@index([userId])
+}
+
+enum UserTokenType {
+  emailConfirmation
+  resetPassword
+}
+
+model UserToken {
+  id        String        @id @default(uuid()) @db.Uuid
+  type      UserTokenType
+  expiresAt DateTime      @db.Timestamp(6)
+  createdAt DateTime      @default(now()) @db.Timestamp(6)
+  userId    String        @unique @db.Uuid
+  user      User          @relation(fields: [userId], references: [id])
+
+  @@unique([userId, type])
+  @@index([userId])
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique @db.VarChar
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+  userRole        UserRole[]
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique @db.VarChar
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+}
+
+model RolePermission {
+  permissionId Int
+  roleId       Int
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model UserPermission {
+  permissionId Int
+  userId       String     @db.Uuid
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  roleId       Int?
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role?      @relation(fields: [roleId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@id([userId, permissionId])
+}
+
+model UserRole {
+  roleId    Int
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  role      Role     @relation(fields: [roleId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+enum FileUploadStatus {
+  pending
+  finalized
+}
+
+model FileUpload {
+  id           String           @id @default(uuid()) @db.Uuid
+  path         String           @db.VarChar(255)
+  originalName String           @db.VarChar(255)
+  createdAt    DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime?        @updatedAt
+  status       FileUploadStatus @default(value: pending)
+  userId       String           @db.Uuid
+  user         User             @relation(fields: [userId], references: [id])
+
+  @@index(userId)
+}
+
+enum BookStatus {
+  draft
+  working
+  final
+}
+
+model Book {
+  id        String     @id @default(uuid()) @db.Uuid
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
+  title     String     @db.VarChar(255)
+  subtitle  String?    @db.VarChar(255)
+  summary   String?
+  status    BookStatus @default(draft)
+  isPrivate Boolean    @default(false)
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @db.Uuid
+  chapters  Chapter[]
+
+  @@index([userId])
+}
+
+enum ChapterStatus {
+  draft
+  working
+  final
+}
+
+model Chapter {
+  id        String        @id @default(uuid()) @db.Uuid
+  createdAt DateTime      @default(now())
+  updatedAt DateTime?     @updatedAt
+  title     String?       @db.VarChar(255)
+  content   String
+  status    ChapterStatus @default(draft)
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String        @db.Uuid
+  book      Book          @relation(fields: [bookId], references: [id])
+  bookId    String        @db.Uuid
+}

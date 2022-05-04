@@ -1,1 +1,0 @@
-<h4>Terms of Service Placeholder</h4>

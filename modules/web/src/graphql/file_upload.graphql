@@ -1,0 +1,17 @@
+query GetFileUpload($id: String!) {
+  fileUpload(id: $id) {
+    id
+    url
+    userId
+    originalName
+  }
+}
+
+query FileUploads($input: ListFileUploadsInput!) {
+  fileUploads(input: $input) {
+    id
+    url
+    userId
+    originalName
+  }
+}
