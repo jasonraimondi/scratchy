@@ -2,6 +2,9 @@
 CREATE TYPE "Provider" AS ENUM ('facebook', 'github', 'google');
 
 -- CreateEnum
+CREATE TYPE "UserTokenType" AS ENUM ('emailConfirmation', 'resetPassword');
+
+-- CreateEnum
 CREATE TYPE "FileUploadStatus" AS ENUM ('pending', 'finalized');
 
 -- CreateEnum
@@ -38,23 +41,14 @@ CREATE TABLE "UserProvider" (
 );
 
 -- CreateTable
-CREATE TABLE "EmailConfirmationToken" (
+CREATE TABLE "UserToken" (
     "id" UUID NOT NULL,
+    "type" "UserTokenType" NOT NULL,
     "expiresAt" TIMESTAMP(6) NOT NULL,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
 
-    CONSTRAINT "EmailConfirmationToken_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ForgotPasswordToken" (
-    "id" UUID NOT NULL,
-    "expiresAt" TIMESTAMP(6) NOT NULL,
-    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" UUID NOT NULL,
-
-    CONSTRAINT "ForgotPasswordToken_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserToken_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -153,16 +147,13 @@ CREATE INDEX "User_email_idx" ON "User"("email");
 CREATE INDEX "UserProvider_userId_idx" ON "UserProvider"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "EmailConfirmationToken_userId_key" ON "EmailConfirmationToken"("userId");
+CREATE UNIQUE INDEX "UserToken_userId_key" ON "UserToken"("userId");
 
 -- CreateIndex
-CREATE INDEX "EmailConfirmationToken_userId_idx" ON "EmailConfirmationToken"("userId");
+CREATE INDEX "UserToken_userId_idx" ON "UserToken"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ForgotPasswordToken_userId_key" ON "ForgotPasswordToken"("userId");
-
--- CreateIndex
-CREATE INDEX "ForgotPasswordToken_userId_idx" ON "ForgotPasswordToken"("userId");
+CREATE UNIQUE INDEX "UserToken_userId_type_key" ON "UserToken"("userId", "type");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
@@ -173,14 +164,14 @@ CREATE UNIQUE INDEX "Permission_name_key" ON "Permission"("name");
 -- CreateIndex
 CREATE INDEX "FileUpload_userId_idx" ON "FileUpload"("userId");
 
+-- CreateIndex
+CREATE INDEX "Book_userId_idx" ON "Book"("userId");
+
 -- AddForeignKey
 ALTER TABLE "UserProvider" ADD CONSTRAINT "UserProvider_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "EmailConfirmationToken" ADD CONSTRAINT "EmailConfirmationToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ForgotPasswordToken" ADD CONSTRAINT "ForgotPasswordToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserToken" ADD CONSTRAINT "UserToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
