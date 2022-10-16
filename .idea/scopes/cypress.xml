@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="cypress" pattern="file[scratchy]:packages/cypress//*" />
-</component>

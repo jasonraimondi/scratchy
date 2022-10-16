@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="sveltekit" pattern="file[scratchy]:packages/web2//*&amp;&amp;!file[scratchy]:packages/web2/.svelte-kit//*" />
-</component>

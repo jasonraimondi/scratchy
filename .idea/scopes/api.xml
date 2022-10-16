@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="api" pattern="file[scratchy]:packages/api//*" />
-</component>

@@ -1,0 +1,30 @@
+{
+  "name": "@lib/web-api-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "gen": "graphql-codegen --config codegen.yml",
+    "gen:watch": "graphql-codegen --config codegen.yml --watch",
+    "_postinstall": "npm run gen",
+    "format": "prettier --write \"{src,test}/**/*.(t|j)s*\""
+  },
+  "keywords": [],
+  "author": "Jason Raimondi",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.11.6",
+    "@graphql-codegen/introspection": "^2.2.1",
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.3",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@types/node": "^18.7.3",
+    "graphql": "^16.5.0",
+    "graphql-tag": "^2.12.6",
+    "typescript": "^4.7.4",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "graphql-request": "^4.3.0"
+  }
+}

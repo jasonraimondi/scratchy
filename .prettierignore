@@ -1,0 +1,8 @@
+*dist/
+*generated/
+*.svelte-kit/
+
+apps/api/schema.graphql
+
+pnpm-*
+*.md

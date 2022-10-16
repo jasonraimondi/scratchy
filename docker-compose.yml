@@ -27,9 +27,10 @@ services:
 
   minio:
     image: minio/minio
-    command: ["server", "/data"]
+    command: ["server", "/data", "--console-address", ":9001"]
     ports:
       - 9000:9000
+      - 9001:9001
     volumes:
       - minio-config:/root/.minio
       - minio-data:/data
@@ -46,9 +47,9 @@ services:
       /bin/sh -c "
       /usr/bin/mc config host rm local;
       /usr/bin/mc config host add --quiet --api s3v4 local http://minio:9000 miniominiominio miniominiominio;
-      /usr/bin/mc rb --force local/scratchy-bucket/;
-      /usr/bin/mc mb --quiet local/scratchy-bucket/;
-      # /usr/bin/mc policy set public local/scratchy-bucket;
+      /usr/bin/mc rb --force local/scratchy-uploads/;
+      /usr/bin/mc mb --quiet local/scratchy-uploads/;
+      /usr/bin/mc policy set public local/scratchy-uploads;
       exit 0;
       "
 

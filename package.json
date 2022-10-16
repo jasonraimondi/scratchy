@@ -4,11 +4,13 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "format": "prettier --write .",
+    "check": "prettier check .",
     "dev": "pnpm db && overmind start -D && overmind echo",
-    "db": "pnpm --prefix modules/prisma db:migrate && pnpm --prefix modules/prisma db:seed"
+    "db": "pnpm --prefix libs/prisma db:migrate && pnpm --prefix libs/prisma db:seed"
   },
   "devDependencies": {
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.1",
     "start-server-and-test": "^1.14.0"
   }
 }
