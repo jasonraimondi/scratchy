@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { ForgotPasswordToken, toForgotPasswordToken } from "~/entities/forgot_password.entity";
+import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
 import { UserTokenType } from "@lib/prisma";
 import { PrismaService } from "~/lib/database/prisma.service";
 
@@ -13,7 +13,7 @@ export class ForgotPasswordRepository {
   }
 
   async create(forgotPasswordToken: ForgotPasswordToken): Promise<ForgotPasswordToken> {
-    return toForgotPasswordToken(
+    return ForgotPasswordToken.fromPrisma(
       await this.repo.create({
         data: forgotPasswordToken.toPrisma(),
         include: { user: true },
@@ -22,16 +22,30 @@ export class ForgotPasswordRepository {
   }
 
   async findById(id: string): Promise<ForgotPasswordToken> {
-    return toForgotPasswordToken(
-      await this.repo.findFirst({
-        rejectOnNotFound: true,
+    return ForgotPasswordToken.fromPrisma(
+      await this.repo.findFirstOrThrow({
         where: {
           id,
-          type: UserTokenType.resetPassword,
+          type: UserTokenType.forgotPassword,
         },
         include: { user: true },
       }),
     );
+  }
+
+  async findForUser(userId: string): Promise<ForgotPasswordToken> {
+    return ForgotPasswordToken.fromPrisma(
+      await this.repo.findFirstOrThrow({
+        where: {
+          user: {
+            id: userId,
+          }
+        },
+        include: {
+          user: true,
+        }
+      })
+    )
   }
 
   async delete(id: string): Promise<void> {

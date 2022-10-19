@@ -27,8 +27,8 @@ const mainImports = [
 // prettier-ignore
 const appImports = [
   AuthModule,
-  UserModule,
   FileModule,
+  UserModule,
 ];
 
 if (ENV.isDevelopment) mainImports.push(QueueWorkerModule);

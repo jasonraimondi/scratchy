@@ -17,9 +17,16 @@ class QueueConnection {
   host = process.env.QUEUE_HOST as string;
 }
 
+type AwsConfig = {
+  accessKeyId: string;
+  secretAccessKey: string;
+  bucket: string;
+  endpoint?: string;
+  region: string;
+};
+
 export abstract class Environment {
-  @IsIn(["development", "production", "test"])
-  nodeEnv: NodeEnv = process.env.NODE_ENV as NodeEnv;
+  abstract nodeEnv: NodeEnv;
 
   @IsIn(["debug", "info", "warn", "error"])
   debugLevel: DebugLevel = process.env.DEBUG_LEVEL as DebugLevel;
@@ -46,7 +53,7 @@ export abstract class Environment {
 
   templatesDir = join(__dirname, "../../../templates");
 
-  s3 = {
+  s3: AwsConfig = {
     accessKeyId: process.env.S3_FILE_UPLOADS_ACCESS_KEY as string,
     secretAccessKey: process.env.S3_FILE_UPLOADS_SECRET_KEY as string,
     bucket: process.env.S3_FILE_UPLOADS_BUCKET as string,

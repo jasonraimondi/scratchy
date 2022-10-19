@@ -1,11 +1,8 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('./tsconfig.json');
+
 module.exports = {
-  preset: "ts-jest",
-  moduleNameMapper: {
-    "^~/(.*)$": "<rootDir>/src/$1",
-    "^~test/(.*)$": "<rootDir>/test/$1",
-  },
-  // coverageDirectory: "<rootDir>/coverage",
-  // collectCoverage: true,
-  // coverageReporters: ["lcov"],
-  setupFiles: ["<rootDir>/test/jest_setup.ts"],
+  preset: 'ts-jest',
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  setupFiles: ['<rootDir>/test/jest_setup.ts'],
 };

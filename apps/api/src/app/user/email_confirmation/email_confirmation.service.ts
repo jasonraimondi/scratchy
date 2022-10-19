@@ -1,24 +1,25 @@
 import { Injectable } from "@nestjs/common";
 
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
+import { PrismaService } from "~/lib/database/prisma.service";
 
 @Injectable()
 export class EmailConfirmationService {
-  constructor(
-    private userRepository: UserRepository,
-    private emailConfirmationRepository: EmailConfirmationRepository,
-  ) {}
+  constructor(private prisma: PrismaService, private emailConfirmationRepository: EmailConfirmationRepository) {}
 
   async verifyEmailConfirmation(email: string, id: string): Promise<void> {
-    const userConfirmation = await this.emailConfirmationRepository.findById(id);
-    if (userConfirmation.user?.email.toLowerCase() !== email.toLowerCase()) {
-      throw new Error(`invalid user and confirmation (${userConfirmation.user!.email}) (${email})`);
+    const confirmation = await this.emailConfirmationRepository.findById(id);
+
+    if (confirmation.user?.email.toLowerCase() !== email.toLowerCase()) {
+      throw new Error(`invalid user and confirmation (${confirmation.user!.email}) (${email})`);
     }
-    let { user } = userConfirmation;
-    if (!user) throw new Error(`must include user`);
-    user.isEmailConfirmed = true;
-    await this.userRepository.update(user);
-    await this.emailConfirmationRepository.delete(userConfirmation.id);
+
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: confirmation.userId },
+        data: { isEmailConfirmed: true },
+      }),
+      this.prisma.userToken.delete({ where: { id: confirmation.id } }),
+    ]);
   }
 }

@@ -9,6 +9,4 @@ last_updated: April 13, 2022
 
 # Terms of Service
 
-## Shit's going down 
-
 _Last revised on {last_updated}_

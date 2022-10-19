@@ -5,7 +5,8 @@
 Clone the repository
 
 ```bash
-cd `scratchy`
+git clone git@github.com:allmyfutures/scratchy.git
+cd scratchy
 ```
 
 Boot Docker services
@@ -45,3 +46,7 @@ overmind start
 ```
 
 Find a [users to login as.](libs/prisma/prisma/seed.ts);
+
+### Graphql
+
+After booting the api, you can nav to the graphiql editor here: http://localhost:5000/graphiql

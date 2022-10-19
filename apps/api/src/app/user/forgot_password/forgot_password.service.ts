@@ -25,11 +25,9 @@ export class ForgotPasswordService {
 
   async validateForgotPasswordToken({ email, token }: ValidateForgotPasswordTokenInput) {
     const forgotPassword = await this.forgotPasswordRepository.findById(token);
-    this.logger.debug("validateForgotPasswordToken");
     if (forgotPassword?.user?.email.toLowerCase() !== email.toLowerCase()) {
       throw new Error("invalid emails or token");
     }
-    this.logger.debug("validateForgotPasswordToken");
     return true;
   }
 
@@ -56,13 +54,13 @@ export class ForgotPasswordService {
 
   private async getForgotPasswordForUser(user: User): Promise<ForgotPasswordToken> {
     const forgotPassword = ForgotPasswordToken.create({ user, userId: user.id });
-    return new ForgotPasswordToken(
-      (await this.prisma.userToken.upsert({
-        where: { userId_type: { userId: forgotPassword.userId, type: UserTokenType.resetPassword } },
+    return ForgotPasswordToken.fromPrisma(
+      await this.prisma.userToken.upsert({
+        where: { userId_type: { userId: forgotPassword.userId, type: UserTokenType.forgotPassword } },
         update: { id: forgotPassword.id, expiresAt: forgotPassword.expiresAt },
         create: forgotPassword.toPrisma(),
         include: { user: true },
-      })) as any,
+      }),
     );
   }
 }

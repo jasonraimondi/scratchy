@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { EmailConfirmationToken, toEmailConfirmationToken } from "~/entities/email_confirmation.entity";
+import { EmailConfirmationToken } from "~/entities/email_confirmation.entity";
 import { PrismaService } from "~/lib/database/prisma.service";
 import { UserTokenType } from "@lib/prisma";
 
@@ -8,14 +8,13 @@ import { UserTokenType } from "@lib/prisma";
 export class EmailConfirmationRepository {
   constructor(private prisma: PrismaService) {}
 
-  private get repo() {
+  get repo() {
     return this.prisma.userToken;
   }
 
   async findByEmail(email: string): Promise<EmailConfirmationToken> {
-    return toEmailConfirmationToken(
-      await this.repo.findFirst({
-        rejectOnNotFound: true,
+    return EmailConfirmationToken.fromPrisma(
+      await this.repo.findFirstOrThrow({
         where: {
           type: UserTokenType.emailConfirmation,
           user: {
@@ -33,9 +32,8 @@ export class EmailConfirmationRepository {
   }
 
   async findById(id: string): Promise<EmailConfirmationToken> {
-    return toEmailConfirmationToken(
-      await this.repo.findUnique({
-        rejectOnNotFound: true,
+    return EmailConfirmationToken.fromPrisma(
+      await this.repo.findFirstOrThrow({
         where: { id },
         include: { user: true },
       }),

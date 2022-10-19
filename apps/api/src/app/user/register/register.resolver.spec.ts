@@ -1,32 +1,36 @@
 import { randEmail } from "@ngneat/falso";
 import { validate } from "class-validator";
-import { describe, beforeEach, afterAll, it, expect } from "vitest";
 
-import { createTestingModule, TestingModule } from "~test/app_testing.module";
-import { generateUser } from "~test/generators/generateUser";
-import { mockContext } from "~test/mock_application";
-import { emails } from "~test/mock_email_service";
+import { createTestingModule, TestingModule } from "$test/app_testing.module";
+import { generateUser } from "$test/generators/generateUser";
+import { emails } from "$test/mock_email_service";
 
-import { MyContext } from "~/config/graphql";
 import { EmailConfirmationRepository } from "~/lib/database/repositories/email_confirmation.repository";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
-import { UserModule } from "~/app/user/user.module";
 import { RegisterInput } from "~/app/user/register/register.input";
 import { RegisterResolver } from "~/app/user/register/register.resolver";
+import { mockContext } from "$test/mock_application";
 
-describe("register.resolver", () => {
+describe(RegisterResolver.name, () => {
   let testingModule: TestingModule;
-  let userRepository: UserRepository;
-  let context: MyContext;
+  let resolver: RegisterResolver;
+  let context = mockContext();
 
-  beforeEach(async () => {
-    testingModule = await createTestingModule({ imports: [UserModule] });
-    context = mockContext();
-    userRepository = testingModule.container.get<UserRepository>(UserRepository);
+  beforeAll(async () => {
+    testingModule = await createTestingModule({
+      providers: [RegisterResolver],
+    });
+    resolver = testingModule.container.get(RegisterResolver);
+  });
+
+  afterEach(async () => {
+    await testingModule.prisma.$transaction([
+      testingModule.prisma.user.deleteMany(),
+    ]);
   });
 
   afterAll(async () => {
     await testingModule.container.close();
+    await testingModule.prisma.$disconnect();
   });
 
   describe("register function", () => {
@@ -54,13 +58,12 @@ describe("register.resolver", () => {
       expect(validationErrors.length).toBe(1);
     });
 
-    test.only("duplicate user id is denied", async () => {
+    test("duplicate user id is denied", async () => {
       // arrange
-      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
-      input.id = "b031765a-a950-4a0d-92dd-ecd12788f3a6n";
+      input.id = "b031765a-a950-4a0d-92dd-ecd12788f3a6";
       input.email = randEmail();
-      await userRepository.create(await generateUser(input));
+      await generateUser(testingModule.prisma, input);
 
       // act
       const result = resolver.register(input, context);
@@ -71,10 +74,9 @@ describe("register.resolver", () => {
 
     it("duplicate user emails is denied", async () => {
       // arrange
-      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = randEmail();
-      await userRepository.create(await generateUser(input));
+      await generateUser(testingModule.prisma, input);
 
       // act
       const result = resolver.register(input, context);
@@ -83,9 +85,8 @@ describe("register.resolver", () => {
       await expect(result).rejects.toThrowError("duplicate emails for user");
     });
 
-    it("user is registered with emails confirmation", async () => {
+    it.skip("user is registered with emails confirmation", async () => {
       // arrange
-      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = randEmail();
 
@@ -93,8 +94,7 @@ describe("register.resolver", () => {
       const result = await resolver.register(input, context);
 
       // assert
-      const emailConfirmationRepository =
-        testingModule.container.get<EmailConfirmationRepository>(EmailConfirmationRepository);
+      const emailConfirmationRepository = testingModule.container.get(EmailConfirmationRepository);
       const emailConfirmation = await emailConfirmationRepository.findByEmail(input.email);
       expect(result).toBeTruthy();
       expect(result.id).toBe(emailConfirmation.user?.id);
@@ -107,9 +107,8 @@ describe("register.resolver", () => {
   });
 
   describe("resentConfirmEmail", () => {
-    it("resend emails function works", async () => {
+    it.skip("resend emails function works", async () => {
       // arrange
-      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
       const input = new RegisterInput();
       input.email = randEmail();
       await resolver.register(input, context);
@@ -125,14 +124,11 @@ describe("register.resolver", () => {
     });
 
     it("resend emails throws for invalid user", async () => {
-      // arrange
-      const resolver = testingModule.container.get<RegisterResolver>(RegisterResolver);
-
       // act
       const result = resolver.resendConfirmEmail("user-does-not-exist@example.com");
 
       // assert
-      await expect(result).rejects.toThrow(new RegExp("No EmailConfirmationToken found"));
+      await expect(result).rejects.toThrow(new RegExp("No UserToken found"));
       expect(emails.length).toBe(0);
     });
   });

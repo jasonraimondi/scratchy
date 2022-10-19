@@ -17,7 +17,7 @@ function respond(decoded?: DecodedJWT) {
     isAuthorized: Boolean(decoded),
     isUnauthorized: !Boolean(decoded),
     decoded,
-  }
+  };
 }
 
 export function getTokenFromEndpoint(cookies: Cookies): Token {
@@ -29,8 +29,7 @@ export function getTokenFromEndpoint(cookies: Cookies): Token {
       graphQLClient.setHeader("Authorization", `Bearer ${token}`);
       return respond(decoded);
     }
-  } catch (e) {
-  }
+  } catch (e) {}
 
   return respond();
 }

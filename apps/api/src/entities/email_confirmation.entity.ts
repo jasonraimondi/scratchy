@@ -3,11 +3,9 @@ import { UserTokenConstructor, PrismaUserToken } from "@lib/prisma";
 import { UserTokenType } from "@lib/prisma";
 
 import { ENV } from "~/config/environment";
-import { UserTokenEntity } from "~/entities/user_token.entity";
+import { UserTokenEntity } from "~/entities/abstract/user_token.entity";
 
-type ICreateEmailConfirmationToken = Omit<UserTokenConstructor, "type" | "expiresAt"> & { expiresAt?: Date };
-
-export const toEmailConfirmationToken = (userToken: PrismaUserToken) => new EmailConfirmationToken(userToken);
+export type ICreateEmailConfirmationToken = Omit<UserTokenConstructor, "type" | "expiresAt"> & { expiresAt?: Date };
 
 @ObjectType()
 export class EmailConfirmationToken extends UserTokenEntity {
@@ -17,5 +15,9 @@ export class EmailConfirmationToken extends UserTokenEntity {
       expiresAt: entity.expiresAt ?? new Date(Date.now() + ENV.ttl.emailConfirmationToken),
       type: UserTokenType.emailConfirmation,
     });
+  }
+
+  static fromPrisma(prisma: PrismaUserToken): EmailConfirmationToken {
+    return new EmailConfirmationToken(prisma);
   }
 }

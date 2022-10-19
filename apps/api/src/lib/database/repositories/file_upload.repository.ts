@@ -13,20 +13,14 @@ export class FileUploadRepository {
   }
 
   async findById(id: string): Promise<FileUpload> {
-    return new FileUpload(
-      await this.repo.findUnique({
-        rejectOnNotFound: true,
-        where: { id },
-      }),
-    );
+    return new FileUpload(await this.repo.findFirstOrThrow({ where: { id } }));
   }
 
   async listForUser(userId: string) {
-    const fileUploads =
-      (await this.repo.findMany({
-        where: { userId },
-      })) ?? [];
-    return fileUploads.map(f => new FileUpload(f));
+    const fileUploads = await this.repo.findMany({
+      where: { userId },
+    });
+    return fileUploads?.map(f => new FileUpload(f)) ?? [];
   }
 
   async create(fileUpload: FileUploadCreateInput): Promise<void> {

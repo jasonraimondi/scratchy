@@ -1,15 +1,15 @@
-import { describe, beforeEach, it, expect } from "vitest";
-
-import { createTestingModule } from "~test/app_testing.module";
+import { createTestingModule } from "$test/app_testing.module";
 import { AuthService } from "~/app/auth/services/auth.service";
-import { AuthModule } from "~/app/auth/auth.module";
+import { TokenService } from "~/app/auth/services/token.service";
+import { JwtModule } from "~/lib/jwt/jwt.module";
 
 describe("AuthService", () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const { container } = await createTestingModule({
-      imports: [AuthModule],
+      imports: [JwtModule],
+      providers: [AuthService, TokenService],
     });
     service = container.get<AuthService>(AuthService);
   });

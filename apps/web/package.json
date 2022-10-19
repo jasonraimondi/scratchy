@@ -55,7 +55,10 @@
     "@jmondi/browser-storage": "^1.1.1",
     "cookie": "^0.5.0",
     "graphql-request": "^4.3.0",
+    "lucide": "^0.91.0",
+    "lucide-svelte": "^0.91.0",
     "mdsvex": "^0.10.6",
+    "svelte2tsx": "^0.5.20",
     "zod": "^3.19.1"
   }
 }

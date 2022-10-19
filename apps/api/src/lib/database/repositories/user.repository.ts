@@ -21,8 +21,7 @@ export class UserRepository {
   }
 
   async findByEmail(email: string, include?: Prisma.UserInclude): Promise<User> {
-    const res = await this.repo.findFirst({
-      rejectOnNotFound: true,
+    const res = await this.repo.findFirstOrThrow({
       where: {
         email: {
           equals: email,
@@ -36,13 +35,7 @@ export class UserRepository {
   }
 
   async findById(userId: string, extraQuery: { include?: Prisma.UserInclude } = {}): Promise<User> {
-    return new User(
-      await this.repo.findUnique({
-        rejectOnNotFound: true,
-        where: { id: userId },
-        ...extraQuery,
-      }),
-    );
+    return new User(await this.repo.findFirstOrThrow({ where: { id: userId }, ...extraQuery }));
   }
 
   async incrementLastLogin(userId: string, ipAddr: string): Promise<void> {

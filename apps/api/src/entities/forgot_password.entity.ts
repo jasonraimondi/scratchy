@@ -2,11 +2,9 @@ import { UserTokenType } from "@lib/prisma";
 import { ObjectType } from "@nestjs/graphql";
 import { ENV } from "~/config/environment";
 import { UserTokenConstructor, PrismaUserToken } from "@lib/prisma";
-import { UserTokenEntity } from "./user_token.entity";
+import { UserTokenEntity } from "./abstract/user_token.entity";
 
-type ICreateForgotPasswordToken = Omit<UserTokenConstructor, "type" | "expiresAt"> & { expiresAt?: Date };
-
-export const toForgotPasswordToken = (userToken: PrismaUserToken) => new ForgotPasswordToken(userToken);
+export type ICreateForgotPasswordToken = Omit<UserTokenConstructor, "type" | "expiresAt"> & { expiresAt?: Date };
 
 @ObjectType()
 export class ForgotPasswordToken extends UserTokenEntity {
@@ -14,7 +12,11 @@ export class ForgotPasswordToken extends UserTokenEntity {
     return new ForgotPasswordToken({
       ...entity,
       expiresAt: entity.expiresAt ?? new Date(Date.now() + ENV.ttl.emailConfirmationToken),
-      type: UserTokenType.emailConfirmation,
+      type: UserTokenType.forgotPassword,
     });
+  }
+
+  static fromPrisma(hash: PrismaUserToken): ForgotPasswordToken {
+    return new ForgotPasswordToken(hash);
   }
 }

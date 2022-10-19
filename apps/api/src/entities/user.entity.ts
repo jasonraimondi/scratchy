@@ -7,11 +7,20 @@ import { hashPassword, verifyPassword } from "~/lib/utils/password";
 
 export type ICreateUser = Omit<UserConstructor, "passwordHash"> & { password?: string };
 
-export const toUser = (user: PrismaUser) => new User(user);
-export const toUsers = (users: PrismaUser[]) => users.map(b => new User(b));
-
 @ObjectType()
 export class User extends BaseUser {
+  static async create({ password, ...createUser }: ICreateUser): Promise<User> {
+    const passwordHash = password ? await hashPassword(password) : null;
+    const user = new User({ ...createUser, passwordHash });
+    if (password) await user.setPassword(password);
+    await validate(user);
+    return user;
+  }
+
+  static fromPrisma(prisma: PrismaUser) {
+    return new User(prisma);
+  }
+
   @Field(() => Boolean!)
   get isAdmin(): boolean {
     return this.rolesList.includes("overlord");
@@ -35,14 +44,6 @@ export class User extends BaseUser {
   @Field(() => [String!]!)
   get rolesList(): string[] {
     return this.roles?.filter(r => r.role?.name).map(r => r.role!.name) ?? [];
-  }
-
-  static async create({ password, ...createUser }: ICreateUser): Promise<User> {
-    const passwordHash = password ? await hashPassword(password) : null;
-    const user = new User({ ...createUser, passwordHash });
-    if (password) await user.setPassword(password);
-    await validate(user);
-    return user;
   }
 
   async setPassword(password: string) {

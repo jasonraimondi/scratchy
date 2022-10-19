@@ -20,10 +20,7 @@ const logLevel: Record<typeof ENV.debugLevel, LogLevel> = {
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly logger: LoggerService) {
-    super({
-      rejectOnNotFound: true,
-      log: logLevel[ENV.debugLevel],
-    });
+    super({ log: logLevel[ENV.debugLevel] });
   }
 
   async onModuleInit() {

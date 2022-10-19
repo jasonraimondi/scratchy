@@ -1,60 +1,58 @@
 import { Test } from "@nestjs/testing";
 import { ModuleMetadata } from "@nestjs/common/interfaces/modules/module-metadata.interface";
 import { MailerService } from "@nestjs-modules/mailer";
-import { PrismaClient } from "@lib/prisma";
 import { TestingModule as NestTestingModule } from "@nestjs/testing/testing-module";
-import { mockDeep, MockProxy } from "jest-mock-extended";
-import { vi } from "vitest";
+import { HttpAdapterHost } from "@nestjs/core";
+import { produce } from "immer";
 
+import { emails, emailServiceMock } from "./mock_email_service";
 import { DatabaseModule } from "~/lib/database/database.module";
 import { EmailService } from "~/lib/email/services/email.service";
 import { PrismaService } from "~/lib/database/prisma.service";
-import { emails, emailServiceMock } from "~test/mock_email_service";
+import { LoggerModule } from "~/lib/logger/logger.module";
+import { EmailModule } from "~/lib/email/email.module";
 
 const mailerServiceMock = {
-  sendMail: vi.fn().mockImplementation(res => {
+  sendMail: jest.fn().mockImplementation(res => {
     emails.push(res);
   }),
 };
 
 const mockQueue = {
-  add: vi.fn().mockImplementation(console.log),
+  add: jest.fn().mockImplementation(console.log),
 };
+
+const MockHttpAdapterHost = jest.fn().mockImplementation(() => ({
+  adapterHost: {
+    httpAdapter: {
+      getInstance: () => jest.fn(),
+    },
+  },
+}));
 
 export type TestingModule = {
   container: NestTestingModule;
-  mockDB: MockProxy<PrismaClient>;
+  prisma: PrismaService;
 };
 
-export async function createTestingModule(metadata: ModuleMetadata = {}): Promise<TestingModule> {
-  metadata = {
-    ...metadata,
-    imports: [...(metadata.imports ?? []), DatabaseModule],
-    providers: [
-      {
-        provide: EmailService,
-        useValue: emailServiceMock,
-      },
-      {
-        provide: MailerService,
-        useValue: mailerServiceMock,
-      },
-      ...(metadata.providers ?? []),
-    ],
-  };
+export async function createTestingModule(rawMetadata: ModuleMetadata = {}): Promise<TestingModule> {
+  const metadata = produce(rawMetadata, meta => {
+    meta.imports = meta.imports ?? [];
+    meta.imports.push(DatabaseModule, LoggerModule, EmailModule);
+  });
 
   const container = await Test.createTestingModule(metadata)
-    .overrideProvider(PrismaService)
-    .useValue(mockDeep<PrismaClient>())
     .overrideProvider(EmailService)
     .useValue(emailServiceMock)
     .overrideProvider(MailerService)
     .useValue(mailerServiceMock)
     .overrideProvider("BullQueue_email")
     .useValue(mockQueue)
+    .overrideProvider(HttpAdapterHost)
+    .useValue(MockHttpAdapterHost)
     .compile();
 
-  const mockDB: MockProxy<PrismaClient> = container.get(PrismaService);
+  const prisma = container.get(PrismaService);
 
-  return { container, mockDB };
+  return { container, prisma };
 }

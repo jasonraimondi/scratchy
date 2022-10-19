@@ -3,13 +3,11 @@
     "files": true
   },
   "compilerOptions": {
-    /* Basic Options */
     "incremental": true,
     "target": "es2017",
     "module": "commonjs",
     "outDir": "dist",
 
-    /* Strict Type-Checking Options */
     "strict": true,
     "noImplicitAny": true,
     "strictPropertyInitialization": true,
@@ -19,13 +17,11 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
 
-    /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Module Resolution Options */
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -33,20 +29,17 @@
     "baseUrl": "./",
     "paths": {
       "~/*": ["src/*"],
-      "~test/*": ["test/*"]
+      "$test/*": ["test/*"]
     },
 
-    /* Experimental Options */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
-    "types": ["fastify", "@fastify/cookie", "@fastify/oauth2"],
+    "types": ["jest", "fastify", "@fastify/cookie", "@fastify/oauth2"],
 
-    /* Output Options */
     "removeComments": false,
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*", "test/**/*"]
 }

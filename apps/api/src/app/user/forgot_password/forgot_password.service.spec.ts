@@ -1,54 +1,51 @@
-import { UserModule } from "~/app/user/user.module";
 import { ForgotPasswordService } from "~/app/user/forgot_password/forgot_password.service";
-import { ForgotPasswordToken } from "~/entities/forgot_password.entity";
+import { createTestingModule, TestingModule } from "$test/app_testing.module";
 import { ForgotPasswordRepository } from "~/lib/database/repositories/forgot_password.repository";
-import { UserRepository } from "~/lib/database/repositories/user.repository";
-
-import { createTestingModule, TestingModule } from "~test/app_testing.module";
-import { generateUser } from "~test/generators/generateUser";
+import { ForgotPasswordMailer } from "~/lib/email/mailers/forgot_password.mailer";
+import { generateForgotPasswordToken, generateUser } from "$test/generators/generateUser";
+import { User } from "~/entities/user.entity";
 
 describe(ForgotPasswordService.name, () => {
-  let service: ForgotPasswordService;
-  let userRepository: UserRepository;
-  let forgotPasswordRepository: ForgotPasswordRepository;
   let testingModule: TestingModule;
+  let service: ForgotPasswordService;
+  let repository: ForgotPasswordRepository;
 
   beforeAll(async () => {
     testingModule = await createTestingModule({
-      imports: [UserModule],
+      providers: [ForgotPasswordService, ForgotPasswordMailer],
     });
-
-    // foo.mockDB.
-    userRepository = testingModule.container.get<UserRepository>(UserRepository);
-    forgotPasswordRepository = testingModule.container.get<ForgotPasswordRepository>(ForgotPasswordRepository);
+    repository = testingModule.container.get(ForgotPasswordRepository);
     service = testingModule.container.get(ForgotPasswordService);
+  });
+
+  afterEach(async () => {
+    await testingModule.prisma.$transaction([
+      testingModule.prisma.userToken.deleteMany(),
+      testingModule.prisma.user.deleteMany(),
+    ]);
   });
 
   afterAll(async () => {
     await testingModule.container.close();
+    await testingModule.prisma.$disconnect();
   });
 
-  it.skip("sendForgotPasswordEmail success", async () => {
+  it("#sendForgotPasswordEmail success", async () => {
     // arrange
-    const user = await generateUser();
-    user.isEmailConfirmed = true;
-    await userRepository.create(user);
+    const user = await generateUser(testingModule.prisma);
 
     // act
     await service.sendForgotPasswordEmail(user.email);
 
     // assert
-    const updatedForgotPassword = await forgotPasswordRepository.findForUser(user.id);
+    const updatedForgotPassword = await repository.findForUser(user.id);
     expect(updatedForgotPassword.expiresAt.getTime()).toBeGreaterThan(Date.now());
   });
 
-  it.skip("updatePasswordFromToken success", async () => {
+  it("#updatePasswordFromToken success", async () => {
     // arrange
-    const user = await generateUser();
-    user.isEmailConfirmed = true;
-    await userRepository.create(user);
-    const forgotPassword = new ForgotPasswordToken({ user });
-    await forgotPasswordRepository.create(forgotPassword);
+    const user = await generateUser(testingModule.prisma);
+    const forgotPassword = await generateForgotPasswordToken(testingModule.prisma, { userId: user.id });
 
     // act
     await service.updatePasswordFromToken({
@@ -58,10 +55,12 @@ describe(ForgotPasswordService.name, () => {
     });
 
     // assert
-    const updatedUser = await userRepository.findById(user.id);
+    const updatedUser = User.fromPrisma(
+      await testingModule.prisma.user.findUniqueOrThrow({ where: { id: user.id }})
+    );
     await expect(updatedUser.verify("my-new-password")).resolves.toBeUndefined();
-    await expect(forgotPasswordRepository.findForUser(forgotPassword.id)).rejects.toThrowError(
-      "No ForgotPasswordToken found",
+    await expect(repository.findById(forgotPassword.id)).rejects.toThrowError(
+      /No UserToken found/,
     );
   });
 });

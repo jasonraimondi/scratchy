@@ -4,9 +4,11 @@ datasource db {
 }
 
 generator custom_generator {
-  provider   = "ts-node node_modules/@jmondi/prisma-generator-nestjs-graphql/src/generator.ts"
+  provider   = "generate-nestjs-models"
   output     = "../src/generated/models"
   clientPath = "../client"
+  prefix     = "Base"
+  abstract   = true
 }
 
 generator client {
@@ -40,6 +42,8 @@ model User {
   permissions      UserPermission[]
   roles            UserRole[]
   fileUploads      FileUpload[]
+  orders           Order[]
+  artistBio        ArtistBio?
 
   @@index([email])
 }
@@ -57,14 +61,13 @@ model UserProvider {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now()) @db.Timestamp(6)
 
-
   @@id([provider, userId])
   @@index([userId])
 }
 
 enum UserTokenType {
   emailConfirmation
-  resetPassword
+  forgotPassword
 }
 
 model UserToken {
@@ -72,7 +75,7 @@ model UserToken {
   type      UserTokenType
   expiresAt DateTime      @db.Timestamp(6)
   createdAt DateTime      @default(now()) @db.Timestamp(6)
-  userId    String        @unique @db.Uuid
+  userId    String        @db.Uuid
   user      User          @relation(fields: [userId], references: [id])
 
   @@unique([userId, type])
