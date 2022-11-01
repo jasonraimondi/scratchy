@@ -2,7 +2,7 @@
 *generated/
 *.svelte-kit/
 
-apps/api/schema.graphql
+api/schema.graphql
 
 pnpm-*
 *.md

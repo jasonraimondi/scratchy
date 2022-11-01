@@ -1,0 +1,30 @@
+{% extends "emails/layouts/index.njk" %}
+
+{% block headTitle %}Register{% endblock %}
+
+{% block main %}
+  <mj-section padding="20px 0">
+    <mj-column width="60%">
+      <mj-text font-size="10px">Verify your email for {{ app_name }}!</mj-text>
+    </mj-column>
+    <mj-column width="40%">
+      <mj-text font-size="10px" align="right">{{ app_homepage }}</mj-text>
+    </mj-column>
+  </mj-section>
+  <mj-section>
+    <mj-column width="100%">
+      <mj-image href="{{ app_homepage }}" src="https://placekeanu.com/350/200"></mj-image>
+      <mj-text align="center">Hi ya</mj-text>
+    </mj-column>
+  </mj-section>
+  <mj-section>
+    <mj-column width="100%">
+      <mj-text>
+        <p>Hello hello {{ user.email }}!</p>
+        <p>Please click this shiny button to verify your email!</p>
+        <p><a target="_blank" href="{{ url | safe }}">Tada!</a></p>
+        <p><small>If the link above is not working, you can always try this one: {{ url | safe }}</small></p>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+{% endblock %}

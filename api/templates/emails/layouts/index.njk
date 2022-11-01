@@ -1,0 +1,26 @@
+<mjml>
+    <mj-head>
+        <mj-title>{% block headTitle %}{{ app_name }}{% endblock %}</mj-title>
+        <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,500"></mj-font>
+        <mj-attributes>
+            <mj-all font-family="Roboto, Helvetica, sans-serif"></mj-all>
+            <mj-text font-weight="300" font-size="16px" color="#616161" line-height="24px"></mj-text>
+            <mj-section padding="0px"></mj-section>
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+        {% block main %}{% endblock %}
+        <mj-section>
+            <mj-column width="11%">
+                <mj-image padding-right="0px" padding-left="25px" align="left" width="70px" href="https://twitter.com/jsonmamondi"
+                          src="https://gravatar.com/avatar/c73eef48a00fcdd4071899ae2a000635?s=150&d=retro"></mj-image>
+            </mj-column>
+            <mj-column width="89%">
+                <mj-text padding="0 25px">
+                    <p style="color:#BDBDBD; line-height: 9px"><a href="{{ url | safe }}" style="color: #3498DB;">Scratchy</a></p>
+                    <p style="font-style: italic; color:#BDBDBD; line-height: 9px">Your light in the storm</p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

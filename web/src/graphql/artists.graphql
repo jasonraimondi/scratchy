@@ -1,0 +1,8 @@
+query ListArtists {
+  listArtists {
+    nickname
+    artistBio {
+      socials
+    }
+  }
+}

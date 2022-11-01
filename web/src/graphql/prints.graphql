@@ -1,0 +1,10 @@
+query ListPrintsAvailable {
+  listPrintsAvailable {
+    id
+    title
+    description
+    status
+    slug
+    url
+  }
+}

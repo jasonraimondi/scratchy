@@ -1,0 +1,24 @@
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "$api": ["src/generated"],
+      "$api/*": ["src/generated/*"],
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$ui": ["src/components"],
+      "$ui/*": ["src/components/*"]
+    }
+  },
+  "include": ["src/**/*", "vite.config.ts"]
+}

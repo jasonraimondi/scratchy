@@ -1,0 +1,45 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "dist",
+
+    "strict": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"],
+      "$test/*": ["test/*"]
+    },
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "fastify", "@fastify/cookie", "@fastify/oauth2"],
+
+    "removeComments": false,
+    "sourceMap": true
+  },
+  "include": ["src/**/*", "prisma/**/*", "test/**/*"]
+}

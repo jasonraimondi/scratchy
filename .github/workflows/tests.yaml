@@ -1,0 +1,50 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - testing
+
+env:
+  PNPM_VERSION: "7.x"
+  NODE_VERSION: "18.12.0"
+  NODE_ENV: test
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: scratchy
+          POSTGRES_USER: scratchy
+          POSTGRES_PASSWORD: secret
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r gen
+      - run: pnpm prisma migrate deploy
+        working-directory: api/
+        env:
+          DATABASE_PROVIDER: "postgres"
+          DATABASE_URL: "postgres://scratchy:secret@postgres:5432/scratchy"
+      - run: pnpm -r test
+        working-directory: api/
+        env:
+          DATABASE_PROVIDER: "postgres"
+          DATABASE_URL: "postgres://scratchy:secret@postgres:5432/scratchy"

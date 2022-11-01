@@ -1,0 +1,15 @@
+overwrite: true
+schema: ../api/schema.graphql
+documents: "./src/**/*.graphql"
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      useTypeImports: true
+      documentMode: string
+      scalars:
+        DateTime: Date
+        JSON: "{ [key: string]: unknown }"

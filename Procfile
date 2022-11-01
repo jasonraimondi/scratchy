@@ -1,6 +1,7 @@
-api: sleep 1 && pnpm --prefix apps/api start:dev
-web: pnpm --prefix apps/web dev
+api: sleep 1 && pnpm --prefix api start:dev
+# worker: sleep 1 && pnpm --prefix api start:dev:worker
+www: pnpm --prefix web dev
 
 ## Generators
-generate-prisma: pnpm --prefix libs/prisma gen:watch
-generate-websdk: pnpm --prefix libs/web-api-client gen:watch
+generate-prisma: pnpm --prefix api gen --watch
+generate-websdk: pnpm --prefix web gen:watch
