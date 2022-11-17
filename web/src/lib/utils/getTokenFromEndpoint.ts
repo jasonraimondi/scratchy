@@ -1,7 +1,5 @@
 import type { DecodedJWT } from "$lib/auth/auth";
-import type { AccessTokenStore } from "$lib/auth/access_token";
 import { COOKIES } from "$lib/storage/storage.service";
-import { graphQLClient } from "$lib/api/api_sdk";
 import jwtDecode from "jwt-decode";
 import type { Cookies } from "@sveltejs/kit";
 
@@ -26,7 +24,7 @@ export function getTokenFromEndpoint(cookies: Cookies): Token {
     const decoded = jwtDecode<DecodedJWT>(token);
     const isAuthorized = checkIsAuthorized(decoded?.exp);
     if (isAuthorized && token) {
-      graphQLClient.setHeader("Authorization", `Bearer ${token}`);
+      // graphQLClient.setHeader("Authorization", `Bearer ${token}`);
       return respond(decoded);
     }
   } catch (e) {}

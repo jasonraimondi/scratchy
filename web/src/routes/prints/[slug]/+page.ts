@@ -1,14 +1,9 @@
-import { graphQLSdk } from "$lib/api/api_sdk";
-import { error } from "@sveltejs/kit";
+import { trpc } from "$lib/api/trpc";
+import type { PageLoad } from "./$types";
 
-export async function load({ params }: any) {
-  const { listPrintsAvailable } = await graphQLSdk.listPrintsAvailable();
-
-  const print = listPrintsAvailable.find(print => print.slug === params.slug);
-
-  if (print) {
-    return { print };
-  }
-
-  throw error(404, "Print not found");
-}
+export const load: PageLoad = async ({ params }) => {
+  const print = await trpc.print.get.query({
+    slug: params.slug,
+  });
+  return { print };
+};

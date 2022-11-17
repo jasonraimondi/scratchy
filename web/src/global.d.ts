@@ -1,7 +1,14 @@
-/// <reference types="@sveltejs/kit" />
+/// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  VITE_APP: string;
-  VITE_API_URL: string;
-  VITE_ENABLE_DEBUG: boolean;
+  readonly VITE_APP: string;
+  readonly VITE_API_URL: string;
+  readonly VITE_ENABLE_DEBUG: boolean;
+
+  readonly VITE_TRPC_URL_HTTP: string;
+  readonly VITE_TRPC_URL_WS: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }

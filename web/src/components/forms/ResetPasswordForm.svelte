@@ -1,10 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { validateForm } from "@jmondi/form-validator";
-  import { graphQLSdk } from "$lib/api/api_sdk";
   import { updatePasswordFromTokenSchema } from "$ui/forms/schema";
   import { setAccessToken } from "$lib/auth/auth";
   import { notify } from "$ui/notifications/notification.service";
+  import { trpc } from "$lib/api/trpc";
 
   export let email: string;
   export let token: string;
@@ -19,7 +19,7 @@
     const input = { email, token, password: formData.password };
     errors = await validateForm({ schema: updatePasswordFromTokenSchema, data: input });
     if (!errors) {
-      const { updatePasswordFromToken } = await graphQLSdk.UpdatePasswordFromToken({ input });
+      const { updatePasswordFromToken } = await trpc.forgotPassword.updatePasswordFromToken.mutate(input);
       setAccessToken(updatePasswordFromToken.accessToken);
       notify.success("It sent!");
       await goto("/app");

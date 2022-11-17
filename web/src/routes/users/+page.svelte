@@ -1,16 +1,15 @@
 <script lang="ts">
   import UserCard from "$ui/UserCard.svelte";
   import type { User } from "$api/graphql";
+  import type { RouterOutput } from "$lib/api/trpc";
 
-  /** @type {import('./$types').PageData} */
   export let data: {
-    users: User[];
-    cursorId: string;
+    users: RouterOutput["user"]["list"];
   };
 </script>
 
 <ul>
-  {#each data.users as user}
+  {#each data.users.items as user}
     <li>
       <a href={`/users/${user.id}`}>
         <UserCard {user} />
@@ -19,6 +18,6 @@
   {/each}
 </ul>
 
-{#if data.cursorId}
-  <a class="button" href="?cursorId={data.cursorId}">Next Page</a>
+{#if data.users.nextCursor}
+  <a class="button" href="?cursor={data.users.nextCursor}">Next Page</a>
 {/if}

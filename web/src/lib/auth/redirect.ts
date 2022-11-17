@@ -7,6 +7,7 @@ import { isAuthenticated } from "$lib/auth/auth";
 export const redirectIfAuthenticated = () =>
   onMount(() => {
     const accessToken = get(accessTokenStore);
+    console.log("redirectIfAuthenticated", accessToken, isAuthenticated(accessToken));
     if (isAuthenticated(accessToken)) goto("/app", { replaceState: true });
   });
 

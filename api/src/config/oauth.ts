@@ -1,6 +1,12 @@
-import { EnvSchema } from "~/config/environments/base";
+import { z } from "zod";
+import type { Provider } from "$generated/client";
 
-export default {
+const OAuthEnv = z.object({ clientId: z.string(), clientSecret: z.string() });
+type OAuthEnv = z.infer<typeof OAuthEnv>;
+
+export type OAuthSchema = Record<Provider, OAuthEnv>;
+
+export const OAUTH: OAuthSchema = {
   facebook: {
     clientId: process.env.OAUTH_FACEBOOK_ID as string,
     clientSecret: process.env.OAUTH_FACEBOOK_SECRET as string,
@@ -13,4 +19,4 @@ export default {
     clientId: process.env.OAUTH_GOOGLE_ID as string,
     clientSecret: process.env.OAUTH_GOOGLE_SECRET as string,
   },
-} as EnvSchema["oauth"];
+};

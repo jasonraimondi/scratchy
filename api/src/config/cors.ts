@@ -1,12 +1,8 @@
-import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
+import type { FastifyCorsOptions } from "@fastify/cors";
 
-class Cors implements CorsOptions {
-  allowedHeaders = ["Authorization", "Content-Type"];
-  credentials = true;
-  methods = ["GET", "POST", "OPTIONS"];
-  origin = [/\.?allmyfutures\.com$/];
-}
-
-export const CORS = new Cors();
-
-console.log(CORS);
+export const CORS: FastifyCorsOptions = {
+  allowedHeaders: ["Authorization", "Content-Type"],
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  origin: [/\.?allmyfutures\.com$/],
+};

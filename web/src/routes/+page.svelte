@@ -1,11 +1,10 @@
 <script lang="ts">
-  import type { AvailablePrintsQuery } from "$api/graphql";
+  import { Skull } from 'lucide-svelte'
+  import type { RouterOutput } from "$lib/api/trpc";
 
   export let data: {
-    listPrintsAvailable: AvailablePrintsQuery["listPrintsAvailable"];
+    prints: RouterOutput["print"]["list"];
   };
-
-  import { Skull } from 'lucide-svelte'
 </script>
 
 <svelte:head>
@@ -19,7 +18,7 @@
 </div>
 
 <ul class="prints-gallery">
-  {#each data.listPrintsAvailable as print}
+  {#each data.prints.items as print}
     <li>
       <a href={`/prints/${print.slug}`}>
         <img src={print.url} alt={print.description}/>
@@ -28,6 +27,10 @@
     </li>
   {/each}
 </ul>
+
+{#if data.prints.nextCursor}
+  <a class="button" href="?cursor={data.prints.nextCursor}">Next Page</a>
+{/if}
 
 <style lang="postcss">
   .prints-gallery {

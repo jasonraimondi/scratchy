@@ -3,49 +3,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator entities {
-  provider   = "generate-nestjs-models"
-  clientPath = "~/generated/client"
-  output     = "../src/generated/entities"
-  prefix     = "Base"
-  abstract   = true
-  compileJs  = false
-}
-
 generator client {
   provider      = "prisma-client-js"
-  output        = "../src/generated/client"
   binaryTargets = "native"
+  output = "./generated/client"
 }
+
+//generator zod {
+//  provider = "zod-prisma"
+//}
 
 model User {
   id               String           @id @default(uuid()) @db.Uuid
-  /// @Validate.IsEmail()
   email            String           @unique @db.VarChar(255)
-  /// @HideField()
   passwordHash     String?          @db.VarChar(255)
-  /// @HideField()
   tokenVersion     Int              @default(0)
   isEmailConfirmed Boolean          @default(false)
   nickname         String?          @db.VarChar(255)
-  /// @Validate.IsDate() @Validate.MaxDate(new Date())
+  roles            String[]         @default([])
   lastHeartbeatAt  DateTime?        @db.Timestamp(6)
-  /// @Validate.IsDate() @Validate.MaxDate(new Date())
   lastLoginAt      DateTime?        @db.Timestamp(6)
-  /// @Validate.IsIP()
   lastLoginIP      String?          @db.Inet
-  /// @Validate.IsIP()
   createdIP        String           @db.Inet
-  /// @Validate.IsDate() @Validate.MaxDate(new Date())
   createdAt        DateTime         @default(now()) @db.Timestamp(6)
   updatedAt        DateTime?        @updatedAt
   userTokens       UserToken[]
   providers        UserProvider[]
   permissions      UserPermission[]
-  roles            UserRole[]
   fileUploads      FileUpload[]
   orders           Order[]
   artistBio        ArtistBio?
+  UserRole         UserRole[]
 
   @@index([email])
 }
@@ -57,13 +45,14 @@ enum Provider {
 }
 
 model UserProvider {
-  /// @HideField()
-  provider  Provider
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now()) @db.Timestamp(6)
+  provider   Provider
+  providerId String   @db.VarChar(255)
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
 
-  @@id([provider, userId])
+  @@id([provider, providerId])
+  @@unique([provider, userId])
   @@index([userId])
 }
 
@@ -145,6 +134,54 @@ model FileUpload {
   status       FileUploadStatus @default(value: pending)
   userId       String           @db.Uuid
   user         User             @relation(fields: [userId], references: [id])
+
+  @@index(userId)
+}
+
+enum PrintStatus {
+  unavailable
+  available
+}
+
+model Print {
+  id          String      @id @default(uuid()) @db.Uuid
+  slug        String
+  title       String
+  description String
+  url         String
+  status      PrintStatus @default(value: unavailable)
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime?   @updatedAt
+  orders      Order[]
+
+  @@index(slug)
+}
+
+enum OrderStatus {
+  pending
+}
+
+model Order {
+  id        String      @id @default(uuid()) @db.Uuid
+  status    OrderStatus @default(value: pending)
+  createdAt DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt DateTime?   @updatedAt
+  printId   String      @db.Uuid
+  print     Print       @relation(fields: [printId], references: [id])
+  userId    String      @db.Uuid
+  user      User        @relation(fields: [userId], references: [id])
+
+  @@index(printId)
+  @@index(userId)
+}
+
+model ArtistBio {
+  id        String    @id @default(uuid()) @db.Uuid
+  socials   Json?
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @updatedAt
+  userId    String    @unique @db.Uuid
+  user      User      @relation(fields: [userId], references: [id])
 
   @@index(userId)
 }

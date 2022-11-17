@@ -2,22 +2,23 @@
   import { validateForm } from "@jmondi/form-validator";
 
   import { registerSchema } from "$ui/forms/schema";
-  import { graphQLSdk } from "$lib/api/api_sdk";
   import { goto } from "$app/navigation";
   import OAuthLogins from "$ui/auth/OAuthLogins.svelte";
   import { notify } from "$ui/notifications/notification.service";
+  import { trpc } from "$lib/api/trpc";
 
   // errors are key value, where key is the form name, and value is the error message
   let errors: Record<string, string> | undefined;
 
   const data = {
+    id: undefined,
     email: "",
     password: "",
-    nickname: null,
+    nickname: undefined,
   };
 
   async function register() {
-    await graphQLSdk.Register({ input: data });
+    await trpc.register.register.mutate(data);
     notify.success({
       title: "Huzzah!!",
       message: "Go check your inbox for to confirm your email!",

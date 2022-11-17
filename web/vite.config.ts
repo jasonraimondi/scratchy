@@ -8,12 +8,11 @@ const config: UserConfig = {
   server: {
     port: 3000,
     proxy: {
-      "/api": "http://127.0.0.1:5000",
+      "/api": "http://127.0.0.1:4000",
     },
   },
   resolve: {
     alias: {
-      //   $libs: resolve("./src/libs"),
       $styles: resolve("./src/styles"),
       $ui: resolve("./src/components"),
       $api: resolve("./src/generated"),

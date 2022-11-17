@@ -1,12 +1,13 @@
 import { writable } from "svelte/store";
-import type { User } from "$api/graphql";
 
 import { browser } from "$app/environment";
-import { sessionStorageService, SESSIONS } from "$lib/storage/storage.service";
+import { SESSIONS, sessionStorageService } from "$lib/storage/storage.service";
 import { accessTokenStore } from "$lib/auth/access_token";
-import { graphQLSdk } from "$lib/api/api_sdk";
+import type { RouterOutput } from "$lib/api/trpc";
 
-export type CurrentUser = Partial<User> & { email: string; id: string };
+type MeOutput = RouterOutput["me"]["me"];
+
+export type CurrentUser = { email: string; id: string };
 
 let init;
 
@@ -19,8 +20,13 @@ export const currentUserStore = writable<CurrentUser | undefined>(init);
 accessTokenStore.subscribe(async accessToken => {
   let currentUser: CurrentUser | undefined = undefined;
   if (accessToken?.decoded) {
-    const { me } = await graphQLSdk.Me();
-    currentUser = me;
+    // currentUser = await trpc.me.me.query();
+    currentUser = accessToken?.decoded
+      ? {
+          id: accessToken.decoded.userId,
+          email: accessToken.decoded.email,
+        }
+      : undefined;
   }
   currentUserStore.set(currentUser);
 });

@@ -1,5 +1,6 @@
 import { LocalStorage, SessionStorage, CookieStorage } from "@jmondi/browser-storage";
 import { browser } from "$app/environment";
+import { RouteGroup } from "@jmondi/route-strings";
 
 class SsrAdapter {
   clear = () => {};
@@ -12,12 +13,12 @@ export const localStorageService = browser ? new LocalStorage() : new SsrAdapter
 export const sessionStorageService = browser ? new SessionStorage() : new SsrAdapter();
 export const cookieStorageService = browser ? new CookieStorage() : new SsrAdapter();
 
-const prefix = "app_";
+const storageGroup = new RouteGroup({ prefix: "app_" });
 
 export const COOKIES = {
-  accessToken: prefix + "accessToken",
+  accessToken: storageGroup.add("accessToken").toString(),
 };
 
 export const SESSIONS = {
-  currentUser: prefix + "currentUser",
+  currentUser: storageGroup.add("currentUser").toString(),
 };

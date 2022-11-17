@@ -2,15 +2,15 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { graphQLSdk } from "$lib/api/api_sdk";
   import { setAccessToken } from "$lib/auth/auth";
   import { notify } from "$ui/notifications/notification.service";
   import { validateForm } from "@jmondi/form-validator";
   import { emailConfirmationSchema } from "$ui/forms/schema";
+  import { trpc } from "$lib/api/trpc";
 
   const input = {
-    token: $page.url.searchParams.get("u") as string,
-    email: $page.url.searchParams.get("e") as string,
+    token: $page.url.searchParams.get("token"),
+    email: $page.url.searchParams.get("email"),
   };
 
   onMount(async () => {
@@ -23,11 +23,12 @@
     }
 
     try {
-      const { verifyEmailConfirmation } = await graphQLSdk.VerifyEmailConfirmation({ input });
+      const verifyEmailConfirmation = await trpc.emailConfirmation.verifyEmailConfirmation.mutate(input);
       setAccessToken(verifyEmailConfirmation.accessToken);
       notify.success("Email Confirmed!");
       await goto("/app");
     } catch (e) {
+      console.error(e);
       notify.error("Invalid Token");
       await goto("/");
     }

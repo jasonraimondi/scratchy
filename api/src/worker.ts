@@ -1,11 +1,3 @@
-import "./config/initialize";
+import "./initializer";
 
-import { FastifyAdapter } from "@nestjs/platform-fastify";
-import { NestFactory } from "@nestjs/core";
-
-import { QueueWorkerModule } from "~/lib/queue/queue_worker.module";
-
-(async () => {
-  const app = await NestFactory.create(QueueWorkerModule, new FastifyAdapter());
-  await app.init();
-})();
+import "$lib/queue_workers/email_worker";

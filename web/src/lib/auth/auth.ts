@@ -1,23 +1,15 @@
 import { goto } from "$app/navigation";
 import jwtDecode from "jwt-decode";
 import { get } from "svelte/store";
-
-import { graphQLSdk } from "$lib/api/api_sdk";
+import type { AccessTokenPayload } from "@package/server/src/lib/services/auth/dtos/token_jwt.payload";
 import { backoffCallback } from "$lib/utils/backoff_callback";
-import { accessTokenStore } from "$lib/auth/access_token";
 import type { AccessTokenStore } from "$lib/auth/access_token";
+import { accessTokenStore } from "$lib/auth/access_token";
 import { currentUserStore } from "$lib/auth/current_user";
 import { notify } from "$ui/notifications/notification.service";
+import { trpc } from "$lib/api/trpc";
 
-export type DecodedJWT = {
-  email: string;
-  userId: string;
-  exp: number;
-  iat: number;
-  isEmailConfirmed: boolean;
-  nbf: number;
-  sub: string;
-};
+export type DecodedJWT = AccessTokenPayload;
 
 export type LoginParams = {
   email: string;
@@ -27,7 +19,7 @@ export type LoginParams = {
 
 export async function login(input: LoginParams) {
   try {
-    const { login } = await graphQLSdk.Login({ input });
+    const login = await trpc.auth.login.mutate(input);
     setAccessToken(login.accessToken);
     notify.success({ message: "Welcome!", ttl: 1000 });
     await goto("/app");
@@ -38,7 +30,7 @@ export async function login(input: LoginParams) {
 
 export async function logout({ sendNotification = true } = {}) {
   try {
-    await graphQLSdk.Logout();
+    await trpc.auth.logout.mutate();
     if (sendNotification) notify.info({ message: "Goodbye!", ttl: 1000 });
     accessTokenStore.set(undefined);
     currentUserStore.set(undefined);
@@ -56,11 +48,12 @@ async function invalidRefreshAttempt(reason?: string) {
 
 export async function refreshToken(): Promise<boolean> {
   let cnt = 0;
+  console.log("ATTEMPTING REFRESH");
 
   const attemptRefresh = async () => {
     cnt++;
     notify.info("attempting to refresh: " + cnt);
-    const { refreshAccessToken } = await graphQLSdk.RefreshAccessToken();
+    const refreshAccessToken = await trpc.auth.refreshAccessToken.mutate();
     setAccessToken(refreshAccessToken.accessToken);
     notify.success("Token Refreshed");
   };
@@ -80,6 +73,6 @@ export function setAccessToken(token: string) {
 export function isAuthenticated(accessToken?: AccessTokenStore) {
   if (!accessToken) accessToken = get(accessTokenStore);
   if (!accessToken?.token || !accessToken?.decoded) return false;
-  const expiresAt = new Date(accessToken.decoded.exp * 1000);
+  const expiresAt = new Date((accessToken?.decoded.exp ?? 0) * 1000);
   return new Date() < expiresAt;
 }

@@ -7,13 +7,14 @@
     "node": "<=18"
   },
   "scripts": {
-    "postinstall": "pnpm -r gen",
+    "postinstall": "# run-s sveltekit-sync",
     "format": "prettier --write .",
     "check": "pnpm -r check && prettier --check .",
     "dev": "pnpm db && overmind start -D && overmind echo",
-    "db": "run-s db:development db:test",
+    "db": "run-s db:development",
     "db:development": "pnpm --prefix api db:migrate && pnpm --prefix api db:seed",
-    "db:test": "pnpm --prefix api db:migrate:test"
+    "db:test": "pnpm --prefix api db:migrate:test",
+    "sveltekit-sync": "cd web && pnpm svelte-kit sync"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",

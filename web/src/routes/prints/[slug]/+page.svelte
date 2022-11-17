@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ListPrintsAvailableQuery } from "$api/graphql";
+  import type { RouterOutput } from "$lib/api/trpc";
 
   export let data: {
-    print: ListPrintsAvailableQuery["listPrintsAvailable"][number];
+    print: RouterOutput["print"]["get"];
   };
 </script>
 

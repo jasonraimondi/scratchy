@@ -1,13 +1,6 @@
-# The Scratchy
+# Scratchy
 
 ## Getting Started
-
-Clone the repository
-
-```bash
-git clone git@github.com:allmyfutures/scratchy.git
-cd scratchy
-```
 
 Boot Docker services
 
@@ -40,8 +33,6 @@ Start dev mode, either use overmind or look in the [Procfile](./Procfile) and us
 ```bash
 overmind start
 ```
-
-Find a list of users to login as here: https://github.com/allmyfutures/scratchy/blob/main/api/prisma/seed.ts#L22-L59
 
 ### Graphql
 

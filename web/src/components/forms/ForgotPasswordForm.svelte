@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { graphQLSdk } from "$lib/api/api_sdk";
   import { forgotPasswordSchema } from "$ui/forms/schema";
   import { validateForm } from "@jmondi/form-validator";
   import { notify } from "$ui/notifications/notification.service";
+  import { trpc } from "$lib/api/trpc";
 
   let errors: Record<string, string> | undefined;
   const formData = {
@@ -13,7 +13,7 @@
   async function submit() {
     errors = await validateForm({ schema: forgotPasswordSchema, data: formData });
     if (!errors) {
-      await graphQLSdk.SendForgotPasswordEmail({ email: formData.email });
+      await trpc.forgotPassword.sendForgotPasswordEmail.mutate ({ email: formData.email });
       notify.success("It sent!");
       await goto("/");
     }

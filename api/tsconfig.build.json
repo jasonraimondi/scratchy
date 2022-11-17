@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {},
-  "exclude": ["node_modules", "prisma", "test", "dist", "**/*spec.ts"]
-}

@@ -1,10 +1,10 @@
-import { graphQLSdk } from "$lib/api/api_sdk";
+import { trpc } from "$lib/api/trpc";
+import type { PageLoad } from "./$types";
 
-/** @type {import("./$types").PageLoad} */
-export async function load() {
-  const { users } = await graphQLSdk.Users();
-  return {
-    users: users.data,
-    cursorId: users.cursorId,
-  };
-}
+export const load: PageLoad = async ({ url }) => {
+  const users = await trpc.user.list.query({
+    limit: 5,
+    cursor: url.searchParams.get("cursor"),
+  });
+  return { users };
+};

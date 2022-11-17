@@ -1,45 +1,44 @@
 {
-  "ts-node": {
-    "files": true
-  },
+  "extends": "@jmondi/tsconfig",
   "compilerOptions": {
-    "incremental": true,
-    "target": "es2017",
     "module": "commonjs",
+    "target": "esnext",
     "outDir": "dist",
 
-    "strict": true,
-    "noImplicitAny": true,
-    "strictPropertyInitialization": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
+    // [ Paths ]
     "baseUrl": "./",
     "paths": {
-      "~/*": ["src/*"],
-      "$test/*": ["test/*"]
+      "$config": ["src/config"],
+      "$config/*": ["src/config/*"],
+      "$db": ["src/lib/repository"],
+      "$db/*": ["src/lib/repository/*"],
+      "$entities": ["src/entities"],
+      "$entities/*": ["src/entities/*"],
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$server": ["src/server"],
+      "$server/*": ["src/server/*"],
+      "$trpc": ["src/trpc"],
+      "$trpc/*": ["src/trpc/*"],
+      "$generated": ["prisma/generated"],
+      "$generated/*": ["prisma/generated/*"],
+      "~/*": ["src/*"]
     },
 
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    // [ Additional Checks ]
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false,
+    "noUncheckedIndexedAccess": true,
 
-    "forceConsistentCasingInFileNames": true,
-    "types": ["jest", "fastify", "@fastify/cookie", "@fastify/oauth2"],
+    // [ Module Resolution ]
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
 
-    "removeComments": false,
-    "sourceMap": true
+    // [ Build ]
+    "listFiles": false,
+    "listEmittedFiles": true,
+    "types": ["fastify", "@fastify/cookie", "@fastify/oauth2"]
   },
-  "include": ["src/**/*", "prisma/**/*", "test/**/*"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

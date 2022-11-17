@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
-  import { graphQLSdk } from "$lib/api/api_sdk";
   import { checkAuth } from "$lib/check_auth";
   import { notify } from "$ui/notifications/notification.service";
   import { logout } from "$lib/auth/auth";
+  import { trpc } from "$lib/api/trpc";
 
   async function unauthorized(reason?: string) {
     notify.error(reason ?? "invalid access!");
@@ -17,7 +17,7 @@
     if (!browser) return;
     const isAuth = await checkAuth();
     if (!isAuth) await unauthorized("not authenticated");
-    const { me } = await graphQLSdk.Me();
+    const { me } = await trpc.me.me.query();
     if (!me.isAdmin) await unauthorized("not admin");
     isAdmin = true;
   });

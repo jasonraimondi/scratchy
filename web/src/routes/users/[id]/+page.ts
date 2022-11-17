@@ -1,6 +1,6 @@
-import { graphQLSdk } from "$lib/api/api_sdk";
+import { trpc } from "$lib/api/trpc";
 
 export async function load({ params }: any) {
-  const res = await graphQLSdk.UserById({ id: params.id });
-  return { user: res.userById };
+  const user = await trpc.user.get.query({ id: params.id });
+  return { user };
 }

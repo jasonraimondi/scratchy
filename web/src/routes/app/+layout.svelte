@@ -13,8 +13,8 @@
   $: isAuthed = isAuthenticated();
 </script>
 
-{#if browser && isAuthed}
+{#if isAuthed}
   <slot />
 {:else}
-  <p>Browser Only</p>
+  <p>Unauthenticated</p>
 {/if}

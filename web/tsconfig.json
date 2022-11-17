@@ -20,5 +20,6 @@
       "$ui/*": ["src/components/*"]
     }
   },
+  "references": [{ "path": "../api" }],
   "include": ["src/**/*", "vite.config.ts"]
 }

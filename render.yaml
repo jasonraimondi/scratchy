@@ -1,8 +1,8 @@
 databases:
   - name: scratchy-pg
     plan: free
-    user: scratchy
-    databaseName: scratchy_database
+    user: tonyperkis
+    databaseName: scratchy_db
     ipAllowList: [] # only allow internal connections
 
 services:
@@ -14,7 +14,7 @@ services:
 
   - type: web
     name: scratchy-api
-    plan: starter plus
+    plan: free
     env: docker
     branch: main
     autoDeploy: true
@@ -55,10 +55,16 @@ services:
         value: "18.12.0"
       - key: NODE_ENV
         value: production
+
       - key: VITE_API_URL
-        value: "https://api.scratchy.onrender.com/api/"
+        value: "https://api.scratchy.example.com/api/"
+      - key: VITE_TRPC_URL_HTTP
+        value: "https://api.scratchy.example.com/api/trpc/"
+      - key: VITE_TRPC_URL_WS
+        value: "wss://api.scratchy.example.com/api/trpc/"
+
       - key: VITE_APP
-        value: scratchy.onrender.com
+        value: scratchy.example.com
       - key: VITE_ENABLE_DEBUG
         value: 0
 
@@ -75,32 +81,29 @@ envVarGroups:
       - key: CORS_URLS
         value: "https://scratchy-web.onrender.com,https://scratchy-api.onrender.com"
       - key: APP_URL
-        value: "https://scratchy.onrender.com"
+        value: "https://scratchy.example.com"
       - key: API_URL
-        value: "https://scratchy-api.onrender.com/api"
+        value: "https://api.scratchy.example.com/api"
 
-      - key: COOKIE_SECRET
+      - key: SECRET_COOKIE
         generateValue: true
-      - key: JWT_SECRET
+      - key: SECRET_JWT
         generateValue: true
-
-      - key: DATABASE_PROVIDER
-        value: postgres
 
       - key: DEBUG_LEVEL
         sync: false
 
       - key: MAILER_FROM
-        value: "noreply@scratchy-api.onrender.com"
+        sync: false
       - key: MAILER_SMTP_URL
         sync: false
 
-      - key: S3_FILE_UPLOADS_BUCKET
-        value: scratchy-uploads
-      - key: S3_FILE_UPLOADS_ACCESS_KEY
-        sync: false
-      - key: S3_FILE_UPLOADS_SECRET_KEY
-        sync: false
+      #      - key: S3_FILE_UPLOADS_BUCKET
+      #        value: scratchy-uploads
+      #      - key: S3_FILE_UPLOADS_ACCESS_KEY
+      #        sync: false
+      #      - key: S3_FILE_UPLOADS_SECRET_KEY
+      #        sync: false
 
       - key: OAUTH_FACEBOOK_ID
         sync: false
